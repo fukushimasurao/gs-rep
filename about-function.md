@@ -10,5 +10,9 @@ description: 関数について、ざっくり説明します。
 
 ```php
 // 以下の３行を１０回繰り返す。
+echo 'hello';
+echo 'world';
+echo 'japan';
 ```
 
+この場合h、
