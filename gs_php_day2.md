@@ -240,6 +240,12 @@ try-catch
 もしエラー(例外処理)をキャッチしたら、`catch`の中身が実行される。
 {% endhint %}
 
+{% hint style="info" %}
+prepare, bindValue
+
+SQLインジェクションを防ぐ。[https://blog.senseshare.jp/placeholder.html](https://blog.senseshare.jp/placeholder.html)
+{% endhint %}
+
 ### データの取得と表示(SELECT)
 
 #### `selsect.php` - 1
