@@ -72,7 +72,7 @@ DBは、通常CLI（コマンドラインインターフェース） = 黒い画
 `name`:  var_char(64)
 `email`:  var_char(128)
 `content`: text
-`indate`: datetime
+`date`: datetime
 ```
 
 記入したら保存
@@ -123,7 +123,7 @@ DBに登録や編集削除等する場合`SQL`という言語を利用します�
 例文
 
 ```sql
-INSERT INTO gs_an_table(id,name,email,content,indate)
+INSERT INTO gs_an_table(id,name,email,content,date)
 VALUES (NULL,'福島はやと','test@test.jp','内容',sysdate());
 ```
 
@@ -157,7 +157,7 @@ SELECT * FROM テーブル名 WHERE id = 1 OR id = 2;
 SELECT * FROM テーブル名 WHERE id = 1 AND id = 2;
 
 --曖昧検索
-SELECT * FROM テーブル名 WHERE indate LIKE '2021-06%';
+SELECT * FROM テーブル名 WHERE date LIKE '2021-06%';
 SELECT * FROM テーブル名 WHERE email LIKE '%@gmail.com';
 SELECT * FROM テーブル名 WHERE email LIKE '%@%';
 
@@ -169,8 +169,7 @@ SELECT * FROM テーブル名 WHERE email LIKE '%@%';
 --ソート
 SELECT * FROM テーブル名 ORDER BY ソート対象カラム ソートルール;
 SELECT * FROM テーブル名 ORDER BY id DESC; --降順
-SELECT * FROM テーブル名 ORDER BY id ASC; --昇順
-
+SELECT * FROM テーブル名 ORDER BY id ASC; --昇
 --取得数制限
 書式：SELECT * FROM テーブル名 LIMIT ***;
 
@@ -184,3 +183,118 @@ DBというものと、BDを操作するための`SQL`を学びました。
 次にPHP内で、`SQL`を書いて`MySQL`を操作していきます。
 
 ### formを作成
+
+`index.php`のformを修正する。
+
+```
+method：POST
+action：insert.php
+```
+
+### 受け取り/登録処理を作成(INSERT)
+
+`insert.php`を以下のように記述
+
+```php
+<?php
+//1. POSTデータ取得
+$name = $_POST['name'];
+$email = $_POST['email'];
+$content = $_POST['content'];
+
+//2. DB接続
+try {
+    //Password:MAMP='root',XAMPP=''
+    $pdo = new PDO('mysql:dbname=gs_db; charset=utf8; host=localhost', 'root', 'root');
+} catch (PDOException $e) {
+    exit('DBConnectError:' . $e->getMessage());
+}
+
+//３．データ登録SQL作成
+$stmt = $pdo->prepare("INSERT INTO gs_an_table(id, name, email, content, date)
+                        VALUES(NULL, :name, :email, :content, sysdate())");
+$stmt->bindValue(':name', $name, PDO::PARAM_STR);  //Integer（数値の場合 PDO::PARAM_INT)
+$stmt->bindValue(':email', $email, PDO::PARAM_STR);  //Integer（数値の場合 PDO::PARAM_INT)
+$stmt->bindValue(':content', $content, PDO::PARAM_STR);  //Integer（数値の場合 PDO::PARAM_INT)
+$status = $stmt->execute();
+
+//４．データ登録処理後
+if ($status == false) {
+    //SQL実行時にエラーがある場合（エラーオブジェクト取得して表示）
+    $error = $stmt->errorInfo();
+    exit("ErrorMessage:" . print_r($error, true));
+} else {
+    header('Location: index.php');
+}
+```
+
+! try-catchについて
+まずtryの中身を処理。もしエラー(例外処理)をキャッチしたら、`catch`の中身が実行される。
+
+### データの取得と表示(SELECT)
+
+#### `selsect.php` - 1
+
+```php
+<?php
+
+//1.  DB接続
+try {
+    //Password:MAMP='root',XAMPP=''
+    $pdo = new PDO('mysql:dbname=gs_db;charset=utf8;host=localhost', 'root', 'root');
+} catch (PDOException $e) {
+    exit('DBConnectError' . $e->getMessage());
+}
+
+//２．データ取得SQL作成
+$stmt = $pdo->prepare("SELECT * FROM gs_an_table");
+$status = $stmt->execute();
+
+//３．データ表示
+$view = '';
+if ($status === false) {
+    //execute（SQL実行時にエラーがある場合）
+    $error = $stmt->errorInfo();
+    exit('ErrorQuery:' . $error[2]);
+} else {
+    // Selectデータの数だけ自動でループしてくれる
+    // FETCH_ASSOC = http://php.net/manual/ja/pdostatement.fetch.php
+    while ($result = $stmt->fetch(PDO::FETCH_ASSOC)) {
+        $view .= '<p>';
+        $view .= $result['date'] . ':' . $result['name'] . ' ' . $result['content'] . ' ' . $result['email'];
+        $view .= '</p>';
+    }
+}
+?>
+```
+
+#### `selsect.php` - 2
+
+- フロント表示部分
+
+```php
+    <!-- Main[Start] -->
+    <div>
+        <div class="container jumbotron"><?= $view ?></div>
+    </div>
+```
+
+### セキュリティ対策 XSS -1
+
+`select.php`に`funcs.php`を読み込んで作成した関数を使う
+
+```php
+<?php
+//select.phpの一番上に1行追記
+require_once('funcs.php');
+```
+
+### セキュリティ対策 XSS - 2
+
+`selsect.php` の `$view`処理部分に`XSS対策`をする。
+
+```php
+$view .= '<p>';
+$view .= h($result['date']).':'.h($result['name']).' '.h($result['content']).' '.h($result['email']);
+$view .= '</p>';
+```
