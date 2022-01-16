@@ -217,3 +217,18 @@ getTriangleArea(10);
 ```
 
 結果として、`25`という値が表示されます。
+
+![](.gitbook/assets/引数.jpg)
+
+例えば、以下のようにしたらどのような数字が出てくるでしょうか？
+
+```php
+function num($height) {
+    echo (5 * $height * $height * $height / 2);
+}
+
+
+num(10);
+```
+
+こうすると、$
