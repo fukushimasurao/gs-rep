@@ -232,7 +232,13 @@ if ($status == false) {
 }
 ```
 
-! try-catchについて まずtryの中身を処理。もしエラー(例外処理)をキャッチしたら、`catch`の中身が実行される。
+{% hint style="info" %}
+try-catch
+
+まずtryの中身を処理.
+
+もしエラー(例外処理)をキャッチしたら、`catch`の中身が実行される。
+{% endhint %}
 
 ### データの取得と表示(SELECT)
 
