@@ -216,7 +216,7 @@ function getTriangleArea($hight) {
 1. 実行するときは、高さを書いて実行してあげてください。
 
 ```php
-// ↓例えば、下の場合は高さを50にした場合です。
+// ↓例えば、下の場合は高さを10にした場合です。
 getTriangleArea(10);
 ```
 
@@ -235,3 +235,30 @@ num(10);
 ```
 
 こうすると、`$num`の部分は10に置き換わるので、 `5 * 10 * 10 * 10 / 2`という計算がされます。
+
+* 例題 : 以下のような関数を作って、実行してください。
+  * 四角形の面積を求める関数を作りましょう。
+  * 関数名は`calcSquares`
+  * 縦の長さは10cm
+  * よこの長さは引数で渡してあげる。
+
+* よこの長さを5cm、10cmにした場合の面積を求めてください。
+
+<details>
+<summary>答え</summary>
+
+```php
+
+// $widthは別の変数名でも良いです。
+
+function calcSquares($width) {
+    echo 10 * $width;
+}
+
+calcSquares(5);
+calcSquares(10);
+
+
+```
+
+</details>
