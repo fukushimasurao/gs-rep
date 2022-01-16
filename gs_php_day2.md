@@ -7,9 +7,9 @@
 ## 前回のおさらい
 
 * 今までの学習はクライアントサイドの学習
-  * HTML : どのような文字などを出すか
-  * CSS : どのなレイアウトにするか
-  * JS : どのような動きをするか。
+  * HTML : どのような文字などを出すかを指示する
+  * CSS : どのなレイアウトにするかを指示する
+  * JS : どのような動きをするかを指示する
 * サーバーサイド
   * クライアントから情報を受け取り、その内容をもとに処理をする。
 
@@ -130,11 +130,12 @@ text型の文字列はデータベースとは別に保存。データベース�
 例文
 
 ```sql
-INSERT INTO gs_an_table(id,name,email,content,date)
-VALUES (NULL,'福島はやと','test@test.jp','内容',sysdate());
+INSERT INTO gs_an_table(id,name,email,content,date) VALUES (NULL,'福島はやと','test@test.jp','内容',sysdate());
 ```
 
-**後で、データを利用するので、名前やメルアドを変えて3つ()登録してください**
+{% hint style="success" %}
+**名前やメルアドを変えて3つ以上登録してください**
+{% endhint %}
 
 ### SELECT
 
