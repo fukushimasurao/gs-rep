@@ -34,7 +34,8 @@ echo 'hello world';
 
 {% hint style="danger" %}
 mampの設定によっては、localhost:8888/000-1helloworld.php
-{% endhint %}
+{% endhint %}o
+osu
 
 {% hint style="danger" %}
 エラーの場合は以下を確認
@@ -470,4 +471,3 @@ $file = fopen('data/data.txt', 'a');
 fwrite($file, $str . "\n");
 fclose($file);
 ```
-
