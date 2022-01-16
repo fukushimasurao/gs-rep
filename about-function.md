@@ -223,12 +223,12 @@ getTriangleArea(10);
 例えば、以下のようにしたらどのような数字が出てくるでしょうか？
 
 ```php
-function num($height) {
-    echo (5 * $height * $height * $height / 2);
+function num($num) {
+    echo (5 * $num * $num * $num / 2);
 }
-
 
 num(10);
 ```
 
-こうすると、$
+こうすると、`$num`の部分は10に置き換わるので、
+`5 * 10 * 10 * 10 / 2`という計算がされます。
