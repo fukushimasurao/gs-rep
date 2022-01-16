@@ -2,7 +2,7 @@
 description: 関数について、ざっくり説明します。
 ---
 
-# 😇 about function
+# 😇 about function 途中まで
 
 ### 関数が無い場合
 
@@ -21,6 +21,23 @@ echo "I'm from japan";
 2. １０回貼り付ける
 
 という方法が考えられます。 ただし、ちょっとめんどくさいです。
+
+```php
+// イメージ
+echo 'hello';
+echo 'world';
+echo "I'm from japan";
+
+echo 'hello';
+echo 'world';
+echo "I'm from japan";
+
+echo 'hello';
+echo 'world';
+echo "I'm from japan";
+
+// ...以下省略
+```
 
 こういった、`複数行の処理`を、何かしらの理由で`複数回記述する必要が有る`場合、関数が便利です。
 
@@ -50,7 +67,7 @@ function func_test() {
 func_test();
 ```
 
-![](.gitbook/assets/無題7.png)
+![](<.gitbook/assets/名称未設定のノート-6 2.jpg>)
 
 #### 関数の書き方(具体例)
 
@@ -80,27 +97,6 @@ greeting();
 
 これで、`greeting()`と書くたびに、処理の中身３行が実行されます。
 
-この処理を１０回繰り返す行為を関数使わない場合は30行くらい必要になります。
-
-```php
-// イメージ
-echo 'hello';
-echo 'world';
-echo "I'm from japan";
-
-echo 'hello';
-echo 'world';
-echo "I'm from japan";
-
-echo 'hello';
-echo 'world';
-echo "I'm from japan";
-
-// ...以下省略
-```
-
-関数を利用すると行数をぐっと減らすことができます。 実際、１５行になりました。
-
 ```php
 function greeting() {
     echo 'hello';
@@ -118,6 +114,8 @@ greeting();
 greeting();
 greeting();
 ```
+
+関数を利用すると行数をぐっと減らすことができます。 実際、１５行になりました。
 
 #### 余談
 
@@ -142,3 +140,5 @@ greeting();
 ### 関数の基本(引数編)
 
 さて、同じ処理をする場合「似た処理なんだけど若干違う処理」をしたい場合があります。
+
+例えば、以下の処理を考えて見ましょう。
