@@ -223,7 +223,7 @@ $stmt->bindValue(':content', $content, PDO::PARAM_STR);  //Integer（数値の�
 $status = $stmt->execute();
 
 //４．データ登録処理後
-if ($status == false) {
+if ($status === false) {
     //SQL実行時にエラーがある場合（エラーオブジェクト取得して表示）
     $error = $stmt->errorInfo();
     exit("ErrorMessage:" . print_r($error, true));
