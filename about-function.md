@@ -189,7 +189,7 @@ function getTriangleArea() {
 }
 ```
 
-このように、高さの部分だけを変えれば３つの三角形の面積がわかります。&#x20;
+このように、高さの部分だけを変えれば３つの三角形の面積がわかります。
 
 その際に役立つのが`引数`です。
 
@@ -274,12 +274,9 @@ function getTriangleArea($hight, $bottom) {
 getTriangleArea(2, 3);
 
 // 3
-
 ```
 
-※ 引数の順番が違っても問題ないです。
-例えば以下でもokです。
-というか、左が底辺・右が高さで統一されているので、こっちのほうがきれいかも。
+※ 引数の順番が違っても問題ないです。 例えば以下でもokです。 というか、左が底辺・右が高さで統一されているので、こっちのほうがきれいかも。
 
 ```php
 function getTriangleArea($bottom, $hight) {
@@ -287,7 +284,7 @@ function getTriangleArea($bottom, $hight) {
 }
 ```
 
-##### 例題-1
+**例題-1**
 
 以下のような関数を作って、実行してください。
 
@@ -295,14 +292,13 @@ function getTriangleArea($bottom, $hight) {
 * 関数名は`calcSquares`
 * 縦の長さは10cm
 * よこの長さは引数で渡してあげる。
-
 * よこの長さを5cm、10cmにした場合の面積を求めてください。
 
 <details>
+
 <summary>答え</summary>
 
 ```php
-
 // $widthは別の変数名でも良いです。
 
 function calcSquares($width) {
@@ -313,12 +309,11 @@ function calcSquares($width) {
 calcSquares(5);
 calcSquares(10);
 
-
 ```
 
 </details>
 
-##### 例題-2
+**例題-2**
 
 以下のような関数を作って、実行してください。
 
@@ -326,10 +321,10 @@ calcSquares(10);
 * 実際に引数に自分の名前を与えて出力してみてください。
 
 <details>
+
 <summary>答え</summary>
 
 ```php
-
 // 以下、書き方等は任せます。引数使って出力できればok
 
 $myouji = '福島';
@@ -341,7 +336,6 @@ function aisatsu($myouji, $namae) {
 }
 
 aisatsu($myouji, $namae);
-
 ```
 
 </details>
@@ -357,20 +351,16 @@ aisatsu($myouji, $namae);
 例えば、以下のようなコードを実行してみてください。
 
 ```php
-
 $name = '福島';
 $name = 'はやと';
 echo $name;
-
 ```
 
-こうすると、出力は`はやと`と出てきます。
-最初「福島」を変数に代入しましたが、次に「はやと」と上書きしたためです。
+こうすると、出力は`はやと`と出てきます。 最初「福島」を変数に代入しましたが、次に「はやと」と上書きしたためです。
 
 では以下はどうでしょうか？
 
 ```php
-
 $name = '福島';
 
 function change() {
@@ -381,7 +371,6 @@ change();
 
 echo $name;
 // 福島と出力される。
-
 ```
 
 上から順番の流れはこんな感じです。
@@ -397,17 +386,18 @@ echo $name;
 
 これはなぜなら、**関数内は関数の外の影響を受けないためです。**
 
-この独自の世界 = 有効範囲のことを`スコープ`といいます。
-functionの中は外界とは違う閉ざされた世界なので、`ローカルスコープ(ローカル)`といったリします。
+この独自の世界 = 有効範囲のことを`スコープ`といいます。 functionの中は外界とは違う閉ざされた世界なので、`ローカルスコープ(ローカル)`といったリします。
+
+![](<.gitbook/assets/スコープ (1).jpg>)
 
 一方ローカルスコープの外 = functionの中以外 = ほぼすべての箇所は`グローバルスコープ(グローバル)`と言います。
 
-function内は、`ローカル`なので、`functionの外の$name`と`functionの中の$name`は違います。
-だから、echo $nameしても、中身が変わっていないのです。
+![](.gitbook/assets/スコープ２.jpg)
+
+function内は、`ローカル`なので、`functionの外の$name`と`functionの中の$name`は違います。 だから、echo $nameしても、中身が変わっていないのです。
 
 ```php
-
-// ↓これはグローバル
+// ここはグローバル
 $name = '福島';
 
 function change() {
@@ -419,7 +409,6 @@ change();
 
 // ここでechoしているのは、グローバル = '福島'が代入されている$name
 echo $name;
-
 ```
 
 **このように、functionの中と外は世界が違うので互いに影響し合いません**
