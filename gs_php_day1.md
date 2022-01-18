@@ -6,7 +6,7 @@ description: php 第１日目
 
 ### 授業資料 <a href="#shou-ye-zi-liao" id="shou-ye-zi-liao"></a>
 
-{% embed url="https://gitlab.com/gs_hayato/gs-php-01/-/blob/master/php01haifu.zip" %}
+{% embed url="https://gitlab.com/gs_hayato/gs-php-01/-/blob/master/php01_haifu.zip" %}
 
 ![](<.gitbook/assets/スクリーンショット 2022-01-09 2.30.21.png>)
 
@@ -297,6 +297,7 @@ echo '<pre>';
 var_dump($_GET);
 echo '</pre>';
 ```
+
 {% endhint %}
 
 {% hint style="info" %}
@@ -307,6 +308,7 @@ HTML内では、echoは以下のように省略した記述が可能です。
 // ↓
 <?= $name ?>
 ```
+
 {% endhint %}
 
 {% hint style="success" %}
