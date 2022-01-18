@@ -2,7 +2,7 @@
 description: classについて、知識導入。
 ---
 
-# 🏫  about Class
+# 🏫 about Class
 
 Classを小学生でもわかるようにする試みです。 はっきり言って、説明としては足らないない内容ですので、 あくまでも「雰囲気を捉える」だけにとどめてください。
 
@@ -51,7 +51,6 @@ Classの中には、複数の情報や、関数も格納できちゃいます！
 たとえば以下のコードを見てみましょう。
 
 ```php
-
 try {
     // 1, new Class名とすることで、Classを用意します。
     // () の中に書くことで、Class内の変数を宣言しています
@@ -62,6 +61,7 @@ try {
 }
 
 // $pdo->prepareとすることで、$pdoクラスの中にあるprepare()関数を実行しています。
+// prepare()の中で、ほかのclassをreturnしているので、$stmtに入れてあげます。
 // 関数の中身は私も知りません！
 $stmt = $pdo->prepare("INSERT INTO gs_an_table(id, name, email, content, date)
                         VALUES(NULL, :name, :email, :content, sysdate())");
@@ -69,5 +69,8 @@ $stmt->bindValue(':name', $name, PDO::PARAM_STR);  //Integer（数値の場合 P
 $stmt->bindValue(':email', $email, PDO::PARAM_STR);  //Integer（数値の場合 PDO::PARAM_INT)
 $stmt->bindValue(':content', $content, PDO::PARAM_STR);  //Integer（数値の場合 PDO::PARAM_INT)
 $status = $stmt->execute();
-
 ```
+
+![](.gitbook/assets/名称未設定のノート-14.jpg)
+
+![](.gitbook/assets/名称未設定のノート-15.jpg)
