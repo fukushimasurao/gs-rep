@@ -687,7 +687,7 @@ function getSum() {
 なお、ここでは適当に$numを10としました。
 
 ```php
-// 例えば、$numをform等で受け取る。
+// 本来であればここに例えば$numの中身をform等で受け取るみたいな処理をイメージしてください。。
 $num = 10;
 
 function getSum($num) {
