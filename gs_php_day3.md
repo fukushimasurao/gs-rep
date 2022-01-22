@@ -12,6 +12,14 @@
 - `SQL`の`SELECT`を書いた
 - PHPのフロント画面から、フォームを使ってDBに登録した。
 
+## 今回やること
+
+前回は、CRUD機能の`Create（生成）`、`Read（読み取り）`を行いました。
+
+今日は、`update（更新）`、`Delete（削除）`をやっていきます。
+
+- `CRUD`とは？ https://wa3.i-3-i.info/word123.html
+
 ## MAMPの起動、DB準備
 
 1. MAMPを起動
@@ -51,10 +59,10 @@
 function db_conn()
 {
     try {
-        $db_name = "gs_db3";
-        $db_id   = "root";
-        $db_pw   = "root";
-        $db_host = "localhost";
+        $db_name = 'gs_db3';
+        $db_id   = 'root';
+        $db_pw   = 'root';
+        $db_host = 'localhost';
         $pdo = new PDO('mysql:dbname=' . $db_name . ';charset=utf8;host=' . $db_host, $db_id, $db_pw);
         return $pdo;
     } catch (PDOException $e) {
@@ -100,4 +108,172 @@ if ($status === false) {
 } else {
     redirect('index.php');
 }
+```
+
+## 更新処理を実装
+
+更新処理は
+1. 更新画面(詳細画面)の作成
+2. 更新処理 → リダイレクトの流れです。
+
+### UPDATE（データ更新）
+
+**書式**
+
+```sql
+UPDATE テーブル名 SET 更新対象1=:更新データ ,更新対象2=:更新データ2,... WHERE id = 対象ID;
+```
+
+## まず更新画面を表示する為のリンクを作成する。
+
+1. `select.php`のデータ表示の`while`文内の`HTML`生成にリンクを作成(`GETデータ送信リンク`)
+   
+```php
+//GETデータ送信リンク作成
+// <a>で囲う。
+$view .= '<p>';
+$view .= '<a href="detail.php?id=' . $result['id'] . '">';
+$view .= $result['indate'] . '：' . $result['name'];
+$view .= '</a>';
+$view .= '</p>';
+
+```
+
+2. select.php内のDB接続・SQLエラー・リダイレクト処理を外部関数から呼び出しに変更する
+3. ブラウザの検証ツールからaタグのリンクの飛び先(`detail.php`)をチェック
+
+## 更新画面を作成する
+
+1. detail.phpにデータ取得処理を記述
+
+```php
+<?php
+require_once('funcs.php');
+$pdo = db_conn();
+
+//2.select.phpから送られてくる対象のIDを取得
+$id = $_GET['id'];
+
+//3．データ登録SQL作成
+$stmt = $pdo->prepare('SELECT * FROM gs_an_table WHERE id=:id;');
+$stmt->bindValue(':id',$id,PDO::PARAM_INT);
+$status = $stmt->execute();
+
+//4．データ表示
+$view = '';
+if ($status === false) {
+    sql_error($status);
+} else {
+    $result = $stmt->fetch();
+}
+?>
+```
+
+2. detail.phpに更新画面用のHTMLを記述
+
+`index.php`のコードをまるっとコピーして貼り付け！
+
+3. detail.phpのHTML内formのaction先をupdate.phpに変更する
+
+```php
+<form method="POST" action="update.php">
+ .....省略
+</form>
+```
+4. detail.phpのHTML内formの送信ボタン直上に以下を追記
+
+```php
+ <!-- ↓追加 -->
+<input type="hidden" name="id" value="<?= $result['id'] ?>">
+<input type="submit" value="送信">
+```
+
+## 更新処理の中身を作成する
+1. update.phpに更新処理を追記
+
+```php
+//1. POSTデータ取得
+$name   = $_POST['name'];
+$email  = $_POST['email'];
+$age    = $_POST['age'];
+$content = $_POST['content'];
+$id = $_POST['id'];
+
+//2. DB接続します
+require_once('funcs.php');
+$pdo = db_conn();
+
+//３．データ登録SQL作成
+$stmt = $pdo->prepare( 'UPDATE gs_an_table SET name = :name, email = :email, age = :age, content = :content, indate = sysdate() WHERE id = :id;' );
+
+$stmt->bindValue(':name', $name, PDO::PARAM_STR);/// 文字の場合 PDO::PARAM_STR
+$stmt->bindValue(':email', $email, PDO::PARAM_STR);// 文字の場合 PDO::PARAM_STR
+$stmt->bindValue(':age', $age, PDO::PARAM_INT);// 数値の場合 PDO::PARAM_INT
+$stmt->bindValue(':content', $content, PDO::PARAM_STR);// 文字の場合 PDO::PARAM_STR
+$stmt->bindValue(':id', $id, PDO::PARAM_INT);// 数値の場合 PDO::PARAM_INT
+$status = $stmt->execute(); //実行
+
+//４．データ登録処理後
+if ($status === false) {
+    sql_error($stmt);
+} else {
+    redirect('select.php');
+}
+
+```
+
+## 削除処理を実装していく
+
+PHPの基本処理、登録・表示（取得）・更新・削除の4つのうちの最後の一つです。
+削除処理は削除ボタンクリック→削除処理の流れなので比較的簡単です。
+
+
+### DELETE（データ削除）
+
+**書式**
+
+```sql
+UPDATE テーブル名 SET 更新対象1=:更新データ ,更新対象2=:更新データ2,... WHERE id = 対象ID;
+```
+### 削除ボタン（削除リンクを作成する）
+
+1. select.phpのデータ表示のwhile文内のHTML生成に削除リンクを作成
+
+```php
+//GETデータ送信リンク作成
+// <a>で囲う。
+$view .= '<p>';
+$view .= '<a href="detail.php?id=' . $result['id'] . '">';
+$view .= $result["indate"] . "：" . $result["name"];
+$view .= '</a>';
+$view .= '<a href="delete.php?id=' . $result['id'] . '">';//追記
+$view .= '  [削除]';//追記
+$view .= '</a>';//追記
+$view .= '</p>';
+```
+
+
+2. delete.phpに削除処理を作成する
+
+```php
+//1.対象のIDを取得
+$id   = $_GET['id'];
+
+//2.DB接続します
+require_once('funcs.php');
+$pdo = db_conn();
+
+//3.削除SQLを作成
+$stmt = $pdo->prepare('DELETE FROM gs_an_table WHERE id = :id');
+$stmt->bindValue(':id', $id, PDO::PARAM_INT);
+$status = $stmt->execute(); //実行
+
+
+//４．データ登録処理後
+if ($status === false) {
+    sql_error($stmt);
+} else {
+    redirect('select.php');
+}
+
 ```
