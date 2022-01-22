@@ -9,5 +9,5 @@
 * [😇 about functionほぼ完成](about-function.md)
 * [🆚 導入したいVS code 拡張機能](shitaivs-code.md)
 * [🏫 about Class](about-class.md)
-* [📖 PhpMyAdmin関連](phpmyadmin.md.md)
+* [📖 PhpMyAdmin関連](phpmyadmin.md)
 * [♥ 便利情報](good-tools.md)
