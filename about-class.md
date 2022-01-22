@@ -8,6 +8,12 @@ Classを小学生でもわかるようにする試みです。 はっきり言�
 
 詳細は公式サイトとか見てください！
 
+## おすすめの動画
+
+classのちゃんとした説明は、山崎先生の動画がとてもいい感じです！
+
+[Classの動画](https://youtube.com/playlist?list=PLTD8xMSOmM1L_zfRCCrCKsA6dOuvn2d8K)
+
 ## 変数とは？
 
 そもそも変数とは？
