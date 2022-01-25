@@ -7,7 +7,7 @@
 * [😚 013_gs\_php\_day3](gs\_php\_day3.md)
 * [🤩 014_gs\_php\_day4](gs\_php\_day4.md)
 * [😇 about functionほぼ完成](about-function.md)
-* [🆚 導入したいVS code 拡張機能](shitaivs-code.md)
+* [🆚 VS code関連](vs\-code.md)
 * [🏫 about Class](about-class.md)
 * [📖 PhpMyAdmin関連](phpmyadmin.md)
 * [♥ 便利情報](good-tools.md)
