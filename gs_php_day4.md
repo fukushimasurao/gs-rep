@@ -133,7 +133,7 @@ echo $age;
 ?>
 ```
 
-![](.gitbook/assets/session.jpg)
+![](.gitbook/assets/php04/session.jpg)
 
 ### `session ID`の変更方法
 
@@ -294,7 +294,7 @@ echo $pw;
 - ↑で表示されたハッシュ値をコピー
 - `phpMyAdmin`にて、`lpw`の`test1`をコピーしたハッシュ値に書き換える。
 
-![](.gitbook/assets/hash.png)
+![](.gitbook/assets/php04/hash.png)
 
 
 
