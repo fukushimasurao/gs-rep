@@ -95,7 +95,9 @@ echo $sid;
 ```
 
 {% hint style="info" %}
-`session_start()`で「鍵」に当たる部分を作成するイメージです。"/n" `session_id()`で、その鍵がどんなIDなのかを確認できます。
+`session_start()`で「鍵」に当たる部分を作成するイメージです。
+
+`session_id()`で、その鍵がどんなIDなのかを確認できます。
 {% endhint %}
 
 #### `session01.php`をブラウザでチェック
