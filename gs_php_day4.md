@@ -39,7 +39,7 @@
 〇〇.sqlというSQLファイルをインポートしてデータを作成します。
 
 1. 念の為、左側のメニューから`gs_db4`をクリック
-2. gs\_db3を選択した状態でインポートタブをクリック
+2. `gs_db4`を選択した状態でインポートタブをクリック
 3. ファイルを選択をクリックして配布した資料内のSQLフォルダ内の`gs_an_table.sql`を選択
 4. 実行してみる
 5. ファイルを選択をクリックして配布した資料内のSQLフォルダ内の`gs_user_table.sql`を選択 **今日のテーブルは2つあります。**
@@ -117,6 +117,13 @@ $_SESSION['name'] = 'john';
 $_SESSION['age'] = 30;
 ```
 
+{% hint style="info" %}
+上記保存したら、ブラウザで`session01.php`をもう一度開いて（更新して）ください。
+
+ブラウザで開くことで、`session01.php`が処理されます。
+{% endhint %}
+
+
 #### `session02.php`を作成して以下記述
 
 ```php
@@ -135,7 +142,13 @@ echo $age;
 
 ![](.gitbook/assets/php04/session.jpg)
 
-### `session ID`の変更方法
+### `session ID`の更新・変更方法
+
+**セキュリティー上、session idは変更する必要があります。**
+
+#### session_regenerate_id.phpの動きを確認
+
+### 以下記述を追加
 
 ```php
 <?php
@@ -145,8 +158,9 @@ session_start();
 //現在のセッションIDを取得
 $old_sessionid = session_id();
 
-//新しいセッションIDを発行（前のSESSION IDは無効）
-session_regenerate_id(true);
+  // 以下追加
+  //　新しいセッションIDを発行（前のSESSION IDは無効）
+  session_regenerate_id(true);
 
 //新しいセッションIDを取得
 $new_sessionid = session_id();
@@ -248,6 +262,10 @@ loginCheck();
 //以下ログインユーザーのみ
 ```
 
+{% hint style="info" %}
+`loginCheck();`は、`session_start();`、`require_once('funcs.php');`の下に記述するようにしましょう。
+{% endhint %}
+
 #### ログイン・ログアウトの確認
 
 * `index.php`
@@ -273,7 +291,8 @@ loginCheck();
 
 _**万が一パスワードが盗まれた場合に備えて、パスワードをハッシュ化**_
 
-`ハッシュ化` ... 不可逆的 `暗号化` ... 可逆的 = 復元可能
+- `ハッシュ化` ... 不可逆的
+- `暗号化` ... 可逆的 = 復元可能
 
 1. `hash.php`を作成
 2. `hash.php`内にパスワードのハッシュ化の処理を記述
@@ -309,7 +328,7 @@ $status = $stmt->execute();
 
 ```php
 //5. 該当レコードがあればSESSIONに値を代入この部分のif文をpassword_verifyに変更
-if( password_verify($lpw, $val['lpw']) ){
+if ($val['id'] != '' && password_verify($lpw, $val['lpw'])) {
   // Login成功時
   // 省略
 }else{
