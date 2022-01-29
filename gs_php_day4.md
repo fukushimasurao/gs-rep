@@ -50,7 +50,7 @@
 
 ## 今日のイメージ
 
-![](.gitbook/assets/loginのイメージ.jpg)
+![](.gitbook/assets/php04/loginのイメージ.jpg)
 
 この鍵に、`SESSION`を利用する。
 ## SESSIONとは。
