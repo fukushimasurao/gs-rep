@@ -47,6 +47,12 @@
 6. 実行してみる
 7. 授業用のDBと中身を確認
 
+
+## 今日のイメージ
+
+![](.gitbook/assets/loginのイメージ.jpg)
+
+この鍵に、`SESSION`を利用する。
 ## SESSIONとは。
 
 今日はSESSIONを学びます。
@@ -126,6 +132,8 @@ echo $name;
 echo $age;
 ?>
 ```
+
+![](.gitbook/assets/session.jpg)
 
 ### `session ID`の変更方法
 
@@ -285,6 +293,9 @@ echo $pw;
 
 - ↑で表示されたハッシュ値をコピー
 - `phpMyAdmin`にて、`lpw`の`test1`をコピーしたハッシュ値に書き換える。
+
+![](.gitbook/assets/hash.png)
+
 
 
 4. `login_act.php`の中の処理を一部変更
