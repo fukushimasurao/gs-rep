@@ -14,9 +14,9 @@
 
 前回は、CRUD機能の`Updata（編集）`、`Delete（削除）`を行いました。
 
-今日は、`update（更新）`、`Delete（削除）`をやっていきます。
+今日は、`SESSION`をやっていきます。
 
-* `CRUD`とは？ https://wa3.i-3-i.info/word123.html
+* `CRUD`とは？ <https://wa3.i-3-i.info/word123.html>
 
 ## MAMPの起動、DB準備
 
@@ -52,7 +52,7 @@
 
 この鍵に、`SESSION`を利用する。
 
-## SESSIONとは。
+## SESSIONとは
 
 今日はSESSIONを学びます。
 
@@ -122,7 +122,6 @@ $_SESSION['age'] = 30;
 
 ブラウザで開くことで、`session01.php`が処理されます。
 {% endhint %}
-
 
 #### `session02.php`を作成して以下記述
 
@@ -299,8 +298,8 @@ loginCheck();
 
 _**万が一パスワードが盗まれた場合に備えて、パスワードをハッシュ化**_
 
-- `ハッシュ化` ... 不可逆的
-- `暗号化` ... 可逆的 = 復元可能
+* `ハッシュ化` ... 不可逆的
+* `暗号化` ... 可逆的 = 復元可能
 
 1. `hash.php`を作成
 2. `hash.php`内にパスワードのハッシュ化の処理を記述
