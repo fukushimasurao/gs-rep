@@ -34,19 +34,18 @@ echo 'hello world';
 
 {% hint style="danger" %}
 mampの設定によっては、localhost:8888/000-1helloworld.php
-{% endhint %}o
-osu
+{% endhint %}
 
 {% hint style="danger" %}
-エラーの場合は以下を確認
+エラーの場合は以下を確認してみてください。
 
-開始タグ・終了タグに間違いが無いか。
+・開始タグ・終了タグに間違いが無いか。
 
-書き間違いが無いか。
+・書き間違いが無いか。
 
-文の最後に ; が抜けていないか。
+・文の最後に ; が抜けていないか。
 
-全角スペースを記入していないか。
+・全角スペースを記入していないか。
 {% endhint %}
 
 ### 000-2helloworld.php
@@ -55,7 +54,7 @@ phpはHTMLと合わせて記述することが可能です。
 
 ```php
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ja">
 
 <head>
     <meta charset="UTF-8">
@@ -69,17 +68,14 @@ phpはHTMLと合わせて記述することが可能です。
 </body>
 
 </html>
-
 ```
-
-phpはHTMLと合わせて記述することが可能です。
 
 {% hint style="info" %}
 記述して保存したら、localhost/000-2helloworld.php をブラウザで確認してみてください。
 {% endhint %}
 
 {% hint style="danger" %}
-phpファイルは、
+表示がされない場合、
 
 1\. 保存
 
@@ -87,7 +83,8 @@ phpファイルは、
 
 3\. 画面の確認
 
-が基本です。
+の３点を行ったか確認してみださい。
+この３つが基本の動作です。
 {% endhint %}
 
 ### 001hensu.php
@@ -114,7 +111,7 @@ phpファイルは、
 {% hint style="info" %}
 ドット.で結合する際は、ドットの左右に半角スペースを入れると読みやすいです。
 
-&#x20;△　`echo $myouji.$namae;`
+`△ echo $myouji.$namae;`
 
 `◎ echo $myouji . $namae;`
 {% endhint %}
@@ -140,6 +137,11 @@ phpファイルは、
     ?>
 ```
 
+{% hint style="info" %}
+配列への要素の追加方法は他にもたくさんあります。
+また、配列の種類（例えば連想配列、多次元配列など）もたくさんあるので調べてみてください。
+{% endhint %}
+
 ### 003kansu.php
 
 ここでは代表的な組み込み関数の対応を行います。
@@ -147,7 +149,6 @@ phpファイルは、
 単純に「こういう関数有るんだ〜」という確認程度の内容です。
 
 ```php
-    <!-- ここから -->
     <?php
     
     // 日付表示
@@ -170,8 +171,6 @@ phpファイルは、
     $rand = rand(1, 10);
     echo '<pre>';
     var_dump($rand);
-    // var_dump('');
-
     echo '</pre>';
     
     // おみくじ
@@ -182,7 +181,6 @@ phpファイルは、
         echo '大凶';
     }
     ?>
-    <!-- ここまで -->
 ```
 
 {% hint style="info" %}
@@ -265,7 +263,6 @@ echo '</pre>';
 // $_GETの中身を変数に移動
 $name = $_GET['name'];
 $mail = $_GET['mail'];
-
 ?>
 
 <html>
@@ -369,7 +366,8 @@ post.phpのフォームに以下のスクリプトを記入して送信して、
 ```
 
 {% hint style="danger" %}
-不特定多数が記入できるFormは、悪意を持った人にスクリプトを埋め込まれる可能性があります。
+不特定多数の人間が記入できるFormは、悪意を持った人にスクリプトを埋め込まれる可能性があります。
+※WEB上には悪いことをする人がかならずいる、という前提でプロダクト制作をしてください。
 {% endhint %}
 
 {% hint style="danger" %}
