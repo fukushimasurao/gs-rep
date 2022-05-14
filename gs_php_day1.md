@@ -165,10 +165,22 @@ PHP部分は改行せずに、１行で記述しよう。
     echo $today2;
     echo '<br>';
 
-    // 文字置き換え
-    $length = strlen('abcde');
-    echo '文字数は' . $length . '文字';
+    // 文字長さ
+    $string = 'abcde';
+    $length = strlen($string);
+    echo $string . 'の文字数は' . $length . '文字';
     echo "<br>";
+    // 正確には、strlen() が返すのはバイト数であり、 文字数ではありません。
+    // 日本語文字数の場合は、https://www.flatflag.nir87.com/strlen-671
+
+    // trim
+    // ※trim...全角スペースは取り除かない。取り除くものは↓
+    // https://www.php.net/manual/ja/function.trim.php
+    // 全角対応は、str_replaceを利用する。
+    $string2 = ' 前後にわざと空白を入れる ';
+    echo $string2;
+    echo '<br>';
+    echo trim($string2);
 
     // ランダムな数字を表示する(rand)
     // 第1引数は最小の数、第2は最大の数
@@ -176,7 +188,7 @@ PHP部分は改行せずに、１行で記述しよう。
     echo '<pre>';
     var_dump($rand);
     echo '</pre>';
-    
+
     // おみくじ
     echo '<br>';
     if ($rand === 1) {
@@ -277,8 +289,6 @@ for ($i = 0; $i < ; $i++) {
         foreach ($lang as $val) {
             echo $val."<br>";
         }
-
-
     ?>
 </body>
 </html>
@@ -516,6 +526,23 @@ fwrite($file, $time."\n");
 //ファイルを閉じる
 fclose($file);
 ?>
+```
+
+- fopenの引数について
+fopenの第２引数(openモード)には以下のような種類があります。
+方法によって使い分けてください。
+
+間違えると、中身を削除してしまうので、ご利用は慎重に。
+
+```
+r 読み込みのみでオープンします。
+r+ 読み込み/書込み用にオープンします。
+
+w 書込みのみでオープンします。内容をまず削除、ファイルがなければ作成
+w+ 読み込み/書込み用でオープンします。内容をまず削除、ファイルがなければ作成
+
+a 追加書込み用のみでオープンします。ファイルがなければ作成
+a+ 読み込み/追加書込み用でオープンします。ファイルがなければ作成
 ```
 
 {% hint style="info" %}
