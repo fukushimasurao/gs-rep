@@ -234,6 +234,20 @@ date()の引数はたくさん種類あります。
 
 ### foreachで配列を一つ一つ表示する
 
+繰り返しの処理としてforeachというものがあります。
+
+{% hint style="info" %}
+当然、for文もあります。
+が、ここでは割愛。
+
+```
+for ($i = 0; $i < ; $i++) {
+    # code...
+}
+```
+
+{% endhint %}
+
 ```php
 <html>
 <head>
@@ -281,11 +295,27 @@ foreach ($variable as $key => $value) {
 ```
 
 という書き方もできる。
-
 {% endhint %}
 
+### while文に触れる
+
+foreachは、回数が決まっているものに対して繰り返しをおこなります。
+
+一方で、回数が決まっていない・条件がある限り繰り返しには、`while文`があります。
+
+```php
+    // 初期値を決める
+    $money = 10000;
+
+    // whileのカッコの中に継続条件を書く
+    while ($money >= 0) {
+        echo $money."<br>";
+        $money = $money - 3350;
+    }
+```
+
 {% hint style="info" %}
-当然、for文もあります。
+継続条件を間違えると、処理が永遠に終わらない可能性あるので注意です。
 {% endhint %}
 
 ### Form操作
