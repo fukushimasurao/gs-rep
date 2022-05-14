@@ -71,6 +71,10 @@ phpはHTMLと合わせて記述することが可能です。
 ```
 
 {% hint style="info" %}
+PHP部分は改行せずに、１行で記述しよう。
+{% endhint %}
+
+{% hint style="info" %}
 記述して保存したら、localhost/000-2helloworld.php をブラウザで確認してみてください。
 {% endhint %}
 
@@ -99,10 +103,10 @@ phpはHTMLと合わせて記述することが可能です。
     $myouji = 'ふくしま';
     $namae = 'はやと';
 
-    // JavaScriptの + は PHPではドット . となる。 
+    // JavaScriptの + は PHPではドット . となる。
     echo $myouji . $namae;
     echo $name . 'test';
-    
+
     // 出力内容の詳細・データを知りたい場合はvar_dumpを利用
     var_dump($name);
     ?>
@@ -227,6 +231,62 @@ date()の引数はたくさん種類あります。
 </html>
 
 ```
+
+### foreachで配列を一つ一つ表示する
+
+```php
+<html>
+<head>
+    <meta charset="utf-8">
+    <style>
+        .menu {
+            background-color: #2FA6E9;
+        }
+        .red {
+            color: red;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="menu">
+        <h3>menu</h3>
+        <ul>
+            <li>PHPファイルとJS/CSSの動きを知る。</li>
+        </ul>
+    </div>
+    <?php
+        // 配列を作成する
+        $lang = ['PHP', 'JS', 'Python', 'Ruby'];
+
+        // foreachで一つ一つ表示する
+        foreach ($lang as $val) {
+            echo $val."<br>";
+        }
+
+
+    ?>
+</body>
+</html>
+```
+
+{% hint style="info" %}
+foreachにkeyを与えて
+
+```
+foreach ($variable as $key => $value) {
+    echo $key;
+    echo $value;
+}
+```
+
+という書き方もできる。
+
+{% endhint %}
+
+{% hint style="info" %}
+当然、for文もあります。
+{% endhint %}
 
 ### Form操作
 
@@ -381,7 +441,7 @@ GETやPOSTで受け取ったデータを出力する場合は必ず以下の処�
 function h($val){
 
    return htmlspecialchars($val,ENT_QUOTES);
-   
+
 }
 ```
 
