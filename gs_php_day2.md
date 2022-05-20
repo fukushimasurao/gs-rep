@@ -328,3 +328,27 @@ $view .= '<p>';
 $view .= h($result['date']).':'.h($result['name']).' '.h($result['content']).' '.h($result['email']);
 $view .= '</p>';
 ```
+
+#### 【課題】 ブックマークアプリ
+
+1. まず、以下の通りDBとテーブルを作成
+
+* DB名:自由
+* table名:`gs_bm_table`
+* 項目（カラム）名
+  1. ユニーク値 (int 12 , PRIMARY, AutoIncrement)
+  2. 2.書籍名 (varChar 64)
+  3. 書籍URL (text)
+  4. 書籍コメント(text)
+  5. 登録日時 (datetime)
+
+2. 授業でやったように、
+
+* 登録画面
+* 登録処理画面
+* 登録内容確認画面
+
+を作成してください。
+
+3. 課題を提出するときは、必ずsqlファイルも提出。
+ファイルの用意の仕方は[ここを参照](https://gitlab.com/gs_hayato/gs-php-01/-/blob/master/%E3%81%9D%E3%81%AE%E4%BB%96/howToExportSql.md)
