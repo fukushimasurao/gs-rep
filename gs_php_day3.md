@@ -14,6 +14,8 @@
 
 ## 今回やること
 
+- 各ファイルにある同じような作業を一つにまとめます。(require)
+
 前回は、CRUD機能の`Create（生成）`、`Read（読み取り）`を行いました。
 
 今日は、`update（更新）`、`Delete（削除）`をやっていきます。
@@ -79,6 +81,14 @@ function db_conn()
 require_once('funcs.php');
 $pdo = db_conn();
 ```
+
+{% endhint %}
+
+{% hint style="info" %}
+prepare, bindValue
+
+[require, require_once, include, include_once の違い](https://qiita.com/awesam86/items/3fa28e23c95ca74caddc)
+{% endhint %}
 
 ## SQLエラー処理とリダイレクト処理を関数化
 
@@ -284,8 +294,8 @@ if ($status === false) {
 
 1. まず、以下の通りDBとテーブルを作成
 
-- DB名:自由
-- table名:`gs_bm_table2`
+- DB名:自由 ※授業のDB名とかぶらないようにしてください。
+- table名:自由
 
 1. 授業でやったように、
 
