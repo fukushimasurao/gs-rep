@@ -4,19 +4,18 @@
 
 [https://gitlab.com/gs\_hayato/gs-php-01/-/blob/master/PHP04\_haifu.zip](https://gitlab.com/gs\_hayato/gs-php-01/-/blob/master/PHP04\_haifu.zip)
 
-## 前回のおさらい
+# まだ書き途中です
+
+## 前回までのおさらい
 
 * `SQL`の`UPDATE`を書いた
 * `SQL`の`DELETE`を書いた
 * CRUDのC,R,U,D全部触った
+* SESSIONを利用してログイン機能を作った
 
 ## 今回やること
 
-前回は、CRUD機能の`Updata（編集）`、`Delete（削除）`を行いました。
-
-今日は、`SESSION`をやっていきます。
-
-* `CRUD`とは？ <https://wa3.i-3-i.info/word123.html>
+フレームワーク利用に向けて、より良いコードを書く。
 
 ## MAMPの起動、DB準備
 
@@ -46,13 +45,9 @@
 6. 実行してみる
 7. 授業用のDBと中身を確認
 
-## 今日のイメージ
+## フレームワークとは？
 
-![](.gitbook/assets/php04/loginのイメージ.jpg)
-
-この鍵に、`SESSION`を利用する。
-
-## SESSIONとは
+## ハッシュ化
 
 今日はSESSIONを学びます。
 
