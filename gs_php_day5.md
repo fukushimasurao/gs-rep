@@ -15,7 +15,7 @@
 
 ## 今回やること
 
-フレームワーク利用に向けて、より良いコードを書く。
+今までの内容まとめ、応用
 
 ## MAMPの起動、DB準備
 
@@ -27,11 +27,11 @@
 6. データベースを作成から以下の名前で作成
 
 ```
-データベース名：gs_db4
+データベース名：gs_db5
 照合順序：utf8_unicode_ci
 ```
 
-1. 作成ボタンをクリック 左側に`gs_db4`というデータベースができていると思います。 現在は空っぽです。
+1. 作成ボタンをクリック 左側に`gs_db5`というデータベースができていると思います。 現在は空っぽです。
 
 ## SQLファイルからインポート
 
@@ -39,324 +39,235 @@
 
 1. 念の為、左側のメニューから`gs_db4`をクリック
 2. `gs_db4`を選択した状態でインポートタブをクリック
-3. ファイルを選択をクリックして配布した資料内のSQLフォルダ内の`gs_an_table.sql`を選択
+3. ファイルを選択をクリックして配布した資料内のSQLフォルダ内の`gs_content_table.sql`を選択
 4. 実行してみる
 5. ファイルを選択をクリックして配布した資料内のSQLフォルダ内の`gs_user_table.sql`を選択 **今日のテーブルは2つあります。**
 6. 実行してみる
 7. 授業用のDBと中身を確認
 
-## フレームワークとは？
+## まずは中身を確認してみてください。
 
-## ハッシュ化
+- index.php
+  - 投稿した内容の一覧が表示されます。左下から管理画面にログインしてください
 
-今日はSESSIONを学びます。
+ID, PWは以下の通り。
 
-* SESSION変数 ... 「サーバー側に変数を保持」できる。
-  * ※普通の変数は、サーバーに保存できない。
-
-#### （例）普通の変数
-
-```php
-// test01.php
-
-$name = 'yamada';
-echo $name;
-// yamadaと出力される
+```
+ID:test1
+PW:test2
 ```
 
-```php
-// test02.php
-echo $name;
-// エラー。test02.phpの中には変数定義されていない。
+- ログイン後、記事を作成できる。
+- ログイン後、記事を修正できる。
+- ログアウトできる,,,など。
+
+- コードは、管理者画面については、`admin`ディレクトリに入っていることを確認してください。
+## 共通部分をまとめる。
+
+### `<head>`の中身
+
+今回はどのページにも共通している内容を、まとめます。
+
+例えば、以下のページにある、`<head>`の中身です。
+
+- index.php
+- admin/index.php
+- admin/confirm.php
+- admin/detail.php
+- admin/login.php
+- admin/post.php
+
+```html
+<!-- 共通している事項 -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 ```
 
-### `SESSION`の確認
+関数の共通化のように、一つパーツを作った後、必要なページで呼び出してあげます。
 
-#### `session01.php`を作成
-
-1. `session01.php`を作成
-2. 以下記述
+1. ファイル作成...`common/head.php`
+2. `common/head.php`に以下のように記述
 
 ```php
 <?php
-// SESSIONスタート
-session_start();
+$head = <<<EOM
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+EOM;
+```
 
-// SESSIONのidを取得
-$sid = session_id();
-echo $sid;
+3. 利用したいページで、`require_once('../common/head.php');`を記述　※ファイルPATHは環境によって異なるので注意
+4. `<head>`タグ内で、`<?= $head ?>`と記述し呼び出してあげる。
 
+{% hint style="info" %}
+
+```
+$var = <<<EOM
+....
+EOM;
+```
+
+この書き方は、`ヒアドキュメント`と言います、
+地味にルールが多いので、公式サイト参照推奨
+https://www.php.net/manual/ja/language.types.string.php#language.types.string.syntax.heredoc
+{% endhint %}
+
+
+### (余力有ったらこれもやりましょう)`<nav>`の中身
+
+以下ページにある、`<nav>`タグも共通化しましょう。
+
+- admin/confirm.php
+- admin/detail.php
+- admin/index.php
+- admin/post.php
+
+共通化している項目
+
+```html
+  <header>
+      <nav class="navbar navbar-expand-lg navbar-light bg-info">
+          <div class="container-fluid">
+              <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                  <li class="nav-item">
+                  <a class="nav-link active" aria-current="page" href="../index.php">ブログ画面へ</a>
+                  </li>
+                  <li class="nav-item">
+                  <a class="nav-link active" aria-current="page" href="post.php">投稿する</a>
+                  </li>
+                  <li class="nav-item">
+                  <a class="nav-link active" aria-current="page" href="index.php">投稿一覧</a>
+                  </li>
+                  <li class="nav-item">
+                  <a class="nav-link active" aria-current="page" href="logout.php">ログアウト</a>
+                  </li>
+              </ul>
+          </div>
+      </nav>
+  </header>
+```
+
+1. ファイル作成...`common/header.php`
+2. `common/header.php`に以下のように記述
+3. 利用したいページで、`require_once('../common/header.php');`を記述　※ファイルPATHは環境によって異なるので注意
+4. `<body>`の直下あたりで、`<?= $header ?>`と記述し呼び出してあげる。
+
+```php
+<?php
+$header = <<<EOM
+<header>
+    <nav class="navbar navbar-expand-lg navbar-light bg-info">
+        <div class="container-fluid">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="../index.php">ブログ画面へ</a>
+                </li>
+                <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="post.php">投稿する</a>
+                </li>
+                <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="index.php">投稿一覧</a>
+                </li>
+                <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="logout.php">ログアウト</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</header>
+EOM;
+```
+
+## 投稿にバリデーションをつける。
+
+投稿内容が空白の場合に、登録できないようにする。
+
+- `resister.php`にバリデーションをつける。
+  
+以下のようにif文を作成。
+（`$content  = $_POST['content'];`の下辺り。）
+
+```php
+// resister.php
+$title = $_POST['title'];
+$content  = $_POST['content'];
+
+
+$error = false;
+// もし、どちらかが空白だったらredirect関数でindexに戻す。その際、URLパラメーターでerrorを渡す。
+if (trim($title) === '' || trim($$content) === '') {
+    redirect('post.php?error=1');
+}
+```
+
+- `post.php`の`<form>`の上辺りに、以下追加
+
+```php
+// post.php
+
+// もしURLパラメータがある場合
+<?php if (isset($_GET['error'])): ?>
+    <p class="text-danger">記入内容を確認してください</p>
+<?php endif ?>
+<form method="POST" action="resister.php" enctype="multipart/form-data">
+```
+
+HTMLブロック内にてPHPを記述する際、if文やfor文を利用する際は、以下のように記述できます。
+
+```php
+
+// 普通に書く場合
+<?php
+if ($a > $b)
+  echo "aはbより大きい";
+  echo "<h1>test</h1>";
 ?>
+
+// 下のように書くと、echoを書かなくて良い。
+<?php if ($a > $b): ?>
+    <p>aはbより大きい</p>
+    <h1>test</h1>
+<?php endif ?>
 ```
 
 {% hint style="info" %}
-`session_start()`で「鍵」に当たる部分を作成するイメージです。
+本来、バリデーションは、各項目ごとに記述を変えてあげたほうが親切です。
+例えば、
 
-`session_id()`で、その鍵がどんなIDなのかを確認できます。
+- 名前の文字数が多い場合
+- メールアドレスの文字列が多い場合
+- メールアドレスの形式がおかしい（例えば@が入っていない）場合
+- 数字で記入するべきところを数字で記載しない場合
+
+などです。
+それぞれに適したバリデーションメッセージを表示させるようにしましょう。
 {% endhint %}
 
-#### `session01.php`をブラウザでチェック
 
-idが表示されているはずです。 このデータは
+## 投稿に確認画面をつける。
 
-* ブラウザ
-* サーバー の両方に同じデーターが保存されています。
-* ブラウザ `developer tools`の`検証 ＞ Application ＞ Cookies ＞ localhost`に`PHPSESSID`
-* サーバー `MAMP` > `tmp` > `php` > `sess_XXXXXXXXXXXXXXXXXXX`
 
-#### `session01.php`の`session_id()`の下に以下処理を追加
+## 投稿に画像投稿も追加する。
 
-```php
-// SESSION変数にデータを登録
-$_SESSION['name'] = 'john';
-$_SESSION['age'] = 30;
-```
 
-{% hint style="info" %}
-上記保存したら、ブラウザで`session01.php`をもう一度開いて（更新して）ください。
 
-ブラウザで開くことで、`session01.php`が処理されます。
-{% endhint %}
-
-#### `session02.php`を作成して以下記述
-
-```php
-<?php
-// SESSIONスタート
-session_start();
-
-// SESSION変数を取得
-$name = $_SESSION['name'];
-$age = $_SESSION['age'];
-
-echo $name;
-echo $age;
-?>
-```
-
-![](.gitbook/assets/php04/session.jpg)
-
-### `session ID`の更新・変更方法
-
-**セキュリティー上、session idは変更する必要があります。**
-
-#### session_regenerate_id.phpの動きを確認
-
-### 以下記述を追加
-
-```php
-<?php
-//必ずsession_startは最初に記述
-session_start();
-
-//現在のセッションIDを取得
-$old_session_id = session_id();
-
-// 以下追加
-//　新しいセッションIDを発行（前のSESSION IDは無効）
-session_regenerate_id(true);
-
-//新しいセッションIDを取得
-$new_session_id = session_id();
-
-//旧セッションIDと新セッションIDを表示
-echo '古いセッション:' . $old_session_id . '<br />';
-echo '新しいセッション:' . $new_session_id . '<br />';
-
-```
-
-{% hint style="info" %}
-セッション情報を鍵のように利用してログイン機能を実装します。
-
-セッションIDを盗まれることを[`セッション・ハイジャック`](https://www.ipa.go.jp/security/vuln/websecurity-HTML-1_4.html)と呼びます。
-
-万が一盗まれても良いように、セッションIDを変更(鍵を変更)する必要が有るわけです
-{% endhint %}
-
-## ログイン処理の実装
-
-#### ログイン処理のイメージ
-
-流れは、
-
-* ログイン処理
-* DBの`UserId`と`UserPw`と合致した場合、
-* `SESSION ID`を発行してサーバーとブラウザにブラウザに同じ値の一意のIDを発行
-* もしブラウザがそのIDを持っていたら、サーバーは、「そのユーザー」と認識する。
-
-1. login.phpのコードを確認。どのようなformになって確認してみてください。
-
-2. login\_act.phpに以下の記述を追加
-
-```php
-session_start();
-
-//POST値
-$lid = $_POST['lid'];
-$lpw = $_POST['lpw'];
-```
-
-1. データ登録SQL作成
-
-```php
-$stmt = $pdo->prepare('SELECT * FROM gs_user_table WHERE lid = :lid AND lpw=:lpw');
-$stmt->bindValue(':lid', $lid, PDO::PARAM_STR);
-$stmt->bindValue(':lpw', $lpw, PDO::PARAM_STR); //* Hash化する場合はコメントする
-$status = $stmt->execute();
-```
-
-1. 処理後のリダイレクト先を設定
-
-```php
-//5. 該当レコードがあればSESSIONに値を代入
-//* if(password_verify($lpw, $val['lpw'])){
-if( $val['id'] != '' ){
-  //Login成功時
-  $_SESSION['chk_ssid']  = session_id();
-  $_SESSION['kanri_flg'] = $val['kanri_flg'];
-  $_SESSION['name']      = $val['name'];
-  redirect('selsect.php');
-}else{
-  //Login失敗時(Logout経由)
-  redirect('login.php');
-}
-```
-
-1. select.phpにログインチェック処理を追加
-
-```php
-//SESSIONスタート
-session_start();
-
-// ログイン処理の時に代入した$_SESSION['chk_ssid']を持っているか？加えてサーバーのSESSION IDと一緒か？
-if( $_SESSION['chk_ssid'] != session_id() ){
-    exit('LOGIN ERROR');
-}else{
-session_regenerate_id(true);
-    $_SESSION['chk_ssid'] = session_id();
-}
-//以下ログインユーザーのみ処理が行われる。
-// (以下略)
-```
-
-1. ログイン処理を関数化。`funcs.php`にログインチェック関数を作成
-
-```php
-//ログインチェック
-function loginCheck(){
-  if( $_SESSION['chk_ssid'] != session_id() ){
-    exit('LOGIN ERROR');
-  }else{
-    session_regenerate_id(true);
-    $_SESSION['chk_ssid'] = session_id();
-  }
-}
-```
-
-1. `select.php`のログインチェック処理をリファクタリング
-
-```php
-//SESSIONスタート
-session_start();
-
-//関数を呼び出す
-require_once('funcs.php');
-
-//ログインチェック
-loginCheck();
-//以下ログインユーザーのみ
-```
-
-{% hint style="info" %}
-`loginCheck();`は、`session_start();`、`require_once('funcs.php');`の下に記述するようにしましょう。
-{% endhint %}
-
-#### ログイン・ログアウトの確認
-
-* `index.php`
-
-1. index.phpで、まずログアウトしましょう。(※ログアウト処理は後述)
-2. selectに戻って、一覧を確認してみてください。 → 多分見られない
-3. ログインしましょう。
-4. 一覧を見てみましょう。
-
-## ログインが必要なページに以下記述
-
-* `detail.php`
-* `delete.php`
-
-```php
-session_start();
-require_once('funcs.php');
-loginCheck();
-// 以下省略
-```
-
-## パスワードのハッシュ化
-
-_**万が一パスワードが盗まれた場合に備えて、パスワードをハッシュ化**_
-
-* `ハッシュ化` ... 不可逆的
-* `暗号化` ... 可逆的 = 復元可能
-
-1. `hash.php`を作成
-2. `hash.php`内にパスワードのハッシュ化の処理を記述
-
-```php
-<?php
-
-$pw = password_hash('test1',PASSWORD_DEFAULT);
-echo $pw;
-
-// 表示された内容が 'test1' を hash化したもの
-?>
-```
-
-3. パスワードの書き換え
-
-* ↑で表示されたハッシュ値をコピー
-* `phpMyAdmin`にて、`lpw`の`test1`をコピーしたハッシュ値に書き換える。
-
-![](.gitbook/assets/php04/hash.png)
-
-1. `login_act.php`の中の処理を一部変更
-
-```php
-// ↓ここをlidだけに変更
-$stmt = $pdo->prepare('SELECT * FROM gs_user_table WHERE lid = :lid;');
-$stmt->bindValue(':lid',$lid, PDO::PARAM_STR);
-
-// *Hash化する場合はコメントする
-// $stmt->bindValue(':lpw',$lpw, PDO::PARAM_STR);
-$status = $stmt->execute();
-```
-
-```php
-//5. 該当レコードがあればSESSIONに値を代入この部分のif文をpassword_verifyに変更
-if ($val['id'] != '' && password_verify($lpw, $val['lpw'])) {
-  // Login成功時
-  // 省略
-}else{
-  // 省略
-}
-```
-
-今後ユーザー登録する際にパスワードはハッシュ化してあげる。
-
-## 【課題】 ブックマークアプリ その3
+## 【課題】 PHPでプロダクト
 
 1. まず、以下の通りDBとテーブルを作成
 
 * DB名:自由 ※授業のDB名とかぶらないようにしてください。
 * table名:自由
 
-1.ログインが不要なページとログインが必要なページを含む内容で作成してください。
+2. 前回の課題に、
+   - 画像投稿機能
+   - 投稿確認画面
+など、授業で扱った内容を加えてください。
 
-* ログインが不要なページ
-例；一覧ページ
+※すでにこれらの機能が備わっている場合は、自由にプロダクトしてください。
 
-* ログインが必要なページ
-例；詳細画面、編集画面
-
-1. 課題を提出するときは、必ずsqlファイルも提出。
+3. 課題を提出するときは、必ずsqlファイルも提出。
 ファイルの用意の仕方は[ここを参照](https://gitlab.com/gs_hayato/gs-php-01/-/blob/master/%E3%81%9D%E3%81%AE%E4%BB%96/howToExportSql.md)
