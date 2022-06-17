@@ -6,7 +6,7 @@
 * [😁 012_gs\_php\_day2](gs\_php\_day2.md)
 * [😚 013_gs\_php\_day3](gs\_php\_day3.md)
 * [🤩 014_gs\_php\_day4](gs\_php\_day4.md)
-* [🤡 014_gs\_php\_day5](gs\_php\_day5.md)
+* [🤡 015_gs\_php\_day5](gs\_php\_day5.md)
 * [😇 about functionほぼ完成](about-function.md)
 * [🆚 VS code関連](vs\-code.md)
 * [🏫 about Class](about-class.md)
