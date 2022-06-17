@@ -555,6 +555,8 @@ if ($_SESSION['post']['image_data']) {
 
 6. `admin/index.php`, `index.php`に以下追加して、もし画像がある場合、それを表示させるようにする。
 
+* `admin/index.php` (srcの階層注意)
+
 ```php
 <?php foreach ($contents as $content): ?>
     <div class="col">
@@ -568,6 +570,21 @@ if ($_SESSION['post']['image_data']) {
         // 以下省略
 ```
 
+* `index.php` (srcの階層注意)
+
+```php
+<?php foreach ($contents as $content): ?>
+    <div class="col">
+        <div class="card shadow-sm">
+        <?php if ($content['img']): ?>
+            <img src="images/<?=$content['img']?>" alt="" class="bd-placeholder-img card-img-top" >
+        <?php else: ?>
+            <img src="images/default_image/no_image_logo.png" alt="" class="bd-placeholder-img card-img-top" >
+        <?php endif ?>
+        <div class="card-body">
+        // 以下省略
+```
+
 ---
 
 *以下余力あれば*
@@ -575,8 +592,6 @@ if ($_SESSION['post']['image_data']) {
 {% hint style="info" %}
 投稿修正画面にも確認画面を追加してみましょう。
 {% endhint %}
-
-
 
 ## 【課題】 PHPでプロダクト
 
