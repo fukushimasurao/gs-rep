@@ -102,15 +102,16 @@ EOM;
 
 3. 利用したいページで、
 
-- index.php
-  -> `require_once('common/head_parts.php');`
+- 以下ページには、 `require_once('common/head_parts.php');`  
+  - index.php
 
-- admin/index.php
-- admin/confirm.php
-- admin/detail.php
-- admin/login.php
-- admin/post.php
-  -> `require_once('../common/head_parts.php');`
+
+- 以下ページには、 `require_once('../common/head_parts.php');`
+  - admin/index.php
+  - admin/confirm.php
+  - admin/detail.php
+  - admin/login.php
+  - admin/post.php
 
 を記述　※ファイルPATHは階層によって異なるので注意
 1. `<head>`タグ内で、`<?= $head_parts ?>`と記述し呼び出してあげる。
