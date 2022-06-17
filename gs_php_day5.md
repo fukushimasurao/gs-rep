@@ -15,6 +15,9 @@
 ## 今回やること
 
 今までの内容まとめ、応用
+- 共通しているパーツをまとめて一つにしましょう（リファクタリング）
+- 記事投稿時に、確認画面がないので、確認画面を追加しましょう。
+- 記事投稿時に、画像投稿ができないので、機能を追加しましょう。
 
 ## MAMPの起動、DB準備
 
@@ -91,7 +94,7 @@ PW:test2
 
 ```php
 <?php
-$head = <<<EOM
+$head_parts = <<<EOM
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
@@ -150,10 +153,10 @@ https://www.php.net/manual/ja/language.types.string.php#language.types.string.sy
   </header>
 ```
 
-1. ファイル作成...`common/header.php`
-2. `common/header.php`に以下のように記述
-3. 利用したいページで、`require_once('../common/header.php');`を記述　※ファイルPATHは環境によって異なるので注意
-4. `<body>`の直下あたりで、`<?= $header ?>`と記述し呼び出してあげる。
+1. ファイル作成...`common/head_parts.php`
+2. `common/head_parts.php`に以下のように記述
+3. 利用したいページで、`require_once('../common/head_parts.php');`を記述　※ファイルPATHは環境によって異なるので注意
+4. `<body>`の直下あたりで、`<?= $head_parts ?>`と記述し呼び出してあげる。
 
 ```php
 <?php
@@ -196,9 +199,8 @@ $title = $_POST['title'];
 $content  = $_POST['content'];
 
 
-$error = false;
 // もし、どちらかが空白だったらredirect関数でindexに戻す。その際、URLパラメーターでerrorを渡す。
-if (trim($title) === '' || trim($$content) === '') {
+if (trim($title) === '' || trim($content) === '') {
     redirect('post.php?error=1');
 }
 ```
@@ -212,7 +214,7 @@ if (trim($title) === '' || trim($$content) === '') {
 <?php if (isset($_GET['error'])): ?>
     <p class="text-danger">記入内容を確認してください</p>
 <?php endif ?>
-<form method="POST" action="resister.php" enctype="multipart/form-data">
+<form method="POST" action="resister.php">
 ```
 
 HTMLブロック内にてPHPを記述する際、if文やfor文を利用する際は、以下のように記述できます。
@@ -249,10 +251,258 @@ if ($a > $b)
 
 ## 投稿に確認画面をつける。
 
+現状は`POST.php`で投稿すると、すぐに登録されます。
+投稿確認画面を作成しましょう。
+
+1. `confirm.php`に以下のコードを追記しましょう。
+
+
+{% hint style="info" %}
+`form`から`post`で遷移した後、もう一度`form`に戻ると、記入した内容が消えてしまいます。
+一度記入した内容を記録しておきたいので、`SESSION`を利用します。
+{% endhint %}
+
+
+```php
+// postされたら、セッションに保存
+$title = $_SESSION['post']['title'] = $_POST['title'];
+$content = $_SESSION['post']['content'] = $_POST['content'];
+
+// $_FILESの中に、投稿画像のデータが入っている。
+// echo '<pre>';
+// var_dump($_FILES);
+// echo '</pre>';
+
+// 簡単なバリデーション処理。
+if (trim($title) === '' || trim($content) === '') {
+    $err = true;
+}
+
+if ($err) {
+    redirect('post.php?error=1');
+}
+```
+
+
+```php
+<form method="POST" action="register.php" class="mb-3">
+    <div class="mb-3">
+        <label for="title" class="form-label">タイトル</label>
+        <input type="hidden"name="title" value="<?= $title ?>"> // ← valueを追加
+        <p><?= $title ?></p>
+    </div>
+    <div class="mb-3">
+        <label for="content" class="form-label">記事内容</label>
+        <input type="hidden"name="content" value="<?= $content ?>">　 // ← valueを追加
+        <div><?= nl2br($content) ?></div>
+    </div>
+    <button type="submit" class="btn btn-primary">投稿</button>
+</form>
+```
+
+2. `postphp`に以下追加
+
+```php
+<?php
+session_start();
+require_once('../funcs.php');
+loginCheck();
+
+// ↓↓↓↓↓ここから追加↓↓↓↓
+// 前に戻るボタン用に、sessionを用意しておく。
+$title = '';
+$content = '';
+$img_path = '';
+if ($_SESSION['post']['title']) {
+    $title = $_SESSION['post']['title'];
+}
+if ($_SESSION['post']['content']) {
+    $content = $_SESSION['post']['content'];
+}
+?>
+```
+
+```php
+<form method="POST" action="confirm.php"> // ← actionを変更
+    <div class="mb-3">
+        <label for="title" class="form-label">タイトル</label>
+        <input type="text" class="form-control" name="title" id="title" aria-describedby="title" value="<?= $title ?>">　// ← value追加
+        <div id="emailHelp" class="form-text">※入力必須</div>
+    </div>
+    <div class="mb-3">
+        <label for="content" class="form-label">記事内容</label>
+        <textArea type="text" class="form-control" name="content" id="content" aria-describedby="content" rows="4" cols="40"><?= $content ?></textArea> // ← <?= $content ?>追加
+        <div id="emailHelp" class="form-text">※入力必須</div>
+    </div>
+    <button type="submit" class="btn btn-primary">投稿する</button>
+</form>
+```
+
 
 ## 投稿に画像投稿も追加する。
 
+1. `POST.php`のフォームに以下追加
 
+```php
+<form method="POST" action="confirm.php" enctype="multipart/form-data"> // enctype="multipart/form-data"を追加
+    <div class="mb-3">
+        <label for="title" class="form-label">タイトル</label>
+        <input type="text" class="form-control" name="title" id="title" aria-describedby="title" value="<?= $title ?>">
+        <div id="emailHelp" class="form-text">※入力必須</div>
+    </div>
+    <div class="mb-3">
+        <label for="content" class="form-label">記事内容</label>
+        <textArea type="text" class="form-control" name="content" id="content" aria-describedby="content" rows="4" cols="40"><?= $content ?></textArea>
+        <div id="emailHelp" class="form-text">※入力必須</div>
+    </div>
+
+    // ↓↓↓↓↓↓↓↓↓以下追加↓↓↓↓↓↓↓↓↓
+    <?php if ($image_data): ?>
+    <img src="image.php">
+    <?php endif;?>
+    <div class="mb-3">
+        <label for="img" class="form-label">画像投稿</label>
+        <input type="file" name="img">
+    </div>
+    // ↑↑↑↑↑↑↑↑ここまで追加↑↑↑↑↑↑↑↑↑ 
+    <button type="submit" class="btn btn-primary">確認する</button>
+</form>
+```
+
+2. `confirm.php`のPHP部分に以下追加
+
+```php
+<?php
+session_start();
+require_once('../funcs.php');
+loginCheck();
+
+// postされたら、セッションに保存
+$title = $_SESSION['post']['title'] = $_POST['title'];
+$content = $_SESSION['post']['content'] = $_POST['content'];
+
+// $_FILESの中に、投稿画像のデータが入っている。
+// echo '<pre>';
+// var_dump($_FILES);
+// echo '</pre>';
+
+
+// ↓↓↓↓↓ここから追加↓↓↓↓
+// imgがある場合
+if ($_FILES['img']['name']) {
+    $file_name = $_SESSION['post']['file_name']= $_FILES['img']['name'];
+    $image_data = $_SESSION['post']['image_data'] = file_get_contents($_FILES['img']['tmp_name']);
+    $image_type = $_SESSION['post']['image_type'] = exif_imagetype($_FILES['img']['tmp_name']);
+} else {
+    $image_data = $_SESSION['post']['image_data'] = '';
+    $image_type = $_SESSION['post']['image_type'] = '';
+}
+// ↑↑↑↑↑↑ここまで↑↑↑↑↑↑↑↑↑↑↑
+
+if (trim($title) === '' || trim($content) === '') {
+    $err = true;
+}
+
+// ↓↓↓↓↓ここから追加↓↓↓↓
+//写真は拡張子をチェック
+if (!empty($file_name)) {
+    $extension = substr($file_name, -3);
+    if ($extension != 'jpg' && $extension != 'gif' && $extension != 'png') {
+        $err = true;
+    }
+}
+// ↑↑↑↑↑↑ここまで↑↑↑↑↑↑↑↑↑↑↑
+
+
+if ($err) {
+    redirect('post.php?error=1');
+}
+?>
+```
+
+3. `confirm.php`の`form`部分に以下追加
+
+```php
+<form method="POST" action="register.php" enctype="multipart/form-data" class="mb-3">
+    <div class="mb-3">
+        <label for="title" class="form-label">タイトル</label>
+        <input type="hidden"name="title" value="<?= $title ?>">
+        <p><?= $title ?></p>
+    </div>
+    <div class="mb-3">
+        <label for="content" class="form-label">記事内容</label>
+        <input type="hidden"name="content" value="<?= $content ?>">
+        <div><?= nl2br($content) ?></div>
+    </div>
+
+    // ↓↓↓↓↓↓↓↓↓↓↓↓追加↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
+    <?php if ($image_data): ?>
+    <div class="mb-3">
+        <img src="image.php">
+    </div>
+    <?php endif; ?>
+    //↑↑↑↑↑↑↑↑↑↑↑↑↑↑ここまで↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑
+
+    <button type="submit" class="btn btn-primary">投稿</button>
+</form>
+```
+
+
+4. `register.php`に以下追記
+
+```php
+<?php
+session_start();
+require_once('../funcs.php');
+loginCheck();
+
+$title = $_POST['title'];
+$content  = $_POST['content'];
+
+    // ↓↓↓↓↓↓↓↓↓↓↓↓追加↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
+$img = '';
+
+    // ↓↓↓↓↓↓↓↓↓↓↓↓追加↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
+// imgがある場合
+if ($_SESSION['post']['image_data']) {
+    $img = date('YmdHis') . '_' . $_SESSION['post']['file_name'];
+}
+    //↑↑↑↑↑↑↑↑↑↑↑↑↑↑ここまで↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑
+
+// 簡単なバリデーション処理。
+if (trim($_POST['title']) === '') {
+    $err[] = 'タイトルを確認してください。';
+}
+if (trim($_POST['content']) === '') {
+    $err[] = '内容を確認してください';
+}
+
+    // ↓↓↓↓↓↓↓↓↓↓↓↓追加↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
+
+if (!empty($img)) {
+    $check =  substr($img, -3);
+    if ($check != 'jpg' && $check != 'gif' && $check != 'png') {
+        $err[] = '写真の内容を確認してください。';
+    }
+}
+    //↑↑↑↑↑↑↑↑↑↑↑↑↑↑ここまで↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑
+
+// もしerr配列に何か入っている場合はエラーなので、redirect関数でindexに戻す。その際、GETでerrを渡す。
+if (count($err) > 0) {
+    redirect('post.php?error=1');
+}
+
+    // ↓↓↓↓↓↓↓↓↓↓↓↓追加↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
+if ($_SESSION['post']['image_data']) {
+    file_put_contents('../images/' . $img, $_SESSION['post']['image_data']);
+}
+    //↑↑↑↑↑↑↑↑↑↑↑↑↑↑ここまで↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑
+
+```
+
+{% hint style="info" %}
+投稿修正画面にも確認画面を追加してみましょう。
+{% endhint %}
 
 ## 【課題】 PHPでプロダクト
 
