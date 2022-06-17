@@ -3,8 +3,6 @@
 
 [https://gitlab.com/gs\_hayato/gs-php-01/-/blob/master/PHP05\_haifu.zip](https://gitlab.com/gs\_hayato/gs-php-01/-/blob/master/PHP05\_haifu.zip)
 
-# まだ書き途中です
-
 ## 前回までのおさらい
 
 * `SQL`の`UPDATE`を書いた
@@ -198,10 +196,9 @@ EOM;
 $title = $_POST['title'];
 $content  = $_POST['content'];
 
-
 // もし、どちらかが空白だったらredirect関数でindexに戻す。その際、URLパラメーターでerrorを渡す。
 if (trim($title) === '' || trim($content) === '') {
-    redirect('post.php?error=1');
+  redirect('post.php?error=1');
 }
 ```
 
@@ -275,11 +272,7 @@ $content = $_SESSION['post']['content'] = $_POST['content'];
 
 // 簡単なバリデーション処理。
 if (trim($title) === '' || trim($content) === '') {
-    $err = true;
-}
-
-if ($err) {
-    redirect('post.php?error=1');
+        redirect('post.php?error=1');
 }
 ```
 
