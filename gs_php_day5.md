@@ -392,14 +392,11 @@ if ($_SESSION['post']['content']) {
     </div>
 
     // ↓↓↓↓↓↓↓↓↓以下追加↓↓↓↓↓↓↓↓↓
-    <?php if ($image_data): ?>
-    <img src="image.php">
-    <?php endif;?>
     <div class="mb-3">
         <label for="img" class="form-label">画像投稿</label>
         <input type="file" name="img">
     </div>
-    // ↑↑↑↑↑↑↑↑ここまで追加↑↑↑↑↑↑↑↑↑ 
+    // ↑↑↑↑↑↑↑↑ここまで追加↑↑↑↑↑↑↑↑↑
     <button type="submit" class="btn btn-primary">確認する</button>
 </form>
 ```
@@ -421,12 +418,14 @@ $content = $_SESSION['post']['content'] = $_POST['content'];
 // var_dump($_FILES);
 // echo '</pre>';
 
-
 // ↓↓↓↓↓ここから追加↓↓↓↓
 // imgがある場合
 if ($_FILES['img']['name']) {
     $file_name = $_SESSION['post']['file_name']= $_FILES['img']['name'];
+    // 一時保存されているファイル内容を取得して、セッションに格納
     $image_data = $_SESSION['post']['image_data'] = file_get_contents($_FILES['img']['tmp_name']);
+
+    // 一時保存されているファイルの種類を確認して、セッションにその種類に当てはまる特定のintを格納
     $image_type = $_SESSION['post']['image_type'] = exif_imagetype($_FILES['img']['tmp_name']);
 } else {
     $image_data = $_SESSION['post']['image_data'] = '';
@@ -435,7 +434,7 @@ if ($_FILES['img']['name']) {
 // ↑↑↑↑↑↑ここまで↑↑↑↑↑↑↑↑↑↑↑
 
 if (trim($title) === '' || trim($content) === '') {
-    $err = true;
+   redirect('post.php?error=1');
 }
 
 // ↓↓↓↓↓ここから追加↓↓↓↓
@@ -443,15 +442,11 @@ if (trim($title) === '' || trim($content) === '') {
 if (!empty($file_name)) {
     $extension = substr($file_name, -3);
     if ($extension != 'jpg' && $extension != 'gif' && $extension != 'png') {
-        $err = true;
+       redirect('post.php?error=1');
     }
 }
 // ↑↑↑↑↑↑ここまで↑↑↑↑↑↑↑↑↑↑↑
 
-
-if ($err) {
-    redirect('post.php?error=1');
-}
 ?>
 ```
 
@@ -482,7 +477,43 @@ if ($err) {
 </form>
 ```
 
-4. `register.php`に以下追記
+4. 戻るボタン押したときに、画像表示するため、`post.php`以下追加
+
+* php部分
+
+```php
+$title = '';
+$content = '';
+// $image_data = ''; ←追加
+
+if ($_SESSION['post']['title']) {
+    $title = $_SESSION['post']['title'];
+}
+if ($_SESSION['post']['content']) {
+    $content = $_SESSION['post']['content'];
+}
+
+// ↓追加
+if ($_SESSION['post']['image_data']) {
+    $image_data = $_SESSION['post']['image_data'];
+}
+```
+
+* form部分
+
+```php
+↓この３行追加↓
+<?php if ($image_data): ?>
+<img src="image.php">
+<?php endif;?>
+
+<div class="mb-3">
+    <label for="img" class="form-label">画像投稿</label>
+    <input type="file" name="img">
+</div>
+```
+
+5. `register.php`に以下追記
 
 ```php
 <?php
@@ -493,48 +524,36 @@ loginCheck();
 $title = $_POST['title'];
 $content  = $_POST['content'];
 
-    // ↓↓↓↓↓↓↓↓↓↓↓↓追加↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
-$img = '';
-
-    // ↓↓↓↓↓↓↓↓↓↓↓↓追加↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
 // imgがある場合
 if ($_SESSION['post']['image_data']) {
     $img = date('YmdHis') . '_' . $_SESSION['post']['file_name'];
 }
-    //↑↑↑↑↑↑↑↑↑↑↑↑↑↑ここまで↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑
+//↑↑↑↑↑↑↑↑↑↑↑↑↑↑ここまで↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑
 
 // 簡単なバリデーション処理。
-if (trim($_POST['title']) === '') {
-    $err[] = 'タイトルを確認してください。';
-}
-if (trim($_POST['content']) === '') {
-    $err[] = '内容を確認してください';
+if (trim($title) === '' || trim($content)  === '') {
+    redirect('post.php?error=1');
 }
 
-    // ↓↓↓↓↓↓↓↓↓↓↓↓追加↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
 
+// ↓↓↓↓↓↓↓↓↓↓↓↓追加↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
 if (!empty($img)) {
     $check =  substr($img, -3);
     if ($check != 'jpg' && $check != 'gif' && $check != 'png') {
         $err[] = '写真の内容を確認してください。';
     }
 }
-    //↑↑↑↑↑↑↑↑↑↑↑↑↑↑ここまで↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑
+//↑↑↑↑↑↑↑↑↑↑↑↑↑↑ここまで↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑
 
-// もしerr配列に何か入っている場合はエラーなので、redirect関数でindexに戻す。その際、GETでerrを渡す。
-if (count($err) > 0) {
-    redirect('post.php?error=1');
-}
-
-    // ↓↓↓↓↓↓↓↓↓↓↓↓追加↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
+// ↓↓↓↓↓↓↓↓↓↓↓↓追加↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
 if ($_SESSION['post']['image_data']) {
     file_put_contents('../images/' . $img, $_SESSION['post']['image_data']);
 }
-    //↑↑↑↑↑↑↑↑↑↑↑↑↑↑ここまで↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑
+//↑↑↑↑↑↑↑↑↑↑↑↑↑↑ここまで↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑
 
 ```
 
-5. `admin/index.php`, `index.php`に以下追加
+6. `admin/index.php`, `index.php`に以下追加して、もし画像がある場合、それを表示させるようにする。
 
 ```php
 <?php foreach ($contents as $content): ?>
@@ -549,9 +568,15 @@ if ($_SESSION['post']['image_data']) {
         // 以下省略
 ```
 
+---
+
+*以下余力あれば*
+
 {% hint style="info" %}
 投稿修正画面にも確認画面を追加してみましょう。
 {% endhint %}
+
+
 
 ## 【課題】 PHPでプロダクト
 
