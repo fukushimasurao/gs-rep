@@ -13,9 +13,10 @@
 ## 今回やること
 
 今までの内容まとめ、応用
-- 共通しているパーツをまとめて一つにしましょう（リファクタリング）
-- 記事投稿時に、確認画面がないので、確認画面を追加しましょう。
-- 記事投稿時に、画像投稿ができないので、機能を追加しましょう。
+
+* 共通しているパーツをまとめて一つにしましょう（リファクタリング）
+* 記事投稿時に、確認画面がないので、確認画面を追加しましょう。
+* 記事投稿時に、画像投稿ができないので、機能を追加しましょう。
 
 ## MAMPの起動、DB準備
 
@@ -45,10 +46,10 @@
 6. 実行してみる
 7. 授業用のDBと中身を確認
 
-## まずは中身を確認してみてください。
+## まずは中身を確認してみてください
 
-- index.php
-  - 投稿した内容の一覧が表示されます。左下から管理画面にログインしてください
+* index.php
+  * 投稿した内容の一覧が表示されます。左下から管理画面にログインしてください
 
 ID, PWは以下の通り。
 
@@ -57,12 +58,13 @@ ID:test1
 PW:test2
 ```
 
-- ログイン後、記事を作成できる。
-- ログイン後、記事を修正できる。
-- ログアウトできる,,,など。
+* ログイン後、記事を作成できる。
+* ログイン後、記事を修正できる。
+* ログアウトできる,,,など。
 
-- コードは、管理者画面については、`admin`ディレクトリに入っていることを確認してください。
-## 共通部分をまとめる。
+* コードは、管理者画面については、`admin`ディレクトリに入っていることを確認してください。
+
+## 共通部分をまとめる
 
 ### `<head>`の中身
 
@@ -70,12 +72,12 @@ PW:test2
 
 例えば、以下のページにある、`<head>`の中身です。
 
-- index.php
-- admin/index.php
-- admin/confirm.php
-- admin/detail.php
-- admin/login.php
-- admin/post.php
+* index.php
+* admin/index.php
+* admin/confirm.php
+* admin/detail.php
+* admin/login.php
+* admin/post.php
 
 ```html
 <!-- 共通している事項 -->
@@ -102,18 +104,18 @@ EOM;
 
 3. 利用したいページで、
 
-- 以下ページには、 `require_once('common/head_parts.php');`  
-  - index.php
+* 以下ページには、 `require_once('common/head_parts.php');`  
+  * index.php
 
-
-- 以下ページには、 `require_once('../common/head_parts.php');`
-  - admin/index.php
-  - admin/confirm.php
-  - admin/detail.php
-  - admin/login.php
-  - admin/post.php
+* 以下ページには、 `require_once('../common/head_parts.php');`
+  * admin/index.php
+  * admin/confirm.php
+  * admin/detail.php
+  * admin/login.php
+  * admin/post.php
 
 を記述　※ファイルPATHは階層によって異なるので注意
+
 1. `<head>`タグ内で、`<?= $head_parts ?>`と記述し呼び出してあげる。
 
 {% hint style="info" %}
@@ -126,18 +128,17 @@ $var = <<<{任意の文字}
 
 この書き方は、`ヒアドキュメント`と言います、
 地味にルールが多いので、公式サイト参照推奨
-https://www.php.net/manual/ja/language.types.string.php#language.types.string.syntax.heredoc
+<https://www.php.net/manual/ja/language.types.string.php#language.types.string.syntax.heredoc>
 {% endhint %}
-
 
 ### (余力有ったらこれもやりましょう)`<nav>`の中身
 
 以下ページにある、`<nav>`タグも共通化しましょう。
 
-- admin/confirm.php
-- admin/detail.php
-- admin/index.php
-- admin/post.php
+* admin/confirm.php
+* admin/detail.php
+* admin/index.php
+* admin/post.php
 
 共通化している項目
 
@@ -195,12 +196,11 @@ $header = <<<EOM
 EOM;
 ```
 
-## 投稿にバリデーションをつける。
+## 投稿にバリデーションをつける
 
 投稿内容が空白の場合に、登録できないようにする。
 
-- `resister.php`にバリデーションをつける。
-
+* `resister.php`にバリデーションをつける。
 
 {% hint style="info" %}
 バリデーションとは、入力規則のことです。
@@ -208,12 +208,13 @@ EOM;
 弾くようにします。
 
 例えば、
-- 電話番号の入力欄に、数字以外の入力がされていないか。
-- メール入力欄に、メール形式以外の文字列（例えば日本語）の入力がされてないか。
-- 男性か女性かその他かを選ばせる箇所で、それ以外の`value`がPOST/GETされていないか。
+
+* 電話番号の入力欄に、数字以外の入力がされていないか。
+* メール入力欄に、メール形式以外の文字列（例えば日本語）の入力がされてないか。
+* 男性か女性かその他かを選ばせる箇所で、それ以外の`value`がPOST/GETされていないか。
+
 などです。
 {% endhint %}
-
 
 以下のようにif文を作成。
 （`$content  = $_POST['content'];`の下辺り。）
@@ -229,7 +230,7 @@ if (trim($title) === '' || trim($content) === '') {
 }
 ```
 
-- `post.php`の`<form>`の上辺りに、以下追加
+* `post.php`の`<form>`の上辺りに、以下追加
 
 ```php
 // post.php
@@ -263,64 +264,75 @@ if ($a > $b)
 本来、バリデーションは、各項目ごとに記述を変えてあげたほうが親切です。
 例えば、
 
-- 名前の文字数が多い場合
-- メールアドレスの文字列が多い場合
-- メールアドレスの形式がおかしい（例えば@が入っていない）場合
-- 数字で記入するべきところを数字で記載しない場合
+* 名前の文字数が多い場合
+* メールアドレスの文字列が多い場合
+* メールアドレスの形式がおかしい（例えば@が入っていない）場合
+* 数字で記入するべきところを数字で記載しない場合
 
 などです。
 それぞれに適したバリデーションメッセージを表示させるようにしましょう。
 {% endhint %}
 
+## 投稿に確認画面をつける - 1
 
-## 投稿に確認画面をつける。
+現状は`post.php`で投稿すると、すぐに登録されます。
 
-現状は`POST.php`で投稿すると、すぐに登録されます。
-投稿確認画面を作成しましょう。
+そこで、
+
+* `post.php`にて、フォームを作成、
+* `confirm.php`にて、フォームから送られてきた内容をブラウザにて確認画面とし表示、
+* 確認が問題なければ`register.php`にて確認した内容を保存
+
+という流れにします。
+
+1. `post.php`のフォームの`action`を`confirm.php`に変更しましょう。
+2. `confirm.php`にバリデーション追加
+
+```php
+if (trim($title) === '' || trim($content)  === '') {
+    redirect('post.php?error=1');
+}
+```
+
+3. フォーム部分`hidden`等を確認しつつブラウザで動作確認。
+
+## 投稿に確認画面をつける - 2
+
+戻るボタンが押されたときに、記入した文字がすべて消えてしまうので、
+入力内容がそのまま残るようにしましょう。
 
 1. `confirm.php`に以下のコードを追記しましょう。
-
-
 {% hint style="info" %}
 `form`から`post`で遷移した後、もう一度`form`に戻ると、記入した内容が消えてしまいます。
 一度記入した内容を記録しておきたいので、`SESSION`を利用します。
 {% endhint %}
 
-
 ```php
 // postされたら、セッションに保存
 $title = $_SESSION['post']['title'] = $_POST['title'];
 $content = $_SESSION['post']['content'] = $_POST['content'];
-
-// $_FILESの中に、投稿画像のデータが入っている。
-// echo '<pre>';
-// var_dump($_FILES);
-// echo '</pre>';
-
-// 簡単なバリデーション処理。
-if (trim($title) === '' || trim($content) === '') {
-        redirect('post.php?error=1');
-}
 ```
 
+{% hint style="info" %}
 
 ```php
-<form method="POST" action="register.php" class="mb-3">
-    <div class="mb-3">
-        <label for="title" class="form-label">タイトル</label>
-        <input type="hidden"name="title" value="<?= $title ?>"> // ← valueを追加
-        <p><?= $title ?></p>
-    </div>
-    <div class="mb-3">
-        <label for="content" class="form-label">記事内容</label>
-        <input type="hidden"name="content" value="<?= $content ?>">　 // ← valueを追加
-        <div><?= nl2br($content) ?></div>
-    </div>
-    <button type="submit" class="btn btn-primary">投稿</button>
-</form>
+$a = 'string';
+$b = 'string';
 ```
 
+と、
+
+```php
+$a = $b = 'string';
+```
+
+は同じです。
+
+{% endhint %}
+
 2. `postphp`に以下追加
+
+`post.php`のphp部分↓
 
 ```php
 <?php
@@ -332,7 +344,7 @@ loginCheck();
 // 前に戻るボタン用に、sessionを用意しておく。
 $title = '';
 $content = '';
-$img_path = '';
+
 if ($_SESSION['post']['title']) {
     $title = $_SESSION['post']['title'];
 }
@@ -342,8 +354,10 @@ if ($_SESSION['post']['content']) {
 ?>
 ```
 
+`post.php`のform部分。↓
+
 ```php
-<form method="POST" action="confirm.php"> // ← actionを変更
+<form method="POST" action="confirm.php">
     <div class="mb-3">
         <label for="title" class="form-label">タイトル</label>
         <input type="text" class="form-control" name="title" id="title" aria-describedby="title" value="<?= $title ?>">　// ← value追加
@@ -358,8 +372,9 @@ if ($_SESSION['post']['content']) {
 </form>
 ```
 
+3. ブラウザで動作確認
 
-## 投稿に画像投稿も追加する。
+## 投稿に画像投稿も追加する
 
 1. `POST.php`のフォームに以下追加
 
@@ -467,7 +482,6 @@ if ($err) {
 </form>
 ```
 
-
 4. `register.php`に以下追記
 
 ```php
@@ -547,8 +561,8 @@ if ($_SESSION['post']['image_data']) {
 * table名:自由
 
 2. 前回の課題に、
-   - 画像投稿機能
-   - 投稿確認画面
+   * 画像投稿機能
+   * 投稿確認画面
 など、授業で扱った内容を加えてください。
 
 ※すでにこれらの機能が備わっている場合は、自由にプロダクトしてください。
