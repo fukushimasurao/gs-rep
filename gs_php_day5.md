@@ -87,8 +87,8 @@ PW:test2
 
 関数の共通化のように、一つパーツを作った後、必要なページで呼び出してあげます。
 
-1. ファイル作成...`common/head.php`
-2. `common/head.php`に以下のように記述
+1. ファイル作成...`common/head_parts.php`
+2. `common/head_parts.php`に以下のように記述
 
 ```php
 <?php
@@ -100,15 +100,27 @@ $head_parts = <<<EOM
 EOM;
 ```
 
-3. 利用したいページで、`require_once('../common/head.php');`を記述　※ファイルPATHは環境によって異なるので注意
-4. `<head>`タグ内で、`<?= $head ?>`と記述し呼び出してあげる。
+3. 利用したいページで、
+
+- index.php
+  -> `require_once('common/head_parts.php');`
+
+- admin/index.php
+- admin/confirm.php
+- admin/detail.php
+- admin/login.php
+- admin/post.php
+  -> `require_once('../common/head_parts.php');`
+
+を記述　※ファイルPATHは階層によって異なるので注意
+1. `<head>`タグ内で、`<?= $head_parts ?>`と記述し呼び出してあげる。
 
 {% hint style="info" %}
 
 ```
-$var = <<<EOM
+$var = <<<{任意の文字}
 ....
-EOM;
+{任意の文字};
 ```
 
 この書き方は、`ヒアドキュメント`と言います、
@@ -491,6 +503,21 @@ if ($_SESSION['post']['image_data']) {
 }
     //↑↑↑↑↑↑↑↑↑↑↑↑↑↑ここまで↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑
 
+```
+
+5. `admin/index.php`, `index.php`に以下追加
+
+```php
+<?php foreach ($contents as $content): ?>
+    <div class="col">
+        <div class="card shadow-sm">
+        <?php if ($content['img']): ?>
+            <img src="../images/<?=$content['img']?>" alt="" class="bd-placeholder-img card-img-top" >
+        <?php else: ?>
+            <img src="../images/default_image/no_image_logo.png" alt="" class="bd-placeholder-img card-img-top" >
+        <?php endif ?>
+        <div class="card-body">
+        // 以下省略
 ```
 
 {% hint style="info" %}
