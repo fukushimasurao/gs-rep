@@ -86,8 +86,17 @@ PW:test2
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 ```
-
 関数の共通化のように、一つパーツを作った後、必要なページで呼び出してあげます。
+
+
+{% hint style="info" %}
+`<head>`の中に記載されている`bootstrap`とは、フロントエンド向けのライブラリです。
+例えば、特定の位置の文字を赤くしたい場合、通常は`class+css`を記述して対応します。
+一方`bootstrap`を導入している場合`class`に`text-danger`と記載するだけで文字が赤くなります。
+
+https://getbootstrap.jp/
+{% endhint %}
+
 
 1. ファイル作成...`common/head_parts.php`
 2. `common/head_parts.php`に以下のように記述
