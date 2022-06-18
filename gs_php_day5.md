@@ -174,14 +174,14 @@ $var = <<<{任意の文字}
   </header>
 ```
 
-1. ファイル作成...`common/head_parts.php`
-2. `common/head_parts.php`に以下のように記述
-3. 利用したいページで、`require_once('../common/head_parts.php');`を記述　※ファイルPATHは環境によって異なるので注意
-4. `<body>`の直下あたりで、`<?= $head_parts ?>`と記述し呼び出してあげる。
+1. ファイル作成...`common/header_nav.php`
+2. `common/header_nav.php`に以下のように記述
+3. 利用したいページで、`require_once('../common/header_nav.php');`を記述　※ファイルPATHは環境によって異なるので注意
+4. `<body>`の直下あたりで、`<?= $header_nav ?>`と記述し呼び出してあげる。
 
 ```php
 <?php
-$header = <<<EOM
+$header_nav = <<<EOM
 <header>
     <nav class="navbar navbar-expand-lg navbar-light bg-info">
         <div class="container-fluid">
