@@ -1,8 +1,37 @@
 ---
-description: php 第0日目 MAMPについて
+description: php 第0日目 開発環境について
 ---
 
-# 🐘 001\_gs\_php\_day0(MAMP)
+# 🐘 001\_gs\_php\_day0(開発環境)
+
+
+# 開発環境は以下の２つから選択
+
+- Xampp
+- Mamp
+
+→ Gsでは、2021年頃からXammppを利用し始めました。
+
+## Xampp導入について
+
+### 公式サイト
+
+https://www.apachefriends.org/jp/index.html
+
+### 導入ガイド
+
+以下確認してください。
+Windows向け・Mac向けともにiltyと同じ内容です。
+ただしIltyが少し古いので撮り直しました↓
+
+### Windows向け
+
+[この動画](https://youtu.be/CtItk40RTfY)
+### Mac向け
+
+[この動画](https://youtu.be/GSHbxMXvfms)
+
+
 
 ## MAMP導入について
 
