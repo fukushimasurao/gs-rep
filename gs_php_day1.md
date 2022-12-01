@@ -10,9 +10,17 @@ description: php 第１日目
 
 ![](<.gitbook/assets/スクリーンショット 2022-01-09 2.30.21.png>)
 
+## GsのPHP授業でのお願い
+
+授業ごとにZIP化した配布資料を共有します。
+
+解凍したファイルは、必ず**htdocs/gs_code**に格納してください。
+
+※gs_codeフォルダがなければ、作成してください。
+
 ## 基礎文法
 
-### _000-1helloworld.php_
+### _gs_code/001/000-1helloworld.php_
 
 ```php
 <?php
@@ -30,22 +38,21 @@ echo 'hello world';
 本当は省略が推奨だが、授業の最初は丁寧に?>を記述していきます。
 {% endhint %}
 
-ブラウザの URLに localhost/000-1helloworld.phpと記入して出力を確認してみましょう。
+ブラウザの URLに _gs_code/001/000-1helloworld.php_と記入して出力を確認してみましょう。
 
 {% hint style="danger" %}
-mampの設定によっては、localhost:8888/000-1helloworld.php
+mampを使っている場合や、設定によっては、localhost:8888/000-1helloworld.php
 {% endhint %}
 
 {% hint style="danger" %}
 エラーの場合は以下を確認してみてください。
 
-・開始タグ・終了タグに間違いが無いか。
+- 開始タグ・終了タグに間違いが無いか。
+- htdocs/gs_codeに格納しているか。
+- 書き間違いが無いか。
+- 文の最後に ; が抜けていないか。
+- 全角スペースを記入していないか。
 
-・書き間違いが無いか。
-
-・文の最後に ; が抜けていないか。
-
-・全角スペースを記入していないか。
 {% endhint %}
 
 ### 000-2helloworld.php
@@ -75,7 +82,7 @@ PHP部分は改行せずに、１行で記述しよう。
 {% endhint %}
 
 {% hint style="info" %}
-記述して保存したら、localhost/000-2helloworld.php をブラウザで確認してみてください。
+記述して保存したら、_localhost/gs_code/001/000-2helloworld.php_ をブラウザで確認してみてください。
 {% endhint %}
 
 {% hint style="danger" %}
@@ -98,8 +105,10 @@ PHP部分は改行せずに、１行で記述しよう。
     echo 'Hello world';
     echo 'ふくしま'; // string型(文字列型)
     echo 90; // int型（整数）
-    echo '<h1>タイトル</h1>';
+    echo '<h1>タイトル</h1>'; // 文字列としてhtmlを表示すると、そのままhtmlとして処理される。
 
+
+    // 変数は、頭に $ をつけるだけ。
     $myouji = 'ふくしま';
     $namae = 'はやと';
 
@@ -118,6 +127,16 @@ PHP部分は改行せずに、１行で記述しよう。
 `△ echo $myouji.$namae;`
 
 `◎ echo $myouji . $namae;`
+{% endhint %}
+
+{% hint style="info" %}
+文字列を示すクオーテーションですが、シングルでもダブルでも現状はどちらでも良いです。
+私は、シングルクオーテーションを多用します。
+
+※シングルとダブルだと、利用方法に違いがあります。
+
+参考 : https://www.php.net/manual/ja/language.types.string.php#language.types.string.parsing
+
 {% endhint %}
 
 ### 002array.php
