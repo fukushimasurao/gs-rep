@@ -176,14 +176,19 @@ PHP部分は改行せずに、１行で記述しよう。
 ### 003kansu.php
 
 ここでは代表的な組み込み関数の対応を行います。
-
 単純に「こういう関数有るんだ〜」という確認程度の内容です。
+
+{% hint style="info" %}
+phpにて組み込み関数（最初から用意されている関数）を利用する時の基本的な形は、
+`関数名()` の形になります。
+{% endhint %}
 
 ```php
     <?php
     
     // 日付表示
     // ※　アルファベット大文字小文字を間違えないでください。
+    // 関数名()の形になっていることを確認してください。
     $today = date('Y/m/d H:i');
     $today2 = date('Y年m月d日 H時');
 
@@ -191,23 +196,32 @@ PHP部分は改行せずに、１行で記述しよう。
     echo '<br>';
     echo $today2;
     echo '<br>';
+```
 
-    // 文字長さ
-    $string = 'abcde';
+{% hint style="info" %}
+phpのデフォルトのタイムゾーンは
+{% endhint %}
+
+
+文字長さを計るには、`strlen('文字列')`関数を利用します。
+例えば`alphabet`という　単語の文字数を画面に出力するにはどのように書けばよいでしょうか。
+
+```php
+<?php
+    $string = 'alphabet';
     $length = strlen($string);
     echo $string . 'の文字数は' . $length . '文字';
     echo "<br>";
     // 正確には、strlen() が返すのはバイト数であり、 文字数ではありません。
     // 日本語文字数の場合は、https://www.flatflag.nir87.com/strlen-671
 
-    // trim
     // ※trim...全角スペースは取り除かない。取り除くものは↓
     // https://www.php.net/manual/ja/function.trim.php
     // 全角対応は、str_replaceを利用する。
     $string2 = ' 前後にわざと空白を入れる ';
-    echo $string2;
+    var_dump($string2);
     echo '<br>';
-    echo trim($string2);
+    var_dump(trim($string2));
 
     // ランダムな数字を表示する(rand)
     // 第1引数は最小の数、第2は最大の数
