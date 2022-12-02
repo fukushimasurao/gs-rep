@@ -38,21 +38,37 @@ echo 'hello world';
 本当は省略が推奨だが、授業の最初は丁寧に?>を記述していきます。
 {% endhint %}
 
-ブラウザの URLに _gs_code/001/000-1helloworld.php_と記入して出力を確認してみましょう。
+ブラウザの URLに`localhost/gs_code/001/000-1helloworld.php`と記入して出力を確認してみましょう。
 
 {% hint style="danger" %}
-mampを使っている場合や、設定によっては、localhost:8888/000-1helloworld.php
+mampを使っている場合や、設定によっては、localhost:8888/gs_code/001/000-1helloworld.php
 {% endhint %}
 
 {% hint style="danger" %}
 エラーの場合は以下を確認してみてください。
 
+- `XAMPP`を起動しているか。
 - 開始タグ・終了タグに間違いが無いか。
 - htdocs/gs_codeに格納しているか。
 - 書き間違いが無いか。
 - 文の最後に ; が抜けていないか。
 - 全角スペースを記入していないか。
+- その他不要な文字などが入ってないか。
+{% endhint %}
 
+{% hint style="danger" %}
+表示がされない場合、
+
+1\. 保存
+
+2\. ブラウザ更新
+
+3\. 画面の確認
+
+の３点を行ったか確認してみださい。
+この３つが基本の動作です。
+
+もし、VScodeの自動保存をしていない場合は、利用してみて下さい。
 {% endhint %}
 
 ### 000-2helloworld.php
@@ -82,20 +98,7 @@ PHP部分は改行せずに、１行で記述しよう。
 {% endhint %}
 
 {% hint style="info" %}
-記述して保存したら、_localhost/gs_code/001/000-2helloworld.php_ をブラウザで確認してみてください。
-{% endhint %}
-
-{% hint style="danger" %}
-表示がされない場合、
-
-1\. 保存
-
-2\. ブラウザ更新
-
-3\. 画面の確認
-
-の３点を行ったか確認してみださい。
-この３つが基本の動作です。
+記述して保存したら、`localhost/gs_code/001/000-2helloworld.php` をブラウザで確認してみてください。
 {% endhint %}
 
 ### 001hensu.php
@@ -112,7 +115,7 @@ PHP部分は改行せずに、１行で記述しよう。
     $myouji = 'ふくしま';
     $namae = 'はやと';
 
-    // JavaScriptの + は PHPではドット . となる。
+    // 変数/文字列を結合する場合は、ドット `.` となる。
     echo $myouji . $namae;
     echo $name . 'test';
 
@@ -120,6 +123,10 @@ PHP部分は改行せずに、１行で記述しよう。
     var_dump($name);
     ?>
 ```
+
+{% hint style="info" %}
+現状、JavaScriptの`console.log`に当たるものが、PHPの`echo`, `var_dump()`だと思ってください。
+{% endhint %}
 
 {% hint style="info" %}
 ドット.で結合する際は、ドットの左右に半角スペースを入れると読みやすいです。
@@ -145,7 +152,7 @@ PHP部分は改行せずに、１行で記述しよう。
     <?php
     
     $ary = ['東京', 'oosaka', '愛知'];
-    // echo $ary;
+    // echo $ary; だと、中身が見られない😭
     var_dump($ary);
     var_dump($ary[0]);
 
@@ -232,6 +239,7 @@ date()の引数はたくさん種類あります。
 <html>
 <head>
     <meta charset="utf-8">
+    // 外部にCSSファイルを用意してもいいですが、ここでは簡素化して<head>内に記述します。
     <style>
         .menu {
             background-color: #2FA6E9;
@@ -254,6 +262,7 @@ date()の引数はたくさん種類あります。
     echo '<p id="test">console test</p>';
     ?>
     <script>
+        // getElementById('{id名}')で、idの要素が取得できます。
         let test = document.getElementById('test');
         console.log(test);
     </script>
@@ -272,7 +281,7 @@ date()の引数はたくさん種類あります。
 が、ここでは割愛。
 
 ```
-for ($i = 0; $i < ; $i++) {
+for ($i = 0; $i < $num; $i++) {
     # code...
 }
 ```
@@ -318,8 +327,7 @@ foreachにkeyを与えて
 
 ```
 foreach ($variable as $key => $value) {
-    echo $key;
-    echo $value;
+    echo $key . $value;
 }
 ```
 
@@ -339,7 +347,7 @@ foreachは、回数が決まっているものに対して繰り返しをおこ�
     // whileのカッコの中に継続条件を書く
     while ($money >= 0) {
         echo $money."<br>";
-        $money = $money - 3350;
+        $money = $money - 3000;
     }
 ```
 
@@ -507,7 +515,7 @@ function h($val){
 _呼び出し方_\
 `<?php echo h(変数); ?>`
 
-post\_comfirm.phpをを以下のように変更してください。
+post\_comfirm.phpを以下のように変更してください。
 
 ```php
 <body>
