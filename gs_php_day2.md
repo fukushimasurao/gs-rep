@@ -1,4 +1,4 @@
-# 😁 gs\_php\_day2
+# 😁 012\_gs\_php\_day2
 
 ### 授業資料 <a href="#shou-ye-zi-liao" id="shou-ye-zi-liao"></a>
 
@@ -35,7 +35,7 @@
 
 のイメージ。
 
-![　エクセルで言うところのファイルがデータベース](<.gitbook/assets/スクリーンショット 2022-01-16 11.19.57.png>)
+![エクセルで言うところのファイルがデータベース](<.gitbook/assets/スクリーンショット 2022-01-16 11.19.57.png>)
 
 ![](<.gitbook/assets/スクリーンショット 2022-01-16 12.18.33.png>)
 
@@ -318,7 +318,6 @@ function h($str)
 {
     return htmlspecialchars($str, ENT_QUOTES);
 }
-
 ```
 
 `selsect.php` の `$view`処理部分に`XSS対策`をする。
@@ -342,7 +341,7 @@ $view .= '</p>';
   4. 書籍コメント(text)
   5. 登録日時 (datetime)
 
-2. 授業でやったように、
+1. 授業でやったように、
 
 * 登録画面
 * 登録処理画面
@@ -350,5 +349,4 @@ $view .= '</p>';
 
 を作成してください。
 
-3. 課題を提出するときは、必ずsqlファイルも提出。
-ファイルの用意の仕方は[ここを参照](https://gitlab.com/gs_hayato/gs-php-01/-/blob/master/%E3%81%9D%E3%81%AE%E4%BB%96/howToExportSql.md)
+1. 課題を提出するときは、必ずsqlファイルも提出。 ファイルの用意の仕方は[ここを参照](https://gitlab.com/gs\_hayato/gs-php-01/-/blob/master/%E3%81%9D%E3%81%AE%E4%BB%96/howToExportSql.md)

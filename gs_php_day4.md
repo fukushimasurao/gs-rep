@@ -16,7 +16,7 @@
 
 今日は、`SESSION`をやっていきます。
 
-* `CRUD`とは？ <https://wa3.i-3-i.info/word123.html>
+* `CRUD`とは？ [https://wa3.i-3-i.info/word123.html](https://wa3.i-3-i.info/word123.html)
 
 ## MAMPの起動、DB準備
 
@@ -145,7 +145,7 @@ echo $age;
 
 **セキュリティー上、session idは変更する必要があります。**
 
-#### session_regenerate_id.phpの動きを確認
+#### session\_regenerate\_id.phpの動きを確認
 
 ### 以下記述を追加
 
@@ -167,13 +167,12 @@ $new_session_id = session_id();
 //旧セッションIDと新セッションIDを表示
 echo '古いセッション:' . $old_session_id . '<br />';
 echo '新しいセッション:' . $new_session_id . '<br />';
-
 ```
 
 {% hint style="info" %}
 セッション情報を鍵のように利用してログイン機能を実装します。
 
-セッションIDを盗まれることを[`セッション・ハイジャック`](https://www.ipa.go.jp/security/vuln/websecurity-HTML-1_4.html)と呼びます。
+セッションIDを盗まれることを[`セッション・ハイジャック`](https://www.ipa.go.jp/security/vuln/websecurity-HTML-1\_4.html)と呼びます。
 
 万が一盗まれても良いように、セッションIDを変更(鍵を変更)する必要が有るわけです
 {% endhint %}
@@ -190,7 +189,6 @@ echo '新しいセッション:' . $new_session_id . '<br />';
 * もしブラウザがそのIDを持っていたら、サーバーは、「そのユーザー」と認識する。
 
 1. login.phpのコードを確認。どのようなformになって確認してみてください。
-
 2. login\_act.phpに以下の記述を追加
 
 ```php
@@ -317,7 +315,7 @@ echo $pw;
 ?>
 ```
 
-3. パスワードの書き換え
+1. パスワードの書き換え
 
 * ↑で表示されたハッシュ値をコピー
 * `phpMyAdmin`にて、`lpw`の`test1`をコピーしたハッシュ値に書き換える。
@@ -357,11 +355,7 @@ if ($val['id'] != '' && password_verify($lpw, $val['lpw'])) {
 
 1.ログインが不要なページとログインが必要なページを含む内容で作成してください。
 
-* ログインが不要なページ
-例；一覧ページ
+* ログインが不要なページ 例；一覧ページ
+* ログインが必要なページ 例；詳細画面、編集画面
 
-* ログインが必要なページ
-例；詳細画面、編集画面
-
-1. 課題を提出するときは、必ずsqlファイルも提出。
-ファイルの用意の仕方は[ここを参照](https://gitlab.com/gs_hayato/gs-php-01/-/blob/master/%E3%81%9D%E3%81%AE%E4%BB%96/howToExportSql.md)
+1. 課題を提出するときは、必ずsqlファイルも提出。 ファイルの用意の仕方は[ここを参照](https://gitlab.com/gs\_hayato/gs-php-01/-/blob/master/%E3%81%9D%E3%81%AE%E4%BB%96/howToExportSql.md)

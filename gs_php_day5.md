@@ -1,16 +1,17 @@
+# 🤡 015\_gs\_php\_day5
 
-### 授業資料 <a href="#shou-ye-zi-liao" id="shou-ye-zi-liao"></a>
+#### 授業資料 <a href="#shou-ye-zi-liao" id="shou-ye-zi-liao"></a>
 
 [https://gitlab.com/gs\_hayato/gs-php-01/-/blob/master/PHP05\_haifu.zip](https://gitlab.com/gs\_hayato/gs-php-01/-/blob/master/PHP05\_haifu.zip)
 
-## 前回までのおさらい
+### 前回までのおさらい
 
 * `SQL`の`UPDATE`を書いた
 * `SQL`の`DELETE`を書いた
 * CRUDのC,R,U,D全部触った
 * SESSIONを利用してログイン機能を作った
 
-## 今回やること
+### 今回やること
 
 今までの内容まとめ、応用
 
@@ -18,7 +19,7 @@
 * 記事投稿時に、確認画面がないので、確認画面を追加しましょう。
 * 記事投稿時に、画像投稿ができないので、機能を追加しましょう。
 
-## MAMPの起動、DB準備
+### MAMPの起動、DB準備
 
 1. MAMPを起動
 2. WebStartボタンから起動トップページを表示
@@ -34,7 +35,7 @@
 
 1. 作成ボタンをクリック 左側に`gs_db5`というデータベースができていると思います。 現在は空っぽです。
 
-## SQLファイルからインポート
+### SQLファイルからインポート
 
 〇〇.sqlというSQLファイルをインポートしてデータを作成します。
 
@@ -46,7 +47,7 @@
 6. 実行してみる
 7. 授業用のDBと中身を確認
 
-## まずは中身を確認してみてください
+### まずは中身を確認してみてください
 
 * index.php
   * 投稿した内容の一覧が表示されます。左下から管理画面にログインしてください
@@ -61,12 +62,11 @@ PW:test2
 * ログイン後、記事を作成できる。
 * ログイン後、記事を修正できる。
 * ログアウトできる,,,など。
-
 * コードは、管理者画面については、`admin`ディレクトリに入っていることを確認してください。
 
-## 共通部分をまとめる
+### 共通部分をまとめる
 
-### `<head>`の中身
+#### `<head>`の中身
 
 今回はどのページにも共通している内容を、まとめます。
 
@@ -86,17 +86,14 @@ PW:test2
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 ```
+
 関数の共通化のように、一つパーツを作った後、必要なページで呼び出してあげます。
 
-
 {% hint style="info" %}
-`<head>`の中に記載されている`bootstrap`とは、フロントエンド向けのライブラリです。
-例えば、特定の位置の文字を赤くしたい場合、通常は`class+css`を記述して対応します。
-一方`bootstrap`を導入している場合`class`に`text-danger`と記載するだけで文字が赤くなります。
+`<head>`の中に記載されている`bootstrap`とは、フロントエンド向けのライブラリです。 例えば、特定の位置の文字を赤くしたい場合、通常は`class+css`を記述して対応します。 一方`bootstrap`を導入している場合`class`に`text-danger`と記載するだけで文字が赤くなります。
 
 https://getbootstrap.jp/
 {% endhint %}
-
 
 1. ファイル作成...`common/head_parts.php`
 2. `common/head_parts.php`に以下のように記述
@@ -111,11 +108,10 @@ $head_parts = <<<EOM
 EOM;
 ```
 
-3. 利用したいページで、
+1. 利用したいページで、
 
-* 以下ページには、 `require_once('common/head_parts.php');`  
+* 以下ページには、 `require_once('common/head_parts.php');`
   * index.php
-
 * 以下ページには、 `require_once('../common/head_parts.php');`
   * admin/index.php
   * admin/confirm.php
@@ -128,19 +124,16 @@ EOM;
 1. `<head>`タグ内で、`<?= $head_parts ?>`と記述し呼び出してあげる。
 
 {% hint style="info" %}
-
 ```
 $var = <<<{任意の文字}
 ....
 {任意の文字};
 ```
 
-この書き方は、`ヒアドキュメント`と言います、
-地味にルールが多いので、公式サイト参照推奨
-<https://www.php.net/manual/ja/language.types.string.php#language.types.string.syntax.heredoc>
+この書き方は、`ヒアドキュメント`と言います、 地味にルールが多いので、公式サイト参照推奨 [https://www.php.net/manual/ja/language.types.string.php#language.types.string.syntax.heredoc](https://www.php.net/manual/ja/language.types.string.php#language.types.string.syntax.heredoc)
 {% endhint %}
 
-### (余力有ったらこれもやりましょう)`<nav>`の中身
+#### (余力有ったらこれもやりましょう)`<nav>`の中身
 
 以下ページにある、`<nav>`タグも共通化しましょう。
 
@@ -205,16 +198,14 @@ $header_nav = <<<EOM
 EOM;
 ```
 
-## 投稿にバリデーションをつける
+### 投稿にバリデーションをつける
 
 投稿内容が空白の場合に、登録できないようにする。
 
 * `resister.php`にバリデーションをつける。
 
 {% hint style="info" %}
-バリデーションとは、入力規則のことです。
-製作者側が期待している内容とは異なる内容がform等で送信された場合に
-弾くようにします。
+バリデーションとは、入力規則のことです。 製作者側が期待している内容とは異なる内容がform等で送信された場合に 弾くようにします。
 
 例えば、
 
@@ -225,8 +216,7 @@ EOM;
 などです。
 {% endhint %}
 
-以下のようにif文を作成。
-（`$content  = $_POST['content'];`の下辺り。）
+以下のようにif文を作成。 （`$content = $_POST['content'];`の下辺り。）
 
 ```php
 // resister.php
@@ -254,7 +244,6 @@ if (trim($title) === '' || trim($content) === '') {
 HTMLブロック内にてPHPを記述する際、if文やfor文を利用する際は、以下のように記述できます。
 
 ```php
-
 // 普通に書く場合
 <?php
 if ($a > $b)
@@ -270,19 +259,17 @@ if ($a > $b)
 ```
 
 {% hint style="info" %}
-本来、バリデーションは、各項目ごとに記述を変えてあげたほうが親切です。
-例えば、
+本来、バリデーションは、各項目ごとに記述を変えてあげたほうが親切です。 例えば、
 
 * 名前の文字数が多い場合
 * メールアドレスの文字列が多い場合
 * メールアドレスの形式がおかしい（例えば@が入っていない）場合
 * 数字で記入するべきところを数字で記載しない場合
 
-などです。
-それぞれに適したバリデーションメッセージを表示させるようにしましょう。
+などです。 それぞれに適したバリデーションメッセージを表示させるようにしましょう。
 {% endhint %}
 
-## 投稿に確認画面をつける - 1
+### 投稿に確認画面をつける - 1
 
 現状は`post.php`で投稿すると、すぐに登録されます。
 
@@ -303,17 +290,16 @@ if (trim($title) === '' || trim($content)  === '') {
 }
 ```
 
-3. フォーム部分`hidden`等を確認しつつブラウザで動作確認。
+1. フォーム部分`hidden`等を確認しつつブラウザで動作確認。
 
-## 投稿に確認画面をつける - 2
+### 投稿に確認画面をつける - 2
 
-戻るボタンが押されたときに、記入した文字がすべて消えてしまうので、
-入力内容がそのまま残るようにしましょう。
+戻るボタンが押されたときに、記入した文字がすべて消えてしまうので、 入力内容がそのまま残るようにしましょう。
 
 1. `confirm.php`に以下のコードを追記しましょう。
+
 {% hint style="info" %}
-`form`から`post`で遷移した後、もう一度`form`に戻ると、記入した内容が消えてしまいます。
-一度記入した内容を記録しておきたいので、`SESSION`を利用します。
+`form`から`post`で遷移した後、もう一度`form`に戻ると、記入した内容が消えてしまいます。 一度記入した内容を記録しておきたいので、`SESSION`を利用します。
 {% endhint %}
 
 ```php
@@ -323,7 +309,6 @@ $content = $_SESSION['post']['content'] = $_POST['content'];
 ```
 
 {% hint style="info" %}
-
 ```php
 $a = 'string';
 $b = 'string';
@@ -336,10 +321,9 @@ $a = $b = 'string';
 ```
 
 は同じです。
-
 {% endhint %}
 
-2. `postphp`に以下追加
+1. `postphp`に以下追加
 
 `post.php`のphp部分↓
 
@@ -381,9 +365,9 @@ if ($_SESSION['post']['content']) {
 </form>
 ```
 
-3. ブラウザで動作確認
+1. ブラウザで動作確認
 
-## 投稿に画像投稿も追加する
+### 投稿に画像投稿も追加する
 
 1. `POST.php`のフォームに以下追加
 
@@ -410,7 +394,7 @@ if ($_SESSION['post']['content']) {
 </form>
 ```
 
-2. `confirm.php`のPHP部分に以下追加
+1. `confirm.php`のPHP部分に以下追加
 
 ```php
 <?php
@@ -459,7 +443,7 @@ if (!empty($file_name)) {
 ?>
 ```
 
-3. `confirm.php`の`form`部分に以下追加
+1. `confirm.php`の`form`部分に以下追加
 
 ```php
 <form method="POST" action="register.php" enctype="multipart/form-data" class="mb-3">
@@ -486,7 +470,7 @@ if (!empty($file_name)) {
 </form>
 ```
 
-4. 戻るボタン押したときに、画像表示するため、`post.php`以下追加
+1. 戻るボタン押したときに、画像表示するため、`post.php`以下追加
 
 * php部分
 
@@ -522,7 +506,7 @@ if ($_SESSION['post']['image_data']) {
 </div>
 ```
 
-5. `register.php`に以下追記
+1. `register.php`に以下追記
 
 ```php
 <?php
@@ -559,10 +543,9 @@ if ($_SESSION['post']['image_data']) {
     file_put_contents('../images/' . $img, $_SESSION['post']['image_data']);
 }
 //↑↑↑↑↑↑↑↑↑↑↑↑↑↑ここまで↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑
-
 ```
 
-6. `admin/index.php`, `index.php`に以下追加して、もし画像がある場合、それを表示させるようにする。
+1. `admin/index.php`, `index.php`に以下追加して、もし画像がある場合、それを表示させるようにする。
 
 * `admin/index.php` (srcの階層注意)
 
@@ -594,27 +577,25 @@ if ($_SESSION['post']['image_data']) {
         // 以下省略
 ```
 
----
+***
 
-*以下余力あれば*
+_以下余力あれば_
 
 {% hint style="info" %}
 投稿修正画面にも確認画面を追加してみましょう。
 {% endhint %}
 
-## 【課題】 PHPでプロダクト
+### 【課題】 PHPでプロダクト
 
 1. まず、以下の通りDBとテーブルを作成
 
 * DB名:自由 ※授業のDB名とかぶらないようにしてください。
 * table名:自由
 
-2. 前回の課題に、
+1. 前回の課題に、
    * 画像投稿機能
-   * 投稿確認画面
-など、授業で扱った内容を加えてください。
+   * 投稿確認画面 など、授業で扱った内容を加えてください。
 
 ※すでにこれらの機能が備わっている場合は、自由にプロダクトしてください。
 
-3. 課題を提出するときは、必ずsqlファイルも提出。
-ファイルの用意の仕方は[ここを参照](https://gitlab.com/gs_hayato/gs-php-01/-/blob/master/%E3%81%9D%E3%81%AE%E4%BB%96/howToExportSql.md)
+1. 課題を提出するときは、必ずsqlファイルも提出。 ファイルの用意の仕方は[ここを参照](https://gitlab.com/gs\_hayato/gs-php-01/-/blob/master/%E3%81%9D%E3%81%AE%E4%BB%96/howToExportSql.md)

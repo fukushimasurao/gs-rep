@@ -2,7 +2,7 @@
 description: php 第１日目
 ---
 
-# 😀 gs\_php\_day1
+# 😀 011\_gs\_php\_day1
 
 ### 授業資料 <a href="#shou-ye-zi-liao" id="shou-ye-zi-liao"></a>
 
@@ -14,13 +14,13 @@ description: php 第１日目
 
 授業ごとにZIP化した配布資料を共有します。
 
-解凍したファイルは、必ず**htdocs/gs_code**に格納してください。
+解凍したファイルは、必ず**htdocs/gs\_code**に格納してください。
 
-※gs_codeフォルダがなければ、作成してください。
+※gs\_codeフォルダがなければ、作成してください。
 
 ## 基礎文法
 
-### _gs_code/001/000-1helloworld.php_
+### _gs\_code/001/000-1helloworld.php_
 
 ```php
 <?php
@@ -41,19 +41,19 @@ echo 'hello world';
 ブラウザの URLに`localhost/gs_code/001/000-1helloworld.php`と記入して出力を確認してみましょう。
 
 {% hint style="danger" %}
-mampを使っている場合や、設定によっては、localhost:8888/gs_code/001/000-1helloworld.php
+mampを使っている場合や、設定によっては、localhost:8888/gs\_code/001/000-1helloworld.php
 {% endhint %}
 
 {% hint style="danger" %}
 エラーの場合は以下を確認してみてください。
 
-- `XAMPP`を起動しているか。
-- 開始タグ・終了タグに間違いが無いか。
-- htdocs/gs_codeに格納しているか。
-- 書き間違いが無いか。
-- 文の最後に ; が抜けていないか。
-- 全角スペースを記入していないか。
-- その他不要な文字などが入ってないか。
+* `XAMPP`を起動しているか。
+* 開始タグ・終了タグに間違いが無いか。
+* htdocs/gs\_codeに格納しているか。
+* 書き間違いが無いか。
+* 文の最後に ; が抜けていないか。
+* 全角スペースを記入していないか。
+* その他不要な文字などが入ってないか。
 {% endhint %}
 
 {% hint style="danger" %}
@@ -65,8 +65,7 @@ mampを使っている場合や、設定によっては、localhost:8888/gs_code
 
 3\. 画面の確認
 
-の３点を行ったか確認してみださい。
-この３つが基本の動作です。
+の３点を行ったか確認してみださい。 この３つが基本の動作です。
 
 もし、VScodeの自動保存をしていない場合は、利用してみて下さい。
 {% endhint %}
@@ -138,13 +137,11 @@ PHP部分は改行せずに、１行で記述しよう。
 {% endhint %}
 
 {% hint style="info" %}
-文字列を示すクオーテーションですが、シングルでもダブルでも現状はどちらでも良いです。
-私は、シングルクオーテーションを多用します。
+文字列を示すクオーテーションですが、シングルでもダブルでも現状はどちらでも良いです。 私は、シングルクオーテーションを多用します。
 
 ※シングルとダブルだと、利用方法に違いがあります。
 
 参考 : https://www.php.net/manual/ja/language.types.string.php#language.types.string.parsing
-
 {% endhint %}
 
 ### 002array.php
@@ -169,18 +166,15 @@ PHP部分は改行せずに、１行で記述しよう。
 ```
 
 {% hint style="info" %}
-配列への要素の追加方法は他にもたくさんあります。
-また、配列の種類（例えば連想配列、多次元配列など）もたくさんあるので調べてみてください。
+配列への要素の追加方法は他にもたくさんあります。 また、配列の種類（例えば連想配列、多次元配列など）もたくさんあるので調べてみてください。
 {% endhint %}
 
 ### 003kansu.php
 
-ここでは代表的な組み込み関数の対応を行います。
-単純に「こういう関数有るんだ〜」という確認程度の内容です。
+ここでは代表的な組み込み関数の対応を行います。 単純に「こういう関数有るんだ〜」という確認程度の内容です。
 
 {% hint style="info" %}
-phpにて組み込み関数（最初から用意されている関数）を利用する時の基本的な形は、
-`関数名()` の形になります。
+phpにて組み込み関数（最初から用意されている関数）を利用する時の基本的な形は、 `関数名()` の形になります。
 {% endhint %}
 
 ```php
@@ -202,9 +196,7 @@ phpにて組み込み関数（最初から用意されている関数）を利�
 phpのデフォルトのタイムゾーンは
 {% endhint %}
 
-
-文字長さを計るには、`strlen('文字列')`関数を利用します。
-例えば`alphabet`という　単語の文字数を画面に出力するにはどのように書けばよいでしょうか。
+文字長さを計るには、`strlen('文字列')`関数を利用します。 例えば`alphabet`という　単語の文字数を画面に出力するにはどのように書けばよいでしょうか。
 
 ```php
 <?php
@@ -292,15 +284,13 @@ date()の引数はたくさん種類あります。
 繰り返しの処理としてforeachというものがあります。
 
 {% hint style="info" %}
-当然、for文もあります。
-が、ここでは割愛。
+当然、for文もあります。 が、ここでは割愛。
 
 ```
 for ($i = 0; $i < $num; $i++) {
     # code...
 }
 ```
-
 {% endhint %}
 
 ```php
@@ -436,7 +426,6 @@ echo '<pre>';
 var_dump($_GET);
 echo '</pre>';
 ```
-
 {% endhint %}
 
 {% hint style="info" %}
@@ -447,7 +436,6 @@ HTML内では、echoは以下のように省略した記述が可能です。
 // ↓
 <?= $name ?>
 ```
-
 {% endhint %}
 
 {% hint style="success" %}
@@ -501,50 +489,120 @@ $password = $_POST['password'];
 
 ### セキュリティ / XSS(クロスサイトスクリプティング)
 
-post.phpのフォームに以下のスクリプトを記入して送信して、動きを確認してください。
+まず、post.phpのフォームに以下のスクリプトを記入後、そのまま送信して、遷移先のページで動きを確認してください。
+
+(get.phpのページで行っても問題ありません。)
 
 ```javascript
-<script>alert("ok");</script>
+<script>alert("test");</script>
 ```
 
-{% hint style="danger" %}
-不特定多数の人間が記入できるFormは、悪意を持った人にスクリプトを埋め込まれる可能性があります。
-※WEB上には悪いことをする人がかならずいる、という前提でプロダクト制作をしてください。
+<figure><img src=".gitbook/assets/form_with_script.png" alt=""><figcaption></figcaption></figure>
+
+以下のような感じで、アラートが動作＝スクリプトが動作していることがわかります。
+
+<figure><img src=".gitbook/assets/do_script.png" alt=""><figcaption></figcaption></figure>
+
+今回は、簡単なアラート動作だけですが、**もしここにもっと悪質なscriptを仕込まれた場合セキュリティ上の脅威になる可能性が高いです。**
+
+よって、この対策のために、`htmlspecialchars()を利用します。`
+
+{% hint style="info" %}
+ipaの「安全なウェブサイトの作り方 - 1.5 クロスサイト・スクリプティング」に詳しい。
+
+[https://www.ipa.go.jp/security/vuln/websecurity-HTML-1\_5.html](https://www.ipa.go.jp/security/vuln/websecurity-HTML-1\_5.html)
+
+なお、セキュリティについて確認したい場合は、基本的にipaのサイト（個人のブログ等ではなく）を確認することをお勧めします。
 {% endhint %}
 
 {% hint style="danger" %}
-GETやPOSTで受け取ったデータを出力する場合は必ず以下の処理を行ってください。
+不特定多数の人間が記入できるFormは、悪意を持った人にスクリプトを埋め込まれる可能性があります。&#x20;
+
+**WEB上には悪いことをする人がかならずいる**という前提でプロダクト制作をしてください。
 {% endhint %}
 
-`htmlspecialchars(変数,ENT_QUOTES);`
+{% hint style="danger" %}
+GETやPOSTで受け取ったデータを出力する場合は**必ず**以下の処理を行ってください。
 
-```php
-// XSS対策関数
-function h($val){
+なお、**出力する箇所だけに処理が必要なので出力しない場合は、**htmlspecialchars()を利用しなくても結構です。
+{% endhint %}
 
-   return htmlspecialchars($val,ENT_QUOTES);
+`htmlspecialchars()`はフォームから受け取った文字列をブラウザに出力する際に利用します。
 
-}
-```
-
-_呼び出し方_\
-`<?php echo h(変数); ?>`
-
-post\_comfirm.phpを以下のように変更してください。
+_post\_confirm.php_
 
 ```php
 <body>
-
-    お名前：<?= h($name) ?>
-    EMAIL：<?= h($mail) ?>
-    パスワード：<?= h($password)  ?>
-
+    <p>お名前：<?= htmlspecialchars($name, ENT_QUOTES) ?> </p>
+    <p>Mail：<?= htmlspecialchars($mail, ENT_QUOTES) ?></p>
     <ul>
         <li><a href="index.php">index.php</a></li>
     </ul>
 </body>
 
 ```
+
+上記記述した後、再度formから`<script>alert("test");</script>`を送信して、次のページでスクリプトが動作しないことを確認してください。
+
+{% hint style="info" %}
+上記の場合は、`htmlspecialchars()`が２つだけですが通常のフォームは、もっと項目数が多いことが多いです。
+
+その場合すべての項目に`htmlspecialchars()`を書くのはとても面倒です。
+
+よって、通常は関数化して`htmlspecialchars()を利用します。`
+{% endhint %}
+
+1. formから送られてきた情報を、表示出力する画面に以下関数を記述
+
+```php
+// XSS対策関数
+function h($val){
+   return htmlspecialchars($val,ENT_QUOTES);
+}
+```
+
+2\. __ 表示出力する箇所を`h()`で囲む\
+`<?php echo h(変数); ?>`
+
+具体的に、`post_comfirm.php`を以下のように変更してみてください。
+
+```php
+<?php
+// XSS対策
+function h($str)
+{
+    return htmlspecialchars($str, ENT_QUOTES);
+}
+
+$name = $_POST['name'];
+$mail = $_POST['mail'];
+?>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>POST（受信）</title>
+</head>
+
+<body>
+    <p>お名前：<?= h($name) ?> </p>
+    <p>Mail：<?= h($mail) ?></p>
+    <ul>
+        <li><a href="index.php">index.php</a></li>
+    </ul>
+</body>
+</html>
+```
+
+そして、改めて`form`から`<script>alert('test')</script>`と送信してみて、遷移先でスクリプトが実行されないことを確認してください。
+
+{% hint style="warning" %}
+【発展】
+
+上記h関数は、さまざまな場所で利用できる可能性が高いので、任意のファイル（例えば`funciton.php)に切り出して、利用したい箇所でrequire_onceで呼び出すとより便利になります。`
+
+`授業でも扱いますが、余力がある人はチャレンジしてみてください。`
+{% endhint %}
 
 ### ファイル保存・読み込み <a href="#fairu" id="fairu"></a>
 
@@ -570,12 +628,11 @@ fclose($file);
 ?>
 ```
 
-- fopenの引数について
-fopenの第２引数(openモード)には以下のような種類があります。
-方法によって使い分けてください。
+* fopenの引数について fopenの第２引数(openモード)には以下のような種類があります。 方法によって使い分けてください。
 
 間違えると、中身を削除してしまうので、ご利用は慎重に。
 
+{% hint style="info" %}
 ```
 r 読み込みのみでオープンします。
 r+ 読み込み/書込み用にオープンします。
@@ -586,15 +643,14 @@ w+ 読み込み/書込み用でオープンします。内容をまず削除、�
 a 追加書込み用のみでオープンします。ファイルがなければ作成
 a+ 読み込み/追加書込み用でオープンします。ファイルがなければ作成
 ```
+{% endhint %}
 
 {% hint style="info" %}
 ファイル操作の基本は、
 
-open
-
-処理
-
-close の３つがセットです。
+1. open
+2. 処理
+3. close の３つがセットです。
 {% endhint %}
 
 #### read.php
@@ -613,6 +669,18 @@ fclose($openFile);
 
 ```
 
+{% hint style="info" %}
+上記コードのwhile,,,の部分は少し難しいかもしれません。
+
+処理の流れは、
+
+```
+fgets($openFile)でファイルの上から１行ずつ取得して、$strに代入
+$strをechoする。その際に、text内の改行を<br>に変換させるnl2brを利用
+もし読み込む行がなくなった場合、条件はFALSEになり、whileは終了する。
+```
+{% endhint %}
+
 ### `inpute.php`から`write.php`に内容を送ってみよう
 
 #### input.php
@@ -623,6 +691,8 @@ $birthPlace = $_POST['birthPlace'];
 
 // 変数を用意
 $time = date("Y-m-d H:i:s");
+
+// $timeや$nameをファイルに書き込む際、区切り文字として、 /(スラッシュ)を結合しています。
 $str = $time . ' / ' . $name . ' /' .  $mail . ' ' . $birthPlace;
 
 // ファイルに書き込み
@@ -635,9 +705,9 @@ fclose($file);
 
 #### 【課題】 アンケート集計/表示アプリ
 
-- `post.php` (データ入力)
-- `write.php` (データ登録)
-- `read.php` (データ表示)
+* `post.php` (データ入力)
+* `write.php` (データ登録)
+* `read.php` (データ表示)
 
 1. データ登録:名前,Email,聞きたい問い複数
 2. データ表示:登録されてるデータを表で表示

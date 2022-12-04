@@ -1,4 +1,4 @@
-# 😚 gs\_php\_day3
+# 😚 013\_gs\_php\_day3
 
 ### 授業資料 <a href="#shou-ye-zi-liao" id="shou-ye-zi-liao"></a>
 
@@ -6,21 +6,21 @@
 
 ## 前回のおさらい
 
-- DBを利用した
-- `PhpMyAdmin`を利用してDBを操作した。
-- `SQL`の`INSERT`を書いた
-- `SQL`の`SELECT`を書いた
-- PHPのフロント画面から、フォームを使ってDBに登録した。
+* DBを利用した
+* `PhpMyAdmin`を利用してDBを操作した。
+* `SQL`の`INSERT`を書いた
+* `SQL`の`SELECT`を書いた
+* PHPのフロント画面から、フォームを使ってDBに登録した。
 
 ## 今回やること
 
-- 各ファイルにある同じような作業を一つにまとめます。(require)
+* 各ファイルにある同じような作業を一つにまとめます。(require)
 
 前回は、CRUD機能の`Create（生成）`、`Read（読み取り）`を行いました。
 
 今日は、`update（更新）`、`Delete（削除）`をやっていきます。
 
-- `CRUD`とは？ <https://wa3.i-3-i.info/word123.html>
+* `CRUD`とは？ [https://wa3.i-3-i.info/word123.html](https://wa3.i-3-i.info/word123.html)
 
 ## MAMPの起動、DB準備
 
@@ -31,29 +31,26 @@
 5. データベースタブをクリック
 6. データベースを作成から以下の名前で作成
 
-```text
+```
 データベース名：gs_db3
 照合順序：utf8_unicode_ci
 ```
 
-7. 作成ボタンをクリック
-左側に`gs_db3`というデータベースができていると思います。
-現在は空っぽです。
+1. 作成ボタンをクリック 左側に`gs_db3`というデータベースができていると思います。 現在は空っぽです。
 
 ## SQLファイルからインポート
 
 〇〇.sqlというSQLファイルをインポートしてデータを作成します。
 
 1. 念の為、左側のメニューから`gs_db3`をクリック
-2. gs_db3を選択した状態でインポートタブをクリック
-3. ファイルを選択をクリックして配布した資料内のSQLフォルダ内のphp3_sql.sqlを選択
+2. gs\_db3を選択した状態でインポートタブをクリック
+3. ファイルを選択をクリックして配布した資料内のSQLフォルダ内のphp3\_sql.sqlを選択
 4. 実行してみる
 5. 授業用のDBと中身を確認
 
 ## 関数化&呼び出し
 
-よく使う処理は関数化するのが一般的です。
-同じ処理を複数回書くのではなく関数化して再利用しましょう。
+よく使う処理は関数化するのが一般的です。 同じ処理を複数回書くのではなく関数化して再利用しましょう。
 
 1. funcs.phpにDB接続関数を作成する
 
@@ -73,7 +70,7 @@ function db_conn()
 }
 ```
 
-2. 利用箇所で、関数を呼び出す。
+1. 利用箇所で、関数を呼び出す。
 
 ```php
 // 関数を使いたいファイルの一番上に以下記入
@@ -82,12 +79,10 @@ require_once('funcs.php');
 $pdo = db_conn();
 ```
 
-{% endhint %}
-
 {% hint style="info" %}
 prepare, bindValue
 
-[require, require_once, include, include_once の違い](https://qiita.com/awesam86/items/3fa28e23c95ca74caddc)
+[require, require\_once, include, include\_once の違い](https://qiita.com/awesam86/items/3fa28e23c95ca74caddc)
 {% endhint %}
 
 ## SQLエラー処理とリダイレクト処理を関数化
@@ -110,7 +105,7 @@ function redirect($file_name)
 }
 ```
 
-2. 利用箇所で、関数を呼び出す。
+1. 利用箇所で、関数を呼び出す。
 
 ```php
 if ($status === false) {
@@ -147,11 +142,10 @@ $view .= '<a href="detail.php?id=' . $result['id'] . '">';
 $view .= $result['indate'] . '：' . $result['name'];
 $view .= '</a>';
 $view .= '</p>';
-
 ```
 
-2. select.php内のDB接続・SQLエラー・リダイレクト処理を外部関数から呼び出しに変更する
-3. ブラウザの検証ツールからaタグのリンクの飛び先(`detail.php`)をチェック
+1. select.php内のDB接続・SQLエラー・リダイレクト処理を外部関数から呼び出しに変更する
+2. ブラウザの検証ツールからaタグのリンクの飛び先(`detail.php`)をチェック
 
 ## 更新画面を作成する
 
@@ -180,11 +174,11 @@ if ($status === false) {
 ?>
 ```
 
-2. detail.phpに更新画面用のHTMLを記述
+1. detail.phpに更新画面用のHTMLを記述
 
 `index.php`のコードをまるっとコピーして貼り付け！
 
-3. detail.phpのHTML内formのaction先をupdate.phpに変更する
+1. detail.phpのHTML内formのaction先をupdate.phpに変更する
 
 ```php
 <form method="POST" action="update.php">
@@ -192,7 +186,7 @@ if ($status === false) {
 </form>
 ```
 
-4. detail.phpのHTML内formの送信ボタン直上に以下を追記
+1. detail.phpのHTML内formの送信ボタン直上に以下を追記
 
 ```php
  <!-- ↓追加 -->
@@ -232,13 +226,11 @@ if ($status === false) {
 } else {
     redirect('select.php');
 }
-
 ```
 
 ## 削除処理を実装していく
 
-PHPの基本処理、登録・表示（取得）・更新・削除の4つのうちの最後の一つです。
-削除処理は削除ボタンクリック→削除処理の流れなので比較的簡単です。
+PHPの基本処理、登録・表示（取得）・更新・削除の4つのうちの最後の一つです。 削除処理は削除ボタンクリック→削除処理の流れなので比較的簡単です。
 
 ### DELETE（データ削除）
 
@@ -265,7 +257,7 @@ $view .= '</a>';//追記
 $view .= '</p>';
 ```
 
-2. delete.phpに削除処理を作成する
+1. delete.phpに削除処理を作成する
 
 ```php
 //1.対象のIDを取得
@@ -287,30 +279,26 @@ if ($status === false) {
 } else {
     redirect('select.php');
 }
-
 ```
 
 ## 【課題】 ブックマークアプリ その２
 
 1. まず、以下の通りDBとテーブルを作成
 
-- DB名:自由 ※授業のDB名とかぶらないようにしてください。
-- table名:自由
+* DB名:自由 ※授業のDB名とかぶらないようにしてください。
+* table名:自由
 
 1. 授業でやったように、
 
-- 登録画面
-- 登録処理画面
-- 登録内容確認画面
+* 登録画面
+* 登録処理画面
+* 登録内容確認画面
 
 に加えて
 
-- データ更新できるような画面
-- データ削除ができるような画面
-を作成してください。
+* データ更新できるような画面
+* データ削除ができるような画面 を作成してください。
 
-前回の課題に更新・削除機能を追加して提出していただいてもいいですし、
-新たに課題作成して頂いてもokです。
+前回の課題に更新・削除機能を追加して提出していただいてもいいですし、 新たに課題作成して頂いてもokです。
 
-1. 課題を提出するときは、必ずsqlファイルも提出。
-ファイルの用意の仕方は[ここを参照](https://gitlab.com/gs_hayato/gs-php-01/-/blob/master/%E3%81%9D%E3%81%AE%E4%BB%96/howToExportSql.md)
+1. 課題を提出するときは、必ずsqlファイルも提出。 ファイルの用意の仕方は[ここを参照](https://gitlab.com/gs\_hayato/gs-php-01/-/blob/master/%E3%81%9D%E3%81%AE%E4%BB%96/howToExportSql.md)

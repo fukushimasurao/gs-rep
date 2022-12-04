@@ -12,7 +12,7 @@ Classを小学生でもわかるようにする試みです。 はっきり言�
 
 classのちゃんとした説明は、山崎先生の動画がとてもいい感じです！
 
-[Classの動画](https://youtube.com/playlist?list=PLTD8xMSOmM1L_zfRCCrCKsA6dOuvn2d8K)
+[Classの動画](https://youtube.com/playlist?list=PLTD8xMSOmM1L\_zfRCCrCKsA6dOuvn2d8K)
 
 ## 変数とは？
 
@@ -55,7 +55,6 @@ classの使い方は、
 イメージは、
 
 ```php
-
 class Test() {
     // 変数 = hogehoge
     // 変数 = hogehoge
@@ -67,7 +66,6 @@ class Test() {
 }
 
 $hogeho = new Test();
-
 ```
 
 このクラスを呼び出すことを`インスタンス化`と言います。
