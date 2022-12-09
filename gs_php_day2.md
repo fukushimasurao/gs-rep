@@ -44,8 +44,7 @@
 それだととっつきにくいので、CGIで操作できる`phpMyAdmin`というソフトを利用する。
 
 {% hint style="info" %}
-`phpMyAdmin` = DBではありません。
-DB操作をする際に、便利に操作するためのソフトが`phpMyAdmin`です
+`phpMyAdmin` = DBではありません。 DB操作をする際に、便利に操作するためのソフトが`phpMyAdmin`です
 {% endhint %}
 
 ## phpMyAdmin
@@ -55,10 +54,17 @@ DB操作をする際に、便利に操作するためのソフトが`phpMyAdmin`
 1. `XAMPP`を起動。
 2. chromeにて、`localhost`へ接続。
 3. 画面headerメニューの`phpMyAdmin`をクリック
+4.
 
-![](<.gitbook/assets/スクリーンショット 2022-01-16 11.21.17.png>)
+    <figure><img src=".gitbook/assets/スクリーンショット 2022-12-09 13.07.07 (1).png" alt=""><figcaption></figcaption></figure>
 
 ブラウザのURLからは、多分 `http://localhost/phpmyadmin/`で行ける。
+
+
+
+
+
+<figure><img src=".gitbook/assets/phpmyadmin.jpg" alt=""><figcaption></figcaption></figure>
 
 ## DB作成
 
@@ -102,11 +108,7 @@ text型の文字列はデータベースとは別に保存。データベース�
 {% endhint %}
 
 {% hint style="info" %}
-【プライマリキー】
-データを一意に識別するために使われる項目。
-例えば、データの中から、名前が「田中」を抽出した場合他の人と被る可能性がある。
-連番IDであれば、他のデータと被らないので、これをプライマリーキーとすることが多い。
-※データは必ず入力しなければならない。(NULL)にはならない。
+【プライマリキー】 データを一意に識別するために使われる項目。 例えば、データの中から、名前が「田中」を抽出した場合他の人と被る可能性がある。 連番IDであれば、他のデータと被らないので、これをプライマリーキーとすることが多い。 ※データは必ず入力しなければならない。(NULL)にはならない。
 {% endhint %}
 
 {% hint style="info" %}
@@ -116,11 +118,7 @@ text型の文字列はデータベースとは別に保存。データベース�
 {% endhint %}
 
 {% hint style="info" %}
-【NULL】
-データを保存する時、空白にしていいかどうか。
-NULLでもok = `Nullable`にしていい場合は、チェック入れる。
-Nullableの場合、データが空白でも保存可能。
-そうでない場合は、保存時にエラーが出る。
+【NULL】 データを保存する時、空白にしていいかどうか。 NULLでもok = `Nullable`にしていい場合は、チェック入れる。 Nullableの場合、データが空白でも保存可能。 そうでない場合は、保存時にエラーが出る。
 {% endhint %}
 
 ### SQL
@@ -139,7 +137,6 @@ Nullableの場合、データが空白でも保存可能。
 基本的な書き方は `INSERT INTO テーブル名(カラム1,カラム2,カラム3・・・) VALUES (値1,値2,値3・・・);`
 
 * 基本的に大文字(小文字でも動作しますが慣習的に。)
-
 * 基本的に行の最後は`;`をつけてあげてください。(なくても動いてくれうこと多々あり。)
 
 例文
@@ -152,8 +149,7 @@ VALUES
 ```
 
 {% hint style="info" %}
-SQLは１行で書いてあげてもいいが、右に長くなるので改行してあげると見やすい。
-`;`までが１つの文章なので、改行したまま実行可能
+SQLは１行で書いてあげてもいいが、右に長くなるので改行してあげると見やすい。 `;`までが１つの文章なので、改行したまま実行可能
 {% endhint %}
 
 {% hint style="info" %}
@@ -213,6 +209,8 @@ SELECT * FROM テーブル名 LIMIT 3,5; --3番目のデータから最大5件�
 
 DBというものと、BDを操作するための`SQL`を学びました。 次にPHP内で、`SQL`を書いて`MySQL`を操作していきます。
 
+<figure><img src=".gitbook/assets/php_n_db.jpg" alt=""><figcaption></figcaption></figure>
+
 ### formを作成
 
 `index.php`のformを修正する。
@@ -263,8 +261,7 @@ if ($status === false) {
 ```
 
 {% hint style="info" %}
-`if ($status === false)`の部分は、
-`if (!$status)`と書くことも可能。
+`if ($status === false)`の部分は、 `if (!$status)`と書くことも可能。
 {% endhint %}
 
 {% hint style="info" %}

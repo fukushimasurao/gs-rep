@@ -497,7 +497,7 @@ $password = $_POST['password'];
 <script>alert("test");</script>
 ```
 
-<figure><img src=".gitbook/assets/form_with_script.png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/form_with_script (1).png" alt=""><figcaption></figcaption></figure>
 
 以下のような感じで、アラートが動作＝スクリプトが動作していることがわかります。
 
