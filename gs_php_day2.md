@@ -13,25 +13,25 @@
 * サーバーサイド
   * クライアントから情報を受け取り、その内容をもとに処理をする。
 
-## DBに登録する
+## 今回やること
 
-クライアントから受け取った情報をDB(= データベース)に登録していきます。
+* 前回フォームで受け取ったデータをtxtに保存しましたが、今回はDB(= データベース)への保存ができるようにします。
 
 ### データベース？？？
 
-#### ※ここでは、 リレーショナルデータベースのことをデータベースとします
-
-#### 以下、データベースをDBと略して表記します
+#### (※ここでは、 リレーショナルデータベースのことをデータベースとします)
 
 * 情報を記録するもの。
   * DBと
   * テーブルで構成される。
   * その中に、表形式で記録していく。
 
+#### 今後、データベースをDBと略して表記します
+
 スプレッドシートでいうと、
 
-* ファイルそのもの(XXXX.xlsx)がDB
-* シートがテーブル
+* ファイルそのもの(XXXX.xlsx)が`DB`
+* シートが`テーブル`
 
 のイメージ。
 
@@ -39,19 +39,26 @@
 
 ![](<.gitbook/assets/スクリーンショット 2022-01-16 12.18.33.png>)
 
-スプレッドシートだと、画面見ながら操作できる DBは、通常CLI（コマンドラインインターフェース） = 黒い画面に文字で操作する。
+スプレッドシートだと、画面見ながら操作できる DBは **通常CLI（コマンドラインインターフェース） = 黒い画面に文字で操作します**
 
 それだととっつきにくいので、CGIで操作できる`phpMyAdmin`というソフトを利用する。
 
+{% hint style="info" %}
+`phpMyAdmin` = DBではありません。
+DB操作をする際に、便利に操作するためのソフトが`phpMyAdmin`です
+{% endhint %}
+
 ## phpMyAdmin
 
-1. `MAMP`を起動。
-2. `WebStartボタン`でwelcome画面(起動時に勝手にブラウザに表示される画面)
-3. welcome画面左上のメニューから、phpMyAdminをクリック 開き方は画面参照。
+操作
+
+1. `XAMPP`を起動。
+2. chromeにて、`localhost`へ接続。
+3. 画面headerメニューの`phpMyAdmin`をクリック
 
 ![](<.gitbook/assets/スクリーンショット 2022-01-16 11.21.17.png>)
 
-ブラウザのURLからは、多分 `http://localhost/phpMyAdmin5/`で行ける。
+ブラウザのURLからは、多分 `http://localhost/phpmyadmin/`で行ける。
 
 ## DB作成
 
@@ -95,20 +102,26 @@ text型の文字列はデータベースとは別に保存。データベース�
 {% endhint %}
 
 {% hint style="info" %}
-プライマリキー
-
-データを一意に識別するために使われる項目 →他の項目(名前とか年齢とか)は重複する場合がある。
-
-※データは必ず入力しなければならない。（NULL)にはならない。
+【プライマリキー】
+データを一意に識別するために使われる項目。
+例えば、データの中から、名前が「田中」を抽出した場合他の人と被る可能性がある。
+連番IDであれば、他のデータと被らないので、これをプライマリーキーとすることが多い。
+※データは必ず入力しなければならない。(NULL)にはならない。
 {% endhint %}
 
 {% hint style="info" %}
-オートインクリメント
+【オートインクリメント】
 
 連続した数値を自動で入れてくれる。
 {% endhint %}
 
-*
+{% hint style="info" %}
+【NULL】
+データを保存する時、空白にしていいかどうか。
+NULLでもok = `Nullable`にしていい場合は、チェック入れる。
+Nullableの場合、データが空白でも保存可能。
+そうでない場合は、保存時にエラーが出る。
+{% endhint %}
 
 ### SQL
 
@@ -125,13 +138,27 @@ text型の文字列はデータベースとは別に保存。データベース�
 
 基本的な書き方は `INSERT INTO テーブル名(カラム1,カラム2,カラム3・・・) VALUES (値1,値2,値3・・・);`
 
-※ 基本的に大文字(小文字でも動作しますが慣習的に。) 基本的に行の最後は`;`をつけてあげてください。
+* 基本的に大文字(小文字でも動作しますが慣習的に。)
+
+* 基本的に行の最後は`;`をつけてあげてください。(なくても動いてくれうこと多々あり。)
 
 例文
 
 ```sql
-INSERT INTO gs_an_table(id,name,email,content,date) VALUES (NULL,'福島はやと','test@test.jp','内容',sysdate());
+INSERT INTO
+    gs_an_table(id, name, email, content, date)
+VALUES
+    (NULL, '福島はやと', 'test@test.jp', '内容', sysdate());
 ```
+
+{% hint style="info" %}
+SQLは１行で書いてあげてもいいが、右に長くなるので改行してあげると見やすい。
+`;`までが１つの文章なので、改行したまま実行可能
+{% endhint %}
+
+{% hint style="info" %}
+`INSERT`文はもう少し省略して書くことができます。どうやって書くかは、君の目で確かめてくれ！
+{% endhint %}
 
 {% hint style="success" %}
 **名前やメルアドを変えて3つ以上登録してください**
@@ -215,22 +242,30 @@ try {
 }
 
 //３．データ登録SQL作成
-$stmt = $pdo->prepare("INSERT INTO gs_an_table(id, name, email, content, date)
-                        VALUES(NULL, :name, :email, :content, sysdate())");
-$stmt->bindValue(':name', $name, PDO::PARAM_STR);  //Integer（数値の場合 PDO::PARAM_INT)
-$stmt->bindValue(':email', $email, PDO::PARAM_STR);  //Integer（数値の場合 PDO::PARAM_INT)
-$stmt->bindValue(':content', $content, PDO::PARAM_STR);  //Integer（数値の場合 PDO::PARAM_INT)
+$stmt = $pdo->prepare('INSERT INTO gs_an_table(id, name, email, content, date)
+                        VALUES(NULL, :name, :email, :content, sysdate())');
+
+//Integer（数値の場合 PDO::PARAM_INT)
+//String（文字列の場合 PDO::PARAM_STR)
+$stmt->bindValue(':name', $name, PDO::PARAM_STR);
+$stmt->bindValue(':email', $email, PDO::PARAM_STR);
+$stmt->bindValue(':content', $content, PDO::PARAM_STR);
 $status = $stmt->execute();
 
 //４．データ登録処理後
 if ($status === false) {
     //SQL実行時にエラーがある場合（エラーオブジェクト取得して表示）
     $error = $stmt->errorInfo();
-    exit("ErrorMessage:" . print_r($error, true));
+    exit('ErrorMessage:' . print_r($error, true));
 } else {
     header('Location: index.php');
 }
 ```
+
+{% hint style="info" %}
+`if ($status === false)`の部分は、
+`if (!$status)`と書くことも可能。
+{% endhint %}
 
 {% hint style="info" %}
 try-catch
@@ -264,7 +299,7 @@ try {
 }
 
 //２．データ取得SQL作成
-$stmt = $pdo->prepare("SELECT * FROM gs_an_table");
+$stmt = $pdo->prepare('SELECT * FROM gs_an_table');
 $status = $stmt->execute();
 
 //３．データ表示
