@@ -4,6 +4,8 @@
 
 {% embed url="https://gitlab.com/gs_hayato/gs-php-01/-/blob/master/PHP02_haifu.zip" %}
 
+リンク先の`php02_haifu.zip`からダウンロードしてください。
+
 ## 前回のおさらい
 
 * 今までの学習はクライアントサイドの学習
