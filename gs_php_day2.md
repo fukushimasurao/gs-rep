@@ -60,10 +60,6 @@
 
 ブラウザのURLからは、多分 `http://localhost/phpmyadmin/`で行ける。
 
-
-
-
-
 <figure><img src=".gitbook/assets/phpmyadmin.jpg" alt=""><figcaption></figcaption></figure>
 
 ## DB作成
@@ -352,12 +348,14 @@ function h($str)
 }
 ```
 
-`selsect.php` の `$view`処理部分に`XSS対策`をする。
+`selsect.php` の `$view`を最終的に出力する部分に`XSS対策`をする。
 
 ```php
-$view .= '<p>';
-$view .= h($result['date']).':'.h($result['name']).' '.h($result['content']).' '.h($result['email']);
-$view .= '</p>';
+<!-- Main[Start] -->
+<div>
+    <div class="container jumbotron"><?= h($view) ?></div>
+</div>
+<!-- Main[End] -->
 ```
 
 #### 【課題】 ブックマークアプリ
