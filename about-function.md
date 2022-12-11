@@ -387,11 +387,11 @@ echo $name;
 
 この独自の世界 = 有効範囲のことを`スコープ`といいます。 functionの中は外界とは違う閉ざされた世界なので、`ローカルスコープ(ローカル)`といったリします。
 
-![](<.gitbook/assets/スコープ (1) (1).jpg>)
+![](<.gitbook/assets/スコープ (1) (1) (1) (1).jpg>)
 
 一方ローカルスコープの外 = functionの中以外 = ほぼすべての箇所は`グローバルスコープ(グローバル)`と言います。
 
-![](.gitbook/assets/スコープ２.jpg)
+![](.gitbook/assets/スコープ２.jpg)
 
 function内は、`ローカル`なので、`functionの外の$name`と`functionの中の$name`は違います。 だから、echo $nameしても、中身が変わっていないのです。
 
