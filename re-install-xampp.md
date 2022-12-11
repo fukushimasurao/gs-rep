@@ -19,13 +19,18 @@
 2. **バックアップしたいDB**をクリックし、headerメニューからエクスポートをクリック
 3.
 
-    <figure><img src=".gitbook/assets/スクリーンショット 2022-12-11 17.15.52.png" alt=""><figcaption></figcaption></figure>
-4. 特に何もいじらずそのままページ下部のエクスポートボタンを押下すると、`SQLファイル`が勝手にダウンロードされます。このダウンロードしたファイルは後で使います。
+```
+<figure><img src=".gitbook/assets/スクリーンショット 2022-12-11 17.15.52.png" alt=""><figcaption></figcaption></figure>
+```
 
-※バックアップしたいDB（＝ご自身で作成したDB）が複数ある場合は、それぞれのDBにて上記を実行してバックアップファイルを作成してください。
-下記のDBはXAMPP側がもともと用意しているDBなのでバックアップ不要です。
+1. 特に何もいじらずそのままページ下部のエクスポートボタンを押下すると、`SQLファイル`が勝手にダウンロードされます。このダウンロードしたファイルは後で使います。
+2.
 
-<figure><img src=".gitbook/assets/スクリーンショット 2022-12-11 17.16.08.png" alt=""><figcaption></figcaption></figure>
+    <figure><img src=".gitbook/assets/スクリーンショット 2022-12-11 17.16.08.png" alt=""><figcaption></figcaption></figure>
+
+※バックアップしたいDB（＝ご自身で作成したDB）が複数ある場合は、それぞれのDBにて上記を実行してバックアップファイルを作成してください。 下記のDBはXAMPP側がもともと用意しているDBなのでバックアップ不要です。
+
+<figure><img src=".gitbook/assets/スクリーンショット 2022-12-11 18.29.40.png" alt=""><figcaption></figcaption></figure>
 
 ## XAMPPの再インストール
 
@@ -43,10 +48,16 @@
 2. `gs_db`と言うDBを作成する。
 3.
 
-    <figure><img src=".gitbook/assets/スクリーンショット 2022-12-11 18.17.37.png" alt=""><figcaption></figcaption></figure>
-4. 左メニューから、今作成した`gs_db`をクリック。headerメニューから、インポートをクリック
-5. インポートするファイルにて、先ほどバックアップした`SQLファイル`を選択
-6.
+```
+<figure><img src=".gitbook/assets/スクリーンショット 2022-12-11 18.17.37.png" alt=""><figcaption></figcaption></figure>
+```
 
-    <figure><img src=".gitbook/assets/スクリーンショット 2022-12-11 18.19.07.png" alt=""><figcaption></figcaption></figure>
-7. そのまま一番下までスクロールして、インポートをクリック
+1. 左メニューから、今作成した`gs_db`をクリック。headerメニューから、インポートをクリック
+2. インポートするファイルにて、先ほどバックアップした`SQLファイル`を選択
+3.
+
+```
+<figure><img src=".gitbook/assets/スクリーンショット 2022-12-11 18.19.07.png" alt=""><figcaption></figcaption></figure>
+```
+
+1. そのまま一番下までスクロールして、インポートをクリック
