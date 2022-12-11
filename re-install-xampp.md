@@ -18,13 +18,11 @@
 1. `phpMyAdmin`を開く
 2. **バックアップしたいDB**をクリックし、headerメニューからエクスポートをクリック
 3.
+4.
 
-```
-<figure><img src=".gitbook/assets/スクリーンショット 2022-12-11 17.15.52.png" alt=""><figcaption></figcaption></figure>
-```
-
-1. 特に何もいじらずそのままページ下部のエクスポートボタンを押下すると、`SQLファイル`が勝手にダウンロードされます。このダウンロードしたファイルは後で使います。
-2.
+    <figure><img src=".gitbook/assets/スクリーンショット 2022-12-11 17.15.52.png" alt=""><figcaption></figcaption></figure>
+5. 特に何もいじらずそのままページ下部のエクスポートボタンを押下すると、`SQLファイル`が勝手にダウンロードされます。このダウンロードしたファイルは後で使います。
+6.
 
     <figure><img src=".gitbook/assets/スクリーンショット 2022-12-11 17.16.08.png" alt=""><figcaption></figcaption></figure>
 
@@ -46,18 +44,12 @@
 
 1. phpMyAdminを開く
 2. `gs_db`と言うDBを作成する。
-3.
 
-```
 <figure><img src=".gitbook/assets/スクリーンショット 2022-12-11 18.17.37.png" alt=""><figcaption></figcaption></figure>
-```
 
 1. 左メニューから、今作成した`gs_db`をクリック。headerメニューから、インポートをクリック
 2. インポートするファイルにて、先ほどバックアップした`SQLファイル`を選択
-3.
 
-```
 <figure><img src=".gitbook/assets/スクリーンショット 2022-12-11 18.19.07.png" alt=""><figcaption></figcaption></figure>
-```
 
 1. そのまま一番下までスクロールして、インポートをクリック
