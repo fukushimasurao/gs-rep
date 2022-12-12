@@ -10,6 +10,7 @@
 * [😇 about functionほぼ完成](about-function.md)
 * [🆚 VS code関連](vs\-code.md)
 * [🏫 about Class](about-class.md)
+* [🏫 about Class Detail（クラス説明の時使うやつ。作成中）](about-class-detail.md)
 * [📖 PhpMyAdmin関連](phpmyadmin.md)
 * [♥ 便利情報](good-tools.md)
 * [👯‍♀️ XAMPP再インストール方法](re\-install\-xampp.md)
