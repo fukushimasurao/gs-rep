@@ -98,9 +98,6 @@ $stmt->bindValue(':content', $content, PDO::PARAM_STR);
 
 の流れです。
 
-
-
-
 ## まず更新画面にidを送る為のリンクを作成する
 
 `detail.php`に`id`を送るために、urlに`パラメータ(URLパラメータ)`を追加して遷移させてあげます。
@@ -148,21 +145,32 @@ http://localhost/test/detail.php?id=XXX
 
 ```php
 <?php
-require_once('funcs.php');
-$pdo = db_conn();
-
-//2.select.phpから送られてくる対象のIDを取得
+//select.phpから送られてくる対象のIDを取得
 $id = $_GET['id'];
 
+// DB接続(insert.phpとかから持ってきてください)
+try {
+    $db_name = 'gs_db3';    //データベース名
+    $db_id   = 'root';      //アカウント名
+    $db_pw   = '';      //パスワード：MAMPは'root'
+    $db_host = 'localhost'; //DBホスト
+    $pdo = new PDO('mysql:dbname=' . $db_name . ';charset=utf8;host=' . $db_host, $db_id, $db_pw);
+} catch (PDOException $e) {
+    exit('DB Connection Error:' . $e->getMessage());
+}
+
 //3．データ登録SQL作成
+// WHERE id=:idを利用して、１つだけ情報を取得してください。
 $stmt = $pdo->prepare('SELECT * FROM gs_an_table WHERE id=:id;');
 $stmt->bindValue(':id',$id,PDO::PARAM_INT);
 $status = $stmt->execute();
 
 //4．データ表示
-$view = '';
+$result = '';
 if ($status === false) {
-    sql_error($status);
+    //*** function化する！******\
+    $error = $stmt->errorInfo();
+    exit('SQLError:' . print_r($error, true));
 } else {
     $result = $stmt->fetch();
 }
@@ -181,13 +189,29 @@ if ($status === false) {
 </form>
 ```
 
-1. detail.phpのHTML内formの送信ボタン直上に以下を追記
+1. フォーム `input`に初期値を設定
+
+```html
+<label>名前：<input type="text" name="name" value="<?= $result['name'] ?>"></label><br>
+<label>Email：<input type="text" name="email" value="<?= $result['email'] ?>"></label><br>
+<label>年齢：<input type="text" name="age" value="<?= $result['age'] ?>"></label><br>
+<label><textarea name="content" rows="4" cols="40"><?= $result['content'] ?></textarea></label>
+
+```
+
+
+2. detail.phpのHTML内formの送信ボタン直上に以下を追記
 
 ```php
  <!-- ↓追加 -->
 <input type="hidden" name="id" value="<?= $result['id'] ?>">
-<input type="submit" value="送信">
+
+ <!-- ↓「送信」も「更新」に直しちゃいましょう -->
+<input type="submit" value="更新">
 ```
+
+書き終わったら、ブラウザのdev toolsで、idが送れる状態になっているか確認しましょう。
+
 
 ## 更新処理の中身を作成する
 
@@ -200,7 +224,6 @@ if ($status === false) {
 ```sql
 UPDATE テーブル名 SET 更新対象1=:更新データ ,更新対象2=:更新データ2,... WHERE id = 対象ID;
 ```
-
 
 1. update.phpに更新処理を追記
 
