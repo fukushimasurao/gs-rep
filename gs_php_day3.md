@@ -48,6 +48,49 @@
 4. 実行してみる
 5. 授業用のDBと中身を確認
 
+
+## 登録処理の修正(index.php → insert.php)
+
+### `index.php`の中身確認
+
+まずは、`index.php`を確認してみましょう。
+
+`form`の設置と`insert.php`へ`post`で送る処理が確認できます。
+
+```html
+<form method="POST" action="insert.php">
+```
+
+### `insert.php`の中身確認、修正
+
+insert処理部分が`*******`になっているので修正しましょう。
+
+<details>
+
+<summary>答え</summary>
+
+```php
+
+// idは抜かしても問題ない(自動連番 / default値があれば自動挿入される)ので省略します。
+$stmt = $pdo->prepare('INSERT INTO gs_an_table(name, email, age, content, indate)
+                        VALUES(:name, :email, :age, :content, sysdate())');
+
+$stmt->bindValue(':name', $name, PDO::PARAM_STR);
+$stmt->bindValue(':email', $email, PDO::PARAM_STR);
+$stmt->bindValue(':age', $age, PDO::PARAM_INT); //Integer（数値の場合 PDO::PARAM_INT)
+$stmt->bindValue(':content', $content, PDO::PARAM_STR);
+```
+
+</details>
+
+
+## 一覧画面（select.php）の確認
+
+すでにコードは書いてあるので、どのようなSQLが記載されているか等を確認してください。
+
+
+
+
 ## 関数化&呼び出し
 
 よく使う処理は関数化するのが一般的です。 同じ処理を複数回書くのではなく関数化して再利用しましょう。
@@ -60,7 +103,7 @@ function db_conn()
     try {
         $db_name = 'gs_db3';
         $db_id   = 'root';
-        $db_pw   = 'root';
+        $db_pw   = ''; // MAMPは'root'
         $db_host = 'localhost';
         $pdo = new PDO('mysql:dbname=' . $db_name . ';charset=utf8;host=' . $db_host, $db_id, $db_pw);
         return $pdo;
