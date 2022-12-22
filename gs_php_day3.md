@@ -126,12 +126,20 @@ $stmt->bindValue(':content', $content, PDO::PARAM_STR);
 ```php
 //GETデータ送信リンク作成
 // <a>で囲う。
-$view .= '<p><a href="detail.php?id=' . $result['id'] . '">';
+$view .= '<p>';
+$view .= '<a href="detail.php?id=' . $result['id'] . '">';
 $view .= "{$result['indate']} : {$result['name']}"; // 文字列は、ダブルクオーテーション利用すると変数展開可能
-$view .= '</a></p>';
+$view .= '</a>';
+$view .= '</p>';
 ```
 
-かけたら、ブラウザの検証ツールからaタグのリンクの飛び先(`detail.php`)をチェック
+{% hint style="info" %}
+
+`htmlspecialchars()`の利用は後でやるので、ここでは一旦省略します。
+
+{% endhint %}
+
+書けたら、ブラウザの検証ツールからaタグのリンクの飛び先(`detail.php`)をチェック
 
 もしくは、リンクをクリックして、
 
@@ -268,9 +276,69 @@ if ($status === false) {
 }
 ```
 
+## 削除処理を実装していく
+
+PHPの基本処理、登録・表示（取得）・更新・削除の4つのうちの最後の一つです。 削除処理は削除ボタンクリック→削除処理の流れなので比較的簡単です。
+
+### DELETE（データ削除）
+
+**書式**
+
+```sql
+DELETE FROM テーブル名 WHERE id = :id
+```
+
+{% hint style="info" %}
+
+WHERE句で指定しないと、全部消えるので、超注意
+
+{% endhint %}
+
+### 削除ボタン（削除リンクを作成する）
+
+1. select.phpのデータ表示のwhile文内のHTML生成に削除リンクを作成
+
+```php
+//GETデータ送信リンク作成
+// <a>で囲う。
+$view .= '<p>';
+$view .= '<a href="detail.php?id=' . $result['id'] . '">';
+$view .= $result["indate"] . "：" . $result["name"];
+$view .= '</a>';
+$view .= '<a href="delete.php?id=' . $result['id'] . '">';//追記
+$view .= '  [削除]';//追記
+$view .= '</a>';//追記
+$view .= '</p>';
+```
+
+1. delete.phpに削除処理を作成する
+
+(`update.php`の中身をコピぺして、不要部分を修正削除すると楽です)
+
+```php
+//1.対象のIDを取得
+$id   = $_GET['id'];
+
+//2.DB接続します
+require_once('funcs.php');
+$pdo = db_conn();
+
+//3.削除SQLを作成
+$stmt = $pdo->prepare('DELETE FROM gs_an_table WHERE id = :id');
+$stmt->bindValue(':id', $id, PDO::PARAM_INT);
+$status = $stmt->execute(); //実行
 
 
-## 関数化&呼び出し
+//４．データ登録処理後
+if ($status === false) {
+    sql_error($stmt);
+} else {
+    redirect('select.php');
+}
+```
+
+
+## コードをリファクタリング。関数化&呼び出し
 
 よく使う処理は関数化するのが一般的です。 同じ処理を複数回書くのではなく関数化して再利用しましょう。
 
@@ -285,6 +353,7 @@ function db_conn()
         $db_pw   = ''; // MAMPは'root'
         $db_host = 'localhost';
         $pdo = new PDO('mysql:dbname=' . $db_name . ';charset=utf8;host=' . $db_host, $db_id, $db_pw);
+        // return $pdo;を忘れないように。 
         return $pdo;
     } catch (PDOException $e) {
         exit('DB Connection Error:' . $e->getMessage());
@@ -336,172 +405,10 @@ if ($status === false) {
     redirect('index.php');
 }
 ```
-<!-- 
-## 更新処理を実装
 
-更新処理は
+1. すでに`funcs.php`の中に、`h()`関数が用意されています。
 
-1. 更新画面(詳細画面)の作成
-2. 更新処理 → リダイレクトの流れです。
-
-### UPDATE（データ更新）
-
-**書式**
-
-```sql
-UPDATE テーブル名 SET 更新対象1=:更新データ ,更新対象2=:更新データ2,... WHERE id = 対象ID;
-```
-
-## まず更新画面を表示する為のリンクを作成する
-
-1. `select.php`のデータ表示の`while`文内の`HTML`生成にリンクを作成(`GETデータ送信リンク`)
-
-```php
-//GETデータ送信リンク作成
-// <a>で囲う。
-$view .= '<p>';
-$view .= '<a href="detail.php?id=' . $result['id'] . '">';
-$view .= $result['indate'] . '：' . $result['name'];
-$view .= '</a>';
-$view .= '</p>';
-```
-
-1. select.php内のDB接続・SQLエラー・リダイレクト処理を外部関数から呼び出しに変更する
-2. ブラウザの検証ツールからaタグのリンクの飛び先(`detail.php`)をチェック
-
-## 更新画面を作成する
-
-1. detail.phpにデータ取得処理を記述
-
-```php
-<?php
-require_once('funcs.php');
-$pdo = db_conn();
-
-//2.select.phpから送られてくる対象のIDを取得
-$id = $_GET['id'];
-
-//3．データ登録SQL作成
-$stmt = $pdo->prepare('SELECT * FROM gs_an_table WHERE id=:id;');
-$stmt->bindValue(':id',$id,PDO::PARAM_INT);
-$status = $stmt->execute();
-
-//4．データ表示
-$view = '';
-if ($status === false) {
-    sql_error($status);
-} else {
-    $result = $stmt->fetch();
-}
-?>
-```
-
-1. detail.phpに更新画面用のHTMLを記述
-
-`index.php`のコードをまるっとコピーして貼り付け！
-
-1. detail.phpのHTML内formのaction先をupdate.phpに変更する
-
-```php
-<form method="POST" action="update.php">
- .....省略
-</form>
-```
-
-1. detail.phpのHTML内formの送信ボタン直上に以下を追記
-
-```php
- <!-- ↓追加 -->
-<input type="hidden" name="id" value="<?= $result['id'] ?>">
-<input type="submit" value="送信">
-```
-
-## 更新処理の中身を作成する
-
-1. update.phpに更新処理を追記
-
-```php
-//1. POSTデータ取得
-$name   = $_POST['name'];
-$email  = $_POST['email'];
-$age    = $_POST['age'];
-$content = $_POST['content'];
-$id = $_POST['id'];
-
-//2. DB接続します
-require_once('funcs.php');
-$pdo = db_conn();
-
-//３．データ登録SQL作成
-$stmt = $pdo->prepare( 'UPDATE gs_an_table SET name = :name, email = :email, age = :age, content = :content, indate = sysdate() WHERE id = :id;' );
-
-$stmt->bindValue(':name', $name, PDO::PARAM_STR);/// 文字の場合 PDO::PARAM_STR
-$stmt->bindValue(':email', $email, PDO::PARAM_STR);// 文字の場合 PDO::PARAM_STR
-$stmt->bindValue(':age', $age, PDO::PARAM_INT);// 数値の場合 PDO::PARAM_INT
-$stmt->bindValue(':content', $content, PDO::PARAM_STR);// 文字の場合 PDO::PARAM_STR
-$stmt->bindValue(':id', $id, PDO::PARAM_INT);// 数値の場合 PDO::PARAM_INT
-$status = $stmt->execute(); //実行
-
-//４．データ登録処理後
-if ($status === false) {
-    sql_error($stmt);
-} else {
-    redirect('select.php');
-}
-``` -->
-
-## 削除処理を実装していく
-
-PHPの基本処理、登録・表示（取得）・更新・削除の4つのうちの最後の一つです。 削除処理は削除ボタンクリック→削除処理の流れなので比較的簡単です。
-
-### DELETE（データ削除）
-
-**書式**
-
-```sql
-UPDATE テーブル名 SET 更新対象1=:更新データ ,更新対象2=:更新データ2,... WHERE id = 対象ID;
-```
-
-### 削除ボタン（削除リンクを作成する）
-
-1. select.phpのデータ表示のwhile文内のHTML生成に削除リンクを作成
-
-```php
-//GETデータ送信リンク作成
-// <a>で囲う。
-$view .= '<p>';
-$view .= '<a href="detail.php?id=' . $result['id'] . '">';
-$view .= $result["indate"] . "：" . $result["name"];
-$view .= '</a>';
-$view .= '<a href="delete.php?id=' . $result['id'] . '">';//追記
-$view .= '  [削除]';//追記
-$view .= '</a>';//追記
-$view .= '</p>';
-```
-
-1. delete.phpに削除処理を作成する
-
-```php
-//1.対象のIDを取得
-$id   = $_GET['id'];
-
-//2.DB接続します
-require_once('funcs.php');
-$pdo = db_conn();
-
-//3.削除SQLを作成
-$stmt = $pdo->prepare('DELETE FROM gs_an_table WHERE id = :id');
-$stmt->bindValue(':id', $id, PDO::PARAM_INT);
-$status = $stmt->execute(); //実行
-
-
-//４．データ登録処理後
-if ($status === false) {
-    sql_error($stmt);
-} else {
-    redirect('select.php');
-}
-```
+データを出力表示している箇所を`h()`で囲ってあげましょう。
 
 ## 【課題】 ブックマークアプリ その２
 
