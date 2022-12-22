@@ -22,14 +22,13 @@
 
 * `CRUD`とは？ [https://wa3.i-3-i.info/word123.html](https://wa3.i-3-i.info/word123.html)
 
-## MAMPの起動、DB準備
+## XAMPPの起動、DB準備
 
-1. MAMPを起動
-2. WebStartボタンから起動トップページを表示
-3. ページの真ん中MySQLのタブからphpMyAdminのリンクをクリック
-4. 起動した画面がMySQLを管理するphpMyAdminの画面が表示されます。
-5. データベースタブをクリック
-6. データベースを作成から以下の名前で作成
+XAMPPのapache,mysql serverを起動させてください。
+
+http://localhost/phpmyadminを開いて、DBを用意しましょう。
+
+↓を新たに作成してください。
 
 ```
 データベース名：gs_db3
