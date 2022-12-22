@@ -88,6 +88,151 @@ $stmt->bindValue(':content', $content, PDO::PARAM_STR);
 
 すでにコードは書いてあるので、どのようなSQLが記載されているか等を確認してください。
 
+## 更新処理を実装
+
+更新処理は
+
+1. 更新画面(詳細画面 = `detail.php`)の作成
+2. `select.php`から、更新したい項目の`id`を`detail.php`に送る。
+3. `detail.php`にて、受け取った`id`を元に、その`id`の情報を更新する。
+
+の流れです。
+
+
+
+
+## まず更新画面にidを送る為のリンクを作成する
+
+`detail.php`に`id`を送るために、urlに`パラメータ(URLパラメータ)`を追加して遷移させてあげます。
+
+{% hint style="info" %}
+`パラメータ(URLパラメータ)`って何だっけ？
+
+例えば、`https://eow.alc.co.jp/search?q=english`の`q=english`の部分です。
+
+{% endhint %}
+
+
+
+1. `select.php`のデータ表示の`while`文内の`HTML`生成にリンクを作成(`GETデータ送信リンク`)
+
+※表示されるイメージは、
+
+```html
+<p>
+    <a href="detail.php?id=XXX">2022-09-22 16:06:42 : 徳川家康</a>
+</p>
+```
+
+としたい。
+
+```php
+//GETデータ送信リンク作成
+// <a>で囲う。
+$view .= '<p><a href="detail.php?id=' . $result['id'] . '">';
+$view .= "{$result['indate']} : {$result['name']}"; // 文字列は、ダブルクオーテーション利用すると変数展開可能
+$view .= '</a></p>';
+```
+
+かけたら、ブラウザの検証ツールからaタグのリンクの飛び先(`detail.php`)をチェック
+
+もしくは、リンクをクリックして、
+
+http://localhost/test/detail.php?id=XXX
+
+に遷移するか確認する。
+
+## 更新画面(detail.php)を作成する
+
+1. detail.phpにデータ取得処理を記述
+
+```php
+<?php
+require_once('funcs.php');
+$pdo = db_conn();
+
+//2.select.phpから送られてくる対象のIDを取得
+$id = $_GET['id'];
+
+//3．データ登録SQL作成
+$stmt = $pdo->prepare('SELECT * FROM gs_an_table WHERE id=:id;');
+$stmt->bindValue(':id',$id,PDO::PARAM_INT);
+$status = $stmt->execute();
+
+//4．データ表示
+$view = '';
+if ($status === false) {
+    sql_error($status);
+} else {
+    $result = $stmt->fetch();
+}
+?>
+```
+
+1. detail.phpに更新画面用のHTMLを記述
+
+`index.php`のコードをまるっとコピーして貼り付け！
+
+1. detail.phpのHTML内formのaction先をupdate.phpに変更する
+
+```php
+<form method="POST" action="update.php">
+ .....省略
+</form>
+```
+
+1. detail.phpのHTML内formの送信ボタン直上に以下を追記
+
+```php
+ <!-- ↓追加 -->
+<input type="hidden" name="id" value="<?= $result['id'] ?>">
+<input type="submit" value="送信">
+```
+
+## 更新処理の中身を作成する
+
+### UPDATE（データ更新）
+
+**書式**
+
+**whereを忘れないようにしましょう。**
+
+```sql
+UPDATE テーブル名 SET 更新対象1=:更新データ ,更新対象2=:更新データ2,... WHERE id = 対象ID;
+```
+
+
+1. update.phpに更新処理を追記
+
+```php
+//1. POSTデータ取得
+$name   = $_POST['name'];
+$email  = $_POST['email'];
+$age    = $_POST['age'];
+$content = $_POST['content'];
+$id = $_POST['id'];
+
+//2. DB接続します
+require_once('funcs.php');
+$pdo = db_conn();
+
+//３．データ登録SQL作成
+$stmt = $pdo->prepare( 'UPDATE gs_an_table SET name = :name, email = :email, age = :age, content = :content, indate = sysdate() WHERE id = :id;' );
+
+$stmt->bindValue(':name', $name, PDO::PARAM_STR);/// 文字の場合 PDO::PARAM_STR
+$stmt->bindValue(':email', $email, PDO::PARAM_STR);// 文字の場合 PDO::PARAM_STR
+$stmt->bindValue(':age', $age, PDO::PARAM_INT);// 数値の場合 PDO::PARAM_INT
+$stmt->bindValue(':content', $content, PDO::PARAM_STR);// 文字の場合 PDO::PARAM_STR
+$stmt->bindValue(':id', $id, PDO::PARAM_INT);// 数値の場合 PDO::PARAM_INT
+$status = $stmt->execute(); //実行
+
+//４．データ登録処理後
+if ($status === false) {
+    sql_error($stmt);
+} else {
+    redirect('select.php');
+}
+```
 
 
 
@@ -157,7 +302,7 @@ if ($status === false) {
     redirect('index.php');
 }
 ```
-
+<!-- 
 ## 更新処理を実装
 
 更新処理は
@@ -269,7 +414,7 @@ if ($status === false) {
 } else {
     redirect('select.php');
 }
-```
+``` -->
 
 ## 削除処理を実装していく
 
