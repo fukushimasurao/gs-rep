@@ -48,7 +48,9 @@ http://localhost/phpmyadminを開いて、DBを用意しましょう。
 5. 授業用のDBと中身を確認
 
 
-## 登録処理の修正(index.php → insert.php)
+## 登録処理までの確認（前回の復習）
+
+### 登録処理の修正をしましょう。(index.php → insert.php)
 
 ### `index.php`の中身確認
 
@@ -62,7 +64,9 @@ http://localhost/phpmyadminを開いて、DBを用意しましょう。
 
 ### `insert.php`の中身確認、修正
 
-insert処理部分が`*******`になっているので修正しましょう。
+
+- `$db_name`の内容が問題ないか確認しましょう。
+- insert処理部分が`*******`になっているので修正しましょう。
 
 <details>
 
