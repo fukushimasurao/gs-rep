@@ -94,19 +94,19 @@ $stmt->bindValue(':content', $content, PDO::PARAM_STR);
 
 -----（ここまでは、day2の復習）-----
 
-## 更新処理を実装
+## 詳細画面を実装
 
-更新処理は
+各項目の詳細画面を作成するために、
 
-1. 詳細画面 = `detail.php`の作成
-2. `select.php`から、更新したい項目の`id`を`detail.php`に送る。
-3. `detail.php`にて、受け取った`id`を元に、その`id`の情報を更新する。
+1. `select.php`から、更新したい項目の`id`を`detail.php`に送る。
+2. `detail.php`にて、受け取った`id`を元に、その`id`の情報を表示する
 
-の流れです。
+の流れを作ります。
 
 ## まず更新画面にidを送る為のリンクを作成する
 
-`detail.php`に`id`を送るために、urlに`パラメータ(URLパラメータ)`を追加して遷移させてあげます。
+`select.php`の各項目をクリックしたら、その項目の詳細画面に遷移する様にします。
+よって、`detail.php`に`id`を送るために、urlに`パラメータ(URLパラメータ)`を追加して遷移させてあげます。
 
 {% hint style="info" %}
 `パラメータ(URLパラメータ)`って何だっけ？
@@ -114,8 +114,6 @@ $stmt->bindValue(':content', $content, PDO::PARAM_STR);
 例えば、`https://eow.alc.co.jp/search?q=english`の`q=english`の部分です。
 
 {% endhint %}
-
-
 
 1. `select.php`のデータ表示の`while`文内の`HTML`生成にリンクを作成(`GETデータ送信リンク`)
 
@@ -138,6 +136,26 @@ $view .= "{$result['indate']} : {$result['name']}"; // 文字列は、ダブル�
 $view .= '</a>';
 $view .= '</p>';
 ```
+
+{% hint style="info" %}
+
+文字列をダブルクオーテーションで囲んであげると、
+その中で変数展開が可能になります。
+
+```php
+$modifier = 'good';
+
+echo "I am $modifier_man!!" // これだと、一見してどこまで変数か分かりづらいので、{}で囲ってあげることも可能。
+echo "I am {$modifier}_man!!"  // ${modifier} でもok
+```
+
+なお、ダブルクオーテーションの中で、ダブルクオーテーションは利用できないので気をつけましょう。
+
+❌ `$str="He is "GREAT" teacher.";`
+◎　`$str='He is "GREAT" teacher.';`
+
+{% endhint %}
+
 
 {% hint style="info" %}
 
