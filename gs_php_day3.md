@@ -86,16 +86,19 @@ $stmt->bindValue(':content', $content, PDO::PARAM_STR);
 
 </details>
 
+ここまで確認できたら、登録処理ができるかどうかの確認をしましょう。
 
 ## 一覧画面（select.php）の確認
 
 すでにコードは書いてあるので、どのようなSQLが記載されているか等を確認してください。
 
+-----（ここまでは、day2の復習）-----
+
 ## 更新処理を実装
 
 更新処理は
 
-1. 更新画面(詳細画面 = `detail.php`)の作成
+1. 詳細画面 = `detail.php`の作成
 2. `select.php`から、更新したい項目の`id`を`detail.php`に送る。
 3. `detail.php`にて、受け取った`id`を元に、その`id`の情報を更新する。
 
