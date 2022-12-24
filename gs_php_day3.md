@@ -265,7 +265,7 @@ $name   = $_POST['name'];
 $email  = $_POST['email'];
 $age    = $_POST['age'];
 $content = $_POST['content'];
-$id = $_POST['id'];
+$id = $_POST['id']; // ←追加
 
 //2. DB接続します
 try {
@@ -279,6 +279,8 @@ try {
 }
 
 //３．データ登録SQL作成
+
+// UPDATE文にする
 $stmt = $pdo->prepare( 'UPDATE gs_an_table SET name = :name, email = :email, age = :age, content = :content, indate = sysdate() WHERE id = :id;' );
 
 $stmt->bindValue(':name', $name, PDO::PARAM_STR);/// 文字の場合 PDO::PARAM_STR
@@ -299,6 +301,12 @@ if ($status === false) {
     exit();
 }
 ```
+
+{% hint style="info" %}
+
+`UPDATE`文は、,`WHERE`を忘れない様に注意
+
+{% endhint %}
 
 ## 削除処理を実装していく
 
@@ -341,11 +349,20 @@ $view .= '</p>';
 
 ```php
 //1.対象のIDを取得
+// GETで取得するので、GETに書き換え
 $id   = $_GET['id'];
 
 //2.DB接続します
-require_once('funcs.php');
-$pdo = db_conn();
+try {
+    $db_name = 'gs_db3'; //データベース名
+    $db_id   = 'root'; //アカウント名
+    $db_pw   = ''; //パスワード：MAMPは'root'
+    $db_host = 'localhost'; //DBホスト
+    $pdo = new PDO('mysql:dbname=' . $db_name . ';charset=utf8;host=' . $db_host, $db_id, $db_pw);
+} catch (PDOException $e) {
+    exit('DB Connection Error:' . $e->getMessage());
+}
+
 
 //3.削除SQLを作成
 $stmt = $pdo->prepare('DELETE FROM gs_an_table WHERE id = :id');
@@ -355,10 +372,15 @@ $status = $stmt->execute(); //実行
 
 //４．データ登録処理後
 if ($status === false) {
-    sql_error($stmt);
+    //*** function化する！******\
+    $error = $stmt->errorInfo();
+    exit('SQLError:' . print_r($error, true));
 } else {
-    redirect('select.php');
+    //*** function化する！*****************
+    header('Location: select.php');
+    exit();
 }
+
 ```
 
 
@@ -367,6 +389,12 @@ if ($status === false) {
 よく使う処理は関数化するのが一般的です。 同じ処理を複数回書くのではなく関数化して再利用しましょう。
 
 1. funcs.phpにDB接続関数を作成する
+
+※ 以下、順番に書き換えて動作を確認しましょう。
+- `insert.php`
+- `detail.php`
+- `update.php`
+- `delete.php`
 
 ```php
 function db_conn()
@@ -433,6 +461,12 @@ if ($status === false) {
 1. すでに`funcs.php`の中に、`h()`関数が用意されています。
 
 データを出力表示している箇所を`h()`で囲ってあげましょう。
+
+※ 以下、順番に書き換えて動作を確認しましょう。
+- `select.php`
+- `detail.php`
+
+
 
 ## 【課題】 ブックマークアプリ その２
 
