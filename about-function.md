@@ -153,28 +153,28 @@ greeting();
 
 ```php
 //１つ目
-function getTriangleArea1() {
+function getTriangleArea_1() {
     echo (5 * 2 / 2);
 }
 
 //2つ目
-function getTriangleArea2() {
+function getTriangleArea_2() {
     echo (5 * 4 / 2);
 }
 
 //3つ目
-function getTriangleArea3() {
+function getTriangleArea_3() {
     echo (5 * 6 / 2);
 }
 
-getTriangleArea1();
-getTriangleArea2();
-getTriangleArea3();
+getTriangleArea_1();
+getTriangleArea_2();
+getTriangleArea_3();
 ```
 
 なんだか微妙ですね。。。。 なぜなら、めちゃくちゃ似ている内容が、複数書かれているからです。 「どの関数も内容がめちゃくちゃ似てる」のです。
 
-逆に、
+逆に
 
 * 関数名
 * 掛け算の部分 以外は同じです。
@@ -255,7 +255,7 @@ function getTriangleArea(高さ) {
 1. 底辺も引数で与える場合は以下のとおりです。コンマつけて羅列してあげてください。
 
 ```php
-function getTriangleArea(高さ, 底辺) {
+function getTriangleArea(底辺, 高さ) {
     echo (底辺 * 高さ / 2);
 }
 ```
@@ -263,7 +263,7 @@ function getTriangleArea(高さ, 底辺) {
 1. 漢字を変数にしてあげましょう。
 
 ```php
-function getTriangleArea($hight, $bottom) {
+function getTriangleArea($bottom, $hight) {
     echo ($bottom * $hight / 2);
 }
 ```
@@ -276,10 +276,10 @@ getTriangleArea(2, 3);
 // 3
 ```
 
-※ 引数の順番が違っても問題ないです。 例えば以下でもokです。 というか、左が底辺・右が高さで統一されているので、こっちのほうがきれいかも。
+※ 引数の順番が違っても問題ないです。 けど、出てくる順番は合わせたほうが可読性が高いですね。
 
 ```php
-function getTriangleArea($bottom, $hight) {
+function getTriangleArea($hight, $bottom) {
     echo ($bottom * $hight / 2);
 }
 ```
