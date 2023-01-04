@@ -50,7 +50,7 @@
 
 ![](.gitbook/assets/php04/loginのイメージ.jpg)
 
-この鍵に、`SESSION`を利用する。
+このやりとりを行うために`SESSION`を利用する。
 
 ## SESSIONとは
 
@@ -77,14 +77,24 @@ echo $name;
 
 ### `SESSION`の確認
 
+`SESSION`そのものは概念を指す……お互いが誰かを認識した状態でやりとりすること・やりとりを管理すること。
+
+インターネットの仕組み……ステートレス。
+これだと、買い物等しずらい。
+そのため、sessionを利用する。
+
+
 #### `session01.php`を作成
 
 1. `session01.php`を作成
 2. 以下記述
+3. ★記述後、`session01.php`をブラウザで開く★
 
 ```php
 <?php
 // SESSIONスタート
+// ★この１行は必須★
+// この１行で、新しいセッションを開始しセッションIDが割り当てられて、ファイルが作成される。
 session_start();
 
 // SESSIONのidを取得
@@ -107,7 +117,10 @@ idが表示されているはずです。 このデータは
 * ブラウザ
 * サーバー の両方に同じデーターが保存されています。
 * ブラウザ `developer tools`の`検証 ＞ Application ＞ Cookies ＞ localhost`に`PHPSESSID`
-* サーバー `MAMP` > `tmp` > `php` > `sess_XXXXXXXXXXXXXXXXXXX`
+* サーバー 
+  * XAMPPは、`XAMPP/xamppfiiles/tenp`
+  * MAMPは、`MAMP` > `tmp` > `php` > `sess_XXXXXXXXXXXXXXXXXXX`
+    * XAMPPの場合は、ファイルの拡張子を`.txt`に変えてあげると中身が見られる。
 
 #### `session01.php`の`session_id()`の下に以下処理を追加
 
@@ -138,6 +151,12 @@ echo $name;
 echo $age;
 ?>
 ```
+
+
+{% hint style="info" %}
+`$_SESSION`はサーバー内ならどこでも（＝htdocsの中にあるファイルであればどのファイルからでも）呼び出すことができます。
+{% endhint %}
+
 
 ![](.gitbook/assets/php04/session.jpg)
 

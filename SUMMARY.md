@@ -14,3 +14,4 @@
 * [📖 PhpMyAdmin関連](phpmyadmin.md)
 * [♥ 便利情報](good-tools.md)
 * [👯‍♀️ XAMPP再インストール方法](re\-install\-xampp.md)
+* [☠️ sqlインジェクション確認](sql\_injection.md)
