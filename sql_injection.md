@@ -1,7 +1,7 @@
 # sql_injectionの確認
 
 
-サンプルファイルはこちら。
+サンプルファイルは[こちら](https://gitlab.com/gs_hayato/gs-php-01/-/blob/master/sql_injection.zip)。
 
 
 単純なログイン機能になっている。
