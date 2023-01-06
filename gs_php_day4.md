@@ -1,6 +1,6 @@
 # 🤩 014\_gs\_php\_day4
 
-### 授業資料 <a href="#shou-ye-zi-liao" id="shou-ye-zi-liao"></a>
+ユーザー側にデータを授業資料
 
 [https://gitlab.com/gs\_hayato/gs-php-01/-/blob/master/PHP04\_haifu.zip](https://gitlab.com/gs\_hayato/gs-php-01/-/blob/master/PHP04\_haifu.zip)
 
@@ -46,6 +46,10 @@
 6. 実行してみる
 7. 授業用のDBと中身を確認
 
+今日のプロダクトのイメージ
+
+<figure><img src=".gitbook/assets/about.jpg" alt=""><figcaption></figcaption></figure>
+
 ## 今日のイメージ
 
 ![](.gitbook/assets/php04/loginのイメージ.jpg)
@@ -79,10 +83,7 @@ echo $name;
 
 `SESSION`そのものは概念を指す……お互いが誰かを認識した状態でやりとりすること・やりとりを管理すること。
 
-インターネットの仕組み……ステートレス。
-これだと、買い物等しずらい。
-そのため、sessionを利用する。
-
+インターネットの仕組み……ステートレス。 これだと、買い物等しずらい。 そのため、sessionを利用する。
 
 #### `session01.php`を作成
 
@@ -117,7 +118,7 @@ idが表示されているはずです。 このデータは
 * ブラウザ
 * サーバー の両方に同じデーターが保存されています。
 * ブラウザ `developer tools`の`検証 ＞ Application ＞ Cookies ＞ localhost`に`PHPSESSID`
-* サーバー 
+* サーバー
   * XAMPPは、`XAMPP/xamppfiiles/tenp`
   * MAMPは、`MAMP` > `tmp` > `php` > `sess_XXXXXXXXXXXXXXXXXXX`
     * XAMPPの場合は、ファイルの拡張子を`.txt`に変えてあげると中身が見られる。
@@ -152,11 +153,9 @@ echo $age;
 ?>
 ```
 
-
 {% hint style="info" %}
 `$_SESSION`はサーバー内ならどこでも（＝htdocsの中にあるファイルであればどのファイルからでも）呼び出すことができます。
 {% endhint %}
-
 
 ![](.gitbook/assets/php04/session.jpg)
 
