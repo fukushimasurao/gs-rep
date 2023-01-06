@@ -50,19 +50,21 @@
 
 <figure><img src=".gitbook/assets/about.jpg" alt=""><figcaption></figcaption></figure>
 
-## 今日のイメージ
 
-![](.gitbook/assets/php04/loginのイメージ.jpg)
+## 今日のゴール
 
-このやりとりを行うために`SESSION`を利用する。
+ログイン機能を作成する。
 
-## SESSIONとは
+### `SESSION`の確認
 
-今日はSESSIONを学びます。
+`SESSION`そのものは概念……お互いが誰かを認識した状態でやりとりすること・やりとりを管理すること。
+インターネットの仕組み……ステートレス。 これだと買い物等しずらい。そのためsessionを利用する。
 
-* SESSION変数 ... 「サーバー側に変数を保持」できる。
-  * ※普通の変数は、サーバーに保存できない。
+`session`を利用するために...`session_start();`を利用する。
 
+### `session_start();`でできること　その１
+
+- ファイルを超えてデータを共有できる。
 #### （例）普通の変数
 
 ```php
@@ -79,12 +81,6 @@ echo $name;
 // エラー。test02.phpの中には変数定義されていない。
 ```
 
-### `SESSION`の確認
-
-`SESSION`そのものは概念を指す……お互いが誰かを認識した状態でやりとりすること・やりとりを管理すること。
-
-インターネットの仕組み……ステートレス。 これだと、買い物等しずらい。 そのため、sessionを利用する。
-
 #### `session01.php`を作成
 
 1. `session01.php`を作成
@@ -98,37 +94,20 @@ echo $name;
 // この１行で、新しいセッションを開始しセッションIDが割り当てられて、ファイルが作成される。
 session_start();
 
-// SESSIONのidを取得
-$sid = session_id();
-echo $sid;
-
-?>
 ```
-
-{% hint style="info" %}
-`session_start()`で「鍵」に当たる部分を作成するイメージです。
-
-`session_id()`で、その鍵がどんなIDなのかを確認できます。
-{% endhint %}
-
-#### `session01.php`をブラウザでチェック
-
-idが表示されているはずです。 このデータは
-
-* ブラウザ
-* サーバー の両方に同じデーターが保存されています。
-* ブラウザ `developer tools`の`検証 ＞ Application ＞ Cookies ＞ localhost`に`PHPSESSID`
-* サーバー
-  * XAMPPは、`XAMPP/xamppfiiles/tenp`
-  * MAMPは、`MAMP` > `tmp` > `php` > `sess_XXXXXXXXXXXXXXXXXXX`
-    * XAMPPの場合は、ファイルの拡張子を`.txt`に変えてあげると中身が見られる。
 
 #### `session01.php`の`session_id()`の下に以下処理を追加
 
 ```php
+
+$name = 'jone';
+$age = 30;
+
+echo $name . $age;
+
 // SESSION変数にデータを登録
-$_SESSION['name'] = 'john';
-$_SESSION['age'] = 30;
+$_SESSION['name'] = $name;
+$_SESSION['age'] = $age;
 ```
 
 {% hint style="info" %}
@@ -157,15 +136,61 @@ echo $age;
 `$_SESSION`はサーバー内ならどこでも（＝htdocsの中にあるファイルであればどのファイルからでも）呼び出すことができます。
 {% endhint %}
 
-![](.gitbook/assets/php04/session.jpg)
+
+### `session_start();`でできること　その2
+
+IDをサーバー / クライアントで共有する。
+
+`session01.php`をブラウザで開く★
+
+```php
+<?php
+session_start();
+
+// 適当な箇所に以下追加、SESSIONのidを取得
+$sid = session_id();
+echo $sid;
+```
+
+ブラウザには、id(セッションID)が表示されているはずです。
+
+このidは**ブラウザ / サーバー の両方に同じIDが保存されています。**
+
+*確認場所*
+
+* ブラウザ `developer tools`の`検証 ＞ Application ＞ Cookies ＞ localhost`に`PHPSESSID`
+* サーバー
+  * XAMPP / Macは、`XAMPP/xamppfiiles/temp`
+  * XAMPP / Windowsは、`C/xampp/tmp/`
+  * MAMPは、`MAMP` > `tmp` > `php` > `sess_XXXXXXXXXXXXXXXXXXX`
+    * XAMPPの場合は、ファイルの拡張子を`.txt`に変えてあげると中身が見られる。
+
+
+このidが**鍵のような役割を行います。**
+
+## 今日のイメージ
+
+![](.gitbook/assets/php04/loginのイメージ.jpg)
+
+このように「ログイン機能」を作成するために`SESSION`を利用する。
 
 ### `session ID`の更新・変更方法
 
+例えば、家の鍵が盗まれたら鍵を新しくする必要があるように`session ID`もセキュリティの観点から頻繁に変更します。
+
 **セキュリティー上、session idは変更する必要があります。**
 
-#### session\_regenerate\_id.phpの動きを確認
 
-### 以下記述を追加
+{% hint style="info" %}
+セッション情報を鍵のように利用してログイン機能を実装します。
+
+セッションIDを盗まれることを[`セッション・ハイジャック`](https://www.ipa.go.jp/security/vuln/websecurity-HTML-1\_4.html)と呼びます。
+
+万が一盗まれても良いように、セッションIDを変更(鍵を変更)する必要が有るわけです
+{% endhint %}
+
+
+### session\_regenerate\_id.php に以下記述を追加
 
 ```php
 <?php
@@ -186,14 +211,12 @@ $new_session_id = session_id();
 echo '古いセッション:' . $old_session_id . '<br />';
 echo '新しいセッション:' . $new_session_id . '<br />';
 ```
+-----------------
 
-{% hint style="info" %}
-セッション情報を鍵のように利用してログイン機能を実装します。
 
-セッションIDを盗まれることを[`セッション・ハイジャック`](https://www.ipa.go.jp/security/vuln/websecurity-HTML-1\_4.html)と呼びます。
 
-万が一盗まれても良いように、セッションIDを変更(鍵を変更)する必要が有るわけです
-{% endhint %}
+
+
 
 ## ログイン処理の実装
 
