@@ -152,6 +152,16 @@ $sid = session_id();
 echo $sid;
 ```
 
+{% hint style="info" %}
+`session_start()` で新しいセッションを開始(最初のセッションIDを作成する)、あるいは既存のセッションを再開します。
+
+`session_id()` は現在のセッションのセッションIDを返します。
+`session_id()`単体での利用は、あくまでもIDを確認するだけです。
+https://www.php.net/manual/ja/function.session-id.php
+
+{% endhint %}
+
+
 ブラウザには、id(セッションID)が表示されているはずです。
 
 このidは**ブラウザ / サーバー の両方に同じIDが保存されています。**
@@ -265,6 +275,12 @@ if( $val['id'] != '' ){
   redirect('login.php');
 }
 ```
+
+これで、ログインのような動きはできましたが、実際には機能していません。
+ログインしようとしまいと、`select.php`にアクセスできてしまうからです。
+
+よって、`select.php`などは、*ログインしていないとみられないページ*に修正する必要があります。
+
 
 1. select.phpにログインチェック処理を追加
 
