@@ -288,8 +288,9 @@ if( $val['id'] != '' ){
 //SESSIONスタート
 session_start();
 
-// ログイン処理の時に代入した$_SESSION['chk_ssid']を持っているか？加えてサーバーのSESSION IDと一緒か？
-if( $_SESSION['chk_ssid'] != session_id() ){
+// ログイン処理の時に代入した$_SESSION['chk_ssid']を持っているか？
+// もしくはサーバーのSESSION IDと一緒か？
+if (!isset($_SESSION['chk_ssid']) || $_SESSION['chk_ssid'] != session_id()) {
     exit('LOGIN ERROR');
 }else{
 session_regenerate_id(true);
@@ -299,12 +300,25 @@ session_regenerate_id(true);
 // (以下略)
 ```
 
+{% hint style="info" %}
+もし、ログインを経由せずに`select.php`に来た場合、
+`$_SESSION['chk_ssid']`には、何も代入されていません。
+
+何も代入されてない状態で、`$_SESSION['chk_ssid']`を書くと
+`Undefined array key "chk_ssid" `のエラーが出ます。
+
+よって、丁寧に`if (!isset($_SESSION['chk_ssid']...)` と書いています。
+{% endhint %}
+
+
+
+
 1. ログイン処理を関数化。`funcs.php`にログインチェック関数を作成
 
 ```php
 //ログインチェック
 function loginCheck(){
-  if( $_SESSION['chk_ssid'] != session_id() ){
+  if (!isset($_SESSION['chk_ssid']) || $_SESSION['chk_ssid'] != session_id()) {
     exit('LOGIN ERROR');
   }else{
     session_regenerate_id(true);
@@ -362,11 +376,17 @@ _**万が一パスワードが盗まれた場合に備えて、パスワード�
 1. `hash.php`を作成
 2. `hash.php`内にパスワードのハッシュ化の処理を記述
 
+
+
 ```php
+// hash.php
+
 <?php
 
-$pw = password_hash('test1',PASSWORD_DEFAULT);
-echo $pw;
+$password = 'test';
+
+$hashed_pw = password_hash($password, PASSWORD_DEFAULT);
+echo $hashed_pw;
 
 // 表示された内容が 'test1' を hash化したもの
 ?>
@@ -400,6 +420,15 @@ if ($val['id'] != '' && password_verify($lpw, $val['lpw'])) {
   // 省略
 }
 ```
+
+{% hint style="info" %}
+`password_verify('ハッシュ化前の値', 'ハッシュ化された値')`
+
+で、`ハッシュ化前の値`と `ハッシュ化された値`が一致するか確認できる。
+
+一致したら、ture, ダメならfalseが戻る。
+{% endhint %}
+
 
 今後ユーザー登録する際にパスワードはハッシュ化してあげる。
 
