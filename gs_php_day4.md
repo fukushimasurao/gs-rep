@@ -259,7 +259,7 @@ if( $val['id'] != '' ){
   $_SESSION['chk_ssid']  = session_id();
   $_SESSION['kanri_flg'] = $val['kanri_flg'];
   $_SESSION['name']      = $val['name'];
-  redirect('selsect.php');
+  redirect('select.php');
 }else{
   //Login失敗時(Logout経由)
   redirect('login.php');
