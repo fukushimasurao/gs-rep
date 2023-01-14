@@ -239,7 +239,7 @@ $content  = $_POST['content'];
 
 // もし、どちらかが空白だったらredirect関数でindexに戻す。その際、URLパラメーターでerrorを渡す。
 if (trim($title) === '' || trim($content) === '') {
-  redirect('post.php?error=1');
+  redirect('post.php?error');
 }
 ```
 
@@ -260,12 +260,14 @@ HTMLブロック内にてPHPを記述する際、if文やfor文を利用する�
 ```php
 // 普通に書く場合
 <?php
-if ($a > $b)
-  echo "aはbより大きい";
-  echo "<h1>test</h1>";
+if ($a > $b) {
+    echo "aはbより大きい";
+    echo "<h1>test</h1>";
+}
 ?>
 
 // 下のように書くと、echoを書かなくて良い。
+// つまり、html部分は、htmlとして記述できる。
 <?php if ($a > $b): ?>
     <p>aはbより大きい</p>
     <h1>test</h1>
@@ -300,7 +302,7 @@ if ($a > $b)
 
 ```php
 if (trim($title) === '' || trim($content)  === '') {
-    redirect('post.php?error=1');
+    redirect('post.php?error');
 }
 ```
 
@@ -316,6 +318,15 @@ if (trim($title) === '' || trim($content)  === '') {
 `form`から`post`で遷移した後、もう一度`form`に戻ると、記入した内容が消えてしまいます。 一度記入した内容を記録しておきたいので、`SESSION`を利用します。
 {% endhint %}
 
+{% hint style="info" %}
+以下、`$_SESSION['post']`の中にさらにkeyとvalueを入れる形にしています。
+例えば、`$_SESSION['post']['title']`など。
+これは、postから受け取ったと明示するために、['post']をつけているだけであって、['post']がなくても問題ないです。
+
+つまり、`$_SESSION['title']`と書いても問題ないです。
+{% endhint %}
+
+
 ```php
 // postされたら、セッションに保存
 $title = $_SESSION['post']['title'] = $_POST['title'];
@@ -324,14 +335,14 @@ $content = $_SESSION['post']['content'] = $_POST['content'];
 
 {% hint style="info" %}
 ```php
-$a = 'string';
-$b = 'string';
+$_SESSION['post']['title'] = $_POST['title'];
+$title = $_POST['title'];
 ```
 
 と、
 
 ```php
-$a = $b = 'string';
+$title = $_SESSION['post']['title'] = $_POST['title'];
 ```
 
 は同じです。
@@ -419,11 +430,11 @@ if (isset($_SESSION['post']['content'])) {
 {% hint style="info" %}
 $_FILESの中には、以下が格納されている。
 
-$_FILES['inputで指定したname']['name']:ファイル名
-$_FILES['inputで指定したname']['type']:ファイルのMIMEタイプ
-$_FILES['inputで指定したname']['tmp_name']:サーバー上で一時的に保存されるテンポラリファイル名
-$_FILES['inputで指定したname']['error']:アップロード時のエラーコード
-$_FILES['inputで指定したname']['size']:ファイルサイズ（バイト単位）
+* $_FILES['inputで指定したname']['name']:ファイル名
+* $_FILES['inputで指定したname']['type']:ファイルのMIMEタイプ
+* $_FILES['inputで指定したname']['tmp_name']:サーバー上で一時的に保存されるテンポラリファイル名
+* $_FILES['inputで指定したname']['error']:アップロード時のエラーコード
+* $_FILES['inputで指定したname']['size']:ファイルサイズ（バイト単位）
 
 参考　https://wepicks.net/phpref-files/
 {% endhint %}
@@ -459,7 +470,7 @@ if (isset($_FILES['img']['name'])) {
 // ↑↑↑↑↑↑ここまで↑↑↑↑↑↑↑↑↑↑↑
 
 if (trim($title) === '' || trim($content) === '') {
-   redirect('post.php?error=1');
+   redirect('post.php?error');
 }
 
 // ↓↓↓↓↓ここから追加↓↓↓↓
@@ -467,13 +478,25 @@ if (trim($title) === '' || trim($content) === '') {
 if (!empty($file_name)) {
     $extension = substr($file_name, -3);
     if ($extension != 'jpg' && $extension != 'gif' && $extension != 'png') {
-       redirect('post.php?error=1');
+       redirect('post.php?error');
     }
 }
 // ↑↑↑↑↑↑ここまで↑↑↑↑↑↑↑↑↑↑↑
 
 ?>
 ```
+
+
+
+{% hint style="info" %}
+以下記述について.
+`$image_data = $_SESSION['post']['image_data'] = file_get_contents($_FILES['img']['tmp_name']);`
+
+`$_FILES['img']['tmp_name']`には、画像の一時保存先フォルダが格納されています。
+`file_get_contents(格納先 / URL)`で画像のデータ（文字列を取得します）
+それをセッションや、変数に入れています。
+
+{% endhint %}
 
 1. `confirm.php`の`form`部分に以下追加
 
@@ -501,6 +524,14 @@ if (!empty($file_name)) {
     <button type="submit" class="btn btn-primary">投稿</button>
 </form>
 ```
+
+{% hint style="info" %}
+上記`<img src="image.php">`では、`image.php`をソース元として指定しています。
+`image.php`の中では、`$_SESSION['post']['image_type']`の中身によって、
+`header('content-type: HOGEHOGE);`をつけています。
+
+参考　https://ysklog.net/php/1575.html
+{% endhint %}
 
 1. 戻るボタン押したときに、画像表示するため、`post.php`以下追加
 
@@ -558,7 +589,7 @@ if (isset($_SESSION['post']['image_data'])) {
 
 // 簡単なバリデーション処理。
 if (trim($title) === '' || trim($content)  === '') {
-    redirect('post.php?error=1');
+    redirect('post.php?error');
 }
 
 
