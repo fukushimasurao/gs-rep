@@ -4,6 +4,13 @@
 
 [https://gitlab.com/gs\_hayato/gs-php-01/-/blob/master/PHP05\_haifu.zip](https://gitlab.com/gs\_hayato/gs-php-01/-/blob/master/PHP05\_haifu.zip)
 
+{% hint style="info" %}
+Macの人は、配布ファイルのimagesフォルダの権限を変えてください。
+フォルダの上で右クリック→情報を見る→一番下の「共有とアクセス権」から、全て「読み書き」にしてください
+{% endhint %}
+
+
+
 ### 前回までのおさらい
 
 * `SQL`の`UPDATE`を書いた
@@ -206,9 +213,10 @@ EOM;
 
 ### 投稿にバリデーションをつける
 
+現状、投稿する際に、空欄があっても投稿できるようになっています。
 投稿内容が空白の場合に、登録できないようにする。
 
-* `resister.php`にバリデーションをつける。
+* `register.php`にバリデーションをつける。
 
 {% hint style="info" %}
 バリデーションとは、入力規則のことです。 製作者側が期待している内容とは異なる内容がform等で送信された場合に 弾くようにします。
@@ -225,7 +233,7 @@ EOM;
 以下のようにif文を作成。 （`$content = $_POST['content'];`の下辺り。）
 
 ```php
-// resister.php
+// register.php
 $title = $_POST['title'];
 $content  = $_POST['content'];
 
@@ -244,7 +252,7 @@ if (trim($title) === '' || trim($content) === '') {
 <?php if (isset($_GET['error'])): ?>
     <p class="text-danger">記入内容を確認してください</p>
 <?php endif ?>
-<form method="POST" action="resister.php">
+<form method="POST" action="register.php">
 ```
 
 HTMLブロック内にてPHPを記述する際、if文やfor文を利用する際は、以下のように記述できます。
@@ -344,12 +352,13 @@ loginCheck();
 $title = '';
 $content = '';
 
-if ($_SESSION['post']['title']) {
+if (isset($_SESSION['post']['title'])) {
     $title = $_SESSION['post']['title'];
 }
-if ($_SESSION['post']['content']) {
+if (isset($_SESSION['post']['content'])) {
     $content = $_SESSION['post']['content'];
 }
+
 ?>
 ```
 
@@ -377,6 +386,9 @@ if ($_SESSION['post']['content']) {
 
 1. `POST.php`のフォームに以下追加
 
+`enctype="multipart/form-data"`を忘れがちなので注意
+
+
 ```php
 <form method="POST" action="confirm.php" enctype="multipart/form-data"> // enctype="multipart/form-data"を追加
     <div class="mb-3">
@@ -402,6 +414,20 @@ if ($_SESSION['post']['content']) {
 
 1. `confirm.php`のPHP部分に以下追加
 
+
+
+{% hint style="info" %}
+$_FILESの中には、以下が格納されている。
+
+$_FILES['inputで指定したname']['name']:ファイル名
+$_FILES['inputで指定したname']['type']:ファイルのMIMEタイプ
+$_FILES['inputで指定したname']['tmp_name']:サーバー上で一時的に保存されるテンポラリファイル名
+$_FILES['inputで指定したname']['error']:アップロード時のエラーコード
+$_FILES['inputで指定したname']['size']:ファイルサイズ（バイト単位）
+
+参考　https://wepicks.net/phpref-files/
+{% endhint %}
+
 ```php
 <?php
 session_start();
@@ -419,7 +445,7 @@ $content = $_SESSION['post']['content'] = $_POST['content'];
 
 // ↓↓↓↓↓ここから追加↓↓↓↓
 // imgがある場合
-if ($_FILES['img']['name']) {
+if (isset($_FILES['img']['name'])) {
     $file_name = $_SESSION['post']['file_name']= $_FILES['img']['name'];
     // 一時保存されているファイル内容を取得して、セッションに格納
     $image_data = $_SESSION['post']['image_data'] = file_get_contents($_FILES['img']['tmp_name']);
@@ -485,15 +511,15 @@ $title = '';
 $content = '';
 // $image_data = ''; ←追加
 
-if ($_SESSION['post']['title']) {
+if (isset($_SESSION['post']['title'])) {
     $title = $_SESSION['post']['title'];
 }
-if ($_SESSION['post']['content']) {
+if (isset($_SESSION['post']['content'])) {
     $content = $_SESSION['post']['content'];
 }
 
 // ↓追加
-if ($_SESSION['post']['image_data']) {
+if (isset($_SESSION['post']['image_data'])) {
     $image_data = $_SESSION['post']['image_data'];
 }
 ```
@@ -524,7 +550,8 @@ $title = $_POST['title'];
 $content  = $_POST['content'];
 
 // imgがある場合
-if ($_SESSION['post']['image_data']) {
+if (isset($_SESSION['post']['image_data'])) {
+    // ファイル名に今日の日付をくっつける。
     $img = date('YmdHis') . '_' . $_SESSION['post']['file_name'];
 }
 //↑↑↑↑↑↑↑↑↑↑↑↑↑↑ここまで↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑
@@ -537,6 +564,7 @@ if (trim($title) === '' || trim($content)  === '') {
 
 // ↓↓↓↓↓↓↓↓↓↓↓↓追加↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
 if (!empty($img)) {
+    // 写真が添付されている場合、拡張子を確認。変な拡張子であればバリデーションつける。
     $check =  substr($img, -3);
     if ($check != 'jpg' && $check != 'gif' && $check != 'png') {
         $err[] = '写真の内容を確認してください。';
@@ -545,7 +573,7 @@ if (!empty($img)) {
 //↑↑↑↑↑↑↑↑↑↑↑↑↑↑ここまで↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑
 
 // ↓↓↓↓↓↓↓↓↓↓↓↓追加↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
-if ($_SESSION['post']['image_data']) {
+if (isset($_SESSION['post']['image_data'])) {
     file_put_contents('../images/' . $img, $_SESSION['post']['image_data']);
 }
 //↑↑↑↑↑↑↑↑↑↑↑↑↑↑ここまで↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑
