@@ -2,7 +2,7 @@
 
 #### 授業資料 <a href="#shou-ye-zi-liao" id="shou-ye-zi-liao"></a>
 
-[https://gitlab.com/gs\_hayato/gs-php-01/-/blob/master/PHP05\_haifu.zip](https://gitlab.com/gs\_hayato/gs-php-01/-/blob/master/PHP05\_haifu.zip)
+[https://gitlab.com/gs\_hayato/gs-php-01/-/blob/master/PHP05\_haifu.zip](https://gitlab.com/gs\_hayato/gs-php-01/-/blob/master/PHP05.zip)
 
 {% hint style="info" %}
 Macの人は、配布ファイルのimagesフォルダの権限を変えてください。
