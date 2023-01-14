@@ -602,7 +602,7 @@ if (isset($_SESSION['post']['image_data'])) {
 <?php foreach ($contents as $content): ?>
     <div class="col">
         <div class="card shadow-sm">
-        <?php if ($content['img']): ?>
+        <?php if ($content['img'] !== ''): ?>
             <img src="images/<?=$content['img']?>" alt="" class="bd-placeholder-img card-img-top" >
         <?php else: ?>
             <img src="images/default_image/no_image_logo.png" alt="" class="bd-placeholder-img card-img-top" >
