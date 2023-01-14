@@ -85,6 +85,7 @@ PW:test2
 <meta name="viewport" content="width=device-width">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+<title>{タイトル}</title>
 ```
 
 関数の共通化のように、一つパーツを作った後、必要なページで呼び出してあげます。
@@ -100,12 +101,17 @@ https://getbootstrap.jp/
 
 ```php
 <?php
-$head_parts = <<<EOM
+function head_parts($title)
+{
+    return <<<EOM
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+<title>$title</title>
 EOM;
+}
+
 ```
 
 1. 利用したいページで、
@@ -121,7 +127,7 @@ EOM;
 
 を記述　※ファイルPATHは階層によって異なるので注意
 
-1. `<head>`タグ内で、`<?= $head_parts ?>`と記述し呼び出してあげる。
+1. `<head>`タグ内で、`<?= head_parts({<headの中に記述したい文言>}) ?>`と記述し呼び出してあげる。
 
 {% hint style="info" %}
 ```
