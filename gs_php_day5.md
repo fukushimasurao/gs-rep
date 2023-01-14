@@ -602,17 +602,6 @@ if (trim($title) === '' || trim($content)  === '') {
     redirect('post.php?error');
 }
 
-
-// ↓↓↓↓↓↓↓↓↓↓↓↓追加↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
-if (!empty($img)) {
-    // 写真が添付されている場合、拡張子を確認。変な拡張子であればバリデーションつける。
-    $check =  substr($img, -3);
-    if ($check != 'jpg' && $check != 'gif' && $check != 'png') {
-        $err[] = '写真の内容を確認してください。';
-    }
-}
-//↑↑↑↑↑↑↑↑↑↑↑↑↑↑ここまで↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑
-
 // ↓↓↓↓↓↓↓↓↓↓↓↓追加↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
 if (isset($_SESSION['post']['image_data'])) {
     file_put_contents('../images/' . $img, $_SESSION['post']['image_data']);
