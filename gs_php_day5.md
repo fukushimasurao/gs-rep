@@ -472,21 +472,8 @@ if (isset($_FILES['img']['name'])) {
 if (trim($title) === '' || trim($content) === '') {
    redirect('post.php?error');
 }
-
-// ↓↓↓↓↓ここから追加↓↓↓↓
-//写真は拡張子をチェック
-if (!empty($file_name)) {
-    $extension = substr($file_name, -3);
-    if ($extension != 'jpg' && $extension != 'gif' && $extension != 'png') {
-       redirect('post.php?error');
-    }
-}
-// ↑↑↑↑↑↑ここまで↑↑↑↑↑↑↑↑↑↑↑
-
 ?>
 ```
-
-
 
 {% hint style="info" %}
 以下記述について.
@@ -495,7 +482,30 @@ if (!empty($file_name)) {
 `$_FILES['img']['tmp_name']`には、画像の一時保存先フォルダが格納されています。
 `file_get_contents(格納先 / URL)`で画像のデータ（文字列を取得します）
 それをセッションや、変数に入れています。
+{% endhint %}
 
+{% hint style="info" %}
+余力あれば、画像データのバリデーションもしてあげる。
+
+```php
+if (trim($title) === '' || trim($content) === '') {
+   redirect('post.php?error');
+}
+```
+
+の下に以下追加シテあげてください。
+
+```php
+if (!empty($file_name)) {
+    $extension = substr($file_name, -3);
+    if ($extension != 'jpg' && $extension != 'gif' && $extension != 'png') {
+       redirect('post.php?error=1');
+    }
+}
+```
+
+内容としは、添付された画像データの拡張子を確認して、画像データの拡張子でなければ弾く、というものです。
+※拡張子を偽装されると本当に画像かどうかわからないので、本格的なバリデーションは別途確認してください。
 {% endhint %}
 
 1. `confirm.php`の`form`部分に以下追加
