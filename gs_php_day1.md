@@ -10,6 +10,12 @@ description: php 第１日目
 
 ![](<.gitbook/assets/スクリーンショット 2022-01-09 2.30.21.png>)
 
+
+{% hint style="danger" %}
+Macを利用されている人は、dataファルダの書き込み権限を変更してください。
+{% endhint %}
+
+
 ## GsのPHP授業でのお願い
 
 授業ごとにZIP化した配布資料を共有します。
