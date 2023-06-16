@@ -6,15 +6,13 @@ description: php 第１日目
 
 ### 授業資料 <a href="#shou-ye-zi-liao" id="shou-ye-zi-liao"></a>
 
-{% embed url="https://gitlab.com/gs_hayato/gs-php-01/-/blob/master/php01_haifu.zip" %}
+{% embed url="<https://gitlab.com/gs_hayato/gs-php-01/-/blob/master/php01.zip>" %}
 
 ![](<.gitbook/assets/スクリーンショット 2022-01-09 2.30.21.png>)
-
 
 {% hint style="danger" %}
 Macを利用されている人は、dataファルダの書き込み権限を変更してください。
 {% endhint %}
-
 
 ## GsのPHP授業でのお願い
 
@@ -297,6 +295,7 @@ for ($i = 0; $i < $num; $i++) {
     # code...
 }
 ```
+
 {% endhint %}
 
 ```php
@@ -432,6 +431,7 @@ echo '<pre>';
 var_dump($_GET);
 echo '</pre>';
 ```
+
 {% endhint %}
 
 {% hint style="info" %}
@@ -442,6 +442,7 @@ HTML内では、echoは以下のように省略した記述が可能です。
 // ↓
 <?= $name ?>
 ```
+
 {% endhint %}
 
 {% hint style="success" %}
@@ -639,6 +640,7 @@ fclose($file);
 間違えると、中身を削除してしまうので、ご利用は慎重に。
 
 {% hint style="info" %}
+
 ```
 r 読み込みのみでオープンします。
 r+ 読み込み/書込み用にオープンします。
@@ -649,6 +651,7 @@ w+ 読み込み/書込み用でオープンします。内容をまず削除、�
 a 追加書込み用のみでオープンします。ファイルがなければ作成
 a+ 読み込み/追加書込み用でオープンします。ファイルがなければ作成
 ```
+
 {% endhint %}
 
 {% hint style="info" %}
@@ -690,6 +693,7 @@ fgets($openFile)でファイルの上から１行ずつ取得して、$strに代
 $strをechoする。その際に、text内の改行を<br>に変換させるnl2brを利用
 もし読み込む行がなくなった場合、条件はFALSEになり、whileは終了する。
 ```
+
 {% endhint %}
 
 ### `inpute.php`から`write.php`に内容を送ってみよう
