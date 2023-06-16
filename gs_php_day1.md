@@ -12,6 +12,9 @@ description: php 第１日目
 
 {% hint style="danger" %}
 Macを利用されている人は、dataファルダの書き込み権限を変更してください。
+
+参考
+<https://support.apple.com/ja-jp/guide/mac-help/mchlp1203/mac>
 {% endhint %}
 
 ## GsのPHP授業でのお願い
@@ -141,9 +144,11 @@ PHP部分は改行せずに、１行で記述しよう。
 {% endhint %}
 
 {% hint style="info" %}
-文字列を示すクオーテーションですが、シングルでもダブルでも現状はどちらでも良いです。 私は、シングルクオーテーションを多用します。
+文字列を示すクオーテーションですが、シングルでもダブルでも現状はどちらでも良いです。 私はシングルクオーテーションを多用します。
+大事なことは、どちらを使うか決めたら統一して利用するということです。
+例えば、あっちではシングルクオーテーション使ってこっちではダブルクオーテーション使って、、、、というのはご法度です。
 
-※シングルとダブルだと、利用方法に違いがあります。
+※なお、シングルとダブルは利用方法に違いがあります。
 
 参考 : [https://www.php.net/manual/ja/language.types.string.php#language.types.string.parsing](https://www.php.net/manual/ja/language.types.string.php#language.types.string.parsing)
 {% endhint %}
@@ -214,7 +219,7 @@ phpのデフォルトのタイムゾーンは
     // ※trim...全角スペースは取り除かない。取り除くものは↓
     // https://www.php.net/manual/ja/function.trim.php
     // 全角対応は、str_replaceを利用する。
-    $string2 = ' 前後にわざと空白を入れる ';
+    $string2 = ' abcde '; // 前後にわざと半角スペースいれている
     var_dump($string2);
     echo '<br>';
     var_dump(trim($string2));
@@ -617,6 +622,88 @@ $mail = $_POST['mail'];
 データベースを利用した保存方法を行いたいところですが時間的に厳しいので、ファイルへの保存方法を学びます。
 {% endhint %}
 
+{% hint style="danger" %}
+Macを利用されている人は、dataファルダの書き込み権限を変更してください。
+
+参考
+<https://support.apple.com/ja-jp/guide/mac-help/mchlp1203/mac>
+{% endhint %}
+
+#### write.php
+
+```php
+<?php
+
+$time = date('Y-m-d H:i:s');
+
+// 書き込むデータの内容を整形する。
+// "\n"は改行。HTMLの<br>と同じようにtext中で利用されるとtextは改行される。
+$data = $time . '/' . $name . '/' .  $birthPlace . "\n";
+
+// 第３引数に、FILE_APPENDしないと上書きされちゃう
+file_put_contents('data/data.txt', $data, FILE_APPEND);
+?>
+
+```
+
+#### read.php
+
+txtファイルに保存した内容をブラウザでも確認するため、`read.php`を準備します。 まずは下記を`read.php`に記述してください。
+
+```php
+<?php
+// ファイルを開いて内容を読み込む
+$data = file_get_contents('./data/data.txt');
+
+// nl2br ... textファイルの改行"\n"を<br>に変換する関数
+echo nl2br($data);
+```
+
+記述後、ブラウザで`read.php`を開いて、保存したデータがブラウザで閲覧できることを確認してください。
+
+<figure><img src=".gitbook/assets/スクリーンショット 2022-12-04 18.48.51.png" alt=""><figcaption><p>txtに記述したないようが表示されればok</p></figcaption></figure>
+
+### `inpute.php`から`write.php`に内容を送ってみよう
+
+#### input.php
+
+```php
+$name = $_POST['name'];
+$birthPlace = $_POST['birthPlace'];
+
+// 変数を用意
+$time = date("Y-m-d H:i:s");
+
+// 書き込むデータの内容を整形する。
+// "\n"は改行。HTMLの<br>と同じようにtext中で利用されるとtextは改行される。
+$data = $time . '/' . $name . '/' .  $birthPlace . "\n";
+
+// 第３引数に、FILE_APPENDしないと上書きされちゃう
+file_put_contents('data/data.txt', $data, FILE_APPEND);
+```
+
+### 課題
+
+#### 【課題】 アンケート集計/表示アプリ
+
+* `post.php` (データ入力)
+* `write.php` (データ登録)
+* `read.php` (データ表示)
+
+1. データ登録:名前,Email,聞きたい問い複数
+2. データ表示:登録されてるデータを表で表示
+
+◇更にGoodライン
+
+1. データをグラフ化したり
+2. JSと絡めてみたり
+
+### 補足
+
+以前は、`file_put_contents()`ではなく、`fopen`,`fgets`,`fclose`という関数を利用していました。
+より細かい作業がしたい場合や書き込む内容が膨大（１万行とか）の場合は`fopen`,`fgets`,`fclose`が便利です。
+`fopen`,`fgets`,`fclose`を利用した場合の書き方を以下に記述しておきます。
+
 #### write.php
 
 ```php
@@ -715,19 +802,3 @@ $file = fopen('data/data.txt', 'a');
 fwrite($file, $str . "\n");
 fclose($file);
 ```
-
-### 課題
-
-#### 【課題】 アンケート集計/表示アプリ
-
-* `post.php` (データ入力)
-* `write.php` (データ登録)
-* `read.php` (データ表示)
-
-1. データ登録:名前,Email,聞きたい問い複数
-2. データ表示:登録されてるデータを表で表示
-
-◇更にGoodライン
-
-1. データをグラフ化したり
-2. JSと絡めてみたり
