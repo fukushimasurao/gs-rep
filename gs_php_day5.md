@@ -1,15 +1,12 @@
-# 🤡 015\_gs\_php\_day5
+# 🤡 015\_gs\_php\_day5（修正中
 
-#### 授業資料 <a href="#shou-ye-zi-liao" id="shou-ye-zi-liao"></a>
+#### 修正中授業資料 <a href="#shou-ye-zi-liao" id="shou-ye-zi-liao"></a>
 
 [https://gitlab.com/gs\_hayato/gs-php-01/-/blob/master/PHP05.zip](https://gitlab.com/gs\_hayato/gs-php-01/-/blob/master/PHP05.zip)
 
 {% hint style="info" %}
-Macの人は、配布ファイルのimagesフォルダの権限を変えてください。
-フォルダの上で右クリック→情報を見る→一番下の「共有とアクセス権」から、全て「読み書き」にしてください
+Macの人は、配布ファイルのimagesフォルダの権限を変えてください。 フォルダの上で右クリック→情報を見る→一番下の「共有とアクセス権」から、全て「読み書き」にしてください
 {% endhint %}
-
-
 
 ### 前回までのおさらい
 
@@ -213,8 +210,7 @@ EOM;
 
 ### 投稿にバリデーションをつける
 
-現状、投稿する際に、空欄があっても投稿できるようになっています。
-投稿内容が空白の場合に、登録できないようにする。
+現状、投稿する際に、空欄があっても投稿できるようになっています。 投稿内容が空白の場合に、登録できないようにする。
 
 * `register.php`にバリデーションをつける。
 
@@ -319,13 +315,10 @@ if (trim($title) === '' || trim($content)  === '') {
 {% endhint %}
 
 {% hint style="info" %}
-以下、`$_SESSION['post']`の中にさらにkeyとvalueを入れる形にしています。
-例えば、`$_SESSION['post']['title']`など。
-これは、postから受け取ったと明示するために、['post']をつけているだけであって、['post']がなくても問題ないです。
+以下、`$_SESSION['post']`の中にさらにkeyとvalueを入れる形にしています。 例えば、`$_SESSION['post']['title']`など。 これは、postから受け取ったと明示するために、\['post']をつけているだけであって、\['post']がなくても問題ないです。
 
 つまり、`$_SESSION['title']`と書いても問題ないです。
 {% endhint %}
-
 
 ```php
 // postされたら、セッションに保存
@@ -399,7 +392,6 @@ if (isset($_SESSION['post']['content'])) {
 
 `enctype="multipart/form-data"`を忘れがちなので注意
 
-
 ```php
 <form method="POST" action="confirm.php" enctype="multipart/form-data"> // enctype="multipart/form-data"を追加
     <div class="mb-3">
@@ -425,16 +417,14 @@ if (isset($_SESSION['post']['content'])) {
 
 1. `confirm.php`のPHP部分に以下追加
 
-
-
 {% hint style="info" %}
-$_FILESの中には、以下が格納されている。
+$\_FILESの中には、以下が格納されている。
 
-* $_FILES['inputで指定したname']['name']:ファイル名
-* $_FILES['inputで指定したname']['type']:ファイルのMIMEタイプ
-* $_FILES['inputで指定したname']['tmp_name']:サーバー上で一時的に保存されるテンポラリファイル名
-* $_FILES['inputで指定したname']['error']:アップロード時のエラーコード
-* $_FILES['inputで指定したname']['size']:ファイルサイズ（バイト単位）
+* $\_FILES\['inputで指定したname']\['name']:ファイル名
+* $\_FILES\['inputで指定したname']\['type']:ファイルのMIMEタイプ
+* $\_FILES\['inputで指定したname']\['tmp\_name']:サーバー上で一時的に保存されるテンポラリファイル名
+* $\_FILES\['inputで指定したname']\['error']:アップロード時のエラーコード
+* $\_FILES\['inputで指定したname']\['size']:ファイルサイズ（バイト単位）
 
 参考　https://wepicks.net/phpref-files/
 {% endhint %}
@@ -476,12 +466,9 @@ if (trim($title) === '' || trim($content) === '') {
 ```
 
 {% hint style="info" %}
-以下記述について.
-`$image_data = $_SESSION['post']['image_data'] = file_get_contents($_FILES['img']['tmp_name']);`
+以下記述について. `$image_data = $_SESSION['post']['image_data'] = file_get_contents($_FILES['img']['tmp_name']);`
 
-`$_FILES['img']['tmp_name']`には、画像の一時保存先フォルダが格納されています。
-`file_get_contents(格納先 / URL)`で画像のデータ（文字列を取得します）
-それをセッションや、変数に入れています。
+`$_FILES['img']['tmp_name']`には、画像の一時保存先フォルダが格納されています。 `file_get_contents(格納先 / URL)`で画像のデータ（文字列を取得します） それをセッションや、変数に入れています。
 {% endhint %}
 
 {% hint style="info" %}
@@ -504,8 +491,7 @@ if (!empty($file_name)) {
 }
 ```
 
-内容としは、添付された画像データの拡張子を確認して、画像データの拡張子でなければ弾く、というものです。
-※拡張子を偽装されると本当に画像かどうかわからないので、本格的なバリデーションは別途確認してください。
+内容としは、添付された画像データの拡張子を確認して、画像データの拡張子でなければ弾く、というものです。 ※拡張子を偽装されると本当に画像かどうかわからないので、本格的なバリデーションは別途確認してください。
 {% endhint %}
 
 1. `confirm.php`の`form`部分に以下追加
@@ -536,9 +522,7 @@ if (!empty($file_name)) {
 ```
 
 {% hint style="info" %}
-上記`<img src="image.php">`では、`image.php`をソース元として指定しています。
-`image.php`の中では、`$_SESSION['post']['image_type']`の中身によって、
-`header('content-type: HOGEHOGE);`をつけています。
+上記`<img src="image.php">`では、`image.php`をソース元として指定しています。 `image.php`の中では、`$_SESSION['post']['image_type']`の中身によって、 `header('content-type: HOGEHOGE);`をつけています。
 
 参考　https://ysklog.net/php/1575.html
 {% endhint %}
