@@ -50,21 +50,20 @@
 
 <figure><img src=".gitbook/assets/about.jpg" alt=""><figcaption></figcaption></figure>
 
-
 ## 今日のゴール
 
 ログイン機能を作成する。
 
 ### `SESSION`の確認
 
-`SESSION`そのものは概念……お互いが誰かを認識した状態でやりとりすること・やりとりを管理すること。
-インターネットの仕組み……ステートレス。 これだと買い物等しずらい。そのためsessionを利用する。
+`SESSION`そのものは概念……お互いが誰かを認識した状態でやりとりすること・やりとりを管理すること。 インターネットの仕組み……ステートレス。 これだと買い物等しずらい。そのためsessionを利用する。
 
 `session`を利用するために...`session_start();`を利用する。
 
 ### `session_start();`でできること　その１
 
-- ファイルを超えてデータを共有できる。
+* ファイルを超えてデータを共有できる。
+
 #### （例）普通の変数
 
 ```php
@@ -136,7 +135,6 @@ echo $age;
 `$_SESSION`はサーバー内ならどこでも（＝htdocsの中にあるファイルであればどのファイルからでも）呼び出すことができます。
 {% endhint %}
 
-
 ### `session_start();`でできること　その2
 
 IDをサーバー / クライアントで共有する。
@@ -155,18 +153,14 @@ echo $sid;
 {% hint style="info" %}
 `session_start()` で新しいセッションを開始(最初のセッションIDを作成する)、あるいは既存のセッションを再開します。
 
-`session_id()` は現在のセッションのセッションIDを返します。
-`session_id()`単体での利用は、あくまでもIDを確認するだけです。
-https://www.php.net/manual/ja/function.session-id.php
-
+`session_id()` は現在のセッションのセッションIDを返します。 `session_id()`単体での利用は、あくまでもIDを確認するだけです。 https://www.php.net/manual/ja/function.session-id.php
 {% endhint %}
-
 
 ブラウザには、id(セッションID)が表示されているはずです。
 
 このidは**ブラウザ / サーバー の両方に同じIDが保存されています。**
 
-*確認場所*
+_確認場所_
 
 * ブラウザ `developer tools`の`検証 ＞ Application ＞ Cookies ＞ localhost`に`PHPSESSID`
 * サーバー
@@ -174,7 +168,6 @@ https://www.php.net/manual/ja/function.session-id.php
   * XAMPP / Windowsは、`C/xampp/tmp/`
   * MAMPは、`MAMP` > `tmp` > `php` > `sess_XXXXXXXXXXXXXXXXXXX`
     * XAMPPの場合は、ファイルの拡張子を`.txt`に変えてあげると中身が見られる。
-
 
 このidが**鍵のような役割を行います。**
 
@@ -190,7 +183,6 @@ https://www.php.net/manual/ja/function.session-id.php
 
 **セキュリティー上、session idは変更する必要があります。**
 
-
 {% hint style="info" %}
 セッション情報を鍵のように利用してログイン機能を実装します。
 
@@ -198,7 +190,6 @@ https://www.php.net/manual/ja/function.session-id.php
 
 万が一盗まれても良いように、セッションIDを変更(鍵を変更)する必要が有るわけです
 {% endhint %}
-
 
 ### session\_regenerate\_id.php に以下記述を追加
 
@@ -221,12 +212,8 @@ $new_session_id = session_id();
 echo '古いセッション:' . $old_session_id . '<br />';
 echo '新しいセッション:' . $new_session_id . '<br />';
 ```
------------------
 
-
-
-
-
+***
 
 ## ログイン処理の実装
 
@@ -276,11 +263,9 @@ if( $val['id'] != '' ){
 }
 ```
 
-これで、ログインのような動きはできましたが、実際には機能していません。
-ログインしようとしまいと、`select.php`にアクセスできてしまうからです。
+これで、ログインのような動きはできましたが、実際には機能していません。 ログインしようとしまいと、`select.php`にアクセスできてしまうからです。
 
-よって、`select.php`などは、*ログインしていないとみられないページ*に修正する必要があります。
-
+よって、`select.php`などは、_ログインしていないとみられないページ_に修正する必要があります。
 
 1. select.phpにログインチェック処理を追加
 
@@ -301,17 +286,12 @@ session_regenerate_id(true);
 ```
 
 {% hint style="info" %}
-もし、ログインを経由せずに`select.php`に来た場合、
-`$_SESSION['chk_ssid']`には、何も代入されていません。
+もし、ログインを経由せずに`select.php`に来た場合、 `$_SESSION['chk_ssid']`には、何も代入されていません。
 
-何も代入されてない状態で、`$_SESSION['chk_ssid']`を書くと
-`Undefined array key "chk_ssid" `のエラーが出ます。
+何も代入されてない状態で、`$_SESSION['chk_ssid']`を書くと `Undefined array key "chk_ssid"` のエラーが出ます。
 
 よって、丁寧に`if (!isset($_SESSION['chk_ssid']...)` と書いています。
 {% endhint %}
-
-
-
 
 1. ログイン処理を関数化。`funcs.php`にログインチェック関数を作成
 
@@ -376,8 +356,6 @@ _**万が一パスワードが盗まれた場合に備えて、パスワード�
 1. `hash.php`を作成
 2. `hash.php`内にパスワードのハッシュ化の処理を記述
 
-
-
 ```php
 // hash.php
 
@@ -428,7 +406,6 @@ if ($val['id'] != '' && password_verify($lpw, $val['lpw'])) {
 
 一致したら、ture, ダメならfalseが戻る。
 {% endhint %}
-
 
 今後ユーザー登録する際にパスワードはハッシュ化してあげる。
 

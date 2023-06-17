@@ -47,7 +47,6 @@ http://localhost/phpmyadminを開いて、DBを用意しましょう。
 4. 実行してみる
 5. 授業用のDBと中身を確認
 
-
 ## 登録処理までの確認（前回の復習）
 
 ### 登録処理の修正をしましょう。(index.php → insert.php)
@@ -64,9 +63,8 @@ http://localhost/phpmyadminを開いて、DBを用意しましょう。
 
 ### `insert.php`の中身確認、修正
 
-
-- `$db_name`の内容が問題ないか確認しましょう。
-- insert処理部分が`*******`になっているので修正しましょう。
+* `$db_name`の内容が問題ないか確認しましょう。
+* insert処理部分が`*******`になっているので修正しましょう。
 
 <details>
 
@@ -92,7 +90,7 @@ $stmt->bindValue(':content', $content, PDO::PARAM_STR);
 
 すでにコードは書いてあるので、どのようなSQLが記載されているか等を確認してください。
 
------（ここまでは、day2の復習）-----
+\-----（ここまでは、day2の復習）-----
 
 ## 詳細画面を実装
 
@@ -105,14 +103,12 @@ $stmt->bindValue(':content', $content, PDO::PARAM_STR);
 
 ## まず更新画面にidを送る為のリンクを作成する
 
-`select.php`の各項目をクリックしたら、その項目の詳細画面に遷移する様にします。
-よって、`detail.php`に`id`を送るために、urlに`パラメータ(URLパラメータ)`を追加して遷移させてあげます。
+`select.php`の各項目をクリックしたら、その項目の詳細画面に遷移する様にします。 よって、`detail.php`に`id`を送るために、urlに`パラメータ(URLパラメータ)`を追加して遷移させてあげます。
 
 {% hint style="info" %}
 `パラメータ(URLパラメータ)`って何だっけ？
 
 例えば、`https://eow.alc.co.jp/search?q=english`の`q=english`の部分です。
-
 {% endhint %}
 
 1. `select.php`のデータ表示の`while`文内の`HTML`生成にリンクを作成(`GETデータ送信リンク`)
@@ -138,9 +134,7 @@ $view .= '</p>';
 ```
 
 {% hint style="info" %}
-
-文字列をダブルクオーテーションで囲んであげると、
-その中で変数展開が可能になります。
+文字列をダブルクオーテーションで囲んであげると、 その中で変数展開が可能になります。
 
 ```php
 $modifier = 'good';
@@ -151,16 +145,11 @@ echo "I am {$modifier}_man!!"  // ${modifier} でもok
 
 なお、ダブルクオーテーションの中で、ダブルクオーテーションは利用できないので気をつけましょう。
 
-❌ `$str="He is "GREAT" teacher.";`
-◎　`$str='He is "GREAT" teacher.';`
-
+❌ `$str="He is "GREAT" teacher.";` ◎　`$str='He is "GREAT" teacher.';`
 {% endhint %}
 
-
 {% hint style="info" %}
-
 `htmlspecialchars()`の利用は後でやるので、ここでは一旦省略します。
-
 {% endhint %}
 
 書けたら、ブラウザの検証ツールからaタグのリンクの飛び先(`detail.php`)をチェック
@@ -231,8 +220,7 @@ if ($status === false) {
 
 ```
 
-
-2. detail.phpのHTML内formの送信ボタン直上に以下を追記
+1. detail.phpのHTML内formの送信ボタン直上に以下を追記
 
 ```php
  <!-- ↓追加 -->
@@ -243,7 +231,6 @@ if ($status === false) {
 ```
 
 書き終わったら、ブラウザのdev toolsで、idが送れる状態になっているか確認しましょう。
-
 
 ## 更新処理の中身を作成する
 
@@ -303,9 +290,7 @@ if ($status === false) {
 ```
 
 {% hint style="info" %}
-
 `UPDATE`文は、,`WHERE`を忘れない様に注意
-
 {% endhint %}
 
 ## 削除処理を実装していく
@@ -321,9 +306,7 @@ DELETE FROM テーブル名 WHERE id = :id
 ```
 
 {% hint style="info" %}
-
 WHERE句で指定しないと、全部消えるので、超注意
-
 {% endhint %}
 
 ### 削除ボタン（削除リンクを作成する）
@@ -383,7 +366,6 @@ if ($status === false) {
 
 ```
 
-
 ## コードをリファクタリング。関数化&呼び出し
 
 よく使う処理は関数化するのが一般的です。 同じ処理を複数回書くのではなく関数化して再利用しましょう。
@@ -391,10 +373,11 @@ if ($status === false) {
 1. funcs.phpにDB接続関数を作成する
 
 ※ 以下、順番に書き換えて動作を確認しましょう。
-- `insert.php`
-- `detail.php`
-- `update.php`
-- `delete.php`
+
+* `insert.php`
+* `detail.php`
+* `update.php`
+* `delete.php`
 
 ```php
 function db_conn()
@@ -463,10 +446,9 @@ if ($status === false) {
 データを出力表示している箇所を`h()`で囲ってあげましょう。
 
 ※ 以下、順番に書き換えて動作を確認しましょう。
-- `select.php`
-- `detail.php`
 
-
+* `select.php`
+* `detail.php`
 
 ## 【課題】 ブックマークアプリ その２
 
