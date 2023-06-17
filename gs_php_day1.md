@@ -123,10 +123,10 @@ PHP部分は改行せずに、１行で記述しよう。
 
     // 変数/文字列を結合する場合は、ドット `.` となる。
     echo $myouji . $namae;
-    echo $name . 'test';
+    echo $namae . 'test';
 
     // 出力内容の詳細・データを知りたい場合はvar_dumpを利用
-    var_dump($name);
+    var_dump($namae);
     ?>
 ```
 
