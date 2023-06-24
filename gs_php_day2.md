@@ -350,14 +350,14 @@ function h($str)
 }
 ```
 
-`selsect.php` の `$view`を最終的に出力する部分に`XSS対策`をする。
+`selsect.php` の `$result`を出力する部分に`XSS対策`をする。
 
 ```php
-<!-- Main[Start] -->
-<div>
-    <div class="container jumbotron"><?= h($view) ?></div>
-</div>
-<!-- Main[End] -->
+while ($result = $stmt->fetch(PDO::FETCH_ASSOC)) {
+    $view .= '<p>';
+    $view .= h($result['date']) . ' : ' . h($result['name']) . ' ' . h($result['content']) . ' ' . h($result['email']);
+    $view .= '</p>';
+}
 ```
 
 #### 【課題】 ブックマークアプリ
