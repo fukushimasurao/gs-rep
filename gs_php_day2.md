@@ -2,7 +2,7 @@
 
 ### 授業資料 <a href="#shou-ye-zi-liao" id="shou-ye-zi-liao"></a>
 
-{% embed url="https://gitlab.com/gs_hayato/gs-php-01/-/blob/master/PHP02_haifu.zip" %}
+{% embed url="https://gitlab.com/gs_hayato/gs-php-01/-/blob/master/php02.zip" %}
 
 リンク先の`php02_haifu.zip`からダウンロードしてください。
 
