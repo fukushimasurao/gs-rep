@@ -83,6 +83,10 @@
 
 ### カラムを作成
 
+{% hint style="info" %}
+以下の例のように、項目名にはアルファベットを利用してください。
+{% endhint %}
+
 ```
 `id`:    int(12) AUTO_INCREMENT PRIMARY KEY
 `name`:  var_char(64)
@@ -368,7 +372,7 @@ while ($result = $stmt->fetch(PDO::FETCH_ASSOC)) {
 * table名:`gs_bm_table`
 * 項目（カラム）名
   1. ユニーク値 (int 12 , PRIMARY, AutoIncrement)
-  2. 2.書籍名 (varChar 64)
+  2. 書籍名 (varChar 64)
   3. 書籍URL (text)
   4. 書籍コメント(text)
   5. 登録日時 (datetime)
