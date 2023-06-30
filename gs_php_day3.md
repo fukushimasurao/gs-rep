@@ -2,7 +2,7 @@
 
 ### 授業資料 <a href="#shou-ye-zi-liao" id="shou-ye-zi-liao"></a>
 
-[https://gitlab.com/gs\_hayato/gs-php-01/-/blob/master/php03\_haifu.zip](https://gitlab.com/gs\_hayato/gs-php-01/-/blob/master/php03\_haifu.zip)
+[資料はこちら](https://gitlab.com/gs_hayato/gs-php-01/-/blob/master/php03.zip)
 
 ## 前回のおさらい
 
