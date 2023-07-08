@@ -45,6 +45,8 @@
 6. 実行してみる
 7. 授業用のDBと中身を確認
 
+\*\*DBの中身も確認しておいてください。\*\*
+
 今日のプロダクトのイメージ
 
 <figure><img src=".gitbook/assets/about.jpg" alt=""><figcaption></figcaption></figure>
