@@ -255,8 +255,7 @@ $status = $stmt->execute();
 if( $val['id'] != '' ){
   //Login成功時
   $_SESSION['chk_ssid']  = session_id();
-  // $_SESSION['kanri_flg'] = $val['kanri_flg']; //権限つけたい場合
-  // $_SESSION['name']      = $val['name']; //権限つけたい場合
+  $_SESSION['kanri_flg'] = $val['kanri_flg']; //権限で判断剃る際に利用
   redirect('select.php');
 }else{
   //Login失敗時(Logout経由)
