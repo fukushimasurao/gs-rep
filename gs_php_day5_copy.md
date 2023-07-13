@@ -306,6 +306,135 @@ templates
 
 つまり、ob_start()とob_get_clean()で囲った部分が、内部に保存されて、その中身を$contentに入れているということです。
 
+5. detailページも変更しよう！
+
+detailも修正していきます。
+detail.phpでやっていることは、
+
+* DBに接続
+* 指定のデータを一つだけ抜き出す
+* それを表示
+
+という内容です。
+
+select.phpと少しだけ違うので、その部分を意識して書き直しましょう。
+
+#### modelへ継ぎ足し
+
+model部分に、select文の部分を追加しましょう。
+（DB接続はすでにあるの不要です。）
+※引数とreturn 忘れないでね！
+
+```php
+function get_post_by_id($pdo, $id)
+{
+    //３．データ登録SQL作成
+    $stmt = $pdo->prepare('SELECT * FROM gs_an_table WHERE id = :id;');
+    $stmt->bindValue(':id', $id, PDO::PARAM_INT); //PARAM_INTなので注意
+    $status = $stmt->execute(); //実行
+
+    $result = '';
+    if ($status === false) {
+        $error = $stmt->errorInfo();
+        exit('SQLError:' . print_r($error, true));
+    } else {
+        $result = $stmt->fetch();
+        return $result; // return忘れない！
+    }
+}
+```
+
+#### detail.phpの修正
+
+ファイルの上から、
+
+* `require_once 'model.php';`の追記
+
+* `DB接続`ブロックは不要なので消す
+* データを抜き出している部分も消す。modelに書いたので。
+* modelから、db_connect()を読びつつ、get_post_by_id()で１つだけユーザーを取得する。
+
+#### detail.phpの作成
+
+* templatesの中に、`detail.php`を作成
+
+```bash
+(他のファイルは省略)
+index.php
+funcs.php
+detail.php
+model.php
+templates
+┗━list.php
+┗━layout.php
+┗━detail.php( ← NEW!!)
+```
+
+##### detail.phpにviewの中身を作成
+
+list.phpのように、detail.phpを以下のように書き換える。
+<title>と<body>の中身を入れればok
+
+最後に、`<?php require_once 'layout.php' ?>`を忘れない。
+
+```php
+<?php $title = 'データ編集' ?>
+
+<?php ob_start() ?>
+    <form method="POST" action="update.php">
+        <div class="jumbotron">
+            <fieldset>
+                <legend>フリーアンケート</legend>
+                <label>名前：<input type="text" name="name" value="<?= h($result['name']) ?>"></label><br>
+                <label>Email：<input type="text" name="email" value="<?= $result['email'] ?>"></label><br>
+                <label>年齢：<input type="text" name="age" value="<?= $result['age'] ?>"></label><br>
+                <label><textarea name="content" rows="4" cols="40"> <?= $result['content'] ?> </textarea></label><br>
+                <input type="hidden" name="id" value="<?= $result['id'] ?>">
+                <input type="submit" value="更新">
+            </fieldset>
+        </div>
+    </form>
+<?php $content = ob_get_clean() ?>
+
+<?php require_once 'layout.php' ?>
+```
+
+##### detail.phpの中身を作成
+
+detail.phpの中に、view部分を書いたので、detail.phpにviewを呼び出す。
+最終的なファイルは以下の通り。
+
+```php
+<?php
+
+require_once 'funcs.php';
+require_once 'model.php';
+
+$id = $_GET['id'];
+$db_connect = db_connect();
+$result = get_post_by_id($id, $db_connect);
+
+require_once 'templates/detail.php';
+```
+
+detail.phpに関して言うと、
+
+* View:detail.php
+* Controller:detail.php
+* Model:model.php
+
+のような関係になっています。
+
+#### 今後処理を追加する場合
+
+あとの流れは一緒です。
+
+* Viewを作成する
+* Controllerを作成剃る
+* Modelに必要あれば追記する
+
+という流れになります。
+
 ### Laravelの中身を見てみよう
 
 ### Classをほんのちょっぴり触ろう
