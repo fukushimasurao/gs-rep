@@ -244,6 +244,68 @@ templates
 ┗━layout.php( ← NEW!!)
 ```
 
+2. list.phpの中身を全部layout.phpにまるっとコピーしてください。
+(この時点で、list.phpの中身とlayout.phpは同じです)
+
+3. layout.phpの<title>と<body>部分を以下のように変更
+
+```php
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title><?= $title ?></title>   // ← ここ変更
+    <link rel="stylesheet" href="css/range.css">
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        div {
+            padding: 10px;
+            font-size: 16px;
+        }
+    </style>
+</head>
+
+<body id="main">
+    <?= $content ?>   // ← ここ変更
+</body>
+</html>
+```
+
+4. `list.php`の中身を以下のように変更
+
+```php
+<?php $title = 'フリーアンケート表示'; ?>
+
+<?php ob_start() ?>
+<body id="main">
+    <header>
+        <nav class="navbar navbar-default">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div>
+        <div class="container jumbotron">
+            <a href="detail.php"></a>
+            <?= $view ?>
+        </div>
+    </div>
+</body>
+<?php $content = ob_get_clean() ?>
+
+<?php require_once 'layout.php' ?>
+```
+
+※ ob_start()...そこ以降の部分が内部のバッファに保存されます。
+どこまでかというとob_get_clean()までです。
+
+つまり、ob_start()とob_get_clean()で囲った部分が、内部に保存されて、その中身を$contentに入れているということです。
+
 ### Laravelの中身を見てみよう
 
 ### Classをほんのちょっぴり触ろう
