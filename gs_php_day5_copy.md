@@ -110,6 +110,18 @@ WEB開発がスムーズにいくように、さまざまな機能が備わっ�
 これを変更しましょう。
 
 * `htdocs/gs_code/php05/templates/list.php`を作成
+
+この時点で、以下のようなファイルの形になります。
+
+```bash
+(他のファイルは省略)
+index.php
+funcs.php
+detail.php
+templates
+┗━list.php
+```
+
 * index.phpのHTML部分すべてを`list.php`にコピペ
 * index.phpのPHPコード部分の一番下に、`require 'templates/list.php';`を記入
 
@@ -125,6 +137,112 @@ WEB開発がスムーズにいくように、さまざまな機能が備わっ�
 の分離をしましょう。
 
 このように分離すると、コントローラーはアプリケーションのモデルからデータを取得し、そのデータをレンダリングするテンプレート(=view)を呼び出すだけになります。
+
+1. model.phpを作成してください。
+
+この時点で、以下のようなファイルの形になります。
+
+```bash
+(他のファイルは省略)
+index.php
+funcs.php
+detail.php
+model.php( ← NEW!!)
+templates
+┗━list.php
+```
+
+2. index.phpのrequiewの ***１行以外全て***をmodel.phpに切り貼り
+
+model.phpの中身を関数でまとめる。
+
+(returnとか書き忘れ注意)
+
+```php
+
+<?php
+function db_connect()
+{
+    try {
+        $db_name = 'gs_db3'; //データベース名
+        $db_id   = 'root'; //アカウント名
+        $db_pw   = ''; //パスワード：MAMPは'root'
+        $db_host = 'localhost'; //DBホスト
+        $pdo = new PDO('mysql:dbname=' . $db_name . ';charset=utf8;host=' . $db_host, $db_id, $db_pw);
+        return $pdo;
+    } catch (PDOException $e) {
+        exit('DB Connection Error:' . $e->getMessage());
+    }
+}
+
+function get_all_posts($pdo)
+{
+    //２．データ登録SQL作成
+    $stmt = $pdo->prepare('SELECT * FROM gs_an_table;');
+    $status = $stmt->execute();
+
+    //３．データ表示
+    $view = '';
+    if ($status === false) {
+        $error = $stmt->errorInfo();
+        exit('SQLError:' . print_r($error, true));
+    } else {
+        while ($result = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            //GETデータ送信リンク作成
+            // <a>で囲う。
+            $view .= '<p>';
+            $view .= '<a href="detail.php?id=' . $result['id'] . '">';
+            $view .= $result['indate'] . '：' . $result['name'];
+            $view .= '</a>';
+            $view .= '<a href="delete.php?id=' . $result['id'] . '">';
+            $view .= ' [削除] ';
+            $view .= '</a>';
+            $view .= '</p>';
+        }
+        return $view;
+    }
+}
+```
+
+※ `get_all_posts`の中でhtml書くのは嫌なんですが一旦これで。本当はここは修正するべきです。
+
+3. `index.php`の修正
+
+以下のように、modelをrequireして、DB接続と記事取得を行いましょう。
+
+```php
+<?php
+
+require_once 'model.php';
+
+$pdo = db_connect();
+$view = get_all_posts($pdo);
+
+require_once 'templates/list.php';
+
+```
+
+コレで、`MVC`の分離ができました。
+どれがM/V/Cかわかりますか？
+
+`list.php`が`view`, `index.php`が`controller`, `model.php`がモデルになります。
+
+4. viewの分離
+
+view部分に何か変更が入った場合を考えて、拡張性を高くします。
+
+1. templates配下に、layout.phpを作成します。
+
+```bash
+(他のファイルは省略)
+index.php
+funcs.php
+detail.php
+model.php
+templates
+┗━list.php
+┗━layout.php( ← NEW!!)
+```
 
 ### Laravelの中身を見てみよう
 
