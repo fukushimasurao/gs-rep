@@ -124,7 +124,8 @@ templates
 ```
 
 * index.phpのHTML部分すべてを`list.php`にコピペ
-* index.phpのPHPコード部分の一番下に、`require 'templates/list.php';`を記入
+* index.phpのPHPコード部分の一番下に、`require_once 'templates/list.php';`を記入
+  * phpの閉じタグは不要なので消してしまってください。
 
 これで`View`の分離ができました。
 
@@ -231,6 +232,15 @@ require_once 'templates/list.php';
 4. viewの分離
 
 view部分に何か変更が入った場合を考えて、拡張性を高くします。
+
+具体的には、
+
+* title
+* body
+
+部分は分離させます。
+項目によってこの部分が変わるからです。
+一方で、どのページでも変わらない部分をベースにします。
 
 1. templates配下に、layout.phpを作成します。
 
@@ -373,7 +383,7 @@ templates
 
 ##### detail.phpにviewの中身を作成
 
-list.phpのように、detail.phpを以下のように書き換える。
+`list.php`のように、`templates/detail.php`を以下のように書き換える。
 <title>と<body>の中身を入れればok
 
 最後に、`<?php require_once 'layout.php' ?>`を忘れない。
@@ -402,18 +412,15 @@ list.phpのように、detail.phpを以下のように書き換える。
 
 ##### detail.phpの中身を作成
 
-detail.phpの中に、view部分を書いたので、detail.phpにviewを呼び出す。
+`templates/detail.php`の中に、view部分を書いたので、`detail.php`にviewを呼び出す。
 最終的なファイルは以下の通り。
 
 ```php
-<?php
-
-require_once 'funcs.php';
 require_once 'model.php';
 
 $id = $_GET['id'];
 $db_connect = db_connect();
-$result = get_post_by_id($id, $db_connect);
+$result = get_post_by_id($db_connect,$id);
 
 require_once 'templates/detail.php';
 ```
