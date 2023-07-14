@@ -1,5 +1,9 @@
 # 014\_gs\_php\_day5
 
+## 資料
+
+[資料](https://gitlab.com/gs_hayato/gs-php-01/-/blob/master/PHP05.zip)
+
 ## 前回のおさらい
 
 * sessionを学んで、ログインをした。
