@@ -70,6 +70,7 @@ WEB開発がスムーズにいくように、さまざまな機能が備わっ�
 
 ### Laravelでログイン機能を実装してみる
 
+実際に見てみましょう。
 (授業でやります)
 
 ### Laravelで採用されているMVCとは？
@@ -437,14 +438,301 @@ detail.phpに関して言うと、
 
 ### Laravelの中身を見てみよう
 
+例えば`controller`
+
+```php
+class ArticleController extends Controller
+{
+    public function index()
+    {
+        $articles = Article::all();
+        $data = ['articles' => $articles];
+        return view('articles.index', $data);
+    }
+
+    public function store(Request $request)
+    {
+        $this->validate($request, [
+            'title' => 'required|max:255',
+            'body' => 'required'
+        ]);
+        $article = new Article();
+        $article->title = $request->title;
+        $article->body = $request->body;
+        $article->save();
+
+        return redirect(route('articles.index'));
+    }
+
+}
+```
+
+* `class`ってなんやろ
+* `public`ってなんやろ
+* `->`ってなんやろ
+
 ### Classをほんのちょっぴり触ろう
+
+Laravelでは、(というか、WEB系のフレームワーク全般では)Classが必須です。
+そこで、Classについて少しだけ学んで、Laravelの学習にスムーズに入れるようにしましょう。
+
+#### Classとは？
+
+Classとは何でしょうか？
+
+基本的な説明はたいてい「ものごとを作るための設計図」とか言われます。
+
+ただ、ここでは「変数と関数をまとめたもの」としましょう。
+
+* 変数 ... 文字列や数字を格納するもの
+* 関数 ... 機能をひとまとめにしたもの
+* Class ... 変数や関数をひとまとめにしたもの！
 
 #### Classを作る
 
+classの使い方は、
+
+1. クラスの定義を書く
+2. クラスを利用する際に呼び出す
+
+という流れです。**関数と同じ**です。
+作っただけではだめです。必ず呼び出してあげましょう。
+
+ただし呼び出すときは、
+
+1. `new`とつけてあげます。
+2. 作成したものを適当な変数に入れてあげます。
+
+このクラスを呼び出すことを`インスタンス化`と言います。
+
+代入したもの(↑だと、`$mini`)を`インスタンス`と言います。
+
+このようにクラスは、インスタンス化して利用するという流れになります。
+
 #### インスタンスを作る
 
-#### プロパティ、メソッドを作る
+実際にやってみましょう。
+以下のように記述します。
 
-#### プロパティ、メソッド使ってみる
+```php
+class Person {
+}
+
+// インスタンス化
+$person = new Person();
+```
+
+※ class名は大文字にしてください。大文字が絶対です。
+（大文字にしなくてもエラーはでませんが。）
+先頭が大文字なのは、Pascal記法と言います。
+
+※ インスタンス化するときは()をつけて上げてください。
+
+この段階で、特にエラーが出なければokです。
+
+#### プロパティ、メソッドを作って使う　その１
+
+では、次にclassの中に変数・関数を格納していきましょう。
+
+以下のように記載します。
+
+```php
+class Person {
+    // public変数(プロパティ)
+    public $firstName = 'fukushima';
+
+    // publicメソッド
+    public function sayHello() {
+        echo  "こんにちは。私の名前は" . $this->firstName;
+    }
+}
+
+// インスタンス化
+$person = new Person();
+
+// sayHelloメソッドを使用
+$person->sayHello();
+```
+
+※ ちょっと面倒なんですが、`$this`は必要です。その英語の通り、「このクラス内のプロパティです」と明示してあげる必要があります。
+（より正確にいうと、現在のインスタンスを指す。）
+作成したインスタンスのプロパティに値を設定することもできます。
+
+```php
+class Person {
+    // public変数(プロパティ)
+    
+    public $firstName;
+    public $lastName;
+
+    // publicメソッド
+    public function sayHello() {
+        // ※$this->firstNameは現在のインスタンスのプロパティを指す。
+        echo  "こんにちは。私の名前は" . $this->firstName . $this->lastName;
+    }
+}
+
+// インスタンス化
+$person = new Person();
+$person->firstName = 'ハヤト'
+$person->lastName = 'ふくしま'
+// sayHelloメソッドを使用
+$person->sayHello();
+```
+
+#### コンストラクタ
+
+インスタンスにしたあと、プロパティに設定するのが少し面倒なので、「インスタンス生成したときにもっと手早くプロパティとか設定したい」場合、
+コンストラクタを利用します。
+
+コンストラクタは、インスタンス化のタイミングで実行されます。
+
+```php
+class Person {
+    // public変数(プロパティ)
+    public $firstName;
+    public $lastName;
+
+    public function __construct($firstName, $lastName) {
+        $this->firstName = $firstName;
+        $this->lastName = $lastName;
+    }
+
+    // publicメソッド
+    public function sayHello() {
+        echo  "こんにちは。私の名前は" . $this->firstName . $this->lastName;
+    }
+}
+
+// インスタンス化するとき、引数で与えて上げる。
+$person = new Person('hayato', 'fukushima');
+$person->sayHello();
+```
+
+※ __constructの頭についているのは、アンダーバー２個です。
+
+コンストラクタのお陰で、以下のような記述をしなくても良くなります。
+
+```php
+$person = new Person();
+$person->firstName = 'ハヤト'
+$person->lastName = 'ふくしま'
+```
+
+#### 使用例を見る
+
+さて、上記のように、
+`$person = new Person('hayato', 'fukushima');`
+としましたが、実は今までこのようにクラスを生成して利用したことがあります。
+
+それがこれです。
+
+<https://www.php.net/manual/ja/class.pdo.php>
+
+```php
+try {
+    $pdo = new PDO('mysql:dbname=gs_db; charset=utf8; host=localhost', 'root', 'root');
+} catch (PDOException $e) {
+    exit('DBConnectError:' . $e->getMessage());
+}
+
+$pdo = new PDO('mysql:dbname=gs_db; charset=utf8; host=localhost', 'root', 'root');
+$stmt = $pdo->prepare("INSERT INTO gs_an_table(id, name, email, content, date)VALUES(NULL, :name, :email, :content, sysdate())");
+$stmt->bindValue(':name', $name, PDO::PARAM_STR);
+$stmt->bindValue(':email', $email, PDO::PARAM_STR);
+$stmt->bindValue(':content', $content, PDO::PARAM_STR);
+$status = $stmt->execute();
+```
+
+`new PDO`で、インスタンスを生成していますね！
+他にも、`$pdo->prepare(...)`とメソッドを利用しています！
+
+#### プロパティ、メソッドを作って使う　その2
+
+インスタンスは、２つ以上作成できます。
+
+```php
+class Person {
+    // public変数(プロパティ)
+    public $firstName;
+    public $lastName;
+
+    public function __construct($firstName, $lastName) {
+        $this->firstName = $firstName;
+        $this->lastName = $lastName;
+    }
+
+    // publicメソッド
+    public function sayHello() {
+        echo "こんにちは。私の名前は" . $this->firstName . $this->lastName;
+    }
+}
+
+// インスタンス化するとき、引数で与えて上げる。
+$person = new Person('hayato', 'fukushima');
+$person->sayHello();
+$person2 = new Person('長尾', '景虎');
+$person2->sayHello();
+```
+
+このとき、`$person`と`$person2`は`Person`クラスから生成された別のものになります。
 
 #### インスタンスメソッドを作って使ってみる
+
+さて、次に`staticメソッド`について確認します。
+
+上記の例では、まず`new Class名`でインスタンスを生成して、メソッドを呼び出していました。
+
+`static`を利用すると、インスタンスを生成せずにメソッドを利用することができます。
+
+```php
+class Math {
+    public static function square($num) {
+        return $num * $num;
+    }
+}
+
+// 静的メソッドの使用
+echo Math::square(4);
+```
+
+※ static プロパティもあります。
+※ 動的メソッドはインスタンスを作成してそのインスタンスごとに動作を与えます。staticは、インスタンスを作成するしないに関わらず利用できます。
+
+では、改めてlaravelに出てくるコードを見てみましょう。
+
+```php
+class ArticleController extends Controller
+{
+    public function index()
+    {
+        $articles = Article::all();
+        $data = ['articles' => $articles];
+        return view('articles.index', $data);
+    }
+
+    public function store(Request $request)
+    {
+        $this->validate($request, [
+            'title' => 'required|max:255',
+            'body' => 'required'
+        ]);
+        $article = new Article();
+        $article->title = $request->title;
+        $article->body = $request->body;
+        $article->save();
+
+        return redirect(route('articles.index'));
+    }
+
+}
+```
+
+
+#### namespace、useについて
+
+
+
+#### 【課題】 自由。
+
+自由にやっちゃってください。
