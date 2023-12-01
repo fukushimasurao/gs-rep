@@ -275,6 +275,7 @@ date()の引数はたくさん種類あります。
     echo '<p id="test">console test</p>';
     ?>
     <script>
+        // 別ファイルにJavaScriptを記載して、呼び出してもokです。
         // getElementById('{id名}')で、idの要素が取得できます。
         let test = document.getElementById('test');
         console.log(test);
@@ -537,7 +538,7 @@ ipaの「安全なウェブサイトの作り方 - 1.5 クロスサイト・ス�
 {% hint style="danger" %}
 GETやPOSTで受け取ったデータを出力する場合は**必ず**以下の処理を行ってください。
 
-なお、\*\*出力する箇所だけに処理が必要なので出力しない場合は、\*\*htmlspecialchars()を利用しなくても結構です。
+なお、**出力する箇所だけに処理が必要**なので出力しない場合は、htmlspecialchars()を利用しなくても結構です。
 {% endhint %}
 
 `htmlspecialchars()`はフォームから受け取った文字列をブラウザに出力する際に利用します。
@@ -643,8 +644,12 @@ $data = $time . 'test' . "\n";
 // 第３引数に、FILE_APPENDしないと上書きされちゃう
 file_put_contents('data/data.txt', $data, FILE_APPEND);
 ?>
-
 ```
+
+{% hint style="info" %}
+`write.php`に上記コードを書いたあとに（書き込み権限を修正して）`write.php`をブラウザで開くと、`data.txt`に自動で書き込みされます。
+{% endhint %}
+
 
 #### read.php
 
@@ -653,7 +658,7 @@ txtファイルに保存した内容をブラウザでも確認するため、`r
 ```php
 <?php
 // ファイルを開いて内容を読み込む
-$data = file_get_contents('./data/data.txt');
+$data = file_get_contents('data/data.txt');
 
 // nl2br ... textファイルの改行"\n"を<br>に変換する関数
 echo nl2br($data);
