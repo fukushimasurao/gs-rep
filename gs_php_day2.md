@@ -371,6 +371,7 @@ while ($result = $stmt->fetch(PDO::FETCH_ASSOC)) {
 * DB名:自由
 * table名:`gs_bm_table`
 * 項目（カラム）名
+  * ※ カラム名は下記を参照して英語にしてください。例:書籍名はbookとか、nameとか。
   1. ユニーク値 (int 12 , PRIMARY, AutoIncrement)
   2. 書籍名 (varChar 64)
   3. 書籍URL (text)
