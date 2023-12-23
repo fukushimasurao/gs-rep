@@ -255,9 +255,12 @@ $status = $stmt->execute();
 //5. 該当レコードがあればSESSIONに値を代入
 //* if(password_verify($lpw, $val['lpw'])){
 if( $val['id'] != '' ){
-  //Login成功時
+
+  // サーバーとクライアントで共有しているSessionIDをchk_ssidに記録しておく。
   $_SESSION['chk_ssid']  = session_id();
-  $_SESSION['kanri_flg'] = $val['kanri_flg']; //権限で判断剃る際に利用
+
+  //権限判断したい場合は、kanri_flgをsessionに入れておく。
+  // $_SESSION['kanri_flg'] = $val['kanri_flg']; 
   redirect('select.php');
 }else{
   //Login失敗時(Logout経由)
