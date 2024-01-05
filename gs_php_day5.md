@@ -12,8 +12,9 @@
 
 もうphpで大体のことができるようになりました。
 わからないことはググればわかると思います。
-さて、次回からLaravelの実習に入ります。
+ただし、画像登録については時々勘違いされる方がいるのでその点に触れます。
 
+また、次回からLaravelの実習に入ります。
 そこで、Laravelで使われている技術に触れて、少しでもLaravelと相思相愛になれるようにしましょう。
 
 ## MAMPの起動、DB準備
@@ -45,13 +46,144 @@
 
 ## 今日のやることのイメージ
 
-コードの修正等を行うので、プロダクトは有りません。
+画像登録の方法を知る。
+Laravel学習に向けて準備をする。
 
 ## 今日のゴール
 
+* PHPにて、画像登録の方法を知る。
 * フレームワークを知る
 * MVCモデルを知る
 * Classに入門する
+
+
+### 画像登録処理の方法を知る。
+
+{% hint style="info" %}
+Macの人は、共有資料内のimgフォルダに対して、共有とアクセス権の付与をしてください。
+{% endhint %}
+
+画像登録処理の流れは、
+- formで画像を受け取る
+- サーバー内のフォルダにその画像を保存
+- DBには、保存先ディレクトリ名＋ファイル名を保存しておく。
+
+配布ファイルには、
+- imgファイルがある
+- DBテーブルにはimageカラムがある
+ということを先に認識しておいてください。
+
+## Formの修正
+
+`index.php`の`<form>`に`enctype`追加と、`<input type="file">`の追加をしてください。
+
+```html
+<form method="POST" action="insert.php" enctype="multipart/form-data">
+    <div class="jumbotron">
+        <fieldset>
+            <legend>フリーアンケート</legend>
+            <div>
+                <label for="name">名前：</label>
+                <input type="text" id="name" name="name">
+            </div>
+            <div>
+                <label for="email">Email：</label>
+                <input type="text" id="email" name="email">
+            </div>
+            <div>
+                <label for="age">年齢：</label>
+                <input type="text" id="age" name="age">
+            </div>
+            <div>
+                <label for="content">内容：</label>
+                <textarea id="content" name="content" rows="4" cols="40"></textarea>
+            </div>
+            <div>
+                <label for="image">画像：</label>
+                <input type="file" id="image" name="image">
+            </div>
+            <div>
+                <input type="submit" value="送信">
+            </div>
+        </fieldset>
+    </div>
+</form>
+```
+
+### `insert.php`の修正
+
+`form`を受け取る`insert.php`も修正します。
+
+画像は、`$_FILES`という特別な配列で受け取れます。
+
+
+以下のような処理を記載して、画像を保存しましょう。
+
+```php
+$image = '';
+if (isset($_FILES['image'])) {
+    
+    // アップロードする画像をリネームする準備
+    $upload_file = $_FILES['image']['tmp_name'];
+    $extension = pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION);
+    $new_name = uniqid() . '.' . $extension;
+
+    // image_pathを確認
+    $image_path = 'img/' . $new_name;
+
+    // move_uploaded_file()で、一時的に保管されているファイルをimage_pathに移動させる。
+    if (move_uploaded_file($upload_file, $image_path)) {
+        $image = $image_path;
+    }
+}
+```
+
+ここまでできたら、一旦`index.php`のフォームから画像を送り、imgフォルダに画像が格納されることを確認してください。
+
+### 画像の表示
+`detail.php`にて登録した画像を表示してみましょう。
+基本的には、DBのimageカラムに画像の格納先があるので、これを<img>のsrcに記述するだけです。
+
+
+```
+    <form method="POST" action="update.php" enctype="multipart/form-data">
+
+# 省略
+
+                <div>
+                    <label for="content">内容：</label>
+                    <textarea id="content" name="content" rows="4" cols="40"><?= h($row['content']) ?></textarea>
+                </div>
+
+                // 以下追記
+                <?php
+                    if (!empty($row['image'])) {
+                        echo '<img src="' . h($row['image']) . '" class="image-class">';
+                    }
+                ?>
+                <div>
+                    <label for="new_image">新しい画像を追加する場合は以下から登録：</label>
+                    <input type="file" id="new_image" name="new_image">
+                </div>
+                <div>
+                    <input type="submit" value="更新">
+                    <input type="hidden" name="id" value="<?= $id ?>">
+                </div>
+            </fieldset>
+        </div>
+    </form>
+```
+
+
+これで画像が表示できた。
+
+
+#### 発展
+
+ここまでできたら既存の画像をアップデートする処理も必要です。
+以下サンプルコードを参考になさってください。
+
+
 
 ### フレームワークとは？
 
