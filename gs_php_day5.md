@@ -194,7 +194,7 @@ $status = $stmt->execute(); //実行
 ここまでできたら既存の画像をアップデートする処理も必要です。
 以下サンプルコードを参考になさってください。
 
-
+[資料](https://gitlab.com/gs_hayato/gs-php-01/-/blob/master/PHP05sample.zip)
 
 ### フレームワークとは？
 
