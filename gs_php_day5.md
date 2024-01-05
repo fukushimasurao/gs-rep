@@ -138,6 +138,17 @@ if (isset($_FILES['image'])) {
 }
 ```
 
+併せて、SQL部分とバインドバリュー部分も変更しよう。
+```php
+$stmt = $pdo->prepare('INSERT INTO gs_an_table(name,email,age,content,image,indate)VALUES(:name,:email,:age,:content, :image, sysdate());');
+$stmt->bindValue(':name', $name, PDO::PARAM_STR);
+$stmt->bindValue(':email', $email, PDO::PARAM_STR);
+$stmt->bindValue(':age', $age, PDO::PARAM_INT);
+$stmt->bindValue(':content', $content, PDO::PARAM_STR);
+$stmt->bindValue(':image', $image, PDO::PARAM_STR);
+$status = $stmt->execute(); //実行
+```
+
 ここまでできたら、一旦`index.php`のフォームから画像を送り、imgフォルダに画像が格納されることを確認してください。
 
 ### 画像の表示
