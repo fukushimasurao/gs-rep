@@ -26,7 +26,7 @@ Macを利用されている人は、dataファルダの書き込み権限を変�
 
 ## 基礎文法
 
-### _gs\_code/001/000-1helloworld.php_
+### _gs\_code/hello01.php_
 
 ```php
 <?php
@@ -44,10 +44,10 @@ echo 'hello world';
 本当は省略が推奨だが、授業の最初は丁寧に?>を記述していきます。
 {% endhint %}
 
-ブラウザの URLに`localhost/gs_code/001/000-1helloworld.php`と記入して出力を確認してみましょう。
+ブラウザの URLに`localhost/gs_code/hello01.php`と記入して出力を確認してみましょう。
 
 {% hint style="danger" %}
-mampを使っている場合や、設定によっては、localhost:8888/gs\_code/001/000-1helloworld.php
+mampを使っている場合や、設定によっては、localhost:8888/gs\_code/hello01.php
 {% endhint %}
 
 {% hint style="danger" %}
@@ -76,7 +76,7 @@ mampを使っている場合や、設定によっては、localhost:8888/gs\_cod
 もし、VScodeの自動保存をしていない場合は、利用してみて下さい。
 {% endhint %}
 
-### 000-2helloworld.php
+### hello02.php
 
 phpはHTMLと合わせて記述することが可能です。
 
@@ -104,10 +104,10 @@ PHP部分は改行せずに、１行で記述しよう。
 {% endhint %}
 
 {% hint style="info" %}
-記述して保存したら、`localhost/gs_code/001/000-2helloworld.php` をブラウザで確認してみてください。
+記述して保存したら、`localhost/gs_code/hello02.php` をブラウザで確認してみてください。
 {% endhint %}
 
-### 001hensu.php
+### variable.php
 
 ```php
     <?php
@@ -150,7 +150,7 @@ PHP部分は改行せずに、１行で記述しよう。
 参考 : [https://www.php.net/manual/ja/language.types.string.php#language.types.string.parsing](https://www.php.net/manual/ja/language.types.string.php#language.types.string.parsing)
 {% endhint %}
 
-### 002array.php
+### array.php
 
 ```php
     <?php
@@ -175,7 +175,7 @@ PHP部分は改行せずに、１行で記述しよう。
 配列への要素の追加方法は他にもたくさんあります。 また、配列の種類（例えば連想配列、多次元配列など）もたくさんあるので調べてみてください。
 {% endhint %}
 
-### 003kansu.php
+### func.php
 
 ここでは代表的な組み込み関数の対応を行います。 単純に「こういう関数有るんだ〜」という確認程度の内容です。
 
@@ -246,7 +246,7 @@ date()の引数はたくさん種類あります。
 [https://www.php.net/manual/ja/function.date.php](https://www.php.net/manual/ja/function.date.php)
 {% endhint %}
 
-### phpとJS/CSSの動きを確認
+### phpとJS/CSSの動きを確認 ... other_lang.php
 
 ```php
 <html>
@@ -286,7 +286,7 @@ date()の引数はたくさん種類あります。
 
 ```
 
-### foreachで配列を一つ一つ表示する
+### foreach.php ... foreachで配列を一つ一つ表示する
 
 繰り返しの処理としてforeachというものがあります。
 
