@@ -147,7 +147,7 @@ text型の文字列はデータベースとは別に保存。データベース�
 INSERT INTO
     gs_an_table(id, name, email, content, date)
 VALUES
-    (NULL, '福島はやと', 'test@test.jp', '内容', sysdate());
+    (NULL, '福島はやと', 'test@test.jp', '内容', now());
 ```
 
 {% hint style="info" %}
@@ -243,7 +243,7 @@ try {
 
 //３．データ登録SQL作成
 $stmt = $pdo->prepare('INSERT INTO gs_an_table(id, name, email, content, date)
-                        VALUES(NULL, :name, :email, :content, sysdate())');
+                        VALUES(NULL, :name, :email, :content, now())');
 
 //Integer（数値の場合 PDO::PARAM_INT)
 //String（文字列の場合 PDO::PARAM_STR)
