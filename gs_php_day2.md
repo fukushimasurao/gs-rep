@@ -69,7 +69,7 @@
 ### 新規DB作成
 
 1. 左メニューから\[新規作成]
-2. データベース名は `gs_db`
+2. データベース名は `gs_db_class`
 3. 照合順序は`utf8mb4_general_ci` (ディフォルトのまま)
 4. 作成クリック。
 5. 特にエラーの文言が出なければok
@@ -236,7 +236,7 @@ $content = $_POST['content'];
 //2. DB接続
 try {
     //Password注意。MAMP='root'　XAMPP=''
-    $pdo = new PDO('mysql:dbname=gs_db; charset=utf8; host=localhost', 'root', '');
+    $pdo = new PDO('mysql:dbname=gs_db_class; charset=utf8; host=localhost', 'root', '');
 } catch (PDOException $e) {
     exit('DBConnectError:' . $e->getMessage());
 }
@@ -292,7 +292,7 @@ SQLインジェクションを防ぐ。
 //1.  DB接続
 try {
     //Password....最後の引数の部分。MAMP='root',XAMPP=''
-    $pdo = new PDO('mysql:dbname=gs_db;charset=utf8;host=localhost', 'root', '');
+    $pdo = new PDO('mysql:dbname=gs_db_class;charset=utf8;host=localhost', 'root', '');
 } catch (PDOException $e) {
     exit('DBConnectError' . $e->getMessage());
 }
