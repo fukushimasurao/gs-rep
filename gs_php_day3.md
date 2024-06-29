@@ -34,13 +34,13 @@ http://localhost/phpmyadminを開いて、DBを用意しましょう。
 データベース名：gs_db3
 ```
 
-1. 作成ボタンをクリック 左側に`gs_db3`というデータベースができていると思います。 現在は空っぽです。
+1. 作成ボタンをクリック 左側に`gs_db_class3`というデータベースができていると思います。 現在は空っぽです。
 
 ## SQLファイルからインポート
 
 〇〇.sqlというSQLファイルをインポートしてデータを作成します。
 
-1. 念の為、左側のメニューから`gs_db3`をクリック
+1. 念の為、左側のメニューから`gs_db_class3`をクリック
 2. gs\_db3を選択した状態でインポートタブをクリック
 3. ファイルを選択をクリックして配布した資料内のSQLフォルダ内のphp3\_sql.sqlを選択
 4. 実行してみる
@@ -170,7 +170,7 @@ $id = $_GET['id'];
 
 // DB接続(insert.phpとかから持ってきてください)
 try {
-    $db_name = 'gs_db3';    //データベース名
+    $db_name = 'gs_db_class3';    //データベース名
     $db_id   = 'root';      //アカウント名
     $db_pw   = '';      //パスワード：MAMPは'root'
     $db_host = 'localhost'; //DBホスト
@@ -255,7 +255,7 @@ $id = $_POST['id']; // ←追加
 
 //2. DB接続します
 try {
-    $db_name = 'gs_db3';    //データベース名
+    $db_name = 'gs_db_class3';    //データベース名
     $db_id   = 'root';      //アカウント名
     $db_pw   = '';      //パスワード：XAMPPはパスワード無しに修正してください。
     $db_host = 'localhost'; //DBホスト
@@ -336,7 +336,7 @@ $id   = $_GET['id'];
 
 //2.DB接続します
 try {
-    $db_name = 'gs_db3'; //データベース名
+    $db_name = 'gs_db_class3'; //データベース名
     $db_id   = 'root'; //アカウント名
     $db_pw   = ''; //パスワード：MAMPは'root'
     $db_host = 'localhost'; //DBホスト
@@ -382,7 +382,7 @@ if ($status === false) {
 function db_conn()
 {
     try {
-        $db_name = 'gs_db3';
+        $db_name = 'gs_db_class3';
         $db_id   = 'root';
         $db_pw   = ''; // MAMPは'root'
         $db_host = 'localhost';
