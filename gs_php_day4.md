@@ -282,20 +282,22 @@ session_start();
 // もしくはサーバーのSESSION IDと一緒か？
 if (!isset($_SESSION['chk_ssid']) || $_SESSION['chk_ssid'] != session_id()) {
     exit('LOGIN ERROR');
-}else{
+}
+
 session_regenerate_id(true);
     $_SESSION['chk_ssid'] = session_id();
-}
+
 //以下ログインユーザーのみ処理が行われる。
 // (以下略)
 ```
 
 {% hint style="info" %}
 もし、ログインを経由せずに`select.php`に来た場合、 `$_SESSION['chk_ssid']`には、何も代入されていません。
+よってサーバー側には、`$_SESSION['chk_ssid']`という存在がありません。
 
-何も代入されてない状態で、`$_SESSION['chk_ssid']`を書くと `Undefined array key "chk_ssid"` のエラーが出ます。
+結果、`$_SESSION['chk_ssid']`を書くと `Undefined array key "chk_ssid"` のエラーが出ます。
 
-よって、丁寧に`if (!isset($_SESSION['chk_ssid']...)` と書いています。
+ちゃんとサーバー側が`$_SESSION['chk_ssid']`変数を持っているかチェックするため`if (!isset($_SESSION['chk_ssid']...)` と書いています。
 {% endhint %}
 
 1. ログイン処理を関数化。`funcs.php`にログインチェック関数を作成
