@@ -1,8 +1,8 @@
-# 014\_gs\_php\_day5
+# 🤡 015\_gs\_php\_day5
 
 ## 資料
 
-[資料](https://gitlab.com/gs_hayato/gs-php-01/-/blob/master/PHP05.zip)
+[資料](https://gitlab.com/gs\_hayato/gs-php-01/-/blob/master/PHP05.zip)
 
 ## 前回のおさらい
 
@@ -10,8 +10,7 @@
 
 ## 今回やること
 
-もうphpで大体のことができるようになりました。
-わからないことはググればわかると思います。
+もうphpで大体のことができるようになりました。 わからないことはググればわかると思います。
 
 今日は、基礎部分に追加して少し発展的なことを学びます。
 
@@ -46,43 +45,39 @@ DBの中身も確認しておいてください。
 
 ## 今日のやることのイメージ
 
-画像登録の方法を知る。
-Laravel学習に向けて準備をする。
+画像登録の方法を知る。 Laravel学習に向けて準備をする。
 
 ## 今日のゴール
 
 * PHPにて、画像登録の方法を知る。
 * テーブルを結合する
-  
+
 ### リレーションとは？
+
 RDBは通常複数のテーブルで構成されます。
 
-- テーブルが少ないと、とある情報が複数のテーブルに存在してしまい無駄が生じる
-- データの不整合が起きる
-
+* テーブルが少ないと、とある情報が複数のテーブルに存在してしまい無駄が生じる
+* テーブルが少ないと、データの不整合が起きる可能性あり
 
 ### 正規化について触れる
 
-- 複数のテーブルに綺麗にデータがそろえば使いやすくなる。
-- 一方でテーブルがぐちゃぐちゃだと使いづらくなる。
-- こういったぐちゃぐちゃしたテーブルを綺麗にすることを正規化と呼ぶ。
+* 複数のテーブルに綺麗にデータがそろえば使いやすくなる。
+* 一方でテーブルがぐちゃぐちゃだと使いづらくなる。
+* こういったぐちゃぐちゃしたテーブルを綺麗にすることを正規化と呼ぶ。
 
 {% hint style="info" %}
-正規化は、第１〜第５正規系がよく知られる。
-特に利用するのは、第１〜第3正規系
+正規化は、第１〜第５正規系がよく知られる。 特に利用するのは、第１〜第3正規系
 {% endhint %}
 
 {% hint style="info" %}
 テーブルの名前は、その中身を示すものの複数形にする。
 {% endhint %}
 
-
 #### 第１正規系は簡単
 
-⭐️画像⭐️
+<figure><img src=".gitbook/assets/スクリーンショット 2024-07-13 0.35.59.png" alt=""><figcaption><p>ミック著 『SQL 第2版 ゼロからはじめるデータベース操作』より引用.</p></figcaption></figure>
 
-セルの中に２つ以上入れない。
-※ミック著 『SQL 第2版 ゼロからはじめるデータベース操作』より引用. 
+セルの中に２つ以上入れない。&#x20;
 
 #### 複数のテーブルを扱ってみる。
 
@@ -102,17 +97,17 @@ join
 
 contentsテーブルに `user_id int(10)`カラムを追加する。
 
-※ 事前に登録済みのデータのuser_idは全て0になっているので1~3の任意の数字に変更
-
+※ 事前に登録済みのデータのuser\_idは全て0になっているので1\~3の任意の数字に変更
 
 #### データ登録時のログインユーザーidを保存する処理を追加
 
 流れは
+
 1. ログインしたときに、ログインユーザーのIDをセッションに格納。他のファイルに遷移してもidが使えるようにする。
 2. `insert.php`にて、`contents`に`INSERT`するとき、,userのidも記録するようにする。
 
-
 `login_act.php`
+
 ```php
 if($val['id'] !== '') {
     $_SESSION['chk_ssid'] = session_id();
@@ -146,7 +141,6 @@ $stmt->bindValue(':user_id', $user_id, PDO::PARAM_INT);  // bindValue追加
 
 上記処理を追加後、一旦ログアウト → ログイン
 
-
 user1,2,3それぞれにログインして、２−３個データを登録する。
 
 ### アンケート一覧で投稿者名を横に表示する（リレーション先のデータ取得）
@@ -162,7 +156,6 @@ $pdo = db_conn();
 $stmt = $pdo->prepare('SELECT * FROM contents JOIN users ON contents.user_id = users.id '); // ← sqlを変更する。
 $status = $stmt->execute();
 ```
-
 
 #### select.phpに表示処理のwhile文内を編集
 
@@ -187,12 +180,9 @@ $status = $stmt->execute();
     }
 ```
 
-
 #### 多対多について
 
-https://techlib.circlearound.co.jp/entries/db-table-many-to-many/
-https://techlib.circlearound.co.jp/entries/rdb
-
+https://techlib.circlearound.co.jp/entries/db-table-many-to-many/ https://techlib.circlearound.co.jp/entries/rdb
 
 ### 画像登録処理の方法を知る。
 
@@ -201,14 +191,15 @@ Macの人は、共有資料内のimgフォルダに対して、共有とアク�
 {% endhint %}
 
 画像登録処理の流れは、
-- formで画像を受け取る
-- サーバー内のフォルダにその画像を保存
-- DBには、保存先ディレクトリ名＋ファイル名を保存しておく。
+
+* formで画像を受け取る
+* サーバー内のフォルダにその画像を保存
+* DBには、保存先ディレクトリ名＋ファイル名を保存しておく。
 
 配布ファイルには、
-- imgファイルがある
-- DBテーブルにはimageカラムがある
-ということを先に認識しておいてください。
+
+* imgファイルがある
+* DBテーブルにはimageカラムがある ということを先に認識しておいてください。
 
 ## Formの修正
 
@@ -253,7 +244,6 @@ Macの人は、共有資料内のimgフォルダに対して、共有とアク�
 
 画像は、`$_FILES`という特別な配列で受け取れます。
 
-
 以下のような処理を記載して、画像を保存しましょう。
 
 ```php
@@ -276,6 +266,7 @@ if (isset($_FILES['image'])) {
 ```
 
 併せて、SQL部分とバインドバリュー部分も変更しよう。
+
 ```php
 $stmt = $pdo->prepare('INSERT INTO gs_an_table(name,email,age,content,image,indate)VALUES(:name,:email,:age,:content, :image, sysdate());');
 $stmt->bindValue(':name', $name, PDO::PARAM_STR);
@@ -289,9 +280,8 @@ $status = $stmt->execute(); //実行
 ここまでできたら、一旦`index.php`のフォームから画像を送り、imgフォルダに画像が格納されることを確認してください。
 
 ### 画像の表示
-`detail.php`にて登録した画像を表示してみましょう。
-基本的には、DBのimageカラムに画像の格納先があるので、これを<img>のsrcに記述するだけです。
 
+`detail.php`にて登録した画像を表示してみましょう。 基本的には、DBのimageカラムに画像の格納先があるので、これをのsrcに記述するだけです。
 
 ```
     <form method="POST" action="update.php" enctype="multipart/form-data">
@@ -322,28 +312,24 @@ $status = $stmt->execute(); //実行
     </form>
 ```
 
-
 これで画像が表示できた。
-
 
 #### 発展
 
-ここまでできたら既存の画像をアップデートする処理も必要です。
-以下サンプルコードを参考になさってください。
+ここまでできたら既存の画像をアップデートする処理も必要です。 以下サンプルコードを参考になさってください。
 
-[資料](https://gitlab.com/gs_hayato/gs-php-01/-/blob/master/PHP05sample.zip)
+[資料](https://gitlab.com/gs\_hayato/gs-php-01/-/blob/master/PHP05sample.zip)
 
 ### その他
 
 #### デザインを楽にするために
 
-- tailwind css
+* tailwind css
 
 #### Laravelに入門する前に
 
-- MVC入門
-  - https://symfony.com/doc/current/introduction/from_flat_php_to_symfony.html
-
+* MVC入門
+  * https://symfony.com/doc/current/introduction/from\_flat\_php\_to\_symfony.html
 
 #### 【課題】 自由
 
