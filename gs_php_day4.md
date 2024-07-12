@@ -98,7 +98,7 @@ session_start();
 
 ```
 
-#### `session01.php`の`session_id()`の下に以下処理を追加
+#### `session01.php`の`session_start()`の下に以下処理を追加
 
 ```php
 
