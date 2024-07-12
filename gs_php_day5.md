@@ -77,7 +77,7 @@ RDBは通常複数のテーブルで構成されます。
 
 <figure><img src=".gitbook/assets/スクリーンショット 2024-07-13 0.35.59.png" alt=""><figcaption><p>ミック著 『SQL 第2版 ゼロからはじめるデータベース操作』より引用.</p></figcaption></figure>
 
-セルの中に２つ以上入れない。&#x20;
+セルの中に２つ以上入れない。
 
 #### 複数のテーブルを扱ってみる。
 
@@ -143,11 +143,9 @@ $stmt->bindValue(':user_id', $user_id, PDO::PARAM_INT);  // bindValue追加
 
 user1,2,3それぞれにログインして、２−３個データを登録する。
 
-※既存データのuser_id入れましょう。
-※phpmyadminでデータを見てみましょう。
+※既存データのuser\_id入れましょう。 ※phpmyadminでデータを見てみましょう。
 
 ### アンケート一覧で投稿者名を横に表示する（リレーション先のデータ取得）
-
 
 `select.php`
 
@@ -191,6 +189,10 @@ $status = $stmt->execute();
 ```
 
 #### 多対多について
+
+<figure><img src=".gitbook/assets/1対多.jpg" alt=""><figcaption><p>1対多</p></figcaption></figure>
+
+<figure><img src=".gitbook/assets/多対多.jpg" alt=""><figcaption><p>多対多</p></figcaption></figure>
 
 https://techlib.circlearound.co.jp/entries/db-table-many-to-many/ https://techlib.circlearound.co.jp/entries/rdb
 
