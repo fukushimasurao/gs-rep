@@ -148,6 +148,9 @@ user1,2,3それぞれにログインして、２−３個データを登録す�
 
 ### アンケート一覧で投稿者名を横に表示する（リレーション先のデータ取得）
 
+
+`select.php`
+
 ```php
 <?php
 session_start();
@@ -156,7 +159,10 @@ loginCheck();
 
 //２．つぶやき登録SQL作成
 $pdo = db_conn();
-$stmt = $pdo->prepare('SELECT * FROM contents JOIN users ON contents.user_id = users.id '); // ← sqlを変更する。
+$stmt = $pdo->prepare('SELECT
+contents.id as id,
+contents.content as content
+FROM contents JOIN users ON contents.user_id = users.id '); // ← sqlを変更する。
 $status = $stmt->execute();
 ```
 
