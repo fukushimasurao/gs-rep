@@ -218,36 +218,24 @@ Macの人は、共有資料内のimgフォルダに対して、共有とアク�
 `index.php`の`<form>`に`enctype`追加と、`<input type="file">`の追加をしてください。
 
 ```html
-<form method="POST" action="insert.php" enctype="multipart/form-data">
-    <div class="jumbotron">
-        <fieldset>
-            <legend>フリーアンケート</legend>
-            <div>
-                <label for="name">名前：</label>
-                <input type="text" id="name" name="name">
-            </div>
-            <div>
-                <label for="email">Email：</label>
-                <input type="text" id="email" name="email">
-            </div>
-            <div>
-                <label for="age">年齢：</label>
-                <input type="text" id="age" name="age">
-            </div>
-            <div>
-                <label for="content">内容：</label>
-                <textarea id="content" name="content" rows="4" cols="40"></textarea>
-            </div>
-            <div>
-                <label for="image">画像：</label>
-                <input type="file" id="image" name="image">
-            </div>
-            <div>
-                <input type="submit" value="送信">
-            </div>
-        </fieldset>
-    </div>
-</form>
+    <form method="POST" action="insert.php" enctype="multipart/form-data">
+        <div class="jumbotron">
+            <fieldset>
+                <legend>フリーアンケート</legend>
+                <div>
+                    <label for="content">内容：</label>
+                    <textarea id="content" name="content" rows="4" cols="40"></textarea>
+                </div>
+                <div>
+                    <label for="image">画像：</label>
+                    <input type="file" id="image" name="image">
+                </div>
+                <div>
+                    <input type="submit" value="送信">
+                </div>
+            </fieldset>
+        </div>
+    </form>
 ```
 
 ### `insert.php`の修正
@@ -280,18 +268,16 @@ if (isset($_FILES['image'])) {
 併せて、SQL部分とバインドバリュー部分も変更しよう。
 
 ```php
-$stmt = $pdo->prepare('INSERT INTO gs_an_table(name,email,age,content,image,indate)VALUES(:name,:email,:age,:content, :image, sysdate());');
-$stmt->bindValue(':name', $name, PDO::PARAM_STR);
-$stmt->bindValue(':email', $email, PDO::PARAM_STR);
-$stmt->bindValue(':age', $age, PDO::PARAM_INT);
+$stmt = $pdo->prepare('INSERT INTO contents(user_id, content, image, created_at)VALUES(:user_id, :content, :image, NOW());'); // user_idへの記録を追加
 $stmt->bindValue(':content', $content, PDO::PARAM_STR);
 $stmt->bindValue(':image', $image, PDO::PARAM_STR);
+$stmt->bindValue(':user_id', $user_id, PDO::PARAM_INT);
 $status = $stmt->execute(); //実行
 ```
 
 ここまでできたら、一旦`index.php`のフォームから画像を送り、imgフォルダに画像が格納されることを確認してください。
 
-### 画像の表示
+### 画像の表示01
 
 `detail.php`にて登録した画像を表示してみましょう。 基本的には、DBのimageカラムに画像の格納先があるので、これをのsrcに記述するだけです。
 
@@ -324,13 +310,34 @@ $status = $stmt->execute(); //実行
     </form>
 ```
 
+### 画像の表示01
+
+`select.php`にも表示させる。
+
+```php
+$pdo = db_conn();
+$stmt = $pdo->prepare('SELECT
+contents.id as id,
+contents.content as content,
+contents.image as image, // ←追加
+users.name as name
+FROM contents JOIN users ON contents.user_id = users.id '); // ← sqlを変更する。
+$status = $stmt->execute();
+
+// 省略
+
+$view .= '<img src="' . h($r['image']) . '" class="image-class">'; ←追加
+$view .= '</p></div>';
+
+```
+
+
 これで画像が表示できた。
 
 #### 発展
 
-ここまでできたら既存の画像をアップデートする処理も必要です。 以下サンプルコードを参考になさってください。
-
-[資料](https://gitlab.com/gs\_hayato/gs-php-01/-/blob/master/PHP05sample.zip)
+ここまでできたら既存の画像をアップデートする処理も必要です。
+チャレンジしてみましょう。
 
 ### その他
 
