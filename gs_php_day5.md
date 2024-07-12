@@ -143,6 +143,9 @@ $stmt->bindValue(':user_id', $user_id, PDO::PARAM_INT);  // bindValue追加
 
 user1,2,3それぞれにログインして、２−３個データを登録する。
 
+※既存データのuser_id入れましょう。
+※phpmyadminでデータを見てみましょう。
+
 ### アンケート一覧で投稿者名を横に表示する（リレーション先のデータ取得）
 
 ```php
