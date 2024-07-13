@@ -59,6 +59,18 @@ RDBは通常複数のテーブルで構成されます。
 * テーブルが少ないと、とある情報が複数のテーブルに存在してしまい無駄が生じる
 * テーブルが少ないと、データの不整合が起きる可能性あり
 
+### テーブルを作る時の超ざっくり目安
+
+大きな項目のテーブルを作成、その内容を示すものを複数形にして命名する。
+
+例.
+
+studentsテーブル
+deptテーブル
+stationsテーブル
+
+※名前とは関係ない内容はテーブルから分離する。
+
 ### 正規化について触れる
 
 * 複数のテーブルに綺麗にデータがそろえば使いやすくなる。
@@ -79,11 +91,31 @@ RDBは通常複数のテーブルで構成されます。
 
 セルの中に２つ以上入れない。
 
-#### 複数のテーブルを扱ってみる。
+### 複数のテーブルを扱ってみる。
+
+#### 複数に分けたテーブルを一つのものとして扱う。
+
+RDBにおいて、分けたテーブルは結合して表示することが可能。
+
+そのときに利用するのが `JOIN` 
+
+`SELECT * FROM テーブル1 JOIN テーブル2 ON テーブル1のカラム = テーブル2のカラム`
 
 employeesテーブルとdepartmentsを結合してみる。
 
 ```sql
+SELECT
+    *
+FROM
+    employees
+join
+    departments
+    on employees.dept_id = departments.id;
+```
+
+特定のテーブルのカラムを提示する場合は、`テーブル.カラム`のように指定する。
+
+```
 SELECT
     employees.id, employees.name, departments.name
 FROM
@@ -141,7 +173,7 @@ $stmt->bindValue(':user_id', $user_id, PDO::PARAM_INT);  // bindValue追加
 
 上記処理を追加後、一旦ログアウト → ログイン
 
-user1,2,3それぞれにログインして、２−３個データを登録する。
+※ `PHPMyAdmin`にてuser1,2,3それぞれにログインして、２−３個データを登録する。
 
 ※既存データのuser\_id入れましょう。 ※phpmyadminでデータを見てみましょう。
 
@@ -170,9 +202,9 @@ $status = $stmt->execute();
 ```php
     while ($r = $stmt->fetch(PDO::FETCH_ASSOC)) {
         $view .= '<div class="record"><p>';
-        if ($_SESSION['kanri_flg'] === 1) {
+        if ($_SESSION['kanri_flg'] === 1) { // kanri_flgなければ編集できないように処理
             $view .= '<a href="detail.php?id=' . $r["id"] . '">';
-            $view .= h($r['content']) . " @" . $r['name'];
+            $view .= h($r['content']) . " @" . $r['name']; //$r['name']; 追加
             $view .= '</a>';
         } else {
             $view .= h($r['content']) . " @" . $r['name'];
@@ -190,11 +222,30 @@ $status = $stmt->execute();
 
 #### 多対多について
 
+上記のように、ユーザ1に対して、つぶやき複数のような関係性を1対多という。
+
 <figure><img src=".gitbook/assets/1対多.jpg" alt=""><figcaption><p>1対多</p></figcaption></figure>
 
 <figure><img src=".gitbook/assets/多対多.jpg" alt=""><figcaption><p>多対多</p></figcaption></figure>
 
 https://techlib.circlearound.co.jp/entries/db-table-many-to-many/ https://techlib.circlearound.co.jp/entries/rdb
+
+
+#### 時間あれば実際に中間テーブルやってみよう
+配布した以下のテーブルをte-buruwophpMyAdminで取り入れる
+clubs
+clubs_students
+students
+
+```sql
+SELECT * FROM clubs join clubs_students on clubs.id = clubs_students.clubs_id;
+```
+
+```sql
+SELECT * FROM `clubs` join clubs_students on clubs.id = clubs_students.clubs_id join students on clubs_students.students_id= students.id;
+```
+
+
 
 ### 画像登録処理の方法を知る。
 
