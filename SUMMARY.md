@@ -7,7 +7,8 @@
 * [😚 013\_gs\_php\_day3](gs\_php\_day3.md)
 * [🤩 014\_gs\_php\_day4](gs\_php\_day4.md)
 * [🤡 015\_gs\_php\_day5](gs\_php\_day5.md)
-* [🍥 020\_gs\_laravel(仮)](gs\_laravel.md)
+* [🍥 020\_gs\_laravel_\Cloud9用意](gs\_laravel\_cloud9.md)
+* [🍖 021\_gs\_laravel_\Laravel導入](gs\_laravel\_install_laravel.md)
 <!-- * [👻 015-2\_old\_gs\_php\_day5](old\_gs\_php\_day5.md) -->
 * [😇 about function(仮)](about-function.md)
 * [🆚 VS code関連](vs-code.md)

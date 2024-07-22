@@ -1,9 +1,8 @@
-# 🤡 020\_gs\_laravel
+# 🍥 020\_gs\_laravel_\Cloud9用意
 
 ## 今回やること
 
-- AWS Cloud9を利用して、Lalavel環境を構築する。
-- laravelでCRADを作る。
+- AWS Cloud9を利用して、Lalavelをインストールするための環境を構築する。
 
 ## AWS Cloud9の準備
 
@@ -19,19 +18,19 @@
 
 2. 左のメニューから、「コース」を選択後、「AWS Academy Learner Lab [XXXXXX]」をクリック
 
-<figure><img src=".gitbook/assets/laravel/laravel_001.png" alt=""></figure>
+<figure><img src=".gitbook/assets/laravel/001/laravel_001.png" alt=""></figure>
 
 3. モジュールをクリック
 
-<figure><img src=".gitbook/assets/laravel/laravel_002.png" alt=""></figure>
+<figure><img src=".gitbook/assets/laravel/001/laravel_002.png" alt=""></figure>
 
 4. `AWS Academy Learner Lab を起動する`をクリック
 
-<figure><img src=".gitbook/assets/laravel/laravel_003.png" alt=""></figure>
+<figure><img src=".gitbook/assets/laravel/001/laravel_003.png" alt=""></figure>
 
 5. `Start Lab`をクリック
 
-<figure><img src=".gitbook/assets/laravel/laravel_004.png" alt=""></figure>
+<figure><img src=".gitbook/assets/laravel/001/laravel_004.png" alt=""></figure>
 
 
 {% hint style="info" %}
@@ -47,11 +46,11 @@
 
 7. 「コンソールのホーム」画面で、「cloud9」を検索。サービスの中から「cloud9」をクリックしてください。
 
-<figure><img src=".gitbook/assets/laravel/laravel_005.png" alt=""></figure>
+<figure><img src=".gitbook/assets/laravel/001/laravel_005.png" alt=""></figure>
 
 8. バージニア北部になっていることを確認しつつ、「環境を作成」をクリック
 
-<figure><img src=".gitbook/assets/laravel/laravel_006.png" alt=""></figure>
+<figure><img src=".gitbook/assets/laravel/001/laravel_006.png" alt=""></figure>
 
 
 9. 「環境を作成」画面での操作
@@ -67,29 +66,29 @@
 
 右下の作成を押下。
 
-<figure><img src=".gitbook/assets/laravel/laravel_007.png" alt=""></figure>
-<figure><img src=".gitbook/assets/laravel/laravel_008.png" alt=""></figure>
+<figure><img src=".gitbook/assets/laravel/001/laravel_007.png" alt=""></figure>
+<figure><img src=".gitbook/assets/laravel/001/laravel_008.png" alt=""></figure>
  
 10. 環境ページで待機。
 
 ページ遷移先で待機。上のメッセージが青から緑に変わるまで待つ。
-<figure><img src=".gitbook/assets/laravel/laravel_009.png" alt=""></figure>
+<figure><img src=".gitbook/assets/laravel/001/laravel_009.png" alt=""></figure>
 
 
 
 緑になって「正常に作成されました」とコメントされたら作成した環境の名前のCloud9を開く。
-<figure><img src=".gitbook/assets/laravel/laravel_010.png" alt=""></figure>
+<figure><img src=".gitbook/assets/laravel/001/laravel_010.png" alt=""></figure>
 
 
 11. 事前準備
 
 - 左のメニューの歯車⚙️から`Show Hidden Files`にチェックを** ⭐️入れる⭐️ **
 
-<figure><img src=".gitbook/assets/laravel/laravel_011.png" alt=""></figure>
+<figure><img src=".gitbook/assets/laravel/001/laravel_011.png" alt=""></figure>
 
 - 右上の歯車をクリックして下にスクロール
 
-<figure><img src=".gitbook/assets/laravel/laravel_012.png" alt=""></figure>
+<figure><img src=".gitbook/assets/laravel/001/laravel_012.png" alt=""></figure>
 
 
 `Experimental` > `Save`の項目から、`Auto-Save Files:`を`After Delay`に変更　※既になっていればok
