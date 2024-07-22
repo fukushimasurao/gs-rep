@@ -7,11 +7,12 @@
 * [😚 013\_gs\_php\_day3](gs\_php\_day3.md)
 * [🤩 014\_gs\_php\_day4](gs\_php\_day4.md)
 * [🤡 015\_gs\_php\_day5](gs\_php\_day5.md)
-* [👻 015-2\_old\_gs\_php\_day5](old\_gs\_php\_day5.md)
-* [😇 about functionほぼ完成](about-function.md)
+* [🍥 020\_gs\_laravel(仮)](gs\_laravel.md)
+<!-- * [👻 015-2\_old\_gs\_php\_day5](old\_gs\_php\_day5.md) -->
+* [😇 about function(仮)](about-function.md)
 * [🆚 VS code関連](vs-code.md)
-* [🏫 (ボツページ)about Class](about-class.md)
-* [🏫 (ボツページ)about Class Detail（クラス説明の時使うやつ。作成中）](about-class-detail.md)
+<!-- * [🏫 (ボツページ)about Class](about-class.md) -->
+* [🏫 about Class Detail(仮)](about-class-detail.md)
 * [📖 PhpMyAdmin関連](phpmyadmin.md)
 * [♥️ 便利情報](good-tools.md)
 * [👯‍♀️ XAMPP再インストール方法](re-install-xampp.md)
