@@ -198,17 +198,17 @@ $ php artisan breeze:install
 
 
 ```bash
- ┌ Which Breeze stack would you like to install? ───────────────┐
- │ Blade with Alpine                                            │
- └──────────────────────────────────────────────────────────────┘
+ ┌ Which Breeze stack would you like to install? ─┐
+ │ Blade with Alpine                              │
+ └────────────────────────────────────────────────┘
 
- ┌ Would you like dark mode support? ───────────────────────────┐
- │ No                                                           │
- └──────────────────────────────────────────────────────────────┘
+ ┌ Would you like dark mode support? ─────────────┐
+ │ No                                             │
+ └────────────────────────────────────────────────┘
 
- ┌ Which testing framework do you prefer? ──────────────────────┐
- │ PHPUnit                                                      │
- └──────────────────────────────────────────────────────────────┘
+ ┌ Which testing framework do you prefer? ────────┐
+ │ PHPUnit                                        │
+ └────────────────────────────────────────────────┘
  ```
 
 #### HTML/CSS/JSをビルド = フロントで何か修正したらビルド）
@@ -238,14 +238,14 @@ voclabs:~/environment/cms $ php artisan migrate
 
    INFO  Preparing database.  
 
-  Creating migration table ........................................ 78ms DONE
+  Creating migration table ................................. 78ms DONE
 
    INFO  Running migrations.  
 
-  2014_10_12_000000_create_users_table ............................ 25ms DONE
-  2014_10_12_100000_create_password_reset_tokens_table ............ 10ms DONE
-  2019_08_19_000000_create_failed_jobs_table ...................... 24ms DONE
-  2019_12_14_000001_create_personal_access_tokens_table ........... 32ms DONE
+  2014_10_12_000000_create_users_table ..................... 25ms DONE
+  2014_10_12_100000_create_password_reset_tokens_table ..... 10ms DONE
+  2019_08_19_000000_create_failed_jobs_table ............... 24ms DONE
+  2019_12_14_000001_create_personal_access_tokens_table .... 32ms DONE
 
 voclabs:~/environment/cms $ 
 ```
