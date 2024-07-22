@@ -6,7 +6,8 @@
 
 ## Laravel導入
 
-1. ここからファイルダウンロード
+1. <a href="https://gitlab.com/gs_hayato/gs-php-01/-/raw/master/laravel/setup.sh?ref_type=heads&amp;inline=false" rel="noopener" target="_blank">ここからファイルダウンロード]</a>
+
 2. `File`からkara`Upload Local Files`をクリック
 
 <figure><img src=".gitbook/assets/laravel/laravel_001.png" alt=""></figure>
@@ -27,3 +28,6 @@
 
 ## Laravel導入
 
+
+
+<a href="https://gitlab.com/gs_hayato/gs-php-01/-/raw/master/laravel/setup.sh?ref_type=heads&amp;inline=false" rel="noopener" target="_blank">
