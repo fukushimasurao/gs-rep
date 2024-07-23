@@ -9,7 +9,7 @@
 * [🤡 015\_gs\_php\_day5](gs\_php\_day5.md)
 * [🍥 020\_gs\_laravel\_Cloud9用意](gs\_laravel\_cloud9.md)
 * [🍖 021\_gs\_laravel\_Laravel導入](gs\_laravel\_install_laravel.md)
-* [🐡 022\_gs\_laravel\_操作編](gs\_laravel\_make\_laratter.md)
+* [🐡 022\_gs\_laravel\_Modelとテーブルの用意](gs\_laravel\_make\_laratter_with\_model.md)
 <!-- * [👻 015-2\_old\_gs\_php\_day5](old\_gs\_php\_day5.md) -->
 * [😇 about function(仮)](about-function.md)
 * [🆚 VS code関連](vs-code.md)
