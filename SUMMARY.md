@@ -12,6 +12,7 @@
 * [🐡【laravel】003\_Modelとテーブルの用意](gs\_laravel\_make\_laratter_with\_model.md)
 * [🐷【laravel】004\_画面の用意](gs\_laravel\_make\_laratter_with\_blade.md)
 * [🌸【laravel】005\_一覧画面と作成画面の実装](gs\_laravel\_make\_laratter\_with\_index\_n\_create.md)
+* [⚽️【laravel】006\_作成処理と詳細画面の実装](gs\_laravel\_make\_laratter\_with\_store\_n\_detail.md)
 
 <!-- * [👻 015-2\_old\_gs\_php\_day5](old\_gs\_php\_day5.md) -->
 * [😇 about function(仮)](about-function.md)

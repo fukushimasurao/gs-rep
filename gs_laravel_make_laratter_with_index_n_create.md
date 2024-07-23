@@ -1,187 +1,159 @@
-# 🐷【laravel】004\_画面の用意
+# 🌸【laravel】005\_一覧画面と作成画面の実装
 
 
 ## 今回やること
 
+- Tweet の一覧画面を作成する。
+- Tweet の作成画面を作成する。
 
-- アプリケーションで使用する「Tweet 作成画面」「Tweet 一覧画面」「Tweet 詳細画面」「Tweet 編集画面」のファイルを作成する．
-- 各画面へスムーズに移動できるよう，ナビゲーションバーにリンクを追加する．
+## コントローラのメソッド
 
-## ビューファイルの作成
+`TweetController` の `index` メソッドと `create` メソッドを編集していきます。
+それぞれ、
+- `index` メソッドはTweet の一覧を表示するためのもの
+- `create` メソッドは，Tweet の作成画面を表示するためのもの
+です。
 
-Laravel では，画面を作成する際に Blade テンプレートを使用します。
-Blade テンプレートは HTML のタグを書きながらコントローラから受け取ったデータを埋め込むことができます。
-htmlとphp足して２で割った感じのものです。
-また`@if` や `@foreach` などの制御構文も使用できるため、簡単に条件分岐や繰り返しで表示非表示などを制御できます。
-
-今回は、Bladeテンプレートを作成して`tailwindcss`でスタイリングします。
-
-
-まずはcms階層で以下のコマンドを順番に実行しましょう。
-
-```bash
-$ php artisan make:view tweets.index
-$ php artisan make:view tweets.create
-$ php artisan make:view tweets.show
-$ php artisan make:view tweets.edit
-```
-
-上記を実行すると`resources/views`内に`tweets`フォルダが作成されて、以下 4 つのファイルが作成されます。
-
-- Tweet の作成画面 (`tweets/create.blade.php`)
-- Tweet の一覧画面 (`tweets/index.blade.php`)
-- Tweet の詳細画面 (`tweets/show.blade.php`)
-- Tweet の編集画面 (`tweets/edit.blade.php`)
-
-結果、以下のようなファイル構成になりますので、確認しましょう。
-
-```bash
-[views]
-│
-├── dashboard.blade.php
-├── layouts
-│   ├── app.blade.php
-│   ├── guest.blade.php
-│   └── navigation.blade.php
-├── tweets
-│   ├── create.blade.php [← ⭐️NEW⭐️]
-│   ├── edit.blade.php　[← ⭐️NEW⭐️]
-│   ├── index.blade.php　[← ⭐️NEW⭐️]
-│   └── show.blade.php　[← ⭐️NEW⭐️]
-└── welcome.blade.php
-
-```
-
-### 各画面へのリンク追加
-まず、各画面へ簡単に移動できるようにナビゲーションバーにリンクを追加。
-ナビゲーションバーは`layouts/navigation.blade.php`に記述されています。
-初期状態では`Dashboard`のリンクが追加されているため、同様の形式で一覧画面と作成画面へのリンクを作成します。
-※このファイルでは `PC 画面`と`モバイル画面`で表示する内容を変えているため、それぞれ`2箇所`にリンクのコードを追加する必要があります。
+`index` メソッドではTweet の全件を新しい順に取得するために `latest` メソッドを使用します。
+また，Tweet に関連するユーザ情報を取得するために `with` メソッドを使用します。
 
 
 ```php
-<!-- resources/views/layouts/navigation.blade.php -->
+// app/Http/Controllers/TweetController.php
 
-<nav x-data="{ open: false }" class="bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700">
-  <!-- Primary Navigation Menu -->
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="flex justify-between h-16">
-      <div class="flex">
-        <!-- Logo -->
-        <div class="shrink-0 flex items-center">
-          <a href="{{ route('dashboard') }}">
-            <x-application-logo class="block h-9 w-auto fill-current text-gray-800 dark:text-gray-200" />
-          </a>
-        </div>
+<?php
 
-        <!-- Navigation Links -->
-        <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-          <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-            {{ __('Dashboard') }}
-          </x-nav-link>
+namespace App\Http\Controllers;
 
-          <!-- ⭐️ 2項目追加↓↓↓ ⭐️ -->
-          <x-nav-link :href="route('tweets.index')" :active="request()->routeIs('tweets.index')">
-            {{ __('Tweet一覧') }}
-          </x-nav-link>
-          <x-nav-link :href="route('tweets.create')" :active="request()->routeIs('tweets.create')">
-            {{ __('Tweet作成') }}
-          </x-nav-link>
-          <!-- ⭐️ 2項目追加↑↑↑↑ ⭐️ -->
+use App\Models\Tweet;
+use Illuminate\Http\Request;
 
-        </div>
-      </div>
+class TweetController extends Controller
+{
+  public function index()
+  {
+    // ⭐️追加
+    $tweets = Tweet::with('user')->latest()->get();
+    return view('tweets.index', compact('tweets'));
+  }
 
-      <!-- Settings Dropdown -->
-      <div class="hidden sm:flex sm:items-center sm:ms-6">
-        <x-dropdown align="right" width="48">
-          <x-slot name="trigger">
-            <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none transition ease-in-out duration-150">
-              <div>{{ Auth::user()->name }}</div>
+  public function create()
+  {
+    // ⭐️追加
+    return view('tweets.create');
+  }
 
-              <div class="ms-1">
-                <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                  <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
-                </svg>
-              </div>
-            </button>
-          </x-slot>
+  // 省略
 
-          <x-slot name="content">
-            <x-dropdown-link :href="route('profile.edit')">
-              {{ __('Profile') }}
-            </x-dropdown-link>
-
-            <!-- Authentication -->
-            <form method="POST" action="{{ route('logout') }}">
-              @csrf
-
-              <x-dropdown-link :href="route('logout')" onclick="event.preventDefault();
-                                                this.closest('form').submit();">
-                {{ __('Log Out') }}
-              </x-dropdown-link>
-            </form>
-          </x-slot>
-        </x-dropdown>
-      </div>
-
-      <!-- Hamburger -->
-      <div class="-me-2 flex items-center sm:hidden">
-        <button @click="open = ! open" class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 dark:text-gray-500 hover:text-gray-500 dark:hover:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-900 focus:outline-none focus:bg-gray-100 dark:focus:bg-gray-900 focus:text-gray-500 dark:focus:text-gray-400 transition duration-150 ease-in-out">
-          <svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
-            <path :class="{'hidden': open, 'inline-flex': ! open }" class="inline-flex" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-            <path :class="{'hidden': ! open, 'inline-flex': open }" class="hidden" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-          </svg>
-        </button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Responsive Navigation Menu -->
-  <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
-    <div class="pt-2 pb-3 space-y-1">
-      <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-        {{ __('Dashboard') }}
-      </x-responsive-nav-link>
-      
-      <!-- ⭐️ 2項目追加↓↓↓ ⭐️ -->
-      <x-responsive-nav-link :href="route('tweets.index')" :active="request()->routeIs('tweets.index')">
-        {{ __('Tweet一覧') }}
-      </x-responsive-nav-link>
-      <x-responsive-nav-link :href="route('tweets.create')" :active="request()->routeIs('tweets.create')">
-        {{ __('Tweet作成') }}
-      </x-responsive-nav-link>
-      <!-- ⭐️ 2項目追加↑↑↑↑ ⭐️ -->
-
-    </div>
-
-    <!-- Responsive Settings Options -->
-    <div class="pt-4 pb-1 border-t border-gray-200 dark:border-gray-600">
-      <div class="px-4">
-        <div class="font-medium text-base text-gray-800 dark:text-gray-200">{{ Auth::user()->name }}</div>
-        <div class="font-medium text-sm text-gray-500">{{ Auth::user()->email }}</div>
-      </div>
-
-      <div class="mt-3 space-y-1">
-        <x-responsive-nav-link :href="route('profile.edit')">
-          {{ __('Profile') }}
-        </x-responsive-nav-link>
-
-        <!-- Authentication -->
-        <form method="POST" action="{{ route('logout') }}">
-          @csrf
-
-          <x-responsive-nav-link :href="route('logout')" onclick="event.preventDefault();
-                                        this.closest('form').submit();">
-            {{ __('Log Out') }}
-          </x-responsive-nav-link>
-        </form>
-      </div>
-    </div>
-  </div>
-</nav>
+}
 
 ```
+
+### 一覧画面の作成
+
+`resources/views/tweets/index.blade.php` ファイルを開きTweet の一覧を表示するためのコードを追加する。
+`@foreach` ディレクティブを使用してTweet の一覧を表示する．
+モデルで`Tweet` と `User` を連携しているため，`$tweet->user->name` で Tweet に関連するユーザの名前を取得できる．
+
+```php
+<!-- resources/views/tweets/index.blade.php -->
+
+<x-app-layout>
+  <x-slot name="header">
+    <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+      {{ __('Tweet一覧') }}
+    </h2>
+  </x-slot>
+
+  <div class="py-12">
+    <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+      <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
+        <div class="p-6 text-gray-900 dark:text-gray-100">
+          @foreach ($tweets as $tweet)
+          <div class="mb-4 p-4 bg-gray-100 dark:bg-gray-700 rounded-lg">
+            <p class="text-gray-800 dark:text-gray-300">{{ $tweet->tweet }}</p>
+            <p class="text-gray-600 dark:text-gray-400 text-sm">投稿者: {{ $tweet->user->name }}</p>
+            <a href="{{ route('tweets.show', $tweet) }}" class="text-blue-500 hover:text-blue-700">詳細を見る</a>
+          </div>
+          @endforeach
+        </div>
+      </div>
+    </div>
+  </div>
+
+</x-app-layout>
+
+
+
+```
+
+{% hint style="info" %}
+`<x-app-layout></x-app-layout>`で囲って記載すると、`views/layouts/app.blade.php`内の`{{ $slot }}`という箇所に、
+この囲ったコードがすべて埋め込まれます。
+{% endhint %}
+
+
+### 作成画面の作成
+
+`resources/views/tweets/create.blade.php` ファイルを開きTweet の作成画面を表示するためのコードを追加する。
+`@csrf` ディレクティブを使用して`CSRF（Cross-Site Request Forgery）トークン`を生成する。
+
+👹`@csrf`はフォームを用いてデータを送信する場合には必ず設定すること👹
+
+```php
+<!-- resources/views/tweets/create.blade.php -->
+
+<x-app-layout>
+  <x-slot name="header">
+    <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+      {{ __('Tweet作成') }}
+    </h2>
+  </x-slot>
+
+  <div class="py-12">
+    <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+      <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
+        <div class="p-6 text-gray-900 dark:text-gray-100">
+          <form method="POST" action="{{ route('tweets.store') }}">
+            @csrf
+            <div class="mb-4">
+              <label for="tweet" class="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2">Tweet</label>
+              <input type="text" name="tweet" id="tweet" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 dark:text-gray-300 dark:bg-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+              @error('tweet')
+              <span class="text-red-500 text-xs italic">{{ $message }}</span>
+              @enderror
+            </div>
+            <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Tweet</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</x-app-layout>
+
+```
+
+### Tailwind CSS の適用
+
+一部 CSS が適用されない部分があるため下記コマンドで Tailwind CSS を適用する。
+👹ビューファイルを変更した場合は必ず実行する。
+
+```bash
+$ npm run build
+```
+
+### 動作確認
+一覧画面に移動しエラーが発生しないことを確認する。
+作成画面に移動し入力フォームが表示されていることを確認する。
+※まだ登録できないよ。
+
+# 【補足】エラーメッセージの表示
+
+この画面では入力したデータに不備があった場合（未入力や文字列が長すぎるなど）にエラーメッセージを表示したい。
+エラーメッセージは`@error` ディレクティブを使用して表示する。
+`@error`ディレクティブは指定した項目にエラーがある場合にのみ表示される。
+
+
 
 
 {% hint style="info" %}
@@ -190,8 +162,3 @@ bladeの中に記述されている`<x-...>`というタグは、コンポーネ
 例えば`<x-dropdown align="right" width="48">`は、`views/components/dropdown-link.blade.php`に記載があります。
 同じような部品はコンポーネントに用意して複数のページで使いまわしましょう。
 {% endhint %}
-
-### 動作確認
-
-画面上部にナビゲーションバーが表示されていることを確認する。
-※リンク先のファイルは未実装のため動作しない状態で OK
