@@ -11,6 +11,8 @@
 * [🍖【laravel】002\_Laravel導入](gs\_laravel\_install_laravel.md)
 * [🐡【laravel】003\_Modelとテーブルの用意](gs\_laravel\_make\_laratter_with\_model.md)
 * [🐷【laravel】004\_画面の用意](gs\_laravel\_make\_laratter_with\_blade.md)
+* [🌸【laravel】005\_一覧画面と作成画面の実装](gs\_laravel\_make\_laratter\_with\_index\_n\_create.md)
+
 <!-- * [👻 015-2\_old\_gs\_php\_day5](old\_gs\_php\_day5.md) -->
 * [😇 about function(仮)](about-function.md)
 * [🆚 VS code関連](vs-code.md)
