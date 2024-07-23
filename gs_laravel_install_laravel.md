@@ -249,3 +249,6 @@ voclabs:~/environment/cms $ php artisan migrate
 
 voclabs:~/environment/cms $ 
 ```
+
+ユーザー登録ができるようになったら、２−３人、適当にユーザーを作成してください。
+
