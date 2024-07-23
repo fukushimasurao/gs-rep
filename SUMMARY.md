@@ -7,15 +7,17 @@
 * [😚 013\_gs\_php\_day3](gs\_php\_day3.md)
 * [🤩 014\_gs\_php\_day4](gs\_php\_day4.md)
 * [🤡 015\_gs\_php\_day5](gs\_php\_day5.md)
-* [🍥 【laravel】001\_Cloud9用意](gs\_laravel\_cloud9.md)
-* [🍖 【laravel】002\_Laravel導入](gs\_laravel\_install_laravel.md)
-* [🐡 【laravel】003\_Modelとテーブルの用意](gs\_laravel\_make\_laratter_with\_model.md)
+* [🍥【laravel】001\_Cloud9用意](gs\_laravel\_cloud9.md)
+* [🍖【laravel】002\_Laravel導入](gs\_laravel\_install_laravel.md)
+* [🐡【laravel】003\_Modelとテーブルの用意](gs\_laravel\_make\_laratter_with\_model.md)
+* [🐷【laravel】004\_画面の用意](gs\_laravel\_make\_laratter_with\_blade.md)
 <!-- * [👻 015-2\_old\_gs\_php\_day5](old\_gs\_php\_day5.md) -->
 * [😇 about function(仮)](about-function.md)
 * [🆚 VS code関連](vs-code.md)
 <!-- * [🏫 (ボツページ)about Class](about-class.md) -->
 * [🏫 about Class Detail(仮)](about-class-detail.md)
 * [📖 PhpMyAdmin関連](phpmyadmin.md)
-* [♥️ 便利情報](good-tools.md)
+* [♥️ 便利情報](good-tools.md) 
 * [👯‍♀️ XAMPP再インストール方法](re-install-xampp.md)
 * [☠️ sqlインジェクション確認](sql\_injection.md)
+ 

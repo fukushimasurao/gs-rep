@@ -1,4 +1,4 @@
-# 🍖 021\_gs\_laravel_\Laravel導入
+# 🍖【laravel】002\_Laravel導入
 
 ## 今回やること
 
