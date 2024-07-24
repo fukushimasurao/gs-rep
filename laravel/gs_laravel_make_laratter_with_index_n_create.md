@@ -1,8 +1,6 @@
-# 🐔 【laravel】005\_一覧画面と作成画面の実装
+# 🐔 005\_一覧画面と作成画面の実装
 
-## 【laravel】005\_一覧画面と作成画面の実装
-
-### 今回やること
+今回やること
 
 * Tweet の一覧画面を作成する。
 * Tweet の作成画面を作成する。
@@ -89,7 +87,9 @@ class TweetController extends Controller
 
 #### 作成画面の作成
 
-`resources/views/tweets/create.blade.php` ファイルを開きTweet の作成画面を表示するためのコードを追加する。 `@csrf` ディレクティブを使用して`CSRF（Cross-Site Request Forgery）トークン`を生成する。
+`resources/views/tweets/create.blade.php` ファイルを開きTweet の作成画面を表示するためのコードを追加する。&#x20;
+
+`@csrf` ディレクティブを使用して`CSRF（Cross-Site Request Forgery）トークン`を生成する。
 
 👹`@csrf`はフォームを用いてデータを送信する場合には必ず設定すること👹
 
@@ -141,7 +141,3 @@ $ npm run build
 ## 【補足】エラーメッセージの表示
 
 この画面では入力したデータに不備があった場合（未入力や文字列が長すぎるなど）にエラーメッセージを表示したい。 エラーメッセージは`@error` ディレクティブを使用して表示する。 `@error`ディレクティブは指定した項目にエラーがある場合にのみ表示される。
-
-{% hint style="info" %}
-bladeの中に記述されている`<x-...>`というタグは、コンポーネントという部品のようなものです。 実体は、`views/components`の中にあります。 例えば`<x-dropdown align="right" width="48">`は、`views/components/dropdown-link.blade.php`に記載があります。 同じような部品はコンポーネントに用意して複数のページで使いまわしましょう。
-{% endhint %}
