@@ -8,4 +8,8 @@ description: このページについて
 
 自分のタイミングで勝手に消したり、編集したりする可能性があるのでご注意を。
 
-[https://nu0640042.gitbook.io/gs\_php/](https://nu0640042.gitbook.io/gs\_php/)
+{% embed url="https://nu0640042.gitbook.io/gs_php/" %}
+
+授業で利用するファイルは大体ここに格納してます↓
+
+{% embed url="https://gitlab.com/gs_hayato/gs-php-01" %}
