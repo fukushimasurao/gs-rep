@@ -1,4 +1,4 @@
-# 🍥 【laravel】001\_Cloud9用意
+# 🍥 001\_Cloud9用意
 
 ## 今回やること
 
@@ -12,8 +12,8 @@
 
 1.  ダッシュボードに遷移
 
-    まずはログイン画面からダッシュボードに遷移 ログイン - https://awsacademy.instructure.com/login/canvas
-2. 左のメニューから、「コース」を選択後、「AWS Academy Learner Lab \[XXXXXX]」をクリック
+    まずは[ログイン画面](https://awsacademy.instructure.com/login/canvas)からダッシュボードに遷移&#x20;
+2. 左のメニューから、「コース」を選択後、「`AWS Academy Learner Lab [XXXXXX]`」をクリック
 
 <figure><img src="../.gitbook/assets/laravel/001/laravel_001.png" alt=""><figcaption></figcaption></figure>
 
@@ -30,15 +30,16 @@
 <figure><img src="../.gitbook/assets/laravel/001/laravel_004.png" alt=""><figcaption></figcaption></figure>
 
 {% hint style="info" %}
-・初回起動時は時間がかかるようです。 ・左上の「AWS」の表記の🔴が🟢になれば準備完了です。
+* 初回起動時は時間がかかるようです。&#x20;
+* 左上の「AWS」の表記の🔴が🟢になれば準備完了です。
 {% endhint %}
 
 {% hint style="info" %}
-作業が終了したら、「End Lab」をクリックして、すべての処理をストップしてください。
+作業が終了したら、**「End Lab」**をクリックして、すべての処理をストップしてください。
 {% endhint %}
 
 6. 「AWS 🟢」をクリック
-7. 「コンソールのホーム」画面で、「cloud9」を検索。サービスの中から「cloud9」をクリックしてください。
+7. 「コンソールのホーム」画面で、「`cloud9`」を検索。サービスの中から「cloud9」をクリックしてください。
 
 <figure><img src="../.gitbook/assets/laravel/001/laravel_005.png" alt=""><figcaption></figcaption></figure>
 
@@ -74,7 +75,7 @@
 
 11. 事前準備
 
-* 左のメニューの歯車⚙️から`Show Hidden Files`にチェックを\*\* ⭐️入れる⭐️ \*\*
+* 左のメニューの歯車⚙️から`Show Hidden Files`にチェックを**⭐️入れる⭐️**&#x20;
 
 <figure><img src="../.gitbook/assets/laravel/001/laravel_011.png" alt=""><figcaption></figcaption></figure>
 
