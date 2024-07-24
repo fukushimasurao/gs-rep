@@ -8,7 +8,7 @@ description: php 第１日目
 
 [https://gitlab.com/gs\_hayato/gs-php-01/-/blob/master/php01.zip](https://gitlab.com/gs\_hayato/gs-php-01/-/blob/master/php01.zip)
 
-![](<.gitbook/assets/スクリーンショット 2022-01-09 2.30.21.png>)
+![](<../.gitbook/assets/スクリーンショット 2022-01-09 2.30.21.png>)
 
 {% hint style="danger" %}
 Macを利用されている人は、dataファルダの書き込み権限を変更してください。
@@ -249,7 +249,7 @@ date()の引数はたくさん種類あります。
 [https://www.php.net/manual/ja/function.date.php](https://www.php.net/manual/ja/function.date.php)
 {% endhint %}
 
-### phpとJS/CSSの動きを確認 ... other_lang.php
+### phpとJS/CSSの動きを確認 ... other\_lang.php
 
 ```php
 <html>
@@ -514,11 +514,11 @@ $password = $_POST['password'];
 <script>alert("test");</script>
 ```
 
-<figure><img src=".gitbook/assets/form_with_script (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/form_with_script (1).png" alt=""><figcaption></figcaption></figure>
 
 以下のような感じで、アラートが動作＝スクリプトが動作していることがわかります。
 
-<figure><img src=".gitbook/assets/do_script.png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/do_script.png" alt=""><figcaption></figcaption></figure>
 
 今回は、簡単なアラート動作だけですが、**もしここにもっと悪質なscriptを仕込まれた場合セキュリティ上の脅威になる可能性が高いです。**
 
@@ -653,7 +653,6 @@ file_put_contents('data/data.txt', $data, FILE_APPEND);
 `write.php`に上記コードを書いたあとに（書き込み権限を修正して）`write.php`をブラウザで開くと、`data.txt`に自動で書き込みされます。
 {% endhint %}
 
-
 #### read.php
 
 txtファイルに保存した内容をブラウザでも確認するため、`read.php`を準備します。 まずは下記を`read.php`に記述してください。
@@ -669,7 +668,7 @@ echo nl2br($data);
 
 記述後、ブラウザで`read.php`を開いて、保存したデータがブラウザで閲覧できることを確認してください。
 
-<figure><img src=".gitbook/assets/スクリーンショット 2022-12-04 18.48.51.png" alt=""><figcaption><p>txtに記述したないようが表示されればok</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/スクリーンショット 2022-12-04 18.48.51.png" alt=""><figcaption><p>txtに記述したないようが表示されればok</p></figcaption></figure>
 
 ### `inpute.php`から`write.php`に内容を送ってみよう
 
@@ -772,7 +771,7 @@ fclose($openFile);
 
 記述後、ブラウザで`read.php`を開いて、保存したデータがブラウザで閲覧できることを確認してください。
 
-<figure><img src=".gitbook/assets/スクリーンショット 2022-12-04 18.48.51.png" alt=""><figcaption><p>txtに記述したないようが表示されればok</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/スクリーンショット 2022-12-04 18.48.51.png" alt=""><figcaption><p>txtに記述したないようが表示されればok</p></figcaption></figure>
 
 {% hint style="info" %}
 上記コードのwhile,,,の部分は少し難しいかもしれません。

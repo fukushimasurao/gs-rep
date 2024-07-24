@@ -49,7 +49,7 @@
 
 今日のプロダクトのイメージ
 
-<figure><img src=".gitbook/assets/about.jpg" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/about.jpg" alt=""><figcaption></figcaption></figure>
 
 ## 今日のゴール
 
@@ -57,7 +57,7 @@
 
 ### `SESSION`の確認
 
-`SESSION`そのものは概念……お互いが誰かを認識した状態でやりとりすること・やりとりを管理すること。&#x20;
+`SESSION`そのものは概念……お互いが誰かを認識した状態でやりとりすること・やりとりを管理すること。
 
 インターネットの仕組み……ステートレス。 これだと買い物等しずらい。そのためsessionを利用する。
 
@@ -176,7 +176,7 @@ _確認場所_
 
 ## 今日のイメージ
 
-![](.gitbook/assets/php04/loginのイメージ.jpg)
+![](../.gitbook/assets/php04/loginのイメージ.jpg)
 
 このように「ログイン機能」を作成するために`SESSION`を利用する。
 
@@ -270,7 +270,7 @@ if( $val['id'] != '' ){
 
 これで、ログインのような動きはできましたが、実際には機能していません。 ログインしようとしまいと、`select.php`にアクセスできてしまうからです。
 
-よって、`select.php`などは、_ログインしていないとみられないページ_に修正する必要があります。
+よって、`select.php`などは、\_ログインしていないとみられないページ\_に修正する必要があります。
 
 1. select.phpにログインチェック処理を追加
 
@@ -292,8 +292,7 @@ session_regenerate_id(true);
 ```
 
 {% hint style="info" %}
-もし、ログインを経由せずに`select.php`に来た場合、 `$_SESSION['chk_ssid']`には、何も代入されていません。
-よってサーバー側には、`$_SESSION['chk_ssid']`という存在がありません。
+もし、ログインを経由せずに`select.php`に来た場合、 `$_SESSION['chk_ssid']`には、何も代入されていません。 よってサーバー側には、`$_SESSION['chk_ssid']`という存在がありません。
 
 結果、`$_SESSION['chk_ssid']`を書くと `Undefined array key "chk_ssid"` のエラーが出ます。
 
@@ -365,8 +364,6 @@ if($_SESSION['kanri_flg'] !== 1) {
 }
 ```
 
-
-
 ## パスワードのハッシュ化
 
 _**万が一パスワードが盗まれた場合に備えて、パスワードをハッシュ化**_
@@ -396,7 +393,7 @@ echo $hashed_pw;
 * ↑で表示されたハッシュ値をコピー
 * `phpMyAdmin`にて、`lpw`の`test1`をコピーしたハッシュ値に書き換える。
 
-![](.gitbook/assets/php04/hash.png)
+![](../.gitbook/assets/php04/hash.png)
 
 1. `login_act.php`の中の処理を一部変更
 

@@ -1,17 +1,13 @@
-# 【laravel】006\_更新処理と削除処理の実装
-
+# 🌲 【laravel】007\_更新処理と削除処理の実装
 
 ## 今回やること
 
-- Tweet の更新処理（テーブルのデータ更新）を実装する．
-- Tweet の削除処理（テーブルのデータ削除）を実装する．
-
-
+* Tweet の更新処理（テーブルのデータ更新）を実装する．
+* Tweet の削除処理（テーブルのデータ削除）を実装する．
 
 ## Tweet 作成処理の実装
 
-TweetController の `edit` メソッドを編集する。
-`edit` メソッドは，Tweet の編集画面を表示するためのものです。
+TweetController の `edit` メソッドを編集する。 `edit` メソッドは，Tweet の編集画面を表示するためのものです。
 
 ```php
 // app/Http/Controllers/TweetController.php
@@ -31,10 +27,7 @@ class TweetController extends Controller
 
 ### 編集画面の作成
 
-`resources/views/tweets/edit.blade.php` ファイルを開きTweet の編集画面を表示するためのコードを追加。
-作成画面と同様に`@error`を用いてエラーメッセージを表示する。
-また、`@method('PUT')` ディレクティブを使用してフォームから送信される `HTTP メソッド`を `PUT` に変更する。
-これはルーティングで `PUT` メソッドが使用されている一方で、フォームから送信される HTTP メソッドは `GET` と `POST` のみであることに起因する。
+`resources/views/tweets/edit.blade.php` ファイルを開きTweet の編集画面を表示するためのコードを追加。 作成画面と同様に`@error`を用いてエラーメッセージを表示する。 また、`@method('PUT')` ディレクティブを使用してフォームから送信される `HTTP メソッド`を `PUT` に変更する。 これはルーティングで `PUT` メソッドが使用されている一方で、フォームから送信される HTTP メソッドは `GET` と `POST` のみであることに起因する。
 
 ```php
 <!-- resources/views/tweets/edit.blade.php -->
@@ -71,9 +64,8 @@ class TweetController extends Controller
 ```
 
 ### 更新処理の実装
-Tweet の更新処理を実装するために`TweetController` の`update` メソッドを編集しよう。
-このメソッドはTweet の更新処理を行う。
-該当する Tweet のデータを受け取り、`update` メソッドを用いて新しいデータ（`$request の tweet 項目`）で上書きする。
+
+Tweet の更新処理を実装するために`TweetController` の`update` メソッドを編集しよう。 このメソッドはTweet の更新処理を行う。 該当する Tweet のデータを受け取り、`update` メソッドを用いて新しいデータ（`$request の tweet 項目`）で上書きする。
 
 ```php
 // app/Http/Controllers/TweetController.php
@@ -98,13 +90,12 @@ class TweetController extends Controller
 ```
 
 ### 動作確認
-詳細画面から編集画面に移動しtweet を編集できることを確認しよう。
-編集した tweet が詳細画面に反映されることを確認しよう。
+
+詳細画面から編集画面に移動しtweet を編集できることを確認しよう。 編集した tweet が詳細画面に反映されることを確認しよう。
 
 ### Tweet 削除処理の実装
-Tweet の削除処理を実装するために`TweetController` の `destroy` メソッドを編集。
-このメソッドはTweet の削除処理を行う。
-該当する Tweet のデータを受け取り、`delete` メソッドを用いて削除する。
+
+Tweet の削除処理を実装するために`TweetController` の `destroy` メソッドを編集。 このメソッドはTweet の削除処理を行う。 該当する Tweet のデータを受け取り、`delete` メソッドを用いて削除する。
 
 ```php
 
@@ -137,5 +128,4 @@ $ npm run build
 
 ### 動作確認
 
-詳細画面から削除ボタンを押しtweet を削除できることを確認。
-削除した tweet が一覧画面から消えていることを確認。
+詳細画面から削除ボタンを押しtweet を削除できることを確認。 削除した tweet が一覧画面から消えていることを確認。

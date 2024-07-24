@@ -1,21 +1,15 @@
-# 【laravel】004\_画面の用意
-
+# 🚅 【laravel】004\_画面の用意
 
 ## 今回やること
 
-
-- アプリケーションで使用する「Tweet 作成画面」「Tweet 一覧画面」「Tweet 詳細画面」「Tweet 編集画面」のファイルを作成する．
-- 各画面へスムーズに移動できるよう，ナビゲーションバーにリンクを追加する．
+* アプリケーションで使用する「Tweet 作成画面」「Tweet 一覧画面」「Tweet 詳細画面」「Tweet 編集画面」のファイルを作成する．
+* 各画面へスムーズに移動できるよう，ナビゲーションバーにリンクを追加する．
 
 ## ビューファイルの作成
 
-Laravel では，画面を作成する際に Blade テンプレートを使用します。
-Blade テンプレートは HTML のタグを書きながらコントローラから受け取ったデータを埋め込むことができます。
-htmlとphp足して２で割った感じのものです。
-また`@if` や `@foreach` などの制御構文も使用できるため、簡単に条件分岐や繰り返しで表示非表示などを制御できます。
+Laravel では，画面を作成する際に Blade テンプレートを使用します。 Blade テンプレートは HTML のタグを書きながらコントローラから受け取ったデータを埋め込むことができます。 htmlとphp足して２で割った感じのものです。 また`@if` や `@foreach` などの制御構文も使用できるため、簡単に条件分岐や繰り返しで表示非表示などを制御できます。
 
 今回は、Bladeテンプレートを作成して`tailwindcss`でスタイリングします。
-
 
 まずはcms階層で以下のコマンドを順番に実行しましょう。
 
@@ -28,10 +22,10 @@ $ php artisan make:view tweets.edit
 
 上記を実行すると`resources/views`内に`tweets`フォルダが作成されて、以下 4 つのファイルが作成されます。
 
-- Tweet の作成画面 (`tweets/create.blade.php`)
-- Tweet の一覧画面 (`tweets/index.blade.php`)
-- Tweet の詳細画面 (`tweets/show.blade.php`)
-- Tweet の編集画面 (`tweets/edit.blade.php`)
+* Tweet の作成画面 (`tweets/create.blade.php`)
+* Tweet の一覧画面 (`tweets/index.blade.php`)
+* Tweet の詳細画面 (`tweets/show.blade.php`)
+* Tweet の編集画面 (`tweets/edit.blade.php`)
 
 結果、以下のようなファイル構成になりますので、確認しましょう。
 
@@ -53,11 +47,8 @@ $ php artisan make:view tweets.edit
 ```
 
 ### 各画面へのリンク追加
-まず、各画面へ簡単に移動できるようにナビゲーションバーにリンクを追加。
-ナビゲーションバーは`layouts/navigation.blade.php`に記述されています。
-初期状態では`Dashboard`のリンクが追加されているため、同様の形式で一覧画面と作成画面へのリンクを作成します。
-※このファイルでは `PC 画面`と`モバイル画面`で表示する内容を変えているため、それぞれ`2箇所`にリンクのコードを追加する必要があります。
 
+まず、各画面へ簡単に移動できるようにナビゲーションバーにリンクを追加。 ナビゲーションバーは`layouts/navigation.blade.php`に記述されています。 初期状態では`Dashboard`のリンクが追加されているため、同様の形式で一覧画面と作成画面へのリンクを作成します。 ※このファイルでは `PC 画面`と`モバイル画面`で表示する内容を変えているため、それぞれ`2箇所`にリンクのコードを追加する必要があります。
 
 ```php
 <!-- resources/views/layouts/navigation.blade.php -->
@@ -183,15 +174,10 @@ $ php artisan make:view tweets.edit
 
 ```
 
-
 {% hint style="info" %}
-bladeの中に記述されている`<x-...>`というタグは、コンポーネントという部品のようなものです。
-実体は、`views/components`の中にあります。
-例えば`<x-dropdown align="right" width="48">`は、`views/components/dropdown-link.blade.php`に記載があります。
-同じような部品はコンポーネントに用意して複数のページで使いまわしましょう。
+bladeの中に記述されている`<x-...>`というタグは、コンポーネントという部品のようなものです。 実体は、`views/components`の中にあります。 例えば`<x-dropdown align="right" width="48">`は、`views/components/dropdown-link.blade.php`に記載があります。 同じような部品はコンポーネントに用意して複数のページで使いまわしましょう。
 {% endhint %}
 
 ### 動作確認
 
-画面上部にナビゲーションバーが表示されていることを確認する。
-※リンク先のファイルは未実装のため動作しない状態で OK
+画面上部にナビゲーションバーが表示されていることを確認する。 ※リンク先のファイルは未実装のため動作しない状態で OK

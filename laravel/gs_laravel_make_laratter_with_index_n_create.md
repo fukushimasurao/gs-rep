@@ -1,22 +1,20 @@
-# 【laravel】005\_一覧画面と作成画面の実装
+# 🐔 【laravel】005\_一覧画面と作成画面の実装
 
+## 【laravel】005\_一覧画面と作成画面の実装
 
-## 今回やること
+### 今回やること
 
-- Tweet の一覧画面を作成する。
-- Tweet の作成画面を作成する。
+* Tweet の一覧画面を作成する。
+* Tweet の作成画面を作成する。
 
-## コントローラのメソッド
+### コントローラのメソッド
 
-`TweetController` の `index` メソッドと `create` メソッドを編集していきます。
-それぞれ、
-- `index` メソッドはTweet の一覧を表示するためのもの
-- `create` メソッドは，Tweet の作成画面を表示するためのもの
-です。
+`TweetController` の `index` メソッドと `create` メソッドを編集していきます。 それぞれ、
 
-`index` メソッドではTweet の全件を新しい順に取得するために `latest` メソッドを使用します。
-また，Tweet に関連するユーザ情報を取得するために `with` メソッドを使用します。
+* `index` メソッドはTweet の一覧を表示するためのもの
+* `create` メソッドは，Tweet の作成画面を表示するためのもの です。
 
+`index` メソッドではTweet の全件を新しい順に取得するために `latest` メソッドを使用します。 また，Tweet に関連するユーザ情報を取得するために `with` メソッドを使用します。
 
 ```php
 // app/Http/Controllers/TweetController.php
@@ -49,11 +47,9 @@ class TweetController extends Controller
 
 ```
 
-### 一覧画面の作成
+#### 一覧画面の作成
 
-`resources/views/tweets/index.blade.php` ファイルを開きTweet の一覧を表示するためのコードを追加する。
-`@foreach` ディレクティブを使用してTweet の一覧を表示する．
-モデルで`Tweet` と `User` を連携しているため，`$tweet->user->name` で Tweet に関連するユーザの名前を取得できる．
+`resources/views/tweets/index.blade.php` ファイルを開きTweet の一覧を表示するためのコードを追加する。 `@foreach` ディレクティブを使用してTweet の一覧を表示する． モデルで`Tweet` と `User` を連携しているため，`$tweet->user->name` で Tweet に関連するユーザの名前を取得できる．
 
 ```php
 <!-- resources/views/tweets/index.blade.php -->
@@ -88,15 +84,12 @@ class TweetController extends Controller
 ```
 
 {% hint style="info" %}
-`<x-app-layout></x-app-layout>`で囲って記載すると、`views/layouts/app.blade.php`内の`{{ $slot }}`という箇所に、
-この囲ったコードがすべて埋め込まれます。
+`<x-app-layout></x-app-layout>`で囲って記載すると、`views/layouts/app.blade.php`内の`{{ $slot }}`という箇所に、 この囲ったコードがすべて埋め込まれます。
 {% endhint %}
 
+#### 作成画面の作成
 
-### 作成画面の作成
-
-`resources/views/tweets/create.blade.php` ファイルを開きTweet の作成画面を表示するためのコードを追加する。
-`@csrf` ディレクティブを使用して`CSRF（Cross-Site Request Forgery）トークン`を生成する。
+`resources/views/tweets/create.blade.php` ファイルを開きTweet の作成画面を表示するためのコードを追加する。 `@csrf` ディレクティブを使用して`CSRF（Cross-Site Request Forgery）トークン`を生成する。
 
 👹`@csrf`はフォームを用いてデータを送信する場合には必ず設定すること👹
 
@@ -133,32 +126,22 @@ class TweetController extends Controller
 
 ```
 
-### Tailwind CSS の適用
+#### Tailwind CSS の適用
 
-一部 CSS が適用されない部分があるため下記コマンドで Tailwind CSS を適用する。
-👹ビューファイルを変更した場合は必ず実行する。
+一部 CSS が適用されない部分があるため下記コマンドで Tailwind CSS を適用する。 👹ビューファイルを変更した場合は必ず実行する。
 
 ```bash
 $ npm run build
 ```
 
-### 動作確認
-一覧画面に移動しエラーが発生しないことを確認する。
-作成画面に移動し入力フォームが表示されていることを確認する。
-※まだ登録できないよ。
+#### 動作確認
 
-# 【補足】エラーメッセージの表示
+一覧画面に移動しエラーが発生しないことを確認する。 作成画面に移動し入力フォームが表示されていることを確認する。 ※まだ登録できないよ。
 
-この画面では入力したデータに不備があった場合（未入力や文字列が長すぎるなど）にエラーメッセージを表示したい。
-エラーメッセージは`@error` ディレクティブを使用して表示する。
-`@error`ディレクティブは指定した項目にエラーがある場合にのみ表示される。
+## 【補足】エラーメッセージの表示
 
-
-
+この画面では入力したデータに不備があった場合（未入力や文字列が長すぎるなど）にエラーメッセージを表示したい。 エラーメッセージは`@error` ディレクティブを使用して表示する。 `@error`ディレクティブは指定した項目にエラーがある場合にのみ表示される。
 
 {% hint style="info" %}
-bladeの中に記述されている`<x-...>`というタグは、コンポーネントという部品のようなものです。
-実体は、`views/components`の中にあります。
-例えば`<x-dropdown align="right" width="48">`は、`views/components/dropdown-link.blade.php`に記載があります。
-同じような部品はコンポーネントに用意して複数のページで使いまわしましょう。
+bladeの中に記述されている`<x-...>`というタグは、コンポーネントという部品のようなものです。 実体は、`views/components`の中にあります。 例えば`<x-dropdown align="right" width="48">`は、`views/components/dropdown-link.blade.php`に記載があります。 同じような部品はコンポーネントに用意して複数のページで使いまわしましょう。
 {% endhint %}

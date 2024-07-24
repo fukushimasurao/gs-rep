@@ -65,9 +65,7 @@ RDBは通常複数のテーブルで構成されます。
 
 例.
 
-studentsテーブル
-deptテーブル
-stationsテーブル
+studentsテーブル deptテーブル stationsテーブル
 
 ※名前とは関係ない内容はテーブルから分離する。
 
@@ -87,7 +85,7 @@ stationsテーブル
 
 #### 第１正規系は簡単
 
-<figure><img src=".gitbook/assets/スクリーンショット 2024-07-13 0.35.59.png" alt=""><figcaption><p>ミック著 『SQL 第2版 ゼロからはじめるデータベース操作』より引用.</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/スクリーンショット 2024-07-13 0.35.59.png" alt=""><figcaption><p>ミック著 『SQL 第2版 ゼロからはじめるデータベース操作』より引用.</p></figcaption></figure>
 
 セルの中に２つ以上入れない。
 
@@ -97,7 +95,7 @@ stationsテーブル
 
 RDBにおいて、分けたテーブルは結合して表示することが可能。
 
-そのときに利用するのが `JOIN` 
+そのときに利用するのが `JOIN`
 
 `SELECT * FROM テーブル1 JOIN テーブル2 ON テーブル1のカラム = テーブル2のカラム`
 
@@ -224,18 +222,15 @@ $status = $stmt->execute();
 
 上記のように、ユーザ1に対して、つぶやき複数のような関係性を1対多という。
 
-<figure><img src=".gitbook/assets/1対多.jpg" alt=""><figcaption><p>1対多</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/1対多.jpg" alt=""><figcaption><p>1対多</p></figcaption></figure>
 
-<figure><img src=".gitbook/assets/多対多.jpg" alt=""><figcaption><p>多対多</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/多対多.jpg" alt=""><figcaption><p>多対多</p></figcaption></figure>
 
 https://techlib.circlearound.co.jp/entries/db-table-many-to-many/ https://techlib.circlearound.co.jp/entries/rdb
 
-
 #### 時間あれば実際に中間テーブルやってみよう
-配布した以下のテーブルをte-buruwophpMyAdminで取り入れる
-clubs
-clubs_students
-students
+
+配布した以下のテーブルをte-buruwophpMyAdminで取り入れる clubs clubs\_students students
 
 ```sql
 SELECT * FROM clubs join clubs_students on clubs.id = clubs_students.clubs_id;
@@ -244,8 +239,6 @@ SELECT * FROM clubs join clubs_students on clubs.id = clubs_students.clubs_id;
 ```sql
 SELECT * FROM `clubs` join clubs_students on clubs.id = clubs_students.clubs_id join students on clubs_students.students_id= students.id;
 ```
-
-
 
 ### 画像登録処理の方法を知る。
 
@@ -382,13 +375,11 @@ $view .= '</p></div>';
 
 ```
 
-
 これで画像が表示できた。
 
 #### 発展
 
-ここまでできたら既存の画像をアップデートする処理も必要です。
-チャレンジしてみましょう。
+ここまでできたら既存の画像をアップデートする処理も必要です。 チャレンジしてみましょう。
 
 ### その他
 

@@ -1,23 +1,21 @@
-# 【laravel】006\_作成処理と詳細画面の実装
-
+# 🍄 【laravel】006\_作成処理と詳細画面の実装
 
 ## 今回やること
 
-- Tweet の作成処理（テーブルへのデータ作成）を実装する．
-- Tweet 一件の詳細画面を作成する．
-- 
+* Tweet の作成処理（テーブルへのデータ作成）を実装する．
+* Tweet 一件の詳細画面を作成する．
+*
+
 ## Tweet 作成処理の実装
 
 Tweet の作成処理は`TweetController` に `store` メソッドに記載する。
 
-`フォーム`から送信されてきたデータは `$request`に格納されているため、`validate` を用いてデータのバリデーションを行う。
-ここでは，
-- `tweet が空でないこと`
-- `長さが 255 以内であること`
-を確認している．
+`フォーム`から送信されてきたデータは `$request`に格納されているため、`validate` を用いてデータのバリデーションを行う。 ここでは，
 
-バリデーションをクリアしたら Tweet のデータを作成する。
-バリデーションをクリアしない場合は自動的に作成ページ（とエラーメッセージ）が表示される。
+* `tweet が空でないこと`
+* `長さが 255 以内であること` を確認している．
+
+バリデーションをクリアしたら Tweet のデータを作成する。 バリデーションをクリアしない場合は自動的に作成ページ（とエラーメッセージ）が表示される。
 
 ```php
 // app/Http/Controllers/TweetController.php
@@ -43,18 +41,13 @@ class TweetController extends Controller
 
 ### 動作確認
 
-作成画面に移動しtweet が投稿できることを確認。
-投稿した tweet が一覧画面に表示されることを確認。
+作成画面に移動しtweet が投稿できることを確認。 投稿した tweet が一覧画面に表示されることを確認。
 
 ### Tweet 詳細画面の実装
 
-TweetController の `show` メソッドを編集。
-`show` メソッドは，Tweet の詳細画面を表示するためのものです。
+TweetController の `show` メソッドを編集。 `show` メソッドは，Tweet の詳細画面を表示するためのものです。
 
-一覧画面のリンク（ `<a href="{{ route('tweets.show', $tweet) }}">` 部分）で 
-Tweet 1 件のデータが渡されているため、`$tweet` に該当する Tweet のデータが渡される。
-`show` メソッドが受け取ったデータをそのままビューファイルに渡せば OK。
-
+一覧画面のリンク（ `<a href="{{ route('tweets.show', $tweet) }}">` 部分）で Tweet 1 件のデータが渡されているため、`$tweet` に該当する Tweet のデータが渡される。 `show` メソッドが受け取ったデータをそのままビューファイルに渡せば OK。
 
 ```php
 // app/Http/Controllers/TweetController.php
@@ -74,8 +67,7 @@ class TweetController extends Controller
 
 ### 詳細画面の作成
 
-`resources/views/tweets/show.blade.php` ファイルを開き、Tweet の詳細画面を表示するためのコードを追加しましょう。
-ここでは，Tweet の投稿者のみが編集・削除できるようにするため、Tweet の投稿者とログインユーザが一致するかを確認した上で編集ボタンと削除ボタンを表示します。
+`resources/views/tweets/show.blade.php` ファイルを開き、Tweet の詳細画面を表示するためのコードを追加しましょう。 ここでは，Tweet の投稿者のみが編集・削除できるようにするため、Tweet の投稿者とログインユーザが一致するかを確認した上で編集ボタンと削除ボタンを表示します。
 
 ```php
 <!-- resources/views/tweets/show.blade.php -->
@@ -119,8 +111,8 @@ class TweetController extends Controller
 ```
 
 ### 動作確認
-一覧画面から詳細画面に移動しtweet の詳細が表示されることを確認しましょう。
-編集と削除はまだ動作しないので画面の表示が確認できれば OKです。
+
+一覧画面から詳細画面に移動しtweet の詳細が表示されることを確認しましょう。 編集と削除はまだ動作しないので画面の表示が確認できれば OKです。
 
 ### 【補足】認証ユーザ情報の取得
 

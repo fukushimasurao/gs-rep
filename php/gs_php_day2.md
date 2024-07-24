@@ -37,9 +37,9 @@
 
 のイメージ。
 
-![エクセルで言うところのファイルがデータベース](<.gitbook/assets/スクリーンショット 2022-01-16 11.19.57.png>)
+![エクセルで言うところのファイルがデータベース](<../.gitbook/assets/スクリーンショット 2022-01-16 11.19.57.png>)
 
-![](<.gitbook/assets/スクリーンショット 2022-01-16 12.18.33.png>)
+![](<../.gitbook/assets/スクリーンショット 2022-01-16 12.18.33.png>)
 
 スプレッドシートだと、画面見ながら操作できる DBは **通常CLI（コマンドラインインターフェース） = 黒い画面に文字で操作します**
 
@@ -58,11 +58,13 @@
 3. 画面headerメニューの`phpMyAdmin`をクリック
 4.
 
-    <figure><img src=".gitbook/assets/スクリーンショット 2022-12-09 13.07.07 (1).png" alt=""><figcaption></figcaption></figure>
+```
+<figure><img src=".gitbook/assets/スクリーンショット 2022-12-09 13.07.07 (1).png" alt=""><figcaption></figcaption></figure>
+```
 
 ブラウザのURLからは、多分 `http://localhost/phpmyadmin/`で行ける。
 
-<figure><img src=".gitbook/assets/phpmyadmin.jpg" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/phpmyadmin.jpg" alt=""><figcaption></figcaption></figure>
 
 ## DB作成
 
@@ -74,7 +76,7 @@
 4. 作成クリック。
 5. 特にエラーの文言が出なければok
 
-![](<.gitbook/assets/スクリーンショット 2022-01-16 11.29.50.png>)
+![](<../.gitbook/assets/スクリーンショット 2022-01-16 11.29.50.png>)
 
 ### 新規テーブル作成
 
@@ -97,7 +99,7 @@
 
 記入したら保存
 
-![](<.gitbook/assets/スクリーンショット 2022-01-16 11.37.20.png>)
+![](<../.gitbook/assets/スクリーンショット 2022-01-16 11.37.20.png>)
 
 {% hint style="info" %}
 varcharとtext違い →メモリ容量
@@ -211,7 +213,7 @@ SELECT * FROM テーブル名 LIMIT 3,5; --3番目のデータから最大5件�
 
 DBというものと、BDを操作するための`SQL`を学びました。 次にPHP内で、`SQL`を書いて`MySQL`を操作していきます。
 
-<figure><img src=".gitbook/assets/php_n_db.jpg" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/php_n_db.jpg" alt=""><figcaption></figcaption></figure>
 
 ### formを作成
 
@@ -372,11 +374,11 @@ while ($result = $stmt->fetch(PDO::FETCH_ASSOC)) {
 * table名:`gs_bm_table`
 * 項目（カラム）名
   * ※ カラム名は下記を参照して英語にしてください。例:書籍名はbookとか、nameとか。
-  1. ユニーク値 (int 12 , PRIMARY, AutoIncrement)
-  2. 書籍名 (varChar 64)
-  3. 書籍URL (text)
-  4. 書籍コメント(text)
-  5. 登録日時 (datetime)
+  * ユニーク値 (int 12 , PRIMARY, AutoIncrement)
+  * 書籍名 (varChar 64)
+  * 書籍URL (text)
+  * 書籍コメント(text)
+  * 登録日時 (datetime)
 
 1. 授業でやったように、
 
