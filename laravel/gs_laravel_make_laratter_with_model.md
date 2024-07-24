@@ -1,4 +1,4 @@
-# 🐡 【laravel】003\_Modelとテーブルの用意
+# 🐡 003\_Modelとテーブルの用意
 
 ## 今回やること
 
@@ -12,7 +12,15 @@
 
 ## テーブルの用意
 
-Laravel でテーブルを作成する場合は`マイグレーションファイル`を作成しコマンドでマイグレーションファイルを動かすことにより作成される。 Laravel 側からテーブルを操作（CRUD 処理など）を行うためには`モデル`のファイルが必要となるため同時に作成する。 基本的には`テーブルに対して一つのモデルファイル`を作成する．
+Laravel でテーブルを作成する場合は`マイグレーションファイル`を作成しコマンドでマイグレーションファイルを動かすことにより作成されます。
+
+&#x20;Laravel 側からテーブルを操作（CRUD 処理など）を行うためには`モデル`のファイルが必要となるため同時に作成します。
+
+<figure><img src="../.gitbook/assets/modelとtable.jpg" alt=""><figcaption><p>Laravelでは、直接DBを触らない。</p></figcaption></figure>
+
+{% hint style="info" %}
+基本的には`テーブルに対して一つのモデルファイル`を作成するよ
+{% endhint %}
 
 {% hint style="info" %}
 通常マイグレーションファイルは、`/database/migrations`の中に作成されるよ。
@@ -49,7 +57,9 @@ $ php artisan make:model Tweet -rm
 
 ### マイグレーションファイルの編集
 
-生成されたマイグレーションファイルに，`tweet` カラムと `user_id` カラムを追加する。 ※tweetsテーブルを直接操作しない。マイグレーションファイルを用いて、テーブルを操作するのだ。
+生成されたマイグレーションファイルに，`tweet` カラムと `user_id` カラムを追加する。&#x20;
+
+※tweetsテーブルを直接操作しない。マイグレーションファイルを用いてテーブルを操作するのだ。
 
 これにより、テキスト共有データの格納と各Tweet がどのユーザに属するかを識別が可能になる。
 
@@ -60,7 +70,7 @@ $ php artisan make:model Tweet -rm
 マイグレーションファイルを作成する時点で，「`1 対 多`」「`多 対 多`」などデータの構成を考慮しておく．
 {% endhint %}
 
-````php
+```php
 // database/migrations/xxxx_xx_xx_xxxxxx_create_tweets_table.php
 
 // 省略
@@ -79,29 +89,30 @@ public function up(): void
 }
 
 // 省略
-``
+```
 
-<div data-gb-custom-block data-tag="hint" data-style='info'>
+* `foreignId('user_id')->constrained()` ... userテーブルのidを参照する外部キー制約を設定する。
+* `cascadeOnDelete()` ... とあるusersテーブルのレコードが削除されたら、関連するtweetsテーブルのレコードも自動的に削除する制約を設定する。
+* `string('tweet')` ... `string`型の`tweet`カラムを作成する。
+* `timestamps();` ... 自動で、`created_at`カラムと、`updated_at`カラムを作成してくれる
 
-- `foreignId('user_id')->constrained()` ... userテーブルのidを参照する外部キー制約を設定する。
-- `cascadeOnDelete()` ... とあるusersテーブルのレコードが削除されたら、関連するtweetsテーブルのレコードも自動的に削除する制約を設定する。
-- `string('tweet')` ... `string`型の`tweet`カラムを作成する。
-- `timestamps();` ... 自動で、`created_at`カラムと、`updated_at`カラムを作成してくれる。
+マイグレーションファイルに記述して保存できたら、マイグレートを実行
 
-</div>
-
-マイグレーションファイルに記述して保存できたら、
-`$ php artisan migrate`を実行。
+```bash
+$ php artisan migrate
+```
 
 ```bash
 voclabs:~/environment/cms $ php artisan migrate
 
    INFO  Running migrations.  
 
-  2024_07_23_122117_create_tweets_table ................................................. 111ms DONE
+  2024_07_23_122117_create_tweets_table ................ 111ms DONE
 
 voclabs:~/environment/cms $ 
-````
+```
+
+
 
 phpMyAdminを確認して、テーブルのカラムを確認しよう。 以下のようなルールになっていればok
 
@@ -120,7 +131,9 @@ MariaDB [c9]> DESC tweets;
 
 ### モデルファイルの設定
 
-モデルファイルには関連するデータとの連携を定義する。 ここに連携を記述しておくことで、連携先のデータを容易に操作できるようになる。 今回は `User` モデルと `Tweet` モデルが `1 対 多`で連携する。
+モデルファイルには関連するデータとの連携を定義する。&#x20;
+
+ここに連携を記述しておくことで、連携先のデータを容易に操作できるようになる。 今回は `User` モデルと `Tweet` モデルが `1 対 多`で連携する。
 
 `app/Models/User.php`にて`User` モデルに `Tweet` モデルとの関連を追記する。 `User` モデルから見ると，`Tweet` モデルとの関係は `1 対 多`となるため`tweets()`を作成する。
 
@@ -148,9 +161,15 @@ class User extends Authenticatable
 
 ```
 
-同様に `Tweet` モデルにも関係を定義する。 `app/Models/Tweet.php` ファイルを開き`user` メソッドを追加。 `Tweet` と `User` の間に `多 対 1`の関係が定義される。
+同様に `Tweet` モデルにも関係を定義する。
 
-また，`$fillable` に `tweet` を追加する。`$fillable` にはユーザからの入力を受け付けるカラムを指定する．
+`app/Models/Tweet.php` ファイルを開き`user` メソッドを追加。
+
+`Tweet` と `User` の間に `多 対 1`の関係が定義される。
+
+また，`$fillable` に `tweet` を追加する。
+
+`$fillable` にはユーザからの入力を受け付けるカラムを指定する．
 
 ```php
 // app/Models/Tweet.php
@@ -178,9 +197,13 @@ class Tweet extends Model
 {% endhint %}
 
 {% hint style="info" %}
-`$fillable`はアプリケーション側から変更できるカラムを指定する（ホワイトリスト）． 対して`$guarded`はアプリケーション側から変更できないカラムを指定する（ブラックリスト）
+`$fillable`はアプリケーション側から変更できるカラムを指定する（ホワイトリスト）。
 
-どちらを使用しても良いがどちらかを使用する必要がある。 自分で、どちらを使うかルールを決めておこう。
+&#x20;対して`$guarded`はアプリケーション側から変更できないカラムを指定する（ブラックリスト）
+
+どちらを使用しても良いがどちらかを使用する必要がある。
+
+自分でどちらを使うかルールを決めておこう。
 {% endhint %}
 
 ### ルーティングの設定
@@ -237,6 +260,4 @@ voclabs:~/environment/cms $ php artisan route:list --path=tweets
   DELETE          tweets/{tweet} .......... tweets.destroy    › TweetController@destroy
   GET|HEAD        tweets/{tweet}/edit ........... tweets.edit › TweetController@edit
                                                                                                Showing [7] routes
-
-voclabs:~/environment/cms $ 
 ```

@@ -1,4 +1,4 @@
-# 🍖 【laravel】002\_Laravel導入
+# 🍖 002\_Laravel導入
 
 ## 今回やること
 
@@ -6,33 +6,43 @@
 
 ## Laravel導入
 
-1. [ここからファイルダウンロード\]](https://gitlab.com/gs\_hayato/gs-php-01/-/raw/master/laravel/setup.sh?ref\_type=heads\&inline=false)
-2. `File`からkara`Upload Local Files`をクリック
+1. [ここからファイルダウンロード](https://gitlab.com/gs\_hayato/gs-php-01/-/raw/master/laravel/setup.sh?ref\_type=heads\&inline=false)
+2. `File`から`Upload Local Files`をクリックして、ダウンロードしたファイルをアップロードしてください。
 
 <figure><img src="../.gitbook/assets/laravel/002/laravel_002_001.png" alt=""><figcaption></figcaption></figure>
 
-3.  uploadが完了すると、左のファイルに`setup.sh`が追加（= uploadが完了）される。（`setup.sh`ダブルクリックすると、中身が表示されるぞ） `setup.sh`のアップロードが確認できたら、下の`terminal`に
+3.  先ほどダウンロードしたファイルをupload。uploadが完了すると、ファイルに`setup.sh`が追加される。（`setup.sh`ダブルクリックすると中身が表示されるぞ） `setup.sh`のアップロードが確認できたら、下の`terminal`に
 
     ```bash
-    sh setup.sh
+    $ sh setup.sh
     ```
 
-    と記入して`Enter`を押す。処理が開始されるので数分待機。 ※`sh setup.sh`をコピペして`terminal`に貼り付けてエンターでもok
+    と記入して`Enter`を押す。処理が開始されるので数分待機。&#x20;
+
+
+
+{% hint style="danger" %}
+```
+$ sh setup.sh
+↑この$マークは「terminalで操作してね」という意味です。
+コピペする際ここも一緒にコピーしないように注意。
+```
+{% endhint %}
 
 <figure><img src="../.gitbook/assets/laravel/002/laravel_002_002.png" alt=""><figcaption></figcaption></figure>
 
-4. 最後に、,`\n 017. セットアップファイルの削除`と表示されたら完了。
+4. 最後に、`\n 017. セットアップファイルの削除`と表示されたら完了。
 
-* ファイルから、`setup.sh`が削除されていること
+* ファイルから`setup.sh`が削除されていること
 * cmsというフォルダが追加されていることを確認しましょう。
 
 <figure><img src="../.gitbook/assets/laravel/002/laravel_002_003.png" alt=""><figcaption></figcaption></figure>
 
 ## Laravel導入の確認
 
-LaravelのBuiltInサーバーを起動してみる。
+Laravelの`BuiltIn`サーバーを起動してみる。
 
-terminalにて以下実行
+`terminal`にて以下実行
 
 ```bash
 $ cd cms
@@ -59,7 +69,7 @@ laravelの画面は後で利用するので、そのまま消さずに置いと�
 
 ### AppServiceProviderの設定
 
-`/app/Providers/ AppServiceProvider.php`を以下のように変更しましょう。
+`/app/Providers/AppServiceProvider.php`を以下のように変更しましょう。
 
 ※ 全コピペでもokです。
 
@@ -90,10 +100,14 @@ class AppServiceProvider extends ServiceProvider
 
 ```
 
+{% hint style="warning" %}
+↑の処理はcloud9で処理する時の設定です。普段はこのように設定しません。
+{% endhint %}
+
 ### データベース作成
 
 ```bash
-// cms階層にいることを確認
+// cms階層にいることを確認してから
 $ mysql -u root -p
 
 // root と記載してEnterおす
@@ -141,7 +155,9 @@ DB_PASSWORD=root
 ブラウザで開いているlaravelの画面の末尾にmatubini`/phpMyAdmin/`と追加してそのページに遷移する。 例えば、URLが`https://XXXX.amazonaws.com`だったら、`https://XXXX.amazonaws.com/phpMyAdmin/`
 
 {% hint style="danger" %}
-URLの phpMyAdmin の部分は、大文字小文字区別しているので注意。publicに保存されているフォルダ名がそのままURLになっています。
+URLの phpMyAdmin の部分は、大文字小文字区別しているので注意。
+
+publicに保存されているフォルダ名がそのままURLになっています。
 {% endhint %}
 
 <figure><img src="../.gitbook/assets/laravel/002/laravel_002_006.png" alt=""><figcaption></figcaption></figure>
@@ -152,7 +168,9 @@ DBにc9がいればok。 ※テーブルは作成していないので空っぽ�
 
 ### Laravel Breeze の導入
 
-Laravel Breeze は，シンプルな認証スターターキット。 ログイン，登録，パスワードリセットなどの基本的な認証機能を提供します。 以下のコマンドを実行して，Laravel Breeze をプロジェクトにインストールしましょう。
+Laravel Breeze は、シンプルな認証スターターキット。&#x20;
+
+ログイン，登録，パスワードリセットなどの基本的な認証機能を提供します。 以下のコマンドを実行して，Laravel Breeze をプロジェクトにインストールしましょう。
 
 #### cmsにいることを確認。
 
@@ -235,4 +253,4 @@ voclabs:~/environment/cms $ php artisan migrate
 voclabs:~/environment/cms $ 
 ```
 
-ユーザー登録ができるようになったら、２−３人、適当にユーザーを作成してください。
+ユーザー登録ができるようになったら、２−３人適当にユーザーを作成してください。
