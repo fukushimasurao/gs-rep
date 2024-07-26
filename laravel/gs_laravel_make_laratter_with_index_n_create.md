@@ -14,6 +14,12 @@
 
 `index` メソッドではTweet の全件を新しい順に取得するために `latest` メソッドを使用します。 また，Tweet に関連するユーザ情報を取得するために `with` メソッドを使用します。
 
+{% hint style="info" %}
+```
+Tweet::with('user')の 'user'は、さっきTweetモデルに追加したuser()のことです。
+```
+{% endhint %}
+
 ```php
 // app/Http/Controllers/TweetController.php
 
@@ -141,3 +147,11 @@ $ npm run build
 ## 【補足】エラーメッセージの表示
 
 この画面では入力したデータに不備があった場合（未入力や文字列が長すぎるなど）にエラーメッセージを表示したい。 エラーメッセージは`@error` ディレクティブを使用して表示する。 `@error`ディレクティブは指定した項目にエラーがある場合にのみ表示される。
+
+{% hint style="info" %}
+この時点ではまだtweetの登録できないが、sqlから登録することが可能。
+
+insert into tweets (id, user\_id, tweet, created\_at, updated\_at) values (null, 1, 'test', now(), now());
+{% endhint %}
+
+&#x20;
