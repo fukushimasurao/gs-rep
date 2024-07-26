@@ -28,6 +28,7 @@
     * [レコード作成のパターン](laravel/laravel-tips/rekdonopatn.md)
     * [N + 1 問題](laravel/laravel-tips/n-+-1-wen-ti.md)
     * [ルートモデル結合](laravel/laravel-tips/rtomoderu.md)
+    * [Laravelについて。](laravel/laravel-tips/laravelnitsuite.md)
   * [Page 2](laravel/page-2/README.md)
     * [Page 3](laravel/page-2/page-3.md)
 * [Page 1](page-1.md)
