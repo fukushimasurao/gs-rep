@@ -1,7 +1,3 @@
----
-description: ついて。
----
-
 # Laravelについて。
 
 Laravel とは PHP の MVC フレームワーク。
