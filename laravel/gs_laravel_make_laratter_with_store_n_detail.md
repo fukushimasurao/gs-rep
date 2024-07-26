@@ -100,7 +100,7 @@ class TweetController extends Controller
             <p>作成日時: {{ $tweet->created_at->format('Y-m-d H:i') }}</p>
             <p>更新日時: {{ $tweet->updated_at->format('Y-m-d H:i') }}</p>
           </div>
-          // もしログインしている人のidとtweetした人のidが一緒の場合
+           <!--もしログインしている人のidとtweetした人のidが一緒の場合-->
           @if (auth()->id() === $tweet->user_id)
           <div class="flex mt-4">
             <a href="{{ route('tweets.edit', $tweet) }}" class="text-blue-500 hover:text-blue-700 mr-2">編集</a>
