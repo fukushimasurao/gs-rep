@@ -91,8 +91,12 @@ public function up(): void
 // 省略
 ```
 
-* `foreignId('user_id')->constrained()` ... userテーブルのidを参照する外部キー制約を設定する。
+* `foreignId('user_id')->constrained()`&#x20;
+  * user\_idという用に、`"テーブル名（単数）_id"`とすると、そのテーブルと連携することを認識する。
+  * `->constrained()` つけると、連携してくれて、データを一発で取ってくれるようになる。
+    * この書き方はほぼテンプレ。
 * `cascadeOnDelete()` ... とあるusersテーブルのレコードが削除されたら、関連するtweetsテーブルのレコードも自動的に削除する制約を設定する。
+  * userがdeleteされたときに関連するtweetを消さないと、例えばそのtweetを表示したときにuserがいないのでエラーになる。
 * `string('tweet')` ... `string`型の`tweet`カラムを作成する。
 * `timestamps();` ... 自動で、`created_at`カラムと、`updated_at`カラムを作成してくれる
 
