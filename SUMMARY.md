@@ -25,6 +25,7 @@
   * [Laravel Tips](laravel/laravel-tips/README.md)
     * [リソースコントローラ](laravel/laravel-tips/rissukontorra.md)
     * [マイグレーションの基本的な仕組み](laravel/laravel-tips/maigurshonnonami.md)
+    * [レコード作成のパターン](laravel/laravel-tips/rekdonopatn.md)
   * [Page 2](laravel/page-2/README.md)
     * [Page 3](laravel/page-2/page-3.md)
 * [Page 1](page-1.md)
