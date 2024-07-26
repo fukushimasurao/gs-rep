@@ -64,6 +64,12 @@ $ php artisan make:view tweets.edit
 
 &#x20;※このファイルでは `PC 画面`と`モバイル画面`で表示する内容を変えているため、それぞれ`2箇所`にリンクのコードを追加する必要があります。
 
+{% hint style="info" %}
+```
+記載する、"route('tweets.index')" という箇所は、routeで設定した名前です。
+```
+{% endhint %}
+
 ```php
 <!-- resources/views/layouts/navigation.blade.php -->
 

@@ -137,9 +137,24 @@ MariaDB [c9]> DESC tweets;
 
 モデルファイルには関連するデータとの連携を定義する。&#x20;
 
-ここに連携を記述しておくことで、連携先のデータを容易に操作できるようになる。 今回は `User` モデルと `Tweet` モデルが `1 対 多`で連携する。
+ここに連携を記述しておくことで、連携先のデータを容易に操作できるようになる。&#x20;
 
-`app/Models/User.php`にて`User` モデルに `Tweet` モデルとの関連を追記する。 `User` モデルから見ると，`Tweet` モデルとの関係は `1 対 多`となるため`tweets()`を作成する。
+例えば、
+
+* ユーザーがpostした投稿を取得したり、
+* 投稿からだれがpostしたのか
+
+がすぐに分かる。
+
+
+
+今回は `User` モデルと `Tweet` モデルを `1 対 多`で連携する。
+
+<figure><img src="../.gitbook/assets/user_v_tweet.jpg" alt=""><figcaption></figcaption></figure>
+
+`app/Models/User.php`にて`User` モデルに `Tweet` モデルとの関連を追記する。
+
+`User` モデルから見ると，`Tweet` モデルとの関係は `1 対 多`となるため`tweets()`を作成する。
 
 ```php
 // app/Models/User.php
@@ -159,6 +174,7 @@ class User extends Authenticatable
   // 一番下に以下のメソッドを追加する。
   public function tweets()
   {
+    // $thisは、Userモデルそのものと思ってください。
     return $this->hasMany(Tweet::class);
   }
 }
