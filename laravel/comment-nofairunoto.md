@@ -1,6 +1,6 @@
 # 🎇 Comment 機能の実装（ファイルの準備と設定）
 
-ここでやりたいこと
+### ここでやりたいこと
 
 * 各 tweet に対してコメントを投稿できるようにする
 * tweet とコメントは一対多の関係
@@ -8,15 +8,16 @@
 * コメントは tweet 詳細画面に一覧表示される
 * 各コメントをクリックするとコメント詳細画面に移動でき，編集や削除ができる．
 
-### [必要なファイルの作成](https://gs-lab-202406.deno.dev/laravel/tweet-comment-setting.html#%E5%BF%85%E8%A6%81%E3%81%AA%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB%E3%81%AE%E4%BD%9C%E6%88%90) <a href="#nafairuno" id="nafairuno"></a>
+### 必要なファイルの作成 <a href="#nafairuno" id="nafairuno"></a>
+
+
 
 モデル、リソースコントローラ、マイグレーションファイルを作成する。
 
 Tweet に関するファイルを作成するときと同様の流れ。
 
-```bash
-./vendor/bin/sail php artisan make:model Comment -rm
-```
+<pre class="language-bash"><code class="lang-bash"><strong>$ php artisan make:model Comment -rm
+</strong></code></pre>
 
 下記のファイルが作成される．
 
@@ -24,7 +25,7 @@ Tweet に関するファイルを作成するときと同様の流れ。
 * `database/migrations/xxxx_xx_xx_xxxxxx_create_comments_table.php`
 * `app/Http/Controllers/CommentController.php`
 
-### [マイグレーションファイルの編集](https://gs-lab-202406.deno.dev/laravel/tweet-comment-setting.html#%E3%83%9E%E3%82%A4%E3%82%B0%E3%83%AC%E3%83%BC%E3%82%B7%E3%83%A7%E3%83%B3%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB%E3%81%AE%E7%B7%A8%E9%9B%86) <a href="#maigurshonfairuno" id="maigurshonfairuno"></a>
+### マイグレーションファイルの編集 <a href="#maigurshonfairuno" id="maigurshonfairuno"></a>
 
 comments テーブルを作成するためのマイグレーションファイルを記述する．
 
@@ -56,9 +57,8 @@ public function up(): void
 
 作成したら下記コマンドを実行してマイグレーションを実行する．
 
-```bash
-./vendor/bin/sail php artisan migrate
-```
+<pre class="language-bash"><code class="lang-bash"><strong>$ php artisan migrate
+</strong></code></pre>
 
 phpmyadmin で確認すると，下記の構造で comments テーブルが作成されている．
 
@@ -75,7 +75,7 @@ phpmyadmin で確認すると，下記の構造で comments テーブルが作�
 +-------------+-----------------+------+-----+---------+----------------+
 ```
 
-### [モデルファイルの設定](https://gs-lab-202406.deno.dev/laravel/tweet-comment-setting.html#%E3%83%A2%E3%83%87%E3%83%AB%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB%E3%81%AE%E8%A8%AD%E5%AE%9A) <a href="#moderufairuno" id="moderufairuno"></a>
+### モデルファイルの設定 <a href="#moderufairuno" id="moderufairuno"></a>
 
 モデルファイルには，テーブルとの関連を定義する．今回は下記のとおり．
 
@@ -150,7 +150,7 @@ class Tweet extends Model
 
 ```
 
-### [ビューファイルの作成](https://gs-lab-202406.deno.dev/laravel/tweet-comment-setting.html#%E3%83%93%E3%83%A5%E3%83%BC%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB%E3%81%AE%E4%BD%9C%E6%88%90) <a href="#byfairuno" id="byfairuno"></a>
+### ビューファイルの作成 <a href="#byfairuno" id="byfairuno"></a>
 
 コメント機能で使用するビューファイルを作成する．Tweet の CRUD 処理と同様だが，コメント一覧は `tweets.show` に追加するため `index.blade.php` は作成しなくて OK．
 

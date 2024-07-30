@@ -23,6 +23,7 @@
   * [🥹 008\_Like 機能の実装（多対多のリレーション）](laravel/008like-nonorirshon.md)
   * [🎁 009\_Like! 機能の実装（多対多データの操作）](laravel/009like-nodtano.md)
   * [🎇 Comment 機能の実装（ファイルの準備と設定）](laravel/comment-nofairunoto.md)
+  * [👞 Comment 作成処理と詳細画面の実装](laravel/comment-tono.md)
   * [Laravel Tips](laravel/laravel-tips/README.md)
     * [Laravelについて。](laravel/laravel-tips/laravelnitsuite.md)
     * [リソースコントローラ](laravel/laravel-tips/rissukontorra.md)
