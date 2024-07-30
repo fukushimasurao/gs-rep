@@ -88,7 +88,7 @@ public function update(Request $request, Tweet $tweet, Comment $comment)
 
 ```
 
-### [削除処理](https://gs-lab-202406.deno.dev/laravel/tweet-comment-update-and-delete.html#%E5%89%8A%E9%99%A4%E5%87%A6%E7%90%86) <a href="#xiao-chu-chu-li" id="xiao-chu-chu-li"></a>
+### 削除処理 <a href="#xiao-chu-chu-li" id="xiao-chu-chu-li"></a>
 
 削除するだけ。
 
@@ -104,7 +104,7 @@ public function destroy(Tweet $tweet, Comment $comment)
 
 ```
 
-### [動作確認](https://gs-lab-202406.deno.dev/laravel/tweet-comment-update-and-delete.html#%E5%8B%95%E4%BD%9C%E7%A2%BA%E8%AA%8D) <a href="#dong-zuo-que-ren" id="dong-zuo-que-ren"></a>
+### 動作確認 <a href="#dong-zuo-que-ren" id="dong-zuo-que-ren"></a>
 
 * Comment 詳細画面で「編集」クリックで Comment 編集画面に遷移する．
 * Comment 編集画面でコメントを編集して「更新」クリックで Comment 更新処理が実行される．
