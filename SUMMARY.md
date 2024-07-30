@@ -22,6 +22,7 @@
   * [🌲 007\_更新処理と削除処理の実装](laravel/gs\_laravel\_make\_laratter\_with\_update\_n\_delete.md)
   * [🥹 008\_Like 機能の実装（多対多のリレーション）](laravel/008like-nonorirshon.md)
   * [🎁 009\_Like! 機能の実装（多対多データの操作）](laravel/009like-nodtano.md)
+  * [🎇 Comment 機能の実装（ファイルの準備と設定）](laravel/comment-nofairunoto.md)
   * [Laravel Tips](laravel/laravel-tips/README.md)
     * [Laravelについて。](laravel/laravel-tips/laravelnitsuite.md)
     * [リソースコントローラ](laravel/laravel-tips/rissukontorra.md)
