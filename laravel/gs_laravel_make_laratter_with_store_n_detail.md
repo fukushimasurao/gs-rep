@@ -10,6 +10,10 @@
 * (1)について
   * `/tweets/create` のページ。routeから`tweets/create`は`TweetController@create`を利用し、そこから`view('tweets.create')`のviewを描写しているいうことがわかる。
   * viewの中の`form`を見ると、`action`は`'tweets.store'`ということを確認。routeから、`'tweets.store'`へのpostは`TweetController@store` ということを確認。
+* (2)について
+  * `/tweets`のページに詳細画面へのリンクあり。`route`から`/tweets`は`TweetController@index`を利用し、そこから`view('tweets.index')`に`$tweets`の情報を与えつつ描写していることを確認する。
+  * `view('tweets.index')`に`<a href="{{ route('tweets.show', $tweet) }}"` の記載を確認する。`route`で見ると`TweetController@show` なので、`@show`を記入していく。
+    * なお、`route('tweets.show', $tweet)` は自動で`$tweetの主キー`を渡す。`$tweet->id`と書かなくてもok。
 
 
 
