@@ -33,11 +33,9 @@ ddd($request->all());
 {% endhint %}
 
 {% hint style="info" %}
-```
-Tweet Modelに、
-$fillable = ['tweet'];
-とルール設定したので、
-```
+以下コードの詳細は↓
+
+[https://nu0640042.gitbook.io/gs\_php/laravel/laravel-tips/rekdonopatn](laravel-tips/rekdonopatn.md)
 {% endhint %}
 
 ```php
