@@ -58,6 +58,15 @@ user\_id などの外部キー（他テーブルの id）が含まれる場合�
 
 **しかし**これではformからリクエスト送信されたデータで外部キーが設定できてしまうため、不正な値で作成される可能性があるっ！！！
 
+しかししかし、tweetを登録する際には、
+
+* **user\_id**
+* tweet
+
+が必要。(idはAI、created\_atとupdated\_atには、登録・編集時の時間を機械的に入れればok)
+
+例えば、SQLにて`INSERT INTO tweets(tweet, created_at, updated_at) VALUES ('test', now(),now());`は登録できない。
+
 そのため、「リクエストからユーザの情報を取得してリレーションを活用してデータを作成する」という流れになっている。
 
 ```php
