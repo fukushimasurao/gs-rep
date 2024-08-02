@@ -13,6 +13,12 @@
 2. コントローラに Like 機能の実装
 3. ビューファイルに like ボタンを設置
 
+### 前提
+
+イメージはviewのいいねが押される→routeの確認→controllerで処理される→modelでデータが保存される。
+
+以下では、コントローラの作成、routeの設定、controller+model記述、view記述の順番で対応する。
+
 ### コントローラの作成
 
 ```
@@ -43,10 +49,9 @@ URI に Tweet を特定するためのパラメータとして `{tweet}` を指�
 
 
 
-```
-// routes/web.php
+<pre><code>// routes/web.php
 
-<?php
+&#x3C;?php
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TweetController;
@@ -65,14 +70,14 @@ Route::middleware('auth')->group(function () {
   Route::resource('tweets', TweetController::class);
 
   // 🔽 2行追加  🔽
-  Route::post('/tweets/{tweet}/like', [TweetLikeController::class, 'store'])->name('tweets.like');
-  Route::delete('/tweets/{tweet}/like', [TweetLikeController::class, 'destroy'])->name('tweets.dislike');
+<strong>  Route::post('/tweets/{tweet}/like', [TweetLikeController::class, 'store'])->name('tweets.like');
+</strong>  Route::delete('/tweets/{tweet}/like', [TweetLikeController::class, 'destroy'])->name('tweets.dislike');
 
 });
 
 require __DIR__ . '/auth.php';
 
-```
+</code></pre>
 
 ### Like 機能の実装
 
@@ -83,10 +88,9 @@ store メソッドと destroy メソッドを実装しましょうお！！！�
 * 中間テーブルへのデータの追加は `attach` メソッドを用いる．「指定した Tweet（の id）」と「認証ユーザの id」を一緒に中間テーブルに追加する動きをします。
 * 同様に中間テーブルのデータ削除には `detach` メソッドを利用！
 
-```php
-// app/Http/Controllers/TweetLikeController.php
+<pre class="language-php"><code class="lang-php">// app/Http/Controllers/TweetLikeController.php
 
-<?php
+&#x3C;?php
 
 namespace App\Http\Controllers;
 
@@ -108,13 +112,13 @@ class TweetLikeController extends Controller
   /**
    * Remove the specified resource from storage.
    */
-  public function destroy(Tweet $tweet)
-  {
+<strong>  public function destroy(Tweet $tweet)
+</strong>  {
     $tweet->liked()->detach(auth()->id());
     return back();
   }
 }
-```
+</code></pre>
 
 ### like ボタンの設置（ビューファイル編集）
 
