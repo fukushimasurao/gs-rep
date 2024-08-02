@@ -64,8 +64,6 @@
 
 中間テーブルとなるためカラムは id 以外に tweet\_id と user\_id を追加。
 
-
-
 ```php
 // database/migrations/xxxx_xx_xx_000000_create_tweet_user_table.php
 
@@ -102,6 +100,20 @@ class CreateTweetUserTable extends Migration
   }
 }
 ```
+
+{% hint style="info" %}
+```
+- $table->foreignId('tweet_id')->constrained()->cascadeOnDelete();
+tweetsテーブルからレコードが削除されると、そのtweet_idを持つtweet_userテーブルのすべてのレコードが自動的に削除
+
+- $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+usersテーブルからレコードが削除されると、そのuser_idを持つtweet_userテーブルのすべてのレコードが自動的に削除
+
+- $table->unique(['tweet_id', 'user_id']);
+tweet_userテーブルのtweet_idカラムとuser_idカラムの組み合わせを一意にする。
+
+```
+{% endhint %}
 
 記述したらマイグレーションを実行!!!!!
 
@@ -157,7 +169,7 @@ class Tweet extends Model
 }
 ```
 
-{% hint style="info" %}
+{% hint style="warning" %}
 **Point**
 
 【テーブル名とカラム名の命名規則】
