@@ -32,6 +32,7 @@
     * [レコード作成のパターン](laravel/laravel-tips/rekdonopatn.md)
     * [N + 1 問題](laravel/laravel-tips/n-+-1-wen-ti.md)
     * [ルートモデル結合](laravel/laravel-tips/rtomoderu.md)
+    * [命名規則に従わない場合の多対多連携](laravel/laravel-tips/niwanaino.md)
 * [Page](page.md)
 * [🆚 VS code関連](vs-code.md)
 * [♥️ 便利情報](good-tools.md)
