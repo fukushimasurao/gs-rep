@@ -2,8 +2,16 @@
 
 ## 今回やること
 
-* Tweet の作成処理（テーブルへのデータ作成）を実装する。
-* Tweet 一件の詳細画面を作成する。
+1. Tweet の作成処理（tweet作成画面からpostしてテーブルへのデータ作成）を実装する。
+2. Tweet 一件の詳細画面を作成する。
+
+### 前提確認
+
+* (1)について
+  * `/tweets/create` のページ。routeから`tweets/create`は`TweetController@create`を利用し、そこから`view('tweets.create')`のviewを描写しているいうことがわかる。
+  * viewの中の`form`を見ると、`action`は`'tweets.store'`ということを確認。routeから、`'tweets.store'`へのpostは`TweetController@store` ということを確認。
+
+
 
 ## Tweet 作成処理の実装
 
