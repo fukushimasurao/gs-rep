@@ -32,6 +32,14 @@ ddd($request->all());
 ```
 {% endhint %}
 
+{% hint style="info" %}
+```
+Tweet Modelに、
+$fillable = ['tweet'];
+とルール設定したので、
+```
+{% endhint %}
+
 ```php
 // app/Http/Controllers/TweetController.php
 
