@@ -1,9 +1,21 @@
-# 🌲 【laravel】007\_更新処理と削除処理の実装
+# 🌲 007\_更新処理と削除処理の実装
 
 ## 今回やること
 
-* Tweet の更新処理（テーブルのデータ更新）を実装する．
-* Tweet の削除処理（テーブルのデータ削除）を実装する．
+1. Tweet の更新処理（テーブルのデータ更新）を実装する．
+2. Tweet の削除処理（テーブルのデータ削除）を実装する．
+
+### 前提
+
+* (1)について。
+* `tweets/{tweet}`のページ。`route`で見ると、`TweetController@show`、`viewは'tweets.show'`。view内に`href="{{ route('tweets.edit', $tweet) }}"`があり、routeで確認すると`TweetController@edit`とわかる。
+
+
+
+* (2)について。
+* `tweets/{tweet}`のページ。`route`で見ると、`TweetController@show`、`viewは'tweets.show'`。view内に`href="{{ route('tweets.edit', $tweet) }}"`があり、routeで確認すると`TweetController@edit`とわかる。
+
+
 
 ## Tweet 作成処理の実装
 
@@ -67,8 +79,7 @@ class TweetController extends Controller
 
 Tweet の更新処理を実装するために`TweetController` の`update` メソッドを編集しよう。 このメソッドはTweet の更新処理を行う。 該当する Tweet のデータを受け取り、`update` メソッドを用いて新しいデータ（`$request の tweet 項目`）で上書きする。
 
-```php
-// app/Http/Controllers/TweetController.php
+<pre class="language-php"><code class="lang-php">// app/Http/Controllers/TweetController.php
 
 // 省略
 
@@ -76,8 +87,8 @@ class TweetController extends Controller
 {
   // 省略
 
-  public function update(Request $request, Tweet $tweet)
-  {
+<strong>  public function update(Request $request, Tweet $tweet)
+</strong>  {
     $request->validate([
       'tweet' => 'required|max:255',
     ]);
@@ -87,7 +98,7 @@ class TweetController extends Controller
     return redirect()->route('tweets.show', $tweet);
   }
 }
-```
+</code></pre>
 
 ### 動作確認
 

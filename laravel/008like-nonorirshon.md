@@ -3,7 +3,35 @@
 ### やること
 
 * User と Tweet の関係が多対多となる Like 機能を実装する。
+
+<figure><img src="../.gitbook/assets/like_many-many.jpg" alt=""><figcaption></figcaption></figure>
+
 * 多対多の場合，中間テーブルを作成 → モデルに多対多の連携を定義，の流れで実装できる。
+
+### 前提
+
+* 多対多の場合は、中間テーブルを作成する。
+*   中間テーブルに欲しい情報は、
+
+    * id
+    * tweetのid
+    * userのid
+    * 日付
+
+    の項目。イメージは以下の通り。
+
+| id | tweet\_id | user\_id | created\_at | updated\_at |
+| -- | --------- | -------- | ----------- | ----------- |
+| 1  | 1         | 1        | ...         | ...         |
+| 2  | 2         | 1        | ...         | ...         |
+| 3  | 1         | 2        | ...         | ...         |
+
+※ただし以下のような重複は登録しないようにする。
+
+| id | tweet\_id | user\_id | created\_at | updated\_at |
+| -- | --------- | -------- | ----------- | ----------- |
+| 1  | 1         | 1        | ...         | ...         |
+| 2  | 1         | 1        | ...         | ...         |
 
 ### Like 機能実装の流れ
 
@@ -17,9 +45,8 @@
 
 下記のコマンドを実行して中間テーブルを作成しよう。
 
-```
-$ php artisan make:migration create_tweet_user_table --create=tweet_user
-```
+<pre><code><strong>$ php artisan make:migration create_tweet_user_table --create=tweet_user
+</strong></code></pre>
 
 このテーブルには「`どの Tweet に`」「`どの User` 」がlike したのか、という情報が入る。
 
@@ -36,8 +63,6 @@ $ php artisan make:migration create_tweet_user_table --create=tweet_user
 マイグレーションファイルを開き下記のように編集しよう。
 
 中間テーブルとなるためカラムは id 以外に tweet\_id と user\_id を追加。
-
-
 
 ```php
 // database/migrations/xxxx_xx_xx_000000_create_tweet_user_table.php
@@ -75,6 +100,20 @@ class CreateTweetUserTable extends Migration
   }
 }
 ```
+
+{% hint style="info" %}
+```
+- $table->foreignId('tweet_id')->constrained()->cascadeOnDelete();
+tweetsテーブルからレコードが削除されると、そのtweet_idを持つtweet_userテーブルのすべてのレコードが自動的に削除
+
+- $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+usersテーブルからレコードが削除されると、そのuser_idを持つtweet_userテーブルのすべてのレコードが自動的に削除
+
+- $table->unique(['tweet_id', 'user_id']);
+tweet_userテーブルのtweet_idカラムとuser_idカラムの組み合わせを一意にする。
+
+```
+{% endhint %}
 
 記述したらマイグレーションを実行!!!!!
 
@@ -130,7 +169,7 @@ class Tweet extends Model
 }
 ```
 
-{% hint style="info" %}
+{% hint style="warning" %}
 **Point**
 
 【テーブル名とカラム名の命名規則】

@@ -2,8 +2,20 @@
 
 ## 今回やること
 
-* Tweet の作成処理（テーブルへのデータ作成）を実装する。
-* Tweet 一件の詳細画面を作成する。
+1. Tweet の作成処理（tweet作成画面からpostしてテーブルへのデータ作成）を実装する。
+2. Tweet 一件の詳細画面を作成する。
+
+### 前提確認
+
+* (1)について
+  * `/tweets/create` のページ。routeから`tweets/create`は`TweetController@create`を利用し、そこから`view('tweets.create')`のviewを描写しているいうことがわかる。
+  * viewの中の`form`を見ると、`action`は`'tweets.store'`ということを確認。routeから、`'tweets.store'`へのpostは`TweetController@store` ということを確認。
+* (2)について
+  * `/tweets`のページに詳細画面へのリンクあり。`route`から`/tweets`は`TweetController@index`を利用し、そこから`view('tweets.index')`に`$tweets`の情報を与えつつ描写していることを確認する。
+  * `view('tweets.index')`に`<a href="{{ route('tweets.show', $tweet) }}"` の記載を確認する。`route`で見ると`TweetController@show` なので、`@show`を記入していく。
+    * なお、`route('tweets.show', $tweet)` は自動で`$tweetの主キー`を渡す。`$tweet->id`と書かなくてもok。
+
+
 
 ## Tweet 作成処理の実装
 
@@ -22,6 +34,12 @@ $requestには、formから送られてきた中身が入っている。
 ddd($request->all());
 と書けば簡単に中身を確認できるぞ。
 ```
+{% endhint %}
+
+{% hint style="info" %}
+以下コードの詳細は↓
+
+[https://nu0640042.gitbook.io/gs\_php/laravel/laravel-tips/rekdonopatn](laravel-tips/rekdonopatn.md)
 {% endhint %}
 
 ```php
