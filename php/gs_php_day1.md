@@ -201,6 +201,7 @@ phpにて組み込み関数（最初から用意されている関数）を利�
 {% hint style="info" %}
 phpのデフォルトのタイムゾーンはドイツ・ベルリンになっています。
 タイムゾーンの変更はこちらを参照してください。
+https://nu0640042.gitbook.io/gs_php/php/something#xamppnotaimuzn
 {% endhint %}
 
 文字長さを計るには、`strlen('文字列')`関数を利用します。 例えば`alphabet`という　単語の文字数を画面に出力するにはどのように書けばよいでしょうか。
