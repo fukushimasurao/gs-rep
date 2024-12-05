@@ -12,6 +12,7 @@
   * [😇 about function(仮)](php/about-function.md)
   * [🏫 about Class Detail(仮)](php/about-class-detail.md)
   * [📖 PhpMyAdmin関連](php/phpmyadmin.md)
+  * [ℹ️ その他情報情報](php/something.md)
 * [Laravel](laravel/README.md)
   * [🍥 001\_Cloud9用意](laravel/gs\_laravel\_cloud9.md)
   * [🍖 002\_Laravel導入](laravel/gs\_laravel\_install\_laravel.md)

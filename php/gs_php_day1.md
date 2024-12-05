@@ -26,7 +26,7 @@ Macを利用されている人は、dataファルダの書き込み権限を変�
 
 ## 基礎文法
 
-### _gs\_code/hello01.php_
+### _gs\_code/php001/hello01.php_
 
 ```php
 <?php
@@ -44,10 +44,10 @@ echo 'hello world';
 本当は省略が推奨だが、授業の最初は丁寧に?>を記述していきます。
 {% endhint %}
 
-ブラウザの URLに`localhost/gs_code/hello01.php`と記入して出力を確認してみましょう。
+ブラウザの URLに`localhost/gs_code/php01/hello01.php`と記入して出力を確認してみましょう。
 
 {% hint style="danger" %}
-mampを使っている場合や、設定によっては、localhost:8888/gs\_code/hello01.php
+mampを使っている場合や、設定によっては、localhost:8888/gs\_code/php001/hello01.php
 {% endhint %}
 
 {% hint style="danger" %}
@@ -104,7 +104,7 @@ PHP部分は改行せずに、１行で記述しよう。
 {% endhint %}
 
 {% hint style="info" %}
-記述して保存したら、`localhost/gs_code/hello02.php` をブラウザで確認してみてください。
+記述して保存したら、`localhost/gs_code/php01/hello02.php` をブラウザで確認してみてください。
 {% endhint %}
 
 ### variable.php
@@ -199,7 +199,8 @@ phpにて組み込み関数（最初から用意されている関数）を利�
 ```
 
 {% hint style="info" %}
-phpのデフォルトのタイムゾーンは
+phpのデフォルトのタイムゾーンはドイツ・ベルリンになっています。
+タイムゾーンの変更はこちらを参照してください。
 {% endhint %}
 
 文字長さを計るには、`strlen('文字列')`関数を利用します。 例えば`alphabet`という　単語の文字数を画面に出力するにはどのように書けばよいでしょうか。
