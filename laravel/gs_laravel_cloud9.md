@@ -35,7 +35,7 @@
 {% endhint %}
 
 {% hint style="info" %}
-作業が終了したら、**「End Lab」**をクリックして、すべての処理をストップしてください。
+作業が終了したら、**「End Lab」**&#x3092;クリックして、すべての処理をストップしてください。
 {% endhint %}
 
 6. 「AWS 🟢」をクリック
@@ -75,7 +75,7 @@
 
 11. 事前準備
 
-* 左のメニューの歯車⚙️から`Show Hidden Files`にチェックを**⭐️入れる⭐️**&#x20;
+* 左のメニューの歯車⚙️から`Show Hidden Files`にチェック&#x3092;**⭐️入れる⭐️**&#x20;
 
 <figure><img src="../.gitbook/assets/laravel/001/laravel_011.png" alt=""><figcaption></figcaption></figure>
 
