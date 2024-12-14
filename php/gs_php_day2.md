@@ -293,7 +293,7 @@ SQLインジェクションを防ぐ。
 [https://blog.senseshare.jp/placeholder.html](https://blog.senseshare.jp/placeholder.html)
 {% endhint %}
 
-#### _プレースホルダーを使わないと・・・!?!?_
+#### _プレースホルダーを使わないと・・・!?!?!?!?!?
 
 ```php
 $name = "'; DROP TABLE gs_an_table; --";
