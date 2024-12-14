@@ -49,6 +49,10 @@
 `phpMyAdmin` = DBではありません。 DB操作をする際に、便利に操作するためのソフトが`phpMyAdmin`です
 {% endhint %}
 
+{% hint style="info" %}
+ちなみに、リレーショナルデータベースの**リレーションという言葉**は、数学で「二次元表」を表す単語らしいよ
+{% endhint %}
+
 ## phpMyAdmin
 
 操作
@@ -56,11 +60,10 @@
 1. `XAMPP`を起動。
 2. chromeにて、`localhost`へ接続。
 3. 画面headerメニューの`phpMyAdmin`をクリック
-4.
 
-```
-<figure><img src=".gitbook/assets/スクリーンショット 2022-12-09 13.07.07 (1).png" alt=""><figcaption></figcaption></figure>
-```
+
+
+<figure><img src="../.gitbook/assets/スクリーンショット 2024-12-14 13.38.12.png" alt=""><figcaption></figcaption></figure>
 
 ブラウザのURLからは、多分 `http://localhost/phpmyadmin/`で行ける。
 
@@ -71,8 +74,8 @@
 ### 新規DB作成
 
 1. 左メニューから\[新規作成]
-2. データベース名は `gs_db_class`
-3. 照合順序は`utf8mb4_general_ci` (ディフォルトのまま)
+2. データベース名は **`gs_db_class`**
+3. 照合順序&#x306F;**`utf8mb4_general_ci`** (ディフォルトのまま)
 4. 作成クリック。
 5. 特にエラーの文言が出なければok
 
@@ -80,7 +83,7 @@
 
 ### 新規テーブル作成
 
-1. テーブル名：`gs_an_table`
+1. テーブル名：**`gs_an_table`**
 2. カラム数：5
 
 ### カラムを作成
@@ -388,4 +391,4 @@ while ($result = $stmt->fetch(PDO::FETCH_ASSOC)) {
 
 を作成してください。
 
-1. 課題を提出するときは、必ずsqlファイルも提出。 ファイルの用意の仕方は[ここを参照](https://gitlab.com/gs\_hayato/gs-php-01/-/blob/master/%E3%81%9D%E3%81%AE%E4%BB%96/howToExportSql.md)
+1. 課題を提出するときは、必ずsqlファイルも提出。 ファイルの用意の仕方は[ここを参照](https://gitlab.com/gs_hayato/gs-php-01/-/blob/master/%E3%81%9D%E3%81%AE%E4%BB%96/howToExportSql.md)
