@@ -279,13 +279,71 @@ try-catch
 もしエラー(例外処理)をキャッチしたら、`catch`の中身が実行される。
 {% endhint %}
 
-{% hint style="info" %}
-prepare, bindValue
 
+
+***
+
+
+
+### プレースホルダについてもう少し詳しく。
+
+{% hint style="info" %}
 SQLインジェクションを防ぐ。
 
 [https://blog.senseshare.jp/placeholder.html](https://blog.senseshare.jp/placeholder.html)
 {% endhint %}
+
+#### _プレースホルダーを使わないと・・・!?!?_
+
+```php
+$name = "'; DROP TABLE gs_an_table; --";
+$sql = "INSERT INTO gs_an_table (name) VALUES ('$name')";
+```
+
+_↓生成されるSQL_
+
+```sql
+INSERT INTO gs_an_table (name) VALUES (''; DROP TABLE gs_an_table; --')
+```
+
+ここで、`'; DROP TABLE gs_an_table; --` がSQLの一部として認識され、テーブル削除命令が実行される可能性がある！！！
+
+
+
+#### プレースホルダを利用すると？
+
+```php
+$name = "'; DROP TABLE gs_an_table; --";
+$stmt = $pdo->prepare('INSERT INTO gs_an_table (name) VALUES (:name)');
+$stmt->bindValue(':name', $name, PDO::PARAM_STR);
+$stmt->execute();
+```
+
+
+
+生成されるSQLイメージ
+
+```sql
+INSERT INTO gs_an_table (name) VALUES ('\'; DROP TABLE gs_an_table; --')
+```
+
+入力された値がSQL文の一部として認識されるのではなく、「単なるデータ」として扱われます。
+
+**エスケープ処理の仕組み**
+
+* プレースホルダーを使うと、文字列中の特殊文字（シングルクォート `'`、ダブルクォート `"`, バックスラッシュ `\`）は、データベースエンジンによって自動的にエスケープされる。
+* 例えば、シングルクォート `'` は通常次のようにエスケープされる。
+  * `'` → `\'` (MySQLのエスケープ形式)
+
+#### 大事なポイント
+
+* **変わるのはSQL文内の扱い方で、元の文字列そのものは変更されない。**
+* 入力された文字はそのままデータベースに保存され、`'; DROP TABLE gs_an_table; --` として格納される。
+* **ただし、SQL文の構造を壊さない** ようにエスケープされるため、**テーブルの削除命令は実行されない。**
+
+***
+
+
 
 ### データの取得と表示(SELECT)
 
