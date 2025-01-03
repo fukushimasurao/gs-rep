@@ -2,7 +2,7 @@
 
 ユーザー側にデータを授業資料
 
-[https://gitlab.com/gs\_hayato/gs-php-01/-/blob/master/PHP04.zip](https://gitlab.com/gs\_hayato/gs-php-01/-/blob/master/PHP04.zip)
+[https://gitlab.com/gs\_hayato/gs-php-01/-/blob/master/PHP04.zip](https://gitlab.com/gs_hayato/gs-php-01/-/blob/master/PHP04.zip)
 
 ## 前回のおさらい
 
@@ -163,6 +163,8 @@ echo $sid;
 
 このidは**ブラウザ / サーバー の両方に同じIDが保存されています。**
 
+<figure><img src="../.gitbook/assets/セッション流れ.png" alt=""><figcaption></figcaption></figure>
+
 _確認場所_
 
 * ブラウザ `developer tools`の`検証 ＞ Application ＞ Cookies ＞ localhost`に`PHPSESSID`
@@ -189,7 +191,7 @@ _確認場所_
 {% hint style="info" %}
 セッション情報を鍵のように利用してログイン機能を実装します。
 
-セッションIDを盗まれることを[`セッション・ハイジャック`](https://www.ipa.go.jp/security/vuln/websecurity-HTML-1\_4.html)と呼びます。
+セッションIDを盗まれることを[`セッション・ハイジャック`](https://www.ipa.go.jp/security/vuln/websecurity-HTML-1_4.html)と呼びます。
 
 万が一盗まれても良いように、セッションIDを変更(鍵を変更)する必要が有るわけです
 {% endhint %}
@@ -441,4 +443,4 @@ if ($val['id'] != '' && password_verify($lpw, $val['lpw'])) {
 * ログインが不要なページ 例；一覧ページ
 * ログインが必要なページ 例；詳細画面、編集画面
 
-1. 課題を提出するときは必ずsqlファイルも提出。ファイルの用意の仕方は[ここを参照](https://gitlab.com/gs\_hayato/gs-php-01/-/blob/master/%E3%81%9D%E3%81%AE%E4%BB%96/howToExportSql.md)
+1. 課題を提出するときは必ずsqlファイルも提出。ファイルの用意の仕方は[ここを参照](https://gitlab.com/gs_hayato/gs-php-01/-/blob/master/%E3%81%9D%E3%81%AE%E4%BB%96/howToExportSql.md)
