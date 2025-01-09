@@ -2,11 +2,14 @@
 
 ### やること
 
-* User と Tweet の関係が多対多となる Like 機能を実装する。
+* User と Tweet の関係が`多対多`となる`Like機能`の実装。
 
 <figure><img src="../.gitbook/assets/like_many-many.jpg" alt=""><figcaption></figcaption></figure>
 
-* 多対多の場合，中間テーブルを作成 → モデルに多対多の連携を定義，の流れで実装できる。
+多対多の場合は
+* 中間テーブルを作成
+* モデルに多対多の連携を定義
+の流れが基本です。
 
 ### 前提
 
@@ -35,7 +38,7 @@
 
 ### Like 機能実装の流れ
 
-本項目では 1 を実施する。
+ここでは 1 を実施する。
 
 1. 中間テーブルの作成と各モデルの連携
 2. コントローラに Like 機能の実装
@@ -48,8 +51,7 @@
 <pre><code><strong>$ php artisan make:migration create_tweet_user_table --create=tweet_user
 </strong></code></pre>
 
-このテーブルには「`どの Tweet に`」「`どの User` 」がlike したのか、という情報が入る。
-
+このテーブルには「`どの Tweet に`」「`どの User` 」がlike したのか、という情報が入ります。
 今回はモデルを作成しないため直接マイグレーションファイルを作成しましょう。
 
 テーブル名は `tweet_user` 。
@@ -183,4 +185,3 @@ class Tweet extends Model
 
 Laravel では**可能な限り命名規則に従うことを強く推奨します。**
 {% endhint %}
-
