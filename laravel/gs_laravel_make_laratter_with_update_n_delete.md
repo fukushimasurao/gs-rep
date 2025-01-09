@@ -2,24 +2,26 @@
 
 ## 今回やること
 
-1. Tweet の更新処理（テーブルのデータ更新）を実装する．
-2. Tweet の削除処理（テーブルのデータ削除）を実装する．
+1. Tweet の更新
+2. Tweet の削除
 
 ### 前提
 
-* (1)について。
-* `tweets/{tweet}`のページ。`route`で見ると、`TweetController@show`、`viewは'tweets.show'`。view内に`href="{{ route('tweets.edit', $tweet) }}"`があり、routeで確認すると`TweetController@edit`とわかる。
+* (1)について
+* `tweets/{tweet}`のページ。`route`で見る。
+  * `TweetController@show`、`viewは'tweets.show'`。'tweets.show'内に`href="{{ route('tweets.edit', $tweet) }}"`があり、routeで確認すると`TweetController@edit`とわかる。
 
-
-
-* (2)について。
-* `tweets/{tweet}`のページ。`route`で見ると、`TweetController@show`、`viewは'tweets.show'`。view内に`href="{{ route('tweets.edit', $tweet) }}"`があり、routeで確認すると`TweetController@edit`とわかる。
+* (2)について
+* `tweets/{tweet}`のページ。`route`で見る。
+  * `TweetController@show`、`viewは'tweets.show'`。view内に`href="{{ route('tweets.edit', $tweet) }}"`があり、routeで確認すると`TweetController@edit`とわかる。
 
 
 
 ## Tweet 作成処理の実装
 
-TweetController の `edit` メソッドを編集する。 `edit` メソッドは，Tweet の編集画面を表示するためのものです。
+TweetController の `edit` メソッドを編集します。
+<br>
+`edit` メソッドは，Tweet の編集画面を表示するためのものです。
 
 ```php
 // app/Http/Controllers/TweetController.php
@@ -39,7 +41,11 @@ class TweetController extends Controller
 
 ### 編集画面の作成
 
-`resources/views/tweets/edit.blade.php` ファイルを開きTweet の編集画面を表示するためのコードを追加。 作成画面と同様に`@error`を用いてエラーメッセージを表示する。 また、`@method('PUT')` ディレクティブを使用してフォームから送信される `HTTP メソッド`を `PUT` に変更する。 これはルーティングで `PUT` メソッドが使用されている一方で、フォームから送信される HTTP メソッドは `GET` と `POST` のみであることに起因する。
+`resources/views/tweets/edit.blade.php` ファイルを開きTweet の編集画面を表示するためのコードを追加します。
+<br>
+作成画面と同様に`@error`を用いてエラーメッセージを表示しましょう。
+<br>また、`@method('PUT')` ディレクティブを使用してフォームから送信される `HTTP メソッド`を `PUT` に変更します。
+<br>これはルーティングで `PUT` メソッドが使用されている一方で、フォームから送信される HTTP メソッドは `GET` と `POST`だけであることに起因しています。
 
 ```php
 <!-- resources/views/tweets/edit.blade.php -->
@@ -77,7 +83,11 @@ class TweetController extends Controller
 
 ### 更新処理の実装
 
-Tweet の更新処理を実装するために`TweetController` の`update` メソッドを編集しよう。 このメソッドはTweet の更新処理を行う。 該当する Tweet のデータを受け取り、`update` メソッドを用いて新しいデータ（`$request の tweet 項目`）で上書きする。
+Tweet の更新処理を実装するために`TweetController` の`update` メソッドを編集しよう。 
+<br>
+このメソッドはTweetの更新処理を行います。
+<br>
+該当するTweetのデータを受け取り`update` メソッドを用いて新しいデータ（`$request の tweet 項目`）で上書きします。
 
 <pre class="language-php"><code class="lang-php">// app/Http/Controllers/TweetController.php
 
@@ -102,11 +112,17 @@ class TweetController extends Controller
 
 ### 動作確認
 
-詳細画面から編集画面に移動しtweet を編集できることを確認しよう。 編集した tweet が詳細画面に反映されることを確認しよう。
+詳細画面から編集画面に移動しtweet を編集できることを確認しよう。
+<br>
+編集した tweet が詳細画面に反映されることを確認しよう。
 
 ### Tweet 削除処理の実装
 
-Tweet の削除処理を実装するために`TweetController` の `destroy` メソッドを編集。 このメソッドはTweet の削除処理を行う。 該当する Tweet のデータを受け取り、`delete` メソッドを用いて削除する。
+Tweet の削除処理を実装するために`TweetController` の `destroy` メソッドを編集します。
+<br>
+このメソッドはTweetの削除処理を行います。
+<br>
+該当するTweetのデータを受け取り、`delete` メソッドを用いて削除しよう。
 
 ```php
 
@@ -139,4 +155,6 @@ $ npm run build
 
 ### 動作確認
 
-詳細画面から削除ボタンを押しtweet を削除できることを確認。 削除した tweet が一覧画面から消えていることを確認。
+詳細画面から削除ボタンを押しtweet を削除できることを確認してください。
+<br>
+削除したtweetが一覧画面から消えていることを確認してください。
