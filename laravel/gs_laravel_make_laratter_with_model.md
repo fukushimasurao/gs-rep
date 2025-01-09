@@ -7,12 +7,14 @@
 ## モデルとテーブルの作成
 
 * Tweet のデータを扱うモデルを作成する
-  * モデルに関連するマイグレーションファイル，コントローラ，ファクトリも合わせて作成する．
-* Laratter アプリケーションで使用するテーブルを用意する．
+  * モデルに関連するマイグレーションファイル + コントローラ + ファクトリも併せて作成しましょう。
+* Laratterで使用するテーブルを用意する。
 
 ## テーブルの用意
 
-Laravel でテーブルを作成する場合は`マイグレーションファイル`を作成しコマンドでマイグレーションファイルを動かすことにより作成されます。
+Laravelでテーブルを作成する場合は、
+- `マイグレーションファイル`を作成
+- コマンドでその`マイグレーションファイル`を実行して作成します。
 
 &#x20;Laravel 側からテーブルを操作（CRUD 処理など）を行うためには`モデル`のファイルが必要となるため同時に作成します。
 
@@ -23,17 +25,25 @@ Laravel でテーブルを作成する場合は`マイグレーションファ�
 {% endhint %}
 
 {% hint style="info" %}
-通常マイグレーションファイルは、`/database/migrations`の中に作成されるよ。
+通常マイグレーションファイルは、`/database/migrations`の中に作成されるよ
+マイグレーションファイルは、DBにテーブルを作成するための設計図です。
+手動でテーブル作成せず、マイグレーションファイルを作成+実行でテーブル等作成しよう。
 {% endhint %}
 
 ## Tweet モデルの作成
 
-Tweet モデルとそれに関連する
+Tweet `モデル`とそれに関連する以下のファイルを作成します。
 
-* `マイグレーションファイル` ... モデルに対応するテーブル作成に使用
-* `コントローラ` ... Tweet データの CRUD 処理に使用するメソッドを記述 を作成する。 コマンドにオプション（`-rm`）付加することで，これらを一括で生成する事ができる．
+* `マイグレーションファイル` ... モデルに対応するテーブル作成に使用します。
+* `コントローラ` ... Tweet データの CRUD 処理に使用するメソッドを記述を作成します。
 
-Laravel ではファイル名含めて命名規則が多く規則に従ってファイル名を作成することで実装も容易となる。 _コマンドでまとめて作成すると自動的に規則に従ってくれるので便利だしおすすめ_
+{% hint style="info" %}
+モデルを作成時、コマンドにオプション（`-rm`）付加することで，これらを一括で生成する事ができるよ。
+
+なお、Laravelではファイル名のルール等規則が多いです。
+_コマンドでまとめて作成すると自動的に規則に従ってくれるので便利です。_
+無理に手動で作成せず、コマンドに任せよう。
+{% endhint %}
 
 以下コマンドを`cms`階層で実行する
 
@@ -48,26 +58,26 @@ $ pwd
 
 $ php artisan make:model Tweet -rm
 
-   INFO  Model [app/Models/Tweet.php] created successfully.  
+   INFO  Model [app/Models/Tweet.php] created successfully.
 
-   INFO  Migration [database/migrations/2024_07_23_122117_create_tweets_table.php] created successfully.  
+   INFO  Migration [database/migrations/2024_07_23_122117_create_tweets_table.php] created successfully.
 
-   INFO  Controller [app/Http/Controllers/TweetController.php] created successfully.  
+   INFO  Controller [app/Http/Controllers/TweetController.php] created successfully.
 ```
 
 ### マイグレーションファイルの編集
 
-生成されたマイグレーションファイルに，`tweet` カラムと `user_id` カラムを追加する。&#x20;
+マイグレーションファイルはテーブル作成等のための設計図です。
+テーブルに設定したい内容を、マイグレーションファイルに記載していきます。
 
-※tweetsテーブルを直接操作しない。マイグレーションファイルを用いてテーブルを操作するのだ。
+まずは生成されたマイグレーションファイルに`tweet` カラムと`user_id` カラムを追加します。
+これにより、テキスト共有データの格納と各Tweetがどのユーザに属するかを識別が可能になります。
 
-これにより、テキスト共有データの格納と各Tweet がどのユーザに属するかを識別が可能になる。
-
-* 今回は `User` と `Tweet` の関係が `1 対 多`となるため，`tweets` テーブルに `user_id` カラムを追加する。
-* 他のテーブルと relation させるためには，カラム名を「モデル名小文字\_id」とする必要がある。
+* 今回は `User` と `Tweet` の関係が `1 対 多`となるため，`tweets` テーブルに `user_id` カラムを追加。
+* 他のテーブルとリレーションをさせるためには，カラム名を「モデル名小文字\_id」とする必要があります。
 
 {% hint style="info" %}
-マイグレーションファイルを作成する時点で，「`1 対 多`」「`多 対 多`」などデータの構成を考慮しておく．
+このようなルールがあるため、マイグレーションファイルを作成する時点で「`1 対 多`」「`多 対 多`」などリレーションを決めておきましょう。．
 {% endhint %}
 
 ```php
@@ -91,14 +101,14 @@ public function up(): void
 // 省略
 ```
 
-* `foreignId('user_id')->constrained()`&#x20;
-  * user\_idという用に、`"テーブル名（単数）_id"`とすると、そのテーブルと連携することを認識する。
+* `foreignId('user_id')->constrained()`
+  * user\_idという用に、`"テーブル名（単数）_id"`とすると、そのテーブルと連携することを認識
   * `->constrained()` つけると、連携してくれて、データを一発で取ってくれるようになる。
-    * この書き方はほぼテンプレ。
+    * （この書き方はほぼテンプレ）
 * `cascadeOnDelete()` ... とあるusersテーブルのレコードが削除されたら、関連するtweetsテーブルのレコードも自動的に削除する制約を設定する。
   * userがdeleteされたときに関連するtweetを消さないと、例えばそのtweetを表示したときにuserがいないのでエラーになる。
 * `string('tweet')` ... `string`型の`tweet`カラムを作成する。
-* `timestamps();` ... 自動で、`created_at`カラムと、`updated_at`カラムを作成してくれる
+* `timestamps();` ... 自動で、`created_at`カラムと、`updated_at`カラムをの二つを作成してくれる。基本的にこの1行はほぼ必須。
 
 マイグレーションファイルに記述して保存できたら、マイグレートを実行
 
@@ -135,18 +145,14 @@ MariaDB [c9]> DESC tweets;
 
 ### モデルファイルの設定
 
-モデルファイルには関連するデータとの連携を定義する。&#x20;
-
-ここに連携を記述しておくことで、連携先のデータを容易に操作できるようになる。&#x20;
+モデルファイルには関連するデータとの連携を定義します。
+ここに連携を記述しておくことで、連携先のデータを容易に操作できるようになります。
 
 例えば、
 
-* ユーザーがpostした投稿を取得したり、
+* とあるユーザーがpostした投稿を取得したり、
 * 投稿からだれがpostしたのか
-
-がすぐに分かる。
-
-
+がすぐに分狩るようになります。
 
 今回は `User` モデルと `Tweet` モデルを `1 対 多`で連携する。
 
@@ -180,6 +186,13 @@ class User extends Authenticatable
 }
 
 ```
+
+{% hint style="info" %}
+UserからみるとTweetを複数持っている1対多なので、`hasMany`となります。
+`tweets()`はメソッドです。Tweetを取得するために`tweets()`メソッドが利用できます。
+Userモデルが関連している
+{% endhint %}
+
 
 同様に `Tweet` モデルにも関係を定義する。
 
@@ -217,20 +230,19 @@ class Tweet extends Model
 {% endhint %}
 
 {% hint style="info" %}
-`$fillable`はアプリケーション側から変更できるカラムを指定する（ホワイトリスト）。
+`$fillable`はアプリケーション側から変更できるカラムを指定する`ホワイトリスト`です。
 
-&#x20;対して`$guarded`はアプリケーション側から変更できないカラムを指定する（ブラックリスト）
+対して`$guarded`はアプリケーション側から変更できないカラムを指定する`ブラックリスト`です。
 
-どちらを使用しても良いがどちらかを使用する必要がある。
-
-自分でどちらを使うかルールを決めておこう。
+どちらかを使用する必要があります。どちらでもいいですが、基本的にはどっちを使うか統一することをお勧めします。
 {% endhint %}
 
 ### ルーティングの設定
 
-`routes/web.php`ファイルに，`Tweet`に関するルートを設定する。 コードとしては、2行追加。
+`routes/web.php`ファイルに，`Tweet`に関するルートを設定します。
+コード2行追加。
 
-今回はモデル作成時に `-r` オプション（`--resource`）を指定しており`Tweet` に関する `CRUD` 処理のルートが自動的に追加されている。
+なお、今回はモデル作成時に `-r` オプション（`--resource`）を指定しており`Tweet` に関する `CRUD` 処理のルートが自動的に追加されている。
 
 ```php
 // routes/web.php
@@ -256,18 +268,18 @@ Route::middleware('auth')->group(function () {
   Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
   Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
   Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-  
+
   // ⭐️ 追加 ⭐️
   Route::resource('tweets', TweetController::class);
 });
 
 require __DIR__ . '/auth.php';
-
 ```
 
 ### ルーティングの確認
 
-ルーティングは下記のコマンドで確認可能。 `resource` を用いることで `Tweet` に関する `CRUD` 処理のルートが自動的に追加されていることが確認できる。
+ルーティングは下記のコマンドで確認可能です。
+`resource` を用いることで `Tweet` に関する `CRUD` 処理のルートが自動的に追加されていることが確認できます。
 
 ```bash
 voclabs:~/environment/cms $ php artisan route:list --path=tweets
