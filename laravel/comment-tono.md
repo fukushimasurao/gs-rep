@@ -24,7 +24,9 @@ public function show(Tweet $tweet)
 
 ```
 
-Tweet 詳細画面を下記のように編集する．まだコメントは表示されない．「コメントする」リンクをクリックするとコメント作成画面に遷移する．
+Tweet 詳細画面を下記のように編集しましょう。(まだコメントは表示されないです）
+
+「コメントする」リンクをクリックするとコメント作成画面に遷移します。
 
 ```php
 <!-- resources/views/tweets/show.blade.php -->
@@ -92,11 +94,9 @@ Tweet 詳細画面を下記のように編集する．まだコメントは表�
 
 ### コメント作成画面の作成 <a href="#komentono" id="komentono"></a>
 
-コントローラの create メソッドを編集する。
-
-ルーティングで下記のように設定されているため、引数に Tweet を渡す。
-
-このタイプのルーティングを使用する場合、子モデルに関するコントローラ（今回は CommentController）の各メソッドに引数として親モデル（今回は Tweet）を渡す必要がある．
+コントローラの create メソッドを編集します。
+ルーティングで下記のように設定されているため、引数にTweetを渡す。
+このタイプのルーティングを使用する場合、子モデルに関するコントローラ（今回は CommentController）の各メソッドに引数として親モデル（今回は Tweet）を渡します。
 
 ```
 tweets/{tweet}/comments/create
@@ -118,11 +118,8 @@ public function create(Tweet $tweet)
 
 ```
 
-コメント作成画面を下記のように編集する。
-
-form 部分で Comment を送信する際に、どの Tweet に対する Comment かを指定するために
-
-引数に Tweet を渡す。
+コメント作成画面を編集します。
+`form`部分で`Comment`を送信する際に、どの`Tweet`に対する`Comment`かを指定するために引数に`Tweet`を渡しています。
 
 ```php
 <!-- resources/views/tweets/comments/create.blade.php -->
@@ -160,9 +157,8 @@ form 部分で Comment を送信する際に、どの Tweet に対する Comment
 
 ### Comment 作成処理 <a href="#comment-zuo-cheng-chu-li" id="comment-zuo-cheng-chu-li"></a>
 
-作成画面から送信されるデータを受け取りComment を作成する。
-
-form 内容以外に Tweet を受け取るためstore メソッドの引数に Tweet を追加している．
+作成画面から送信されるデータを受け取りCommentを作成します。
+form 内容以外に Tweet を受け取るためstoreメソッドの引数に Tweet を追加しています。
 
 ```php
 // app/Http/Controllers/CommentController.php
@@ -186,13 +182,11 @@ public function store(Request $request, Tweet $tweet)
 
 ### Comment の詳細画面 <a href="#comment-no" id="comment-no"></a>
 
-Tweet 詳細画面の Comment をクリックすると、Comment の詳細画面に遷移する。
+Tweet詳細画面のComment をクリックでComment詳細画面に遷移します。
+Comment詳細画面にて、編集や削除ができるようにします。
 
-Comment 詳細画面では編集や削除ができるようにする。
-
-まず Tweet 詳細画面に Comment 詳細画面へのリンクを追加する。
-
-詳細画面では Tweet と Comment の 2 つのパラメータを渡すため配列で設定する。
+最初に、Tweet詳細画面にComment詳細画面へのリンクを追加します。
+詳細画面ではTweetとCommentの2つのパラメータを渡したいので、配列で設定しています。
 
 ```
 tweets/{tweet}/comments/{comment}
@@ -281,7 +275,7 @@ route('tweets.comments.show', [$tweet, $comment])
 
 
 
-詳細画面のコントローラでも Tweet と Comment の 2 つのパラメータを受け取る．
+詳細画面コントローラにてTweetとCommentのパラメータを受け取理ます。
 
 ```php
 // app/Http/Controllers/CommentController.php
@@ -292,9 +286,8 @@ public function show(Tweet $tweet, Comment $comment)
 }
 ```
 
-コメント詳細画面に下記を記述する。
-
-詳細画面リンクと同様に、更新と削除のルーティング部分も Tweet と Comment の 2 つのパラメータを渡すため配列で設定する．
+コメント詳細画面に下記を記述します。
+詳細画面リンクと同様に、更新と削除のルーティング部分もTweetとCommentの2つのパラメータを渡すため配列で設定します。
 
 ```php
 <!-- resources/views/tweets/comments/show.blade.php -->
@@ -336,9 +329,9 @@ public function show(Tweet $tweet, Comment $comment)
 
 ```
 
-### [動作確認](https://gs-lab-202406.deno.dev/laravel/tweet-comment-create-and-store.html#%E5%8B%95%E4%BD%9C%E7%A2%BA%E8%AA%8D) <a href="#dong-zuo-que-ren" id="dong-zuo-que-ren"></a>
+### 動作確認
 
-* Tweet 詳細画面の「コメントする」クリックで Comment 作成画面に遷移する
+* Tweet 詳細画面の「コメントする」クリックで Comment 作成画面に遷移
 * Comment 作成画面でコメントを入力して「コメントする」クリックで Comment が保存される
 * Comment 作成処理が完了すると Tweet 詳細画面に遷移する
 * Tweet 詳細画面に Comment 詳細画面へのリンクが追加される
