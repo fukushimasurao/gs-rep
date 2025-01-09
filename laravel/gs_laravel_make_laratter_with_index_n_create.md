@@ -10,13 +10,18 @@
 `TweetController` の `index` メソッドと `create` メソッドを編集していきます。 それぞれ、
 
 * `index` メソッドはTweet の一覧を表示するためのもの
-* `create` メソッドは，Tweet の作成画面を表示するためのもの です。
+* `create` メソッドは，Tweet の作成画面を表示するためのもの
 
-`index` メソッドではTweet の全件を新しい順に取得するために `latest` メソッドを使用します。 また，Tweet に関連するユーザ情報を取得するために `with` メソッドを使用します。
+です。
+
+`index` メソッドではTweet全件を`新しい順`に取得するために `latest` メソッドを使用します。
+<br>
+`Tweet`に関連するユーザ情報を取得するために `with` メソッドを使用します。
 
 {% hint style="info" %}
 ```
-Tweet::with('user')の 'user'は、さっきTweetモデルに追加したuser()のことです。
+Tweet::with('user')の 'user'は、さっきTweetモデルに追加した`user()`のことです。
+`user()`を定義していないと、`with('user')`と書けないよ。
 ```
 {% endhint %}
 
@@ -36,6 +41,8 @@ class TweetController extends Controller
   {
     // ⭐️追加
     $tweets = Tweet::with('user')->latest()->get();
+
+    // $tweetsを'tweets.index'に渡す
     return view('tweets.index', compact('tweets'));
   }
 
@@ -53,7 +60,11 @@ class TweetController extends Controller
 
 #### 一覧画面の作成
 
-`resources/views/tweets/index.blade.php` ファイルを開きTweet の一覧を表示するためのコードを追加する。 `@foreach` ディレクティブを使用してTweet の一覧を表示する． モデルで`Tweet` と `User` を連携しているため，`$tweet->user->name` で Tweet に関連するユーザの名前を取得できる．
+`resources/views/tweets/index.blade.php` ファイルを開きTweet の一覧を表示するためのコードを追加しましょう。
+<br>
+`@foreach` ディレクティブを使用してTweetの一覧を表示します。
+<br>
+モデルで`Tweet` と `User` を連携しているため，`$tweet->user->name` で Tweet に関連するユーザの名前を取得できる．
 
 ```php
 <!-- resources/views/tweets/index.blade.php -->
@@ -134,7 +145,9 @@ class TweetController extends Controller
 
 #### Tailwind CSS の適用
 
-一部 CSS が適用されない部分があるため下記コマンドで Tailwind CSS を適用する。 👹ビューファイルを変更した場合は必ず実行する。
+一部 CSS が適用されない部分があるため下記コマンドで Tailwind CSS を適用しましょう。
+<br>
+👹ビューファイルを変更した場合は必ず実行するようにしましょう。👹
 
 ```bash
 $ npm run build
@@ -142,14 +155,21 @@ $ npm run build
 
 #### 動作確認
 
-一覧画面に移動しエラーが発生しないことを確認する。 作成画面に移動し入力フォームが表示されていることを確認する。 ※まだ登録できないよ。
+一覧画面に移動しエラーが発生しないことを確認しましょう。
+<br>
+作成画面に移動し入力フォームが表示されていることを確認する。※まだ登録できないよ。
 
 ## 【補足】エラーメッセージの表示
 
-この画面では入力したデータに不備があった場合（未入力や文字列が長すぎるなど）にエラーメッセージを表示したい。 エラーメッセージは`@error` ディレクティブを使用して表示する。 `@error`ディレクティブは指定した項目にエラーがある場合にのみ表示される。
+この画面では入力したデータに不備があった場合（未入力や文字列が長すぎるなど）にエラーメッセージを表示しましょう。
+<br>
+エラーメッセージは`@error` ディレクティブを使用して表示できます。
+<br>
+なお `@error`ディレクティブは指定した項目にエラーがある場合にのみ表示される。
 
 {% hint style="info" %}
-この時点ではまだtweetの登録できないが、sqlから登録することが可能。
+この時点ではまだtweetの登録できないが、sqlから登録することが可能です。
+いくつか登録してみましょう！
 
 insert into tweets (id, user\_id, tweet, created\_at, updated\_at) values (null, 1, 'test', now(), now());
 {% endhint %}
