@@ -2,15 +2,14 @@
 
 ### ここでやりたいこと <a href="#kokodeyaritaikoto" id="kokodeyaritaikoto"></a>
 
-* Comment の編集画面を作成する．
-* Comment の更新処理を実装する．
-* Comment の削除処理を実装する．
+* Comment編集画面を作成
+* Comment更新処理を実装
+* Comment削除処理を実装
 
 ### 編集と削除の実装 <a href="#tono" id="tono"></a>
 
-まずComment の編集画面を表示するようにする。
-
-編集画面には Tweet と Comment を表示するので各データを渡す。
+まずCommentの編集画面を表示します。
+編集画面にはTweetとCommentを表示するのでそれぞれデータを渡します。
 
 <pre class="language-php"><code class="lang-php">// app/Http/Controllers/CommentController.php
 
@@ -21,9 +20,8 @@
 
 </code></pre>
 
-編集画面のビューは下記のように記述する。
-
-書き換えて Update ボタンをクリックすると Comment の更新処理が実行される
+編集画面のビューは下記のように記述しましょう。
+書き換えた後、UpdateボタンをクリックするとCommentの更新処理が実行されます。
 
 ```php
 <!-- resources/views/tweets/comments/edit.blade.php -->
@@ -62,11 +60,9 @@
 
 ### 更新処理 <a href="#geng-xin-chu-li" id="geng-xin-chu-li"></a>
 
-データを受け取って更新処理を実行する。
-
-更新後は Comment 詳細画面に遷移する。
-
-ルーティングで 2 つのパラメータを設定する必要がある場合は配列で設定する（詳細画面のリンクなどと同様）．
+データを受け取って更新処理を行います。
+（更新後はComment詳細画面に遷移）
+ルーティングで2つのパラメータを設定する必要があるので配列を渡しましょう。
 
 ```
 tweets/{tweet}/comments/{comment}
@@ -106,8 +102,8 @@ public function destroy(Tweet $tweet, Comment $comment)
 
 ### 動作確認 <a href="#dong-zuo-que-ren" id="dong-zuo-que-ren"></a>
 
-* Comment 詳細画面で「編集」クリックで Comment 編集画面に遷移する．
-* Comment 編集画面でコメントを編集して「更新」クリックで Comment 更新処理が実行される．
-* Comment 更新処理が完了すると Tweet 詳細画面に遷移する．
-* Comment 詳細画面で「削除」クリックで Comment 削除処理が実行される．
-* Comment 削除処理が完了すると Tweet 詳細画面に遷移する．
+* Comment詳細画面:「編集」クリックで Comment 編集画面に遷移
+* Comment編集画面でコメントを編集して「更新」クリックで Comment更新処理が実行
+* Comment更新処理が完了するとTweet詳細画面に遷移
+* Comment詳細画面で「削除」クリックでComment削除処理が実行
+* Comment削除処理が完了するとTweet詳細画面に遷移
