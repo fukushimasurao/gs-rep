@@ -75,7 +75,6 @@ $ php artisan make:view tweets.edit
 {% hint style="info" %}
 ```
 記載する、"route('tweets.index')" という箇所は、routeで設定した名前です。
-<br>
 `$ php artisan route:list --path=tweets`の出力を思い出そう！
 ```
 {% endhint %}
