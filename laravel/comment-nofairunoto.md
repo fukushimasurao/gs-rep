@@ -2,11 +2,11 @@
 
 ### ここでやりたいこと
 
-* 各 tweet に対してコメントを投稿できるようにする
-* tweet とコメントは一対多の関係
-* コメントは tweet 詳細画面からコメント投稿画面に移動して投稿する
-* コメントは tweet 詳細画面に一覧表示される
-* 各コメントをクリックするとコメント詳細画面に移動でき，編集や削除ができる．
+* 各tweetに対してコメントを投稿できるようにする。
+* tweetとコメントは一対多の関係にする。
+* コメントはtweet詳細画面からコメント投稿画面に移動して投稿する。
+* コメントはtweet詳細画面に一覧表示される。
+* 各コメントをクリックするとコメント詳細画面に移動できて、編集や削除ができる。
 
 ### 必要なファイルの作成 <a href="#nafairuno" id="nafairuno"></a>
 
@@ -19,7 +19,7 @@ Tweet に関するファイルを作成するときと同様の流れ。
 <pre class="language-bash"><code class="lang-bash"><strong>$ php artisan make:model Comment -rm
 </strong></code></pre>
 
-下記のファイルが作成される．
+下記のファイルが作成されます。
 
 * `app/Models/Comment.php`
 * `database/migrations/xxxx_xx_xx_xxxxxx_create_comments_table.php`
@@ -27,9 +27,12 @@ Tweet に関するファイルを作成するときと同様の流れ。
 
 ### マイグレーションファイルの編集 <a href="#maigurshonfairuno" id="maigurshonfairuno"></a>
 
-comments テーブルを作成するためのマイグレーションファイルを記述する．
+commentsテーブルを作成するため（テーブルの設計書となる）のマイグレーションファイルを記述します。
 
-`comment` カラムに加えて `tweet_id` と `user_id` を設定する．「どの Tweet に対する」「どのユーザの」という情報を保存する．
+`comment` カラムに加えて `tweet_id` と `user_id` を設定します。
+<br>
+「どの Tweet に対する」「どのユーザの」という情報を保存します。
+
 
 * Tweet と Comment の関係は `1 対多`
 * User と Comment の関係は `1 対多`
@@ -47,6 +50,7 @@ public function up(): void
     $table->foreignId('tweet_id')->constrained()->cascadeOnDelete();
     $table->foreignId('user_id')->constrained()->cascadeOnDelete();
     $table->string('comment');
+
     $table->timestamps();
   });
 }
@@ -55,12 +59,12 @@ public function up(): void
 
 ```
 
-作成したら下記コマンドを実行してマイグレーションを実行する．
+作成したら下記コマンドを実行してマイグレーションを実行しましょう。
 
 <pre class="language-bash"><code class="lang-bash"><strong>$ php artisan migrate
 </strong></code></pre>
 
-phpmyadmin で確認すると，下記の構造で comments テーブルが作成されている．
+実行後、commentsテーブルが作成されていることと、その中身を確認しましょう。．
 
 ```txt
 +-------------+-----------------+------+-----+---------+----------------+
@@ -77,12 +81,19 @@ phpmyadmin で確認すると，下記の構造で comments テーブルが作�
 
 ### モデルファイルの設定 <a href="#moderufairuno" id="moderufairuno"></a>
 
-モデルファイルには，テーブルとの関連を定義する．今回は下記のとおり．
+モデルファイルには，テーブルとの関連を記載します。
 
 * Tweet と Comment が 1 対多．
 * User と Comment が 1 対多．
 
-`app/Models/Comment.php`，`app/Models/Tweet.php` ， `app/Models/User.php` それぞれに連携を設定する．`Comment.php` に対しては `$fillable` も設定しておく．
+これら３つの関係者のモデルファイルに設定を書きます。
+つまり、
+- `app/Models/Comment.php`
+- `app/Models/Tweet.php`
+- `app/Models/User.php`
+それぞれに連携を設定しましょう。
+
+なお、`Comment.php` に対してはコメントが登録できるように`$fillable` も設定しましょう。
 
 ```php
 // app/Models/Comment.php
@@ -152,7 +163,8 @@ class Tweet extends Model
 
 ### ビューファイルの作成 <a href="#byfairuno" id="byfairuno"></a>
 
-コメント機能で使用するビューファイルを作成する．Tweet の CRUD 処理と同様だが，コメント一覧は `tweets.show` に追加するため `index.blade.php` は作成しなくて OK．
+コメント機能で使用するビューファイルを作成しましょう。
+TweetのCRUD処理とほとんど同じだが、コメント一覧は `tweets.show` に追加するため `index.blade.php` は作成しなくて OK．
 
 ```bash
 $ php artisan make:view tweets.comments.create
@@ -160,15 +172,14 @@ $ php artisan make:view tweets.comments.show
 $ php artisan make:view tweets.comments.edit
 ```
 
-### [ルーティングの設定](https://gs-lab-202406.deno.dev/laravel/tweet-comment-setting.html#%E3%83%AB%E3%83%BC%E3%83%86%E3%82%A3%E3%83%B3%E3%82%B0%E3%81%AE%E8%A8%AD%E5%AE%9A) <a href="#rtinguno" id="rtinguno"></a>
+### ルーティングの設定
 
-リソースコントローラを使用しているのでルーティングは 1 行書くだけでok
+リソースコントローラを使用しているのでルーティングは1行書くだけでok
 
-ただし、Comment は Tweet に従うためルーティングは `tweet.comment` となる。
+ただし、CommentはTweetに従うためルーティングは`tweet.comment` となります。
+このような記述を行う理由として、Comment に対する処理（表示，編集，削除）を行う場合に Comment の元の Tweet の情報が必要となるためです。
 
-このような記述を行う理由として、Comment に対する処理（表示，編集，削除）を行う場合に Comment の元の Tweet の情報が必要となることが挙げられる。
-
-ルーティングを上記のように記述すると Tweet の情報も合わせて得ることができる（後述）。
+ルーティングを上記のように記述すると Tweet の情報も合わせて得ることができます（後述）。
 
 ```php
 // routes/web.php
@@ -204,9 +215,9 @@ Route::middleware('auth')->group(function () {
 require __DIR__ . '/auth.php';
 ```
 
-### [ルーティングの確認](https://gs-lab-202406.deno.dev/laravel/tweet-comment-setting.html#%E3%83%AB%E3%83%BC%E3%83%86%E3%82%A3%E3%83%B3%E3%82%B0%E3%81%AE%E7%A2%BA%E8%AA%8D) <a href="#rtinguno" id="rtinguno"></a>
+### ルーティングの確認
 
-Comment に関する CRUD 処理のルートが自動的に追加されていることが確認できる
+Comment に関する CRUD 処理のルートが自動的に追加されていることを確認しましょう。
 
 ```bash
 php artisan route:list --path=comments
