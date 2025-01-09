@@ -2,12 +2,14 @@
 
 ### ここでやりたいこと
 
-* `User` と `Tweet` の関係が`多対多`となる Like 機能を実装
-* `like` は中間テーブルにレコードを追加。`dislike` は中間テーブルからレコードを削除の動きとなる
+* `User` と `Tweet` の関係が`多対多`となる Like 機能を実装しましょう。
+* LIKE機能は、
+  * `like` したら中間テーブルにレコードが追加
+  * `dislike` は中間テーブルからレコードを削除、という動きになります。
 
 ### Like 機能実装の流れ
 
-本項目では 2 と 3 を実施します。
+↓ここでは 2 と 3 を実施します↓
 
 1. 中間テーブルの作成と各モデルの連携
 2. コントローラに Like 機能の実装
@@ -15,9 +17,14 @@
 
 ### 前提
 
-イメージはviewのいいねが押される→routeの確認→controllerで処理される→modelでデータが保存される。
+イメージは
+- viewのいいねが押される
+- →routeの確認
+- →controllerで処理される
+- →modelでデータが保存される。
+という感じです。
 
-以下では、コントローラの作成、routeの設定、controller+model記述、view記述の順番で対応する。
+以下では、コントローラの作成、routeの設定、controller+model記述、view記述の順番で対応していきます。
 
 ### コントローラの作成
 
@@ -39,15 +46,11 @@ $ php artisan make:controller TweetLikeController --resource
 
 今回は`like` と `dislike` の 2 つを追加するため`resource` ではなく個別に記述する．
 
-* like の場合は `store` メソッドを実行する．呼び出しやすいように `tweets.like` という名前をつける．
-* dislike の場合は `destroy` メソッドを実行する．呼び出しやすいように `tweets.dislike` という名前をつける．
-* like と dislike の操作では Tweet を指定したいため，URI のパラメータとして tweet を指定している．
-
-どちらの場合もターゲットとなる Tweet と指定し、認証中のユーザが `like` または `dislike` する動きとなる．
-
-URI に Tweet を特定するためのパラメータとして `{tweet}` を指定している。(ルートモデル結合)
-
-
+* like の場合は `store` メソッドを実行します。呼び出しやすいように`tweets.like` という名前をつけましょう。
+* dislike の場合は `destroy` メソッドを実行します。呼び出しやすいように `tweets.dislike` という名前をつけましょう。
+* like と dislike の操作ではTweetを指定したいため、URLパラメータとしてtweetを指定している．
+どちらの場合もターゲットとなる Tweet と指定し、認証中のユーザが `like` または `dislike` するという動きになります。
+URLにTweetを特定するためのパラメータとして `{tweet}` を指定しています。(`ルートモデル結合`)
 
 <pre><code>// routes/web.php
 
@@ -281,6 +284,3 @@ like ボタンはユーザが like しているかどうかによって like（l
 * 一覧画面で dislike ボタンを押すと、like が削除される。画面のカウントが減り、tweet\_user テーブルからデータが削除される。
 * 詳細画面で like ボタンを押すと、like が追加される。画面のカウントが増え、tweet\_user テーブルにデータが追加される。
 * 詳細画面で dislike ボタンを押すと、like が削除される。画面のカウントが減り、tweet\_user テーブルからデータが削除される。
-
-
-
