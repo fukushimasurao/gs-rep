@@ -168,11 +168,12 @@ DBにc9がいればok。 ※テーブルは作成していないので空っぽ�
 
 ### Laravel Breeze の導入
 
-Laravel Breeze は、シンプルな認証スターターキット。&#x20;
+Laravel Breeze は、手軽に利用できる認証パッケージです。&#x20;
 
-ログイン，登録，パスワードリセットなどの基本的な認証機能を提供します。 以下のコマンドを実行して，Laravel Breeze をプロジェクトにインストールしましょう。
+パッケージを利用すると非常に簡単にログイン機能等が実装できます！
+Laravel Breeze をプロジェクトにインストールしましょう。
 
-#### cmsにいることを確認。
+#### Breeze準備/まずはcmsにいることを確認。
 
 _まずは自分がcms階層にいることを確認_
 
@@ -224,7 +225,8 @@ $ npm run build
 
 <figure><img src="../.gitbook/assets/laravel/002/laravel_002_010.png" alt=""><figcaption></figcaption></figure>
 
-ただし、まだテーブルが無いので作成する必要あり。
+ただし、まだ登録するためのテーブルが無いので作成する必要あります。
+
 
 #### テーブル作成
 
@@ -235,6 +237,7 @@ $ php artisan migrate
 ```
 
 実行するとこんな感じのlogが出ます。
+マイグレーションファイルが実行されて、DONEの記載が出てますね！
 
 ```bash
 voclabs:~/environment/cms $ php artisan migrate
