@@ -8,30 +8,37 @@
 ### 前提確認
 
 * (1)について
-  * `/tweets/create` のページ。routeから`tweets/create`は`TweetController@create`を利用し、そこから`view('tweets.create')`のviewを描写しているいうことがわかる。
-  * viewの中の`form`を見ると、`action`は`'tweets.store'`ということを確認。routeから、`'tweets.store'`へのpostは`TweetController@store` ということを確認。
+  * `/tweets/create` のページ。
+    * routeから`tweets/create`は`TweetController@create`を利用していること。
+    * `TweetController@create`のreturnから`view('tweets.create')`のviewを描写しているいうことがわかる。
+  * `view('tweets.create')`の中の`form`を見ると、`action`は`'tweets.store'`ということを確認。
+    * routeから`'tweets.store'`へのpostは`TweetController@store` ということを確認。
 * (2)について
-  * `/tweets`のページに詳細画面へのリンクあり。`route`から`/tweets`は`TweetController@index`を利用し、そこから`view('tweets.index')`に`$tweets`の情報を与えつつ描写していることを確認する。
-  * `view('tweets.index')`に`<a href="{{ route('tweets.show', $tweet) }}"` の記載を確認する。`route`で見ると`TweetController@show` なので、`@show`を記入していく。
+  * `/tweets`のページに詳細画面へのリンクあり。
+  * `route`から`/tweets`は`TweetController@index`を利用し、そこから`view('tweets.index')`に`$tweets`の情報を与えつつ描写していることを確認する。
+  * `view('tweets.index')`に`<a href="{{ route('tweets.show', $tweet) }}"` の記載を確認する。`route`で見ると`TweetController@show` なので、`show`メソッドを記入していく。
     * なお、`route('tweets.show', $tweet)` は自動で`$tweetの主キー`を渡す。`$tweet->id`と書かなくてもok。
-
-
 
 ## Tweet 作成処理の実装
 
-Tweet の作成処理は`TweetController` に `store` メソッドに記載する。
+Tweet の作成処理は`TweetController` の `store` メソッドに記載。
 
-`フォーム`から送信されてきたデータは `$request`に格納されているため、`validate` を用いてデータのバリデーションを行う。 ここでは，
+`フォーム`から送信されてきたデータは `$request`に格納されているため、`validate` を用いてデータのバリデーションを行っていきます。
+<br>
 
+ここでは，
 * `tweet が空でないこと`
-* `長さが 255 以内であること` を確認している．
+* `長さが 255 以内であること` 
+を確認しています。
 
-バリデーションをクリアしたら Tweet のデータを作成する。 バリデーションをクリアしない場合は自動的に作成ページ（とエラーメッセージ）が表示される。
+バリデーションをクリアしたら Tweet のデータを作成します。
+<>br
+バリデーションをクリアしない場合（=tweetが空だったり255以上あったり）は自動的に作成ページ（とエラーメッセージ）が表示されます。
 
 {% hint style="info" %}
 ```
-$requestには、formから送られてきた中身が入っている。
-ddd($request->all());
+$requestには、formから送られてきた中身が入っています。
+`ddd($request->all());`
 と書けば簡単に中身を確認できるぞ。
 ```
 {% endhint %}
@@ -54,6 +61,7 @@ class TweetController extends Controller
   public function store(Request $request)
   {
     $request->validate([
+       // tweet必須 + 最高で255文字までの制限
       'tweet' => 'required|max:255',
     ]);
 
@@ -67,15 +75,19 @@ class TweetController extends Controller
 
 ### 動作確認
 
-作成画面に移動しtweet が投稿できることを確認。
+作成画面に移動しtweetが投稿できることを確認しよう。
 
-投稿した tweet が一覧画面に表示されることを確認。
+投稿したtweetが一覧画面に表示されることを確認しよう。
 
 ### Tweet 詳細画面の実装
 
-TweetController の `show` メソッドを編集。 `show` メソッドは，Tweet の詳細画面を表示するためのものです。
+TweetController の `show` メソッドを編集します。
+<br>
+ `show` メソッドは，Tweet の詳細画面を表示するためのものです。
 
-一覧画面のリンク（ `<a href="{{ route('tweets.show', $tweet) }}">` 部分）で Tweet 1 件のデータが渡されているため、`$tweet` に該当する Tweet のデータが渡される。 `show` メソッドが受け取ったデータをそのままビューファイルに渡せば OK。
+一覧画面のリンク（ `<a href="{{ route('tweets.show', $tweet) }}">` 部分）で Tweet 1 件のデータが渡されているため、`$tweet` に該当する Tweet のデータが渡されます。
+<br>
+ `show` メソッドが受け取ったデータをそのままビューファイルに渡せば OK。
 
 ```php
 // app/Http/Controllers/TweetController.php
@@ -95,7 +107,11 @@ class TweetController extends Controller
 
 ### 詳細画面の作成
 
-`resources/views/tweets/show.blade.php` ファイルを開き、Tweet の詳細画面を表示するためのコードを追加しましょう。 ここでは，Tweet の投稿者のみが編集・削除できるようにするため、Tweet の投稿者とログインユーザが一致するかを確認した上で編集ボタンと削除ボタンを表示します。
+`resources/views/tweets/show.blade.php` ファイルを開き、Tweet の詳細画面を表示するためのコードを追加しましょう。
+<br>
+ここでは，Tweetの投稿者のみが編集・削除できるようにするため、Tweet の投稿者とログインユーザが一致するかを確認した上で編集ボタンと削除ボタンを表示します。
+※下記補足参照！
+
 
 ```php
 <!-- resources/views/tweets/show.blade.php -->
