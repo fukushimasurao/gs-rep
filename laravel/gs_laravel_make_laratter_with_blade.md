@@ -6,18 +6,24 @@
   * 「Tweet 作成画面」
   * 「Tweet 一覧画面」
   * 「Tweet 詳細画面」
-  * 「Tweet 編集画面」のファイルを作成する．
-* 各画面へスムーズに移動できるようナビゲーションバーにリンクを追加する．
+  * 「Tweet 編集画面」のファイルを作成します。
+* 各画面へスムーズに移動できるようナビゲーションバーにリンクを追加します。
 
 ## ビューファイルの作成
 
-Laravel では画面を作成する際に `Blade テンプレート`を使用します。
+Laravelでは画面を作成する際に `Blade テンプレート`を使用します。
 
-&#x20;Blade テンプレートは HTML のタグを書きながらコントローラから受け取ったデータを埋め込むことができます。 htmlとphp足して２で割った感じのものです。
+&#x20;Blade テンプレートは HTML のタグを書きながらコントローラから受け取ったデータを埋め込むことができます。
+<br>
+htmlとphp足して２で割った感じのものです。
 
 また`@if` や `@foreach` などの制御構文も使用できるため、簡単に条件分岐や繰り返しで表示非表示などを制御できます。
 
 今回は、Bladeテンプレートを作成して`tailwindcss`でスタイリングします。
+{% hint style="info" %}
+tailwindcssは、cssのライブラリです。htmlのclassにデザインを指定して書くことができるよ。
+{% endhint %}
+
 
 まずはcms階層で以下のコマンドを順番に実行しましょう。
 
@@ -56,17 +62,21 @@ $ php artisan make:view tweets.edit
 
 ### 各画面へのリンク追加
 
-まず、各画面へ簡単に移動できるようにナビゲーションバーにリンクを追加。
-
-&#x20;ナビゲーションバーは`layouts/navigation.blade.php`に記述されています。&#x20;
-
+まず、各画面へ簡単に移動できるようにナビゲーションバーにリンクを追加します。。
+&#x20;
+ナビゲーションバーは`layouts/navigation.blade.php`に記述されています。
+&#x20;
 初期状態では`Dashboard`のリンクが追加されているため、同様の形式で一覧画面と作成画面へのリンクを作成します。
+&#x20;
 
-&#x20;※このファイルでは `PC 画面`と`モバイル画面`で表示する内容を変えているため、それぞれ`2箇所`にリンクのコードを追加する必要があります。
+【注意】<br>
+このファイルでは`PC 画面`と`モバイル画面`で表示する内容を変えているため、それぞれ`2箇所`にリンクのコードを追加する必要があります。
 
 {% hint style="info" %}
 ```
 記載する、"route('tweets.index')" という箇所は、routeで設定した名前です。
+<br>
+`$ php artisan route:list --path=tweets`の出力を思い出そう！
 ```
 {% endhint %}
 
@@ -154,7 +164,7 @@ $ php artisan make:view tweets.edit
       <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
         {{ __('Dashboard') }}
       </x-responsive-nav-link>
-      
+
       <!-- ⭐️ 2項目追加↓↓↓ ⭐️ -->
       <x-responsive-nav-link :href="route('tweets.index')" :active="request()->routeIs('tweets.index')">
         {{ __('Tweet一覧') }}
