@@ -247,7 +247,6 @@ $status = $stmt->execute();
 #### 多対多について
 
 上記のように、ユーザ1に対して、つぶやき複数のような関係性を1対多という。
-
 <figure><img src="../.gitbook/assets/1対多.jpg" alt=""><figcaption><p>1対多</p></figcaption></figure>
 
 <figure><img src="../.gitbook/assets/多対多.jpg" alt=""><figcaption><p>多対多</p></figcaption></figure>
@@ -256,7 +255,7 @@ https://techlib.circlearound.co.jp/entries/db-table-many-to-many/ https://techli
 
 #### 時間あれば実際に中間テーブルやってみよう
 
-配布した以下のテーブルをte-buruwophpMyAdminで取り入れる clubs clubs\_students students
+配布した以下のテーブルをphpMyAdminで取り入れる clubs clubs\_students students
 
 ```sql
 SELECT * FROM clubs join clubs_students on clubs.id = clubs_students.clubs_id;
@@ -288,24 +287,26 @@ Macの人は、共有資料内のimgフォルダに対して、共有とアク�
 `index.php`の`<form>`に`enctype`追加と、`<input type="file">`の追加をしてください。
 
 ```html
-    <form method="POST" action="insert.php" enctype="multipart/form-data">
-        <div class="jumbotron">
-            <fieldset>
-                <legend>フリーアンケート</legend>
-                <div>
-                    <label for="content">内容：</label>
-                    <textarea id="content" name="content" rows="4" cols="40"></textarea>
-                </div>
-                <div>
-                    <label for="image">画像：</label>
-                    <input type="file" id="image" name="image">
-                </div>
-                <div>
-                    <input type="submit" value="送信">
-                </div>
-            </fieldset>
-        </div>
-    </form>
+<form method="POST" action="insert.php" enctype="multipart/form-data">
+    <div class="jumbotron">
+        <fieldset>
+            <legend>フリーアンケート</legend>
+            <div>
+                <label for="content">内容：</label>
+                <textarea id="content" name="content" rows="4" cols="40"></textarea>
+            </div>
+
+            <!-- 以下のdivタグ4行を追加 -->
+            <div>
+                <label for="image">画像：</label>
+                <input type="file" id="image" name="image">
+            </div>
+            <div>
+                <input type="submit" value="送信">
+            </div>
+        </fieldset>
+    </div>
+</form>
 ```
 
 ### `insert.php`の修正
@@ -317,9 +318,17 @@ Macの人は、共有資料内のimgフォルダに対して、共有とアク�
 以下のような処理を記載して、画像を保存しましょう。
 
 ```php
+session_start();
+require_once 'funcs.php';
+loginCheck();
+
+//1. POSTつぶやき取得
+$content = $_POST['content'];
+$user_id = $_SESSION['user_id']; 
+
+// 画像アップロードの処理をここら辺に追加
 $image = '';
 if (isset($_FILES['image'])) {
-    
     // アップロードする画像をリネームする準備
     $upload_file = $_FILES['image']['tmp_name'];
     $extension = pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION);
@@ -351,33 +360,33 @@ $status = $stmt->execute(); //実行
 
 `detail.php`にて登録した画像を表示してみましょう。 基本的には、DBのimageカラムに画像の格納先があるので、これをのsrcに記述するだけです。
 
-```
-    <form method="POST" action="update.php" enctype="multipart/form-data">
+```html
+<form method="POST" action="update.php" enctype="multipart/form-data">
 
-# 省略
+    <!-- # 省略 -->
 
-                <div>
-                    <label for="content">内容：</label>
-                    <textarea id="content" name="content" rows="4" cols="40"><?= h($row['content']) ?></textarea>
-                </div>
+            <div>
+                <label for="content">内容：</label>
+                <textarea id="content" name="content" rows="4" cols="40"><?= h($row['content']) ?></textarea>
+            </div>
 
-                // 以下追記
-                <?php
-                    if (!empty($row['image'])) {
-                        echo '<img src="' . h($row['image']) . '" class="image-class">';
-                    }
-                ?>
-                <div>
-                    <label for="new_image">新しい画像を追加する場合は以下から登録：</label>
-                    <input type="file" id="new_image" name="new_image">
-                </div>
-                <div>
-                    <input type="submit" value="更新">
-                    <input type="hidden" name="id" value="<?= $id ?>">
-                </div>
-            </fieldset>
-        </div>
-    </form>
+            <!-- 以下追記 -->
+            <?php
+            if (!empty($row['image'])) {
+                echo '<img src="' . h($row['image']) . '" class="image-class">';
+            }
+            ?>
+            <div>
+                <label for="new_image">新しい画像を追加する場合は以下から登録：</label>
+                <input type="file" id="new_image" name="new_image">
+            </div>
+            <div>
+                <input type="submit" value="更新">
+                <input type="hidden" name="id" value="<?= $id ?>">
+            </div>
+        </fieldset>
+    </div>
+</form>
 ```
 
 ### 画像の表示01
