@@ -36,8 +36,10 @@ https://minegishirei.hatenablog.com/entry/2023/05/04/124946
 **以下のスクリプトを正**としてください。
 
 ```bash
-$ curl -s "https://laravel.build/example-app" | bash
+$ curl -s "https://laravel.build/laratter" | bash
+
 $ cd example-app
+
 $ ./vendor/bin/sail up -d
 ```
 

@@ -24,8 +24,10 @@ dockerの説明はここでは割愛します。
 
 動画内のスクリプトはこちら
 ```bash
-$ curl -s "https://laravel.build/example-app" | bash
+$ curl -s "https://laravel.build/laratter" | bash
+
 $ cd example-app
+
 $ ./vendor/bin/sail up -d
 ```
 
