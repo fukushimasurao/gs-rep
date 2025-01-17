@@ -24,6 +24,7 @@ dockerの説明はここでは割愛します。
 ### 注意
 動画内と以下スクリプトの内容が若干異なりますが、
 **以下のスクリプトを正**としてください。
+（もしくは動画内の字幕を正としてください。）
 
 動画内のスクリプトはこちら
 ```bash
@@ -32,6 +33,9 @@ $ curl -s "https://laravel.build/laratter" | bash
 $ cd example-app
 
 $ ./vendor/bin/sail up -d
+
+$ ./vendor/bin/sail artisan migrate
+
 ```
 
 
@@ -50,7 +54,9 @@ phpmyadmin:
         - sail
 ```
 
-
+```bash
+platform: linux/amd64
+```
 
 動画はこちら
 https://youtu.be/jlLolZ-ZfBk

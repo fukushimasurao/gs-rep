@@ -35,8 +35,9 @@ https://minegishirei.hatenablog.com/entry/2023/05/04/124946
 ----
 
 ### 注意
-動画内と以下スクリプトの内容が若干異なりますが、
+動画内に映るスクリプトと以下スクリプトの内容が若干異なりますが、
 **以下のスクリプトを正**としてください。
+（もしくは動画内の字幕を正としてください。）
 
 ```bash
 $ curl -s "https://laravel.build/laratter" | bash
@@ -61,3 +62,8 @@ phpmyadmin:
     networks:
         - sail
 ```
+
+
+
+動画
+https://youtu.be/qHF9JU629QM
