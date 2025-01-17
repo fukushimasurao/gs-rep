@@ -31,9 +31,13 @@ https://minegishirei.hatenablog.com/entry/2023/05/04/124946
 
 ----
 
+### 注意
+動画内と以下スクリプトの内容が若干異なりますが、
+**以下のスクリプトを正**としてください。
+
 ```bash
-$ curl -s "https://laravel.build/test-project" | bash
-$ cd test-project
+$ curl -s "https://laravel.build/example-app" | bash
+$ cd example-app
 $ ./vendor/bin/sail up -d
 ```
 

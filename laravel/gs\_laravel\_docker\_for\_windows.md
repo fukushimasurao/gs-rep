@@ -17,20 +17,15 @@ dockerの説明はここでは割愛します。
 詳しくは自分の目で確かめるのだ！
 {% endhint %}
 
-動画はこちら
 
-https://youtu.be/jlLolZ-ZfBk
+### 注意
+動画内と以下スクリプトの内容が若干異なりますが、
+**以下のスクリプトを正**としてください。
 
 動画内のスクリプトはこちら
-
-....
-
-
-----
-
 ```bash
-$ curl -s "https://laravel.build/test-project" | bash
-$ cd test-project
+$ curl -s "https://laravel.build/example-app" | bash
+$ cd example-app
 $ ./vendor/bin/sail up -d
 ```
 
@@ -49,3 +44,8 @@ phpmyadmin:
     networks:
         - sail
 ```
+
+
+
+動画はこちら
+https://youtu.be/jlLolZ-ZfBk
