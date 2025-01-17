@@ -24,3 +24,28 @@ https://youtu.be/jlLolZ-ZfBk
 動画内のスクリプトはこちら
 
 ....
+
+
+----
+
+```bash
+$ curl -s "https://laravel.build/test-project" | bash
+$ cd test-project
+$ ./vendor/bin/sail up -d
+```
+
+
+```bash
+phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    links:
+        - mysql:mysql
+    ports:
+        - 8080:80
+    environment:
+        MYSQL_USERNAME: '${DB_USERNAME}'
+        MYSQL_ROOT_PASSWORD: '${DB_PASSWORD}'
+        PMA_HOST: mysql
+    networks:
+        - sail
+```
