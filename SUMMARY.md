@@ -15,8 +15,8 @@
   * [ℹ️ その他情報情報](php/something.md)
 * [Laravel](laravel/README.md)
 
-  * [🪟 001\_Docker導入_WINDOWS](laravel/gs\_laravel\_docker\_for\_windows.md)
-  * [🍎 002\_Docker導入_Mac](laravel/gs\_laravel\_docker\_for\_mac.md)
+  * [🪟 001_1\_Docker導入_WINDOWS](laravel/gs\_laravel\_docker\_for\_windows.md)
+  * [🍎 001_2\_Docker導入_Mac](laravel/gs\_laravel\_docker\_for\_mac.md)
   * [🐡 003\_Modelとテーブルの用意](laravel/gs\_laravel\_make\_laratter\_with\_model.md)
   * [🚅 004\_画面の用意](laravel/gs\_laravel\_make\_laratter\_with\_blade.md)
   * [🐔 005\_一覧画面と作成画面の実装](laravel/gs\_laravel\_make\_laratter\_with\_index\_n\_create.md)
