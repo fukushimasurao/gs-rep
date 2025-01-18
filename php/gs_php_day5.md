@@ -244,8 +244,7 @@ $status = $stmt->execute();
     while ($r = $stmt->fetch(PDO::FETCH_ASSOC)) {
         $view .= '<div class="record"><p>';
         $view .= '<a href="detail.php?id=' . $r["id"] . '">';
-        $view .= h($r['id']) . " " . h($r['content']);
-        $view .= h($r['content']) . " @" . $r['name']; //$r['name']; 追加
+        $view .= h($r['id']) . " " . h($r['content']) . " @ " . $r['name']; //$r['name']; 追加
         $view .= '</a>';
         $view .= "　";
 
