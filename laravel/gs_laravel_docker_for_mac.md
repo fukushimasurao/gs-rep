@@ -85,4 +85,5 @@ phpmyadmin:
 platform: linux/amd64
 ```
 
-動画 https://www.youtube.com/watch?v=PBzFkAERXNc
+動画
+https://youtu.be/qHF9JU629QM

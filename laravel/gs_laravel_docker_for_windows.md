@@ -60,4 +60,4 @@ phpmyadmin:
 
 
 動画はこちら
-https://youtu.be/jlLolZ-ZfBk
+https://youtu.be/PBzFkAERXNc
