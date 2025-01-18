@@ -243,16 +243,16 @@ $status = $stmt->execute();
 ```php
     while ($r = $stmt->fetch(PDO::FETCH_ASSOC)) {
         $view .= '<div class="record"><p>';
-        if ($_SESSION['kanri_flg'] === 1) { // kanri_flgなければ編集できないように処理
-            $view .= '<a href="detail.php?id=' . $r["id"] . '">';
-            $view .= h($r['content']) . " @" . $r['name']; //$r['name']; 追加
-            $view .= '</a>';
-            $view .= "　";
+        $view .= '<a href="detail.php?id=' . $r["id"] . '">';
+        $view .= h($r['id']) . " " . h($r['content']);
+        $view .= h($r['content']) . " @" . $r['name']; //$r['name']; 追加
+        $view .= '</a>';
+        $view .= "　";
+
+        if ($_SESSION['kanri_flg'] === 1) {
             $view .= '<a class="btn btn-danger" href="delete.php?id=' . $r['id'] . '">';
             $view .= '削除';
             $view .= '</a>';
-        } else {
-            $view .= h($r['content']) . " @" . $r['name'];
         }
         $view .= '</p></div>';
     }
