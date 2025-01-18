@@ -23,17 +23,15 @@
 
 Tweet の作成処理は`TweetController` の `store` メソッドに記載。
 
-`フォーム`から送信されてきたデータは `$request`に格納されているため、`validate` を用いてデータのバリデーションを行っていきます。
-<br>
+`フォーム`から送信されてきたデータは `$request`に格納されているため、`validate` を用いてデータのバリデーションを行っていきます。\
+
 
 ここでは，
-* `tweet が空でないこと`
-* `長さが 255 以内であること` 
-を確認しています。
 
-バリデーションをクリアしたら Tweet のデータを作成します。
-<>br
-バリデーションをクリアしない場合（=tweetが空だったり255以上あったり）は自動的に作成ページ（とエラーメッセージ）が表示されます。
+* `tweet が空でないこと`
+* `長さが 255 以内であること` を確認しています。
+
+バリデーションをクリアしたら Tweet のデータを作成します。 <>br バリデーションをクリアしない場合（=tweetが空だったり255以上あったり）は自動的に作成ページ（とエラーメッセージ）が表示されます。
 
 {% hint style="info" %}
 ```
@@ -46,7 +44,7 @@ $requestには、formから送られてきた中身が入っています。
 {% hint style="info" %}
 以下コードの詳細は↓
 
-[https://nu0640042.gitbook.io/gs\_php/laravel/laravel-tips/rekdonopatn](laravel-tips/rekdonopatn.md)
+[https://nu0640042.gitbook.io/gs\_php/laravel/laravel-tips/rekdonopatn](broken-reference)
 {% endhint %}
 
 ```php
@@ -81,13 +79,11 @@ class TweetController extends Controller
 
 ### Tweet 詳細画面の実装
 
-TweetController の `show` メソッドを編集します。
-<br>
- `show` メソッドは，Tweet の詳細画面を表示するためのものです。
+TweetController の `show` メソッドを編集します。\
+`show` メソッドは，Tweet の詳細画面を表示するためのものです。
 
-一覧画面のリンク（ `<a href="{{ route('tweets.show', $tweet) }}">` 部分）で Tweet 1 件のデータが渡されているため、`$tweet` に該当する Tweet のデータが渡されます。
-<br>
- `show` メソッドが受け取ったデータをそのままビューファイルに渡せば OK。
+一覧画面のリンク（ `<a href="{{ route('tweets.show', $tweet) }}">` 部分）で Tweet 1 件のデータが渡されているため、`$tweet` に該当する Tweet のデータが渡されます。\
+`show` メソッドが受け取ったデータをそのままビューファイルに渡せば OK。
 
 ```php
 // app/Http/Controllers/TweetController.php
@@ -107,11 +103,8 @@ class TweetController extends Controller
 
 ### 詳細画面の作成
 
-`resources/views/tweets/show.blade.php` ファイルを開き、Tweet の詳細画面を表示するためのコードを追加しましょう。
-<br>
-ここでは，Tweetの投稿者のみが編集・削除できるようにするため、Tweet の投稿者とログインユーザが一致するかを確認した上で編集ボタンと削除ボタンを表示します。
-※下記補足参照！
-
+`resources/views/tweets/show.blade.php` ファイルを開き、Tweet の詳細画面を表示するためのコードを追加しましょう。\
+ここでは，Tweetの投稿者のみが編集・削除できるようにするため、Tweet の投稿者とログインユーザが一致するかを確認した上で編集ボタンと削除ボタンを表示します。 ※下記補足参照！
 
 ```php
 <!-- resources/views/tweets/show.blade.php -->

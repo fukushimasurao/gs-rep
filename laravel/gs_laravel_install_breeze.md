@@ -1,10 +1,8 @@
+# 🍎 002\_Breeze導入
 
-# Laravel Breeze の導入
+Laravel Breeze は、手軽に利用できる認証パッケージです。
 
-Laravel Breeze は、手軽に利用できる認証パッケージです。&#x20;
-
-パッケージを利用すると非常に簡単にログイン機能等が実装できます！
-Laravel Breeze をプロジェクトにインストールしましょう。
+パッケージを利用すると非常に簡単にログイン機能等が実装できます！ Laravel Breeze をプロジェクトにインストールしましょう。
 
 #### Breeze準備/まずはlaratterにいることを確認。
 
@@ -29,7 +27,6 @@ $ ./vendor/bin/sail artisan breeze:install
 ```
 
 選択肢が出てくるが全部Enterでok
-
 
 ```bash
  ┌ Which Breeze stack would you like to install? ─┐
@@ -57,7 +54,6 @@ $ sail npm run build
 
 ただし、まだ登録するためのテーブルが無いので作成する必要あります。
 
-
 #### テーブル作成
 
 DB内に何もない状況なので、すでに存在している`cms/database/migrations/...`ファイルの中身をDBに反映させる。
@@ -66,8 +62,7 @@ DB内に何もない状況なので、すでに存在している`cms/database/m
 $ ./vendor/bin/sail artisan migrate
 ```
 
-実行するとこんな感じのlogが出ます。
-マイグレーションファイルが実行されて、DONEの記載が出てますね！
+実行するとこんな感じのlogが出ます。 マイグレーションファイルが実行されて、DONEの記載が出てますね！
 
 ```bash
 $ ./vendor/bin/sail artisan migrate

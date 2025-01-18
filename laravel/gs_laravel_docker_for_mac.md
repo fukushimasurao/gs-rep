@@ -36,13 +36,11 @@ https://minegishirei.hatenablog.com/entry/2023/05/04/124946
 
 
 
-動画では出てないですが、初めて
 
-```
-./vendor/bin/sail up -d
-```
 
-した際に以下のようなエラーが出ることがあります。
+動画では出てないですが、初めて`./vendor/bin/sail up -d`した際に以下のようなエラーが出ることがあります。
+
+<figure><img src="../.gitbook/assets/スクリーンショット 2025-01-18 14.11.12.png" alt=""><figcaption></figcaption></figure>
 
 その際は、
 
