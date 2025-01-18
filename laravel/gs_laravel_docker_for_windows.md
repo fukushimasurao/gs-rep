@@ -7,6 +7,8 @@
 もしxamppやmampを起動している場合は、それらを終了させてから以下行ってください。
 
 
+---
+
 laravelを導入するにあたり、今回はDockerというものを使います。
 
 phpを学ぶときに、仮のサーバーとしてxammp(or mamp)を利用しましたよね？
@@ -20,21 +22,22 @@ dockerの説明はここでは割愛します。
 詳しくは自分の目で確かめるのだ！
 {% endhint %}
 
-
 ### 注意
 動画内と以下スクリプトの内容が若干異なりますが、
 **以下のスクリプトを正**としてください。
 （もしくは動画内の字幕を正としてください。）
 
-動画内のスクリプトはこちら
+動画内で利用しているスクリプトはこちら
 ```bash
-$ curl -s "https://laravel.build/laratter" | bash
+curl -s "https://laravel.build/laratter" | bash
 
-$ cd example-app
+cd example-app
 
-$ ./vendor/bin/sail up -d
+./vendor/bin/sail up -d
 
-$ ./vendor/bin/sail artisan migrate
+./vendor/bin/sail down
+
+./vendor/bin/sail artisan migrate
 
 ```
 
@@ -54,9 +57,7 @@ phpmyadmin:
         - sail
 ```
 
-```bash
-platform: linux/amd64
-```
+
 
 動画はこちら
 https://youtu.be/jlLolZ-ZfBk
