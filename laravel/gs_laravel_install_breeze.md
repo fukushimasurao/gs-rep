@@ -19,12 +19,17 @@ $ cd laratter
 ```bash
 $ ./vendor/bin/sail composer require laravel/breeze --dev
 ```
+↑ このスクリプト実行で、Breezeパッケージをプロジェクトに追加します（まだ利用できません）
+breezeそのものはinstallすると、ログインに必要なblade等を勝手に追加してくれる便利ツールです。
+
 
 #### インストール
 
 ```bash
 $ ./vendor/bin/sail artisan breeze:install
 ```
+↑ このスクリプト実行でテンプレートや設定をプロジェクトに適用します。
+
 
 選択肢が出てくるが全部Enterでok
 
@@ -47,6 +52,8 @@ $ ./vendor/bin/sail artisan breeze:install
 ```bash
 $ sail npm run build
 ```
+↑HTML/CSS/JSをビルド = フロントで何か修正して反映されない場合等ある場合はスクリプトを実行してください。
+
 
 完了したら、Laravelのトップページにログイン機能が追加されます。
 
@@ -81,3 +88,11 @@ $ ./vendor/bin/sail artisan migrate
 ```
 
 ユーザー登録ができるようになったら、２−３人適当にユーザーを作成してください。
+
+
+{% hint style="info" %}
+```
+ちなみに http://localhost:8025/ にアクセスすると、localで利用できる（外部ネットワークにつながっていない）メール操作が可能だよ！
+パスワード忘れのメール等はここのアドレスに届きます。
+```
+{% endhint %}
