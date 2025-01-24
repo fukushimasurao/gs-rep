@@ -28,10 +28,10 @@ tailwindcssは、cssのライブラリです。htmlのclassにデザインを指
 まずはcms階層で以下のコマンドを順番に実行しましょう。
 
 ```bash
-$ php artisan make:view tweets.index
-$ php artisan make:view tweets.create
-$ php artisan make:view tweets.show
-$ php artisan make:view tweets.edit
+$ sail artisan make:view tweets.index
+$ sail artisan make:view tweets.create
+$ sail artisan make:view tweets.show
+$ sail artisan make:view tweets.edit
 ```
 
 上記を実行すると`resources/views`内に`tweets`フォルダが作成されて、以下 4 つのファイルが作成されます。
@@ -74,7 +74,8 @@ $ php artisan make:view tweets.edit
 
 {% hint style="info" %}
 ```
-記載する、"route('tweets.index')" という箇所は、routeで設定した名前です。
+記載する、"route('tweets.index')" という箇所は、routeで設定した（された）名前です。
+
 `$ php artisan route:list --path=tweets`の出力を思い出そう！
 ```
 {% endhint %}
