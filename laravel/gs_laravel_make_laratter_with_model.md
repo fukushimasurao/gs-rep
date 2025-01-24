@@ -45,24 +45,24 @@ _コマンドでまとめて作成すると自動的に規則に従ってくれ�
 無理に手動で作成せず、コマンドに任せよう。
 {% endhint %}
 
-以下コマンドを`cms`階層で実行する
+以下コマンドを`laratter`階層で実行する
 
-`$ php artisan make:model Tweet -rm`
+`$ sail artisan make:model Tweet -rm`
 
 以下のようなlogが吐き出されて、`Model`, `migrationsファイル`、`Controller`が作成されればok
 
 ```bash
-// cms階層にいることを確認
+// laratter階層にいることを確認
 $ pwd
-/home/ec2-user/environment/cms
+/Users/fukushimahayato/laratter
 
-$ php artisan make:model Tweet -rm
+$ sail artisan make:model Tweet -rm
 
-   INFO  Model [app/Models/Tweet.php] created successfully.
+   INFO  Model [app/Models/Tweet.php] created successfully.  
 
-   INFO  Migration [database/migrations/2024_07_23_122117_create_tweets_table.php] created successfully.
+   INFO  Migration [database/migrations/2025_01_24_194104_create_tweets_table.php] created successfully.  
 
-   INFO  Controller [app/Http/Controllers/TweetController.php] created successfully.
+   INFO  Controller [app/Http/Controllers/TweetController.php] created successfully.  
 ```
 
 ### マイグレーションファイルの編集
@@ -73,7 +73,7 @@ $ php artisan make:model Tweet -rm
 まずは生成されたマイグレーションファイルに`tweet` カラムと`user_id` カラムを追加します。
 これにより、テキスト共有データの格納と各Tweetがどのユーザに属するかを識別が可能になります。
 
-* 今回は `User` と `Tweet` の関係が `1 対 多`となるため，`tweets` テーブルに `user_id` カラムを追加。
+* 今回は `User` と `Tweet` の関係が `1 対 多`となるため，`tweets` テーブルに `user_id` カラムを追加します。
 * 他のテーブルとリレーションをさせるためには，カラム名を「モデル名小文字\_id」とする必要があります。
 
 {% hint style="info" %}
@@ -103,6 +103,7 @@ public function up(): void
 
 * `foreignId('user_id')->constrained()`
   * user\_idという用に、`"テーブル名（単数）_id"`とすると、そのテーブルと連携することを認識
+  * `foreignId`は「外部キー」というもの。`tweets`テーブルにレコード作成する際に、`user`テーブルに存在しないidを`user_id`に設定するとエラーになる。
   * `->constrained()` つけると、連携してくれて、データを一発で取ってくれるようになる。
     * （この書き方はほぼテンプレ）
 * `cascadeOnDelete()` ... とあるusersテーブルのレコードが削除されたら、関連するtweetsテーブルのレコードも自動的に削除する制約を設定する。
@@ -113,25 +114,20 @@ public function up(): void
 マイグレーションファイルに記述して保存できたら、マイグレートを実行
 
 ```bash
-$ php artisan migrate
+$ sail artisan migrate
 ```
 
 ```bash
-voclabs:~/environment/cms $ php artisan migrate
+$ sail artisan migrate             
 
    INFO  Running migrations.  
 
-  2024_07_23_122117_create_tweets_table ................ 111ms DONE
-
-voclabs:~/environment/cms $ 
+  2025_01_24_194104_create_tweets_table ................................................................................. 59.52ms DONE
 ```
-
-
 
 phpMyAdminを確認して、テーブルのカラムを確認しよう。 以下のようなルールになっていればok
 
 ```bash
-MariaDB [c9]> DESC tweets;
 +------------+---------------------+------+-----+---------+----------------+
 | Field      | Type                | Null | Key | Default | Extra          |
 +------------+---------------------+------+-----+---------+----------------+
@@ -149,10 +145,9 @@ MariaDB [c9]> DESC tweets;
 ここに連携を記述しておくことで、連携先のデータを容易に操作できるようになります。
 
 例えば、
-
 * とあるユーザーがpostした投稿を取得したり、
 * 投稿からだれがpostしたのか
-がすぐに分狩るようになります。
+がすぐにわかるようになります。
 
 今回は `User` モデルと `Tweet` モデルを `1 対 多`で連携する。
 
@@ -189,12 +184,11 @@ class User extends Authenticatable
 
 {% hint style="info" %}
 UserからみるとTweetを複数持っている1対多なので、`hasMany`となります。
-`tweets()`はメソッドです。Tweetを取得するために`tweets()`メソッドが利用できます。
-Userモデルが関連している
+`tweets()`はメソッドです。
+UserからTweetを取得するために`tweets()`メソッドが利用できることを覚えておいてください。
 {% endhint %}
 
-
-同様に `Tweet` モデルにも関係を定義する。
+反対に、 `Tweet` モデルにも関係を定義する。
 
 `app/Models/Tweet.php` ファイルを開き`user` メソッドを追加。
 
@@ -275,6 +269,9 @@ Route::middleware('auth')->group(function () {
 
 require __DIR__ . '/auth.php';
 ```
+{% hint style="info" %}
+`Route::middleware('auth')->group(function () { ... });` に囲まれているルートは、ユーザーが認証されている（ログインしている）状態でないとアクセスできないことを表しています。
+{% endhint %}
 
 ### ルーティングの確認
 
@@ -282,7 +279,7 @@ require __DIR__ . '/auth.php';
 `resource` を用いることで `Tweet` に関する `CRUD` 処理のルートが自動的に追加されていることが確認できます。
 
 ```bash
-voclabs:~/environment/cms $ php artisan route:list --path=tweets
+$ sail artisan route:list --path=tweets
 
   GET|HEAD        tweets ...................... tweets.index  › TweetController@index
   POST            tweets ...................... tweets.store  › TweetController@store
@@ -291,5 +288,5 @@ voclabs:~/environment/cms $ php artisan route:list --path=tweets
   PUT|PATCH       tweets/{tweet} ............ tweets.update   › TweetController@update
   DELETE          tweets/{tweet} .......... tweets.destroy    › TweetController@destroy
   GET|HEAD        tweets/{tweet}/edit ........... tweets.edit › TweetController@edit
-                                                                                               Showing [7] routes
+                                                                                               Showing [7] routes                                                                                              
 ```
