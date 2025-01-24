@@ -8,30 +8,36 @@
 ### 前提確認
 
 * (1)について
-  * `/tweets/create` のページ。
-    * routeから`tweets/create`は`TweetController@create`を利用していること。
-    * `TweetController@create`のreturnから`view('tweets.create')`のviewを描写しているいうことがわかる。
-  * `view('tweets.create')`の中の`form`を見ると、`action`は`'tweets.store'`ということを確認。
-    * routeから`'tweets.store'`へのpostは`TweetController@store` ということを確認。
+  * `/tweets/create`
+    * routeから`tweets/create`は`TweetController@create`を利用していることを確認しよう。
+    * `TweetController@create`のreturnから`view('tweets.create')`のviewを描写しているいうことを確認しよう。
+  * 先ほど記載した`view('tweets.create')`の中の`form`を見ると、`action`は`'tweets.store'`ということを確認しよう。
+    * routeから`'tweets.store'`へのpostは`TweetController@store` メソッドを利用するということを確認しよう。
 * (2)について
-  * `/tweets`のページに詳細画面へのリンクあり。
-  * `route`から`/tweets`は`TweetController@index`を利用し、そこから`view('tweets.index')`に`$tweets`の情報を与えつつ描写していることを確認する。
-  * `view('tweets.index')`に`<a href="{{ route('tweets.show', $tweet) }}"` の記載を確認する。`route`で見ると`TweetController@show` なので、`show`メソッドを記入していく。
+  * Tweet一覧ページ`view('tweets.index')`に`<a href="{{ route('tweets.show', $tweet) }}"` の記載を確認しよう。
+  * `route`で見ると`TweetController@show` なので、`show`メソッドを記入していく。
     * なお、`route('tweets.show', $tweet)` は自動で`$tweetの主キー`を渡す。`$tweet->id`と書かなくてもok。
 
 ## Tweet 作成処理の実装
 
-Tweet の作成処理は`TweetController` の `store` メソッドに記載。
+Tweet の作成処理は`TweetController` の `store` メソッドに記載あります。
 
-`フォーム`から送信されてきたデータは `$request`に格納されているため、`validate` を用いてデータのバリデーションを行っていきます。\
+フォームのPOSTを受け取るときの基本的な流れは、
+- フォームを受け取る
+- バリデーションチェックする
+- バリデーションに問題なければ、処理をする
+という流れになります。
 
+なお、`フォーム`から送信されてきたデータは `$request`に格納されています。
+この`$request`に対して`validate` を用いてデータのバリデーションを行っていきます。
 
-ここでは，
-
+ここでのバリデーションルールは、
 * `tweet が空でないこと`
-* `長さが 255 以内であること` を確認しています。
+* `長さが 255 以内であること` を確認します。
 
-バリデーションをクリアしたら Tweet のデータを作成します。 <>br バリデーションをクリアしない場合（=tweetが空だったり255以上あったり）は自動的に作成ページ（とエラーメッセージ）が表示されます。
+バリデーションをクリアしない場合（=tweetが空だったり255以上あったり）は処理をせずに自動的に作成ページ（とエラーメッセージ）に戻されます。
+
+バリデーションをクリアしたら Tweet のデータを作成します。
 
 {% hint style="info" %}
 ```
