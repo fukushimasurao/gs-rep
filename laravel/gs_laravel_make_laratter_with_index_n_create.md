@@ -166,6 +166,17 @@ class TweetController extends Controller
 <br>
 👹ビューファイルを変更した場合は必ず実行するようにしましょう。👹
 
+
+{% hint style="info" %}
+CSRFについて : https://www.ipa.go.jp/security/vuln/websecurity/csrf.html
+{% endhint %}
+
+{% hint style="info" %}
+Laravelにて、postのformで、`@csrf`を書き忘れると、formを送った際に`419`のエラーレスポンスになります。
+{% endhint %}
+
+
+
 ```bash
 $ sail npm run build
 ```
