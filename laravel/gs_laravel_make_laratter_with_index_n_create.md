@@ -2,8 +2,8 @@
 
 今回やること
 
-* Tweet の一覧画面を作成する。
-* Tweet の作成画面を作成する。
+* Tweet の一覧画面(index)を作成する。
+* Tweet の作成画面(create)を作成する。
 
 ### コントローラのメソッド
 
@@ -13,6 +13,22 @@
 * `create` メソッドは，Tweet の作成画面を表示するためのもの
 
 です。
+
+それぞれブラウザで
+tweetsにアクセスしたときindexメソッドが、
+tweets/createにアクセスしたときcreateメソッドが
+呼ばれます。
+
+```bash
+$ sail artisan route:list --path=tweets
+  // 省略
+  GET|HEAD        tweets ........  tweets.index › TweetController@index
+  GET|HEAD        tweets/create .. tweets.create › TweetController@create
+  // 省略
+```
+                                    
+
+
 
 `index` メソッドではTweet全件を`新しい順`に取得するために `latest` メソッドを使用します。
 <br>
@@ -43,6 +59,7 @@ class TweetController extends Controller
     $tweets = Tweet::with('user')->latest()->get();
 
     // $tweetsを'tweets.index'に渡す
+    // このtweets.indexとは、resources/views配下のtweetsの中のindex.blade.phpを指すよ。
     return view('tweets.index', compact('tweets'));
   }
 
@@ -150,7 +167,7 @@ class TweetController extends Controller
 👹ビューファイルを変更した場合は必ず実行するようにしましょう。👹
 
 ```bash
-$ npm run build
+$ sail npm run build
 ```
 
 #### 動作確認

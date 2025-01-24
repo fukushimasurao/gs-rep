@@ -218,7 +218,7 @@ $ php artisan breeze:install
 #### HTML/CSS/JSをビルド = フロントで何か修正したらビルド）
 
 ```bash
-$ npm run build
+$ sail npm run build
 ```
 
 完了したら、Laravelのトップページにログイン機能が追加されます。

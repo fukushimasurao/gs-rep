@@ -150,7 +150,7 @@ class TweetController extends Controller
 画面いじったので、`Tailwind CSS` を適用
 
 ```bash
-$ npm run build
+$ sail npm run build
 ```
 
 ### 動作確認
