@@ -48,8 +48,7 @@ $requestには、formから送られてきた中身が入っています。
 {% endhint %}
 
 {% hint style="info" %}
-以下コードの詳細は↓
-
+以下コードの詳細はLaravel Tipsのレコード作成のパターンも参照。
 [https://nu0640042.gitbook.io/gs\_php/laravel/laravel-tips/rekdonopatn](broken-reference)
 {% endhint %}
 

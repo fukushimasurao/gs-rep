@@ -7,21 +7,23 @@
 
 ### 前提
 
+どちらも、`tweets/{tweet}`のページです。viewは`viewは'tweets.show'`、controllerは、`TweetController@show`です。
 * (1)について
-* `tweets/{tweet}`のページ。`route`で見る。
-  * `TweetController@show`、`viewは'tweets.show'`。'tweets.show'内に`href="{{ route('tweets.edit', $tweet) }}"`があり、routeで確認すると`TweetController@edit`とわかる。
+  * 先ほど書いた'tweets.show'内に`href="{{ route('tweets.edit', $tweet) }}"`を確認してください。
+  * これをrouteで確認するとメソッドは`TweetController@edit`とわかります。
 
 * (2)について
-* `tweets/{tweet}`のページ。`route`で見る。
-  * `TweetController@show`、`viewは'tweets.show'`。view内に`href="{{ route('tweets.edit', $tweet) }}"`があり、routeで確認すると`TweetController@edit`とわかる。
+  * view内に`<form action="{{ route('tweets.destroy', $tweet) }}"`を確認してください。
+  * routeで確認すると`TweetController@destroy`とわかる。
 
-
+--
 
 ## Tweet 作成処理の実装
 
 TweetController の `edit` メソッドを編集します。
 <br>
 `edit` メソッドは，Tweet の編集画面を表示するためのものです。
+ただフォームの画面を表示するだけなので、return viewだけで大丈夫です。
 
 ```php
 // app/Http/Controllers/TweetController.php
@@ -41,7 +43,8 @@ class TweetController extends Controller
 
 ### 編集画面の作成
 
-`resources/views/tweets/edit.blade.php` ファイルを開きTweet の編集画面を表示するためのコードを追加します。
+TweetControllerのeditメソッドは、tweets.editを開きます。
+よって、`resources/views/tweets/edit.blade.php` ファイルを開きTweet の編集画面を表示するためのコードを追加します。
 <br>
 作成画面と同様に`@error`を用いてエラーメッセージを表示しましょう。
 <br>また、`@method('PUT')` ディレクティブを使用してフォームから送信される `HTTP メソッド`を `PUT` に変更します。
@@ -83,7 +86,8 @@ class TweetController extends Controller
 
 ### 更新処理の実装
 
-Tweet の更新処理を実装するために`TweetController` の`update` メソッドを編集しよう。 
+↑の編集画面で用いられたformは`method="POST" action="{{ route('tweets.update', $tweet) }}"`と記載しました。
+よって、Tweet の更新処理を実装するために`TweetController` の`update` メソッドを編集しよう。 
 <br>
 このメソッドはTweetの更新処理を行います。
 <br>
@@ -96,9 +100,8 @@ Tweet の更新処理を実装するために`TweetController` の`update` メ�
 class TweetController extends Controller
 {
   // 省略
-
-<strong>  public function update(Request $request, Tweet $tweet)
-</strong>  {
+  public function update(Request $request, Tweet $tweet)
+  {
     $request->validate([
       'tweet' => 'required|max:255',
     ]);

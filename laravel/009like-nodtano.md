@@ -29,7 +29,7 @@
 ### コントローラの作成
 
 ```
-$ php artisan make:controller TweetLikeController --resource
+$ sail artisan make:controller TweetLikeController --resource
 ```
 
 {% hint style="info" %}

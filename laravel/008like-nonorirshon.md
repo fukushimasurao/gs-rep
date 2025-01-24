@@ -7,8 +7,10 @@
 <figure><img src="../.gitbook/assets/like_many-many.jpg" alt=""><figcaption></figcaption></figure>
 
 多対多の場合は
+
 * 中間テーブルを作成
 * モデルに多対多の連携を定義
+
 の流れが基本です。
 
 ### 前提
@@ -48,7 +50,7 @@
 
 下記のコマンドを実行して中間テーブルを作成しよう。
 
-<pre><code><strong>$ php artisan make:migration create_tweet_user_table --create=tweet_user
+<pre><code><strong>$ sail artisan make:migration create_tweet_user_table --create=tweet_user
 </strong></code></pre>
 
 このテーブルには「`どの Tweet に`」「`どの User` 」がlike したのか、という情報が入ります。
@@ -120,7 +122,7 @@ tweet_userテーブルのtweet_idカラムとuser_idカラムの組み合わせ�
 記述したらマイグレーションを実行!!!!!
 
 ```
-$ php artisan migrate
+$ sail artisan migrate
 ```
 
 ### モデルの編集
