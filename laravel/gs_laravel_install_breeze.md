@@ -63,6 +63,12 @@ $ sail npm run build
 
 #### テーブル作成
 
+{% hint style="info" %}
+```
+もしかしたら、すでにテーブル作成されていて、migrate不要かも。試しにブラウザからuser登録してみよう。できなかったら↓を実行してみよう
+```
+{% endhint %}
+
 DB内に何もない状況なので、すでに存在している`cms/database/migrations/...`ファイルの中身をDBに反映させる。
 
 ```bash
