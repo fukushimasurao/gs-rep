@@ -51,7 +51,8 @@ $ ./vendor/bin/sail artisan make:controller TweetLikeController --resource
 
 コントローラのメソッドをルーティングに追加。
 
-今回は`like` と `dislike` の 2 つを追加するため`resource` ではなく個別に記述する．
+今回は`like` と `dislike` の 2 つを追加するため`resource` ではなく個別に記述します。
+※ つまりresourceの場合は、crud処理全部(例えばindexとかcreateとかupdateとか)が自動で処理されますが、今回は、store と destroyだけでいいので個別にします。
 
 * like の場合は `store` メソッドを実行します。呼び出しやすいように`tweets.like` という名前をつけましょう。
 * dislike の場合は `destroy` メソッドを実行します。呼び出しやすいように `tweets.dislike` という名前をつけましょう。
@@ -95,8 +96,9 @@ store メソッドと destroy メソッドを実装しましょうお！！！�
 
 * ルートモデル結合を使用しているため指定した Tweet モデルのインスタンスを受け取ることが可能！
 * ユーザの情報は `auth()` ヘルパーを用いて取得します
-* 中間テーブルへのデータの追加は `attach` メソッドを用いる．「指定した Tweet（の id）」と「認証ユーザの id」を一緒に中間テーブルに追加する動きをします。
+* 中間テーブルへのデータの追加は `attach` メソッドを用います。「指定した Tweet（の id）」と「認証ユーザの id」を一緒に中間テーブルに追加する動きをします。
 * 同様に中間テーブルのデータ削除には `detach` メソッドを利用！
+  * attach/detachを利用すると、勝手に中間テーブルに対して処理してくれるよ
 
 <pre class="language-php"><code class="lang-php">// app/Http/Controllers/TweetLikeController.php
 
@@ -105,7 +107,7 @@ store メソッドと destroy メソッドを実装しましょうお！！！�
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-// 🔽 追加
+// ⭐️🔽 追加⭐️
 use App\Models\Tweet;
 
 class TweetLikeController extends Controller

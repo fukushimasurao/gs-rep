@@ -171,12 +171,7 @@ class User extends Authenticatable
 class Tweet extends Model
 {
 
-  // 一番下に以下のメソッドを追加する。
-  public function tweets()
-  {
-    // $thisは、Userモデルそのものと思ってください。
-    return $this->hasMany(Tweet::class);
-  }
+  // 省略
 
   // 🔽 今回はこれを追加!!!! 🔽 
   public function liked()
