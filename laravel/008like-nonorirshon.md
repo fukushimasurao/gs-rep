@@ -50,7 +50,7 @@
 
 下記のコマンドを実行して中間テーブルを作成しよう。
 
-<pre><code><strong>$ sail artisan make:migration create_tweet_user_table --create=tweet_user
+<pre><code><strong>$ ./vendor/bin/sail artisan make:migration create_tweet_user_table --create=tweet_user
 </strong></code></pre>
 
 このテーブルには「`どの Tweet に`」「`どの User` 」がlike したのか、という情報が入ります。
@@ -122,7 +122,7 @@ tweet_userテーブルのtweet_idカラムとuser_idカラムの組み合わせ�
 記述したらマイグレーションを実行!!!!!
 
 ```
-$ sail artisan migrate
+$ ./vendor/bin/sail artisan migrate
 ```
 
 ### モデルの編集

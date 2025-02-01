@@ -28,10 +28,10 @@ tailwindcssは、cssのライブラリです。htmlのclassにデザインを指
 まずはcms階層で以下のコマンドを順番に実行しましょう。
 
 ```bash
-$ sail artisan make:view tweets.index
-$ sail artisan make:view tweets.create
-$ sail artisan make:view tweets.show
-$ sail artisan make:view tweets.edit
+$ ./vendor/bin/sail artisan make:view tweets.index
+$ ./vendor/bin/sail artisan make:view tweets.create
+$ ./vendor/bin/sail artisan make:view tweets.show
+$ ./vendor/bin/sail artisan make:view tweets.edit
 ```
 
 上記を実行すると`resources/views`内に`tweets`フォルダが作成されて、以下 4 つのファイルが作成されます。

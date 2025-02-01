@@ -20,7 +20,7 @@ tweets/createにアクセスしたときcreateメソッドが
 呼ばれます。
 
 ```bash
-$ sail artisan route:list --path=tweets
+$ ./vendor/bin/sail artisan route:list --path=tweets
   // 省略
   GET|HEAD        tweets ........  tweets.index › TweetController@index
   GET|HEAD        tweets/create .. tweets.create › TweetController@create
@@ -178,7 +178,7 @@ Laravelにて、postのformで、`@csrf`を書き忘れると、formを送った
 
 
 ```bash
-$ sail npm run build
+$ ./vendor/bin/sail npm run build
 ```
 
 #### 動作確認

@@ -36,7 +36,7 @@
 ### コントローラの作成
 
 ```
-$ sail artisan make:controller TweetLikeController --resource
+$ ./vendor/bin/sail artisan make:controller TweetLikeController --resource
 ```
 
 {% hint style="info" %}

@@ -47,7 +47,7 @@ _コマンドでまとめて作成すると自動的に規則に従ってくれ�
 
 以下コマンドを`laratter`階層で実行する
 
-`$ sail artisan make:model Tweet -rm`
+`$ ./vendor/bin/sail artisan make:model Tweet -rm`
 
 以下のようなlogが吐き出されて、`Model`, `migrationsファイル`、`Controller`が作成されればok
 
@@ -56,7 +56,7 @@ _コマンドでまとめて作成すると自動的に規則に従ってくれ�
 $ pwd
 /Users/fukushimahayato/laratter
 
-$ sail artisan make:model Tweet -rm
+$ ./vendor/bin/sail artisan make:model Tweet -rm
 
    INFO  Model [app/Models/Tweet.php] created successfully.  
 
@@ -114,11 +114,11 @@ public function up(): void
 マイグレーションファイルに記述して保存できたら、マイグレートを実行
 
 ```bash
-$ sail artisan migrate
+$ ./vendor/bin/sail artisan migrate
 ```
 
 ```bash
-$ sail artisan migrate             
+$ ./vendor/bin/sail artisan migrate             
 
    INFO  Running migrations.  
 
@@ -279,7 +279,7 @@ require __DIR__ . '/auth.php';
 `resource` を用いることで `Tweet` に関する `CRUD` 処理のルートが自動的に追加されていることが確認できます。
 
 ```bash
-$ sail artisan route:list --path=tweets
+$ ./vendor/bin/sail artisan route:list --path=tweets
 
   GET|HEAD        tweets ...................... tweets.index  › TweetController@index
   POST            tweets ...................... tweets.store  › TweetController@store
