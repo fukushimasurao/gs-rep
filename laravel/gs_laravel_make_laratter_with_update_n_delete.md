@@ -9,12 +9,12 @@
 
 どちらも、`tweets/{tweet}`のページです。viewは`viewは'tweets.show'`、controllerは、`TweetController@show`です。
 * (1)について
-  * 先ほど書いた'tweets.show'内に`href="{{ route('tweets.edit', $tweet) }}"`を確認してください。
+  * 先ほど書いた'tweets.show'内に`href="{{ route('tweets.edit', $tweet) }}"`と書いてあることを確認してください。
   * これをrouteで確認するとメソッドは`TweetController@edit`とわかります。
 
 * (2)について
   * view内に`<form action="{{ route('tweets.destroy', $tweet) }}"`を確認してください。
-  * routeで確認すると`TweetController@destroy`とわかる。
+  * routeで確認すると`TweetController@destroy`とわかります。
 
 --
 

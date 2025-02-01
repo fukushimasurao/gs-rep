@@ -119,6 +119,14 @@ tweet_userテーブルのtweet_idカラムとuser_idカラムの組み合わせ�
 ```
 {% endhint %}
 
+
+{% hint style="info" %}
+constrainedを利用しない書き方は以下の通りのイメージ。ちょっとめんどい。
+
+`$table->foreignId('user_id')->references('id')->on('users')->onDelete('cascade');`
+{% endhint %}
+
+
 記述したらマイグレーションを実行!!!!!
 
 ```
@@ -163,9 +171,14 @@ class User extends Authenticatable
 class Tweet extends Model
 {
 
-  // ...
+  // 一番下に以下のメソッドを追加する。
+  public function tweets()
+  {
+    // $thisは、Userモデルそのものと思ってください。
+    return $this->hasMany(Tweet::class);
+  }
 
-  // 🔽 追加 🔽 
+  // 🔽 今回はこれを追加!!!! 🔽 
   public function liked()
   {
       return $this->belongsToMany(User::class)->withTimestamps();
