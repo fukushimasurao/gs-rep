@@ -167,9 +167,9 @@ class Tweet extends Model
 TweetのCRUD処理とほとんど同じだが、コメント一覧は `tweets.show` に追加するため `index.blade.php` は作成しなくて OK．
 
 ```bash
-$ php artisan make:view tweets.comments.create
-$ php artisan make:view tweets.comments.show
-$ php artisan make:view tweets.comments.edit
+$ ./vendor/bin/sail artisan make:view tweets.comments.create
+$ ./vendor/bin/sail artisan make:view tweets.comments.show
+$ ./vendor/bin/sail artisan make:view tweets.comments.edit
 ```
 
 ### ルーティングの設定
