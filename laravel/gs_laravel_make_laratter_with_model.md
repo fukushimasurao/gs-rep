@@ -167,11 +167,15 @@ class User extends Authenticatable
 
   // 省略
 
-  protected $casts = [
-      'email_verified_at' => 'datetime',
-      'password' => 'hashed',
-  ];
+  protected function casts(): array
+  {
+      return [
+          'email_verified_at' => 'datetime',
+          'password' => 'hashed',
+      ];
+  }
   
+  // ⭐️ここから↓追加⭐️
   // 一番下に以下のメソッドを追加する。
   public function tweets()
   {
@@ -205,12 +209,13 @@ UserからTweetを取得するために`tweets()`メソッドが利用できる�
 
 class Tweet extends Model
 {
-  use HasFactory;
 
-  // ↓1行追加
+
+  // ⭐️ここから下追加する
+  // 追加：↓1行
   protected $fillable = ['tweet'];
 
-  // 以下userメソッド追加
+  // 追加：userメソッド
   public function user()
   {
     return $this->belongsTo(User::class);

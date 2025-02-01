@@ -8,19 +8,23 @@
 ### 前提確認
 
 * (1)について
-  * `/tweets/create`
-    * routeから`tweets/create`は`TweetController@create`を利用していることを確認しよう。
+  * 作成画面の場所を確認。urlを見ると場所は `http://localhost/tweets/create`
+  * `/tweets/create`で描写されている画面について確認
+    * routeから`tweets/create`は`TweetController@create`が利用されていることを確認しよう。
     * `TweetController@create`のreturnから`view('tweets.create')`のviewを描写しているいうことを確認しよう。
-  * 先ほど記載した`view('tweets.create')`の中の`form`を見ると、`action`は`'tweets.store'`ということを確認しよう。
+  * `view('tweets.create')`は`resources/views/tweets/create.blade.php`を指している。見てみよう。
+    * 中の`form`を見ると、`action`は`'tweets.store'`ということを確認しよう。
     * routeから`'tweets.store'`へのpostは`TweetController@store` メソッドを利用するということを確認しよう。
 * (2)について
-  * Tweet一覧ページ`view('tweets.index')`に`<a href="{{ route('tweets.show', $tweet) }}"` の記載を確認しよう。
-  * `route`で見ると`TweetController@show` なので、`show`メソッドを記入していく。
+  * ※前提 : ツイートを数件作成しておいてください。
+  * Tweet一覧ページ http://localhost/tweets に各ツイートの詳細へのリンクがあり。
+  * Tweet一覧ページ`view('tweets.index')`の中のコードに`<a href="{{ route('tweets.show', $tweet) }}"` の記載を確認しよう。
+  *`route('tweets.show'`を`route`で見ると`TweetController@show` なので、`TweetController`の`show`メソッドを記入していく。
     * なお、`route('tweets.show', $tweet)` は自動で`$tweetの主キー`を渡す。`$tweet->id`と書かなくてもok。
 
 ## Tweet 作成処理の実装
 
-Tweet の作成処理は`TweetController` の `store` メソッドに記載あります。
+Tweet の作成処理は`TweetController` の `store` メソッドに記載していきましょう！
 
 フォームのPOSTを受け取るときの基本的な流れは、
 - フォームを受け取る
@@ -42,14 +46,14 @@ Tweet の作成処理は`TweetController` の `store` メソッドに記載あ�
 {% hint style="info" %}
 ```
 $requestには、formから送られてきた中身が入っています。
-`ddd($request->all());`
+`dd($request->all());`
 と書けば簡単に中身を確認できるぞ。
 ```
 {% endhint %}
 
 {% hint style="info" %}
 以下コードの詳細はLaravel Tipsのレコード作成のパターンも参照。
-[https://nu0640042.gitbook.io/gs\_php/laravel/laravel-tips/rekdonopatn](broken-reference)
+`https://nu0640042.gitbook.io/gs_php/laravel/laravel-tips/rekdonopatn`
 {% endhint %}
 
 ```php
@@ -61,6 +65,7 @@ class TweetController extends Controller
 {
   // 省略
 
+  // ⭐️以下store内を全部記入
   public function store(Request $request)
   {
     $request->validate([
@@ -69,6 +74,7 @@ class TweetController extends Controller
     ]);
 
     $request->user()->tweets()->create($request->all());
+    // リクエストからユーザの情報を取得し、「ユーザidが指定済みのtweetsテーブル」を用意してデータを作成する
     // $request->user()->tweets()->create($request->only('tweet')); // ←これでもok
 
     return redirect()->route('tweets.index');

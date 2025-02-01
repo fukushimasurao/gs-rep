@@ -55,9 +55,10 @@ class TweetController extends Controller
 {
   public function index()
   {
-    // ⭐️追加
+    // ⭐️追加↓
     $tweets = Tweet::with('user')->latest()->get();
 
+    // ⭐️追加↓
     // $tweetsを'tweets.index'に渡す
     // このtweets.indexとは、resources/views配下のtweetsの中のindex.blade.phpを指すよ。
     return view('tweets.index', compact('tweets'));
@@ -199,7 +200,14 @@ $ ./vendor/bin/sail npm run build
 この時点ではまだtweetの登録できないが、sqlから登録することが可能です。
 いくつか登録してみましょう！
 
-insert into tweets (id, user\_id, tweet, created\_at, updated\_at) values (null, 1, 'test', now(), now());
+※下記では、user id 1の人で登録しています。（多分id1はいると思いますが、）もしid 1がいなければ実際にuserテーブルに存在しているuser id で実行してください。
 {% endhint %}
+
+```sql
+insert into
+  tweets (id, user\_id, tweet, created\_at, updated\_at)
+  values (null, 1, 'test', now(), now());
+```
+
 
 &#x20;

@@ -27,6 +27,8 @@ tailwindcssは、cssのライブラリです。htmlのclassにデザインを指
 
 まずはcms階層で以下のコマンドを順番に実行しましょう。
 
+⭐️１行ずつコピーして実行してね。４行一気にしないように。
+
 ```bash
 $ ./vendor/bin/sail artisan make:view tweets.index
 $ ./vendor/bin/sail artisan make:view tweets.create
