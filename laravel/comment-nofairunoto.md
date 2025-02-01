@@ -102,8 +102,6 @@ public function up(): void
 
 class Comment extends Model
 {
-  use HasFactory;
-
   // 🔽 設定できるカラムを追加
   protected $fillable = ['comment', 'tweet_id', 'user_id'];
 
@@ -148,8 +146,6 @@ class User extends Authenticatable
 
 class Tweet extends Model
 {
-  use HasFactory;
-
   protected $fillable = ['tweet'];
 
   // 🔽 1対多の関係
