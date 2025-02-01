@@ -16,7 +16,7 @@
 
 Tweet に関するファイルを作成するときと同様の流れ。
 
-<pre class="language-bash"><code class="lang-bash"><strong>$ php artisan make:model Comment -rm
+<pre class="language-bash"><code class="lang-bash"><strong>$ ./vendor/bin/sail artisan make:model Comment -rm
 </strong></code></pre>
 
 下記のファイルが作成されます。
@@ -61,7 +61,7 @@ public function up(): void
 
 作成したら下記コマンドを実行してマイグレーションを実行しましょう。
 
-<pre class="language-bash"><code class="lang-bash"><strong>$ php artisan migrate
+<pre class="language-bash"><code class="lang-bash"><strong>$ ./vendor/bin/sail artisan migrate
 </strong></code></pre>
 
 実行後、commentsテーブルが作成されていることと、その中身を確認しましょう。．
@@ -220,7 +220,7 @@ require __DIR__ . '/auth.php';
 Comment に関する CRUD 処理のルートが自動的に追加されていることを確認しましょう。
 
 ```bash
-php artisan route:list --path=comments
+./vendor/bin/sail artisan route:list --path=comments
 
 # 実行結果（ユーザ操作などのルーティングは省略）
 +--------+-----------+------------------------------------------+-------------------------+-------------------------------------------------------+-----------------+
