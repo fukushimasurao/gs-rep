@@ -2,31 +2,31 @@
 description: php 第１日目
 ---
 
-# 😀 011\_gs\_php\_day1
+# 😀 011_gs_php_day1
 
 ### 授業資料 <a href="#shou-ye-zi-liao" id="shou-ye-zi-liao"></a>
 
-[https://gitlab.com/gs\_hayato/gs-php-01/-/blob/master/php01.zip](https://gitlab.com/gs\_hayato/gs-php-01/-/blob/master/php01.zip)
+[https://gitlab.com/gs_hayato/gs-php-01/-/blob/master/php01.zip](https://gitlab.com/gs_hayato/gs-php-01/-/blob/master/php01.zip)
 
 ![](<../.gitbook/assets/スクリーンショット 2022-01-09 2.30.21.png>)
 
 {% hint style="danger" %}
-Macを利用されている人は、dataファルダの書き込み権限を変更してください。
+Mac を利用されている人は、data ファルダの書き込み権限を変更してください。
 
 参考 [https://support.apple.com/ja-jp/guide/mac-help/mchlp1203/mac](https://support.apple.com/ja-jp/guide/mac-help/mchlp1203/mac)
 {% endhint %}
 
-## GsのPHP授業でのお願い
+## Gs の PHP 授業でのお願い
 
-授業ごとにZIP化した配布資料を共有します。
+授業ごとに ZIP 化した配布資料を共有します。
 
-解凍したファイルは、必ず**htdocs/gs\_code**に格納してください。
+解凍したファイルは、必ず**htdocs/gs_code**に格納してください。
 
-※gs\_codeフォルダがなければ、作成してください。
+※gs_code フォルダがなければ、作成してください。
 
 ## 基礎文法
 
-### _gs\_code/php001/hello01.php_
+### _gs_code/php01/hello01.php_
 
 ```php
 <?php
@@ -44,23 +44,23 @@ echo 'hello world';
 本当は省略が推奨だが、授業の最初は丁寧に?>を記述していきます。
 {% endhint %}
 
-ブラウザの URLに`localhost/gs_code/php01/hello01.php`と記入して出力を確認してみましょう。
+ブラウザの URL に`localhost/gs_code/php01/hello01.php`と記入して出力を確認してみましょう。
 
 {% hint style="danger" %}
-mampを使っている場合や、設定によっては、localhost:8888/gs\_code/php001/hello01.php
+mamp を使っている場合や、設定によっては、localhost:8888/gs_code/php01/hello01.php
 {% endhint %}
 
 {% hint style="danger" %}
 エラーの場合は以下を確認してみてください。
 
-* `XAMPP`を起動しているか。
-* 開始タグ・終了タグに間違いが無いか。
-* htdocs/gs\_codeに格納しているか。
-* 書き間違いが無いか。
-* 文の最後に ; が抜けていないか。
-* 全角スペースを記入していないか。
-* その他不要な文字などが入ってないか。
-{% endhint %}
+- `XAMPP`を起動しているか。
+- 開始タグ・終了タグに間違いが無いか。
+- htdocs/gs_code に格納しているか。
+- 書き間違いが無いか。
+- 文の最後に ; が抜けていないか。
+- 全角スペースを記入していないか。
+- その他不要な文字などが入ってないか。
+  {% endhint %}
 
 {% hint style="danger" %}
 表示がされない場合、
@@ -73,12 +73,12 @@ mampを使っている場合や、設定によっては、localhost:8888/gs\_cod
 
 の３点を行ったか確認してみださい。 この３つが基本の動作です。
 
-もし、VScodeの自動保存をしていない場合は、利用してみて下さい。
+もし、VScode の自動保存をしていない場合は、利用してみて下さい。
 {% endhint %}
 
 ### hello02.php
 
-phpはHTMLと合わせて記述することが可能です。
+php は HTML と合わせて記述することが可能です。
 
 ```php
 <!DOCTYPE html>
@@ -100,7 +100,7 @@ phpはHTMLと合わせて記述することが可能です。
 ```
 
 {% hint style="info" %}
-PHP部分は改行せずに、１行で記述しよう。
+PHP 部分は改行せずに、１行で記述しよう。
 {% endhint %}
 
 {% hint style="info" %}
@@ -131,7 +131,7 @@ PHP部分は改行せずに、１行で記述しよう。
 ```
 
 {% hint style="info" %}
-現状、JavaScriptの`console.log`に当たるものが、PHPの`echo`, `var_dump()`だと思ってください。
+現状、JavaScript の`console.log`に当たるものが、PHP の`echo`, `var_dump()`だと思ってください。
 {% endhint %}
 
 {% hint style="info" %}
@@ -154,7 +154,7 @@ PHP部分は改行せずに、１行で記述しよう。
 
 ```php
     <?php
-    
+
     $ary = ['東京', 'oosaka', '愛知'];
     // echo $ary; だと、中身が見られない😭
     var_dump($ary);
@@ -180,12 +180,12 @@ PHP部分は改行せずに、１行で記述しよう。
 ここでは代表的な組み込み関数の対応を行います。 単純に「こういう関数有るんだ〜」という確認程度の内容です。
 
 {% hint style="info" %}
-phpにて組み込み関数（最初から用意されている関数）を利用する時の基本的な形は、 `関数名()` の形になります。
+php にて組み込み関数（最初から用意されている関数）を利用する時の基本的な形は、 `関数名()` の形になります。
 {% endhint %}
 
 ```php
     <?php
-    
+
     // 日付表示
     // ※　アルファベット大文字小文字を間違えないでください。
     // 関数名()の形になっていることを確認してください。
@@ -199,7 +199,7 @@ phpにて組み込み関数（最初から用意されている関数）を利�
 ```
 
 {% hint style="info" %}
-phpのデフォルトのタイムゾーンはドイツ・ベルリンになっています。
+php のデフォルトのタイムゾーンはドイツ・ベルリンになっています。
 タイムゾーンの変更はこちらを参照してください。
 https://nu0640042.gitbook.io/gs_php/php/something#xamppnotaimuzn
 {% endhint %}
@@ -251,7 +251,7 @@ date()の引数はたくさん種類あります。
 [https://www.php.net/manual/ja/function.date.php](https://www.php.net/manual/ja/function.date.php)
 {% endhint %}
 
-### phpとJS/CSSの動きを確認 ... other\_lang.php
+### php と JS/CSS の動きを確認 ... other_lang.php
 
 ```php
 <html>
@@ -291,18 +291,19 @@ date()の引数はたくさん種類あります。
 
 ```
 
-### foreach.php ... foreachで配列を一つ一つ表示する
+### foreach.php ... foreach で配列を一つ一つ表示する
 
-繰り返しの処理としてforeachというものがあります。
+繰り返しの処理として foreach というものがあります。
 
 {% hint style="info" %}
-当然、for文もあります。 が、ここでは割愛。
+当然、for 文もあります。 が、ここでは割愛。
 
 ```
 for ($i = 0; $i < $num; $i++) {
     # code...
 }
 ```
+
 {% endhint %}
 
 ```php
@@ -340,7 +341,7 @@ for ($i = 0; $i < $num; $i++) {
 ```
 
 {% hint style="info" %}
-foreachにkeyを与えて
+foreach に key を与えて
 
 ```
 foreach ($variable as $key => $value) {
@@ -351,9 +352,9 @@ foreach ($variable as $key => $value) {
 という書き方もできる。
 {% endhint %}
 
-### while文に触れる
+### while 文に触れる
 
-foreachは、回数が決まっているものに対して繰り返しをおこなります。
+foreach は、回数が決まっているものに対して繰り返しをおこなります。
 
 一方で、回数が決まっていない・条件がある限り繰り返しには、`while文`があります。
 
@@ -372,17 +373,17 @@ foreachは、回数が決まっているものに対して繰り返しをおこ�
 継続条件を間違えると、処理が永遠に終わらない可能性あるので注意です。
 {% endhint %}
 
-### Form操作
+### Form 操作
 
-Formを利用して、データの送信・受け取り方法を知る。
+Form を利用して、データの送信・受け取り方法を知る。
 
 {% hint style="info" %}
-Formで大事な項目は３つ。
+Form で大事な項目は３つ。
 
-1. _actionで、送信先を設定_
-2. _methodで送信メソッドを設定_
-3. _inputタグ内のnameでそれぞれ送る情報に名前をつける。_
-{% endhint %}
+1. _action で、送信先を設定_
+2. _method で送信メソッドを設定_
+3. _input タグ内の name でそれぞれ送る情報に名前をつける。_
+   {% endhint %}
 
 _get.php （送信側）_
 
@@ -394,7 +395,7 @@ _get.php （送信側）_
     </form>
 ```
 
-get\_confirm.php _（受け取り側）_
+get*confirm.php *（受け取り側）\_
 
 ```php
 <?php
@@ -417,7 +418,7 @@ $mail = $_GET['mail'];
 </head>
 
 <body>
-　   
+　
     <p>お名前：<?= $name ?></p>
     <p>Mail：<?= $mail ?> </p>
     <ul>
@@ -430,7 +431,7 @@ $mail = $_GET['mail'];
 ```
 
 {% hint style="info" %}
-var\_dumpは\<pre>で囲ってあげると、整形されて見やすいです。
+var_dump は\<pre>で囲ってあげると、整形されて見やすいです。
 
 ```php
 // ↓ こんな感じ
@@ -438,20 +439,22 @@ echo '<pre>';
 var_dump($_GET);
 echo '</pre>';
 ```
+
 {% endhint %}
 
 {% hint style="info" %}
-HTML内では、echoは以下のように省略した記述が可能です。
+HTML 内では、echo は以下のように省略した記述が可能です。
 
 ```php
 <?php echo $name ?>
 // ↓
 <?= $name ?>
 ```
+
 {% endhint %}
 
 {% hint style="success" %}
-フォームに新しいinput要素(例えば、年齢や性別など)を加えて、それを受け取ってみましょう。
+フォームに新しい input 要素(例えば、年齢や性別など)を加えて、それを受け取ってみましょう。
 {% endhint %}
 
 _post.php(送信側)_
@@ -466,10 +469,15 @@ _post.php(送信側)_
 ```
 
 {% hint style="info" %}
-_getとpostはmethodを変えるだけです。_
+_get と post は method を変えるだけです。_
 {% endhint %}
 
-_post\_confirm.php(受け取り側)_
+_post_confirm.php(受け取り側)_
+
+{% hint style="info" %}
+フォームから値が送信されていない場合、$_POST['name']のように直接アクセスすると「Notice: Undefined index」が表示されることがあります。
+そのため、isset($\_POST['name'])や$\_POST['name'] ?? ''のように、isset を用いて値が存在するか確認してから使いましょう
+{% endhint %}
 
 ```php
 <?php
@@ -502,15 +510,15 @@ $password = $_POST['password'];
 {% hint style="info" %}
 `POST`と`GET`は以下のように違いを捉えてください。
 
-* `POST`:リソース（DBの中身）を変化させるもの。例えば、何かを登録するときなど。
-* `GET`:リソース（DBの中身）の取得をするのみ。例えば、検索してその結果を取得する場合など。
-{% endhint %}
+- `POST`:リソース（DB の中身）を変化させるもの。例えば、何かを登録するときなど。
+- `GET`:リソース（DB の中身）の取得をするのみ。例えば、検索してその結果を取得する場合など。
+  {% endhint %}
 
 ### セキュリティ / XSS(クロスサイトスクリプティング)
 
-まず、post.phpのフォームに以下のスクリプトを記入後、そのまま送信して、遷移先のページで動きを確認してください。
+まず、post.php のフォームに以下のスクリプトを記入後、そのまま送信して、遷移先のページで動きを確認してください。
 
-(get.phpのページで行っても問題ありません。)
+(get.php のページで行っても問題ありません。)
 
 ```javascript
 <script>alert("test");</script>
@@ -522,33 +530,33 @@ $password = $_POST['password'];
 
 <figure><img src="../.gitbook/assets/do_script.png" alt=""><figcaption></figcaption></figure>
 
-今回は、簡単なアラート動作だけですが、**もしここにもっと悪質なscriptを仕込まれた場合セキュリティ上の脅威になる可能性が高いです。**
+今回は、簡単なアラート動作だけですが、**もしここにもっと悪質な script を仕込まれた場合セキュリティ上の脅威になる可能性が高いです。**
 
 よって、この対策のために、`htmlspecialchars()を利用します。`
 
 {% hint style="info" %}
-ipaの「安全なウェブサイトの作り方 - 1.5 クロスサイト・スクリプティング」に詳しい。
+ipa の「安全なウェブサイトの作り方 - 1.5 クロスサイト・スクリプティング」に詳しい。
 
-[https://www.ipa.go.jp/security/vuln/websecurity-HTML-1\_5.html](https://www.ipa.go.jp/security/vuln/websecurity-HTML-1\_5.html)
+[https://www.ipa.go.jp/security/vuln/websecurity-HTML-1_5.html](https://www.ipa.go.jp/security/vuln/websecurity-HTML-1_5.html)
 
-なお、セキュリティについて確認したい場合は、基本的にipaのサイト（個人のブログ等ではなく）を確認することをお勧めします。
+なお、セキュリティについて確認したい場合は、基本的に ipa のサイト（個人のブログ等ではなく）を確認することをお勧めします。
 {% endhint %}
 
 {% hint style="danger" %}
-不特定多数の人間が記入できるFormは、悪意を持った人にスクリプトを埋め込まれる可能性があります。
+不特定多数の人間が記入できる Form は、悪意を持った人にスクリプトを埋め込まれる可能性があります。
 
-**WEB上には悪いことをする人がかならずいる**という前提でプロダクト制作をしてください。
+**WEB 上には悪いことをする人がかならずいる**という前提でプロダクト制作をしてください。
 {% endhint %}
 
 {% hint style="danger" %}
-GETやPOSTで受け取ったデータを出力する場合は**必ず**以下の処理を行ってください。
+GET や POST で受け取ったデータを出力する場合は**必ず**以下の処理を行ってください。
 
-なお、**出力する箇所だけに処理が必要**なので出力しない場合は、htmlspecialchars()を利用しなくても結構です。
+なお、**入力時には不要、出力時のみ必要**なので出力しない場合は、htmlspecialchars()を利用しなくても結構です。
 {% endhint %}
 
 `htmlspecialchars()`はフォームから受け取った文字列をブラウザに出力する際に利用します。
 
-_post\_confirm.php_
+_post_confirm.php_
 
 ```php
 <body>
@@ -561,7 +569,7 @@ _post\_confirm.php_
 
 ```
 
-上記記述した後、再度formから`<script>alert("test");</script>`を送信して、次のページでスクリプトが動作しないことを確認してください。
+上記記述した後、再度 form から`<script>alert("test");</script>`を送信して、次のページでスクリプトが動作しないことを確認してください。
 
 {% hint style="info" %}
 上記の場合は、`htmlspecialchars()`が２つだけですが通常のフォームは、もっと項目数が多いことが多いです。
@@ -571,7 +579,7 @@ _post\_confirm.php_
 よって、通常は関数化して`htmlspecialchars()を利用します。`
 {% endhint %}
 
-1. formから送られてきた情報を、表示出力する画面に以下関数を記述
+1. form から送られてきた情報を、表示出力する画面に以下関数を記述
 
 ```php
 // XSS対策関数
@@ -618,7 +626,7 @@ $mail = $_POST['mail'];
 {% hint style="warning" %}
 【発展】
 
-上記h関数は、さまざまな場所で利用できる可能性が高いので、任意のファイル（例えば`funciton.php)に切り出して、利用したい箇所でrequire_onceで呼び出すとより便利になります。`
+上記 h 関数は、さまざまな場所で利用できる可能性が高いので、任意のファイル（例えば`funciton.php)に切り出して、利用したい箇所でrequire_onceで呼び出すとより便利になります。`
 
 `授業でも扱いますが、余力がある人はチャレンジしてみてください。`
 {% endhint %}
@@ -630,7 +638,7 @@ $mail = $_POST['mail'];
 {% endhint %}
 
 {% hint style="danger" %}
-Macを利用されている人は、dataファルダの書き込み権限を変更してください。
+Mac を利用されている人は、data ファルダの書き込み権限を変更してください。
 
 参考 [https://support.apple.com/ja-jp/guide/mac-help/mchlp1203/mac](https://support.apple.com/ja-jp/guide/mac-help/mchlp1203/mac)
 {% endhint %}
@@ -657,7 +665,7 @@ file_put_contents('data/data.txt', $data, FILE_APPEND);
 
 #### read.php
 
-txtファイルに保存した内容をブラウザでも確認するため、`read.php`を準備します。 まずは下記を`read.php`に記述してください。
+txt ファイルに保存した内容をブラウザでも確認するため、`read.php`を準備します。 まずは下記を`read.php`に記述してください。
 
 ```php
 <?php
@@ -672,7 +680,7 @@ echo nl2br($data);
 
 <figure><img src="../.gitbook/assets/スクリーンショット 2022-12-04 18.48.51.png" alt=""><figcaption><p>txtに記述したないようが表示されればok</p></figcaption></figure>
 
-### `inpute.php`から`write.php`に内容を送ってみよう
+### `input.php`から`write.php`に内容を送ってみよう
 
 #### input.php
 
@@ -695,17 +703,17 @@ file_put_contents('data/data.txt', $data, FILE_APPEND);
 
 #### 【課題】 アンケート集計/表示アプリ
 
-* `post.php` (データ入力)
-* `write.php` (データ登録)
-* `read.php` (データ表示)
+- `post.php` (データ入力)
+- `write.php` (データ登録)
+- `read.php` (データ表示)
 
 1. データ登録:名前,Email,聞きたい問い複数
 2. データ表示:登録されてるデータを表で表示
 
-◇更にGoodライン
+◇ 更に Good ライン
 
 1. データをグラフ化したり
-2. JSと絡めてみたり
+2. JS と絡めてみたり
 
 ### 補足
 
@@ -729,11 +737,12 @@ fclose($file);
 ?>
 ```
 
-* fopenの引数について fopenの第２引数(openモード)には以下のような種類があります。 方法によって使い分けてください。
+- fopen の引数について fopen の第２引数(open モード)には以下のような種類があります。 方法によって使い分けてください。
 
 間違えると、中身を削除してしまうので、ご利用は慎重に。
 
 {% hint style="info" %}
+
 ```
 r 読み込みのみでオープンします。
 r+ 読み込み/書込み用にオープンします。
@@ -744,6 +753,7 @@ w+ 読み込み/書込み用でオープンします。内容をまず削除、�
 a 追加書込み用のみでオープンします。ファイルがなければ作成
 a+ 読み込み/追加書込み用でオープンします。ファイルがなければ作成
 ```
+
 {% endhint %}
 
 {% hint style="info" %}
@@ -752,11 +762,11 @@ a+ 読み込み/追加書込み用でオープンします。ファイルがな�
 1. open
 2. 処理
 3. close の３つがセットです。
-{% endhint %}
+   {% endhint %}
 
 #### read.php
 
-txtファイルに保存した内容をブラウザでも確認するため、`read.php`を準備します。 まずは下記を`read.php`に記述してください。
+txt ファイルに保存した内容をブラウザでも確認するため、`read.php`を準備します。 まずは下記を`read.php`に記述してください。
 
 ```php
 <?php
@@ -776,7 +786,7 @@ fclose($openFile);
 <figure><img src="../.gitbook/assets/スクリーンショット 2022-12-04 18.48.51.png" alt=""><figcaption><p>txtに記述したないようが表示されればok</p></figcaption></figure>
 
 {% hint style="info" %}
-上記コードのwhile,,,の部分は少し難しいかもしれません。
+上記コードの while,,,の部分は少し難しいかもしれません。
 
 処理の流れは、
 
@@ -785,9 +795,10 @@ fgets($openFile)でファイルの上から１行ずつ取得して、$strに代
 $strをechoする。その際に、text内の改行を<br>に変換させるnl2brを利用
 もし読み込む行がなくなった場合、条件はFALSEになり、whileは終了する。
 ```
+
 {% endhint %}
 
-### `inpute.php`から`write.php`に内容を送ってみよう
+### `input.php`から`write.php`に内容を送ってみよう
 
 #### input.php
 
