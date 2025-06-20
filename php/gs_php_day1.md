@@ -11,7 +11,7 @@ description: php 第１日目
 ![](<../.gitbook/assets/スクリーンショット 2022-01-09 2.30.21.png>)
 
 {% hint style="danger" %}
-Mac を利用されている人は、data ファルダの書き込み権限を変更してください。
+Mac を利用されている人は、data/data.txt ファイルの書き込み権限を変更してください。
 
 参考 [https://support.apple.com/ja-jp/guide/mac-help/mchlp1203/mac](https://support.apple.com/ja-jp/guide/mac-help/mchlp1203/mac)
 {% endhint %}
@@ -638,7 +638,7 @@ $mail = $_POST['mail'];
 {% endhint %}
 
 {% hint style="danger" %}
-Mac を利用されている人は、data ファルダの書き込み権限を変更してください。
+Mac を利用されている人は、data/data.txtファイルの書き込み権限を変更してください。
 
 参考 [https://support.apple.com/ja-jp/guide/mac-help/mchlp1203/mac](https://support.apple.com/ja-jp/guide/mac-help/mchlp1203/mac)
 {% endhint %}
