@@ -6,6 +6,9 @@ description: php 第１日目
 
 ### 授業資料 <a href="#shou-ye-zi-liao" id="shou-ye-zi-liao"></a>
 
+[WEBについて超概略](https://fukushimasurao.github.io/client-server-presentation/)
+
+
 [https://gitlab.com/gs_hayato/gs-php-01/-/blob/master/php01.zip](https://gitlab.com/gs_hayato/gs-php-01/-/blob/master/php01.zip)
 
 ![](<../.gitbook/assets/スクリーンショット 2022-01-09 2.30.21.png>)
