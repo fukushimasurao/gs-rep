@@ -92,8 +92,8 @@
 
 ```
 `id`:    int(12) AUTO_INCREMENT PRIMARY KEY
-`name`:  var_char(64)
-`email`:  var_char(128)
+`name`:  varchar(64)
+`email`:  varchar(128)
 `content`: text
 `date`: datetime
 ```
@@ -103,13 +103,19 @@
 ![](<../.gitbook/assets/スクリーンショット 2022-01-16 11.37.20.png>)
 
 {% hint style="info" %}
-varchar と text 違い → メモリ容量
+varchar と text の違い
 
-varchar 型の文字列はDBに直接保存されます。
+varchar: 可変長文字列型。指定した最大文字数まで格納可能（例：varchar(64)なら最大64文字）
 
-text 型の文字列はDBとは別に保存。DBにはそのポインターのみ保存されます。
+text: 大容量テキスト用。varcharより大きなデータを格納可能
 
-そのため、短い文字列であれば varchar を使った方が効率良く処理できます。
+パフォーマンス面では、短いデータならvarcharが効率的です。
+
+理由：
+varchar: データがテーブルと一緒に格納される（インライン格納）
+text: データは別の場所に格納され、テーブルにはその場所を示すポインタのみ格納
+そのため、varcharの方がデータ読み取りが1回で済み、高速
+
 {% endhint %}
 
 {% hint style="info" %}
@@ -215,6 +221,29 @@ SELECT * FROM テーブル名 LIMIT 3,5; --4番目のデータから最大5件�
 DB というものと、DB を操作するための`SQL`を学びました。 次に PHP 内で、`SQL`を書いて`MySQL`を操作していきます。
 
 <figure><img src="../.gitbook/assets/php_n_db.jpg" alt=""><figcaption></figcaption></figure>
+
+### PDOとは
+
+PDO（PHP Data Objects）は、PHPでデータベースを操作するための仕組みです。
+
+**PDOの利点：**
+- 複数のデータベース（MySQL、PostgreSQL等）を同じ方法で操作できる
+- セキュリティが高い（プレースホルダが使える）
+- エラーハンドリングがしやすい
+
+### prepare文とは
+
+prepare = 事前にSQL文を準備することで、以下の利点があります：
+
+セキュリティ向上（SQLインジェクション対策）
+同じSQL文を何度も実行する場合のパフォーマンス向上
+
+
+```php
+$stmt = $pdo->prepare('SELECT * FROM gs_an_table');
+```
+
+
 
 ### form を作成
 
@@ -431,7 +460,7 @@ while ($result = $stmt->fetch(PDO::FETCH_ASSOC)) {
 - カラム名
   - ※ カラム名は下記を参照して英語にしてください。例:書籍名は book とか、name とか。
   - ユニーク値 (int 12 , PRIMARY, AutoIncrement)
-  - 書籍名 (varChar 64)
+  - 書籍名 (varchar 64)
   - 書籍 URL (text)
   - 書籍コメント(text)
   - 登録日時 (datetime)
@@ -445,3 +474,24 @@ while ($result = $stmt->fetch(PDO::FETCH_ASSOC)) {
 を作成してください。
 
 1. 課題を提出するときは、必ず sql ファイルも提出。 ファイルの用意の仕方は[ここを参照](https://gitlab.com/gs_hayato/gs-php-01/-/blob/master/%E3%81%9D%E3%81%AE%E4%BB%96/howToExportSql.md)
+
+#### 【発展課題】（余力がある人向け）
+
+基本課題が完成したら、以下の機能を追加してみてください
+※ 削除や編集は次回の授業で行いますので、無理なさらず。
+
+1. **検索機能**
+   - 書籍名で検索できる機能を追加
+   - LIKE文を使った部分一致検索
+
+2. **削除機能**
+   - 登録したブックマークを削除できる機能
+   - 削除確認画面も作成
+
+3. **編集機能**
+   - 登録済みのブックマーク情報を編集できる機能
+
+4. **並び替え機能**
+   - 登録日時順、書籍名順で並び替え
+
+これらの機能を通じて、より実践的なWebアプリケーション開発を学習できます。
