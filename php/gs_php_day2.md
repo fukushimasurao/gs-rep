@@ -75,6 +75,18 @@ graph TD
     B -->|初心者向け| D[🖱️ phpMyAdmin<br/>GUI操作]
     C --> E[(🗄️ DATABASE<br/>MySQL)]
     D --> E
+    
+    classDef user fill:#f39c12,stroke:#e67e22,stroke-width:3px,color:#fff
+    classDef cli fill:#1a1a1a,stroke:#00ff00,stroke-width:2px,color:#00ff00
+    classDef gui fill:#3498db,stroke:#74b9ff,stroke-width:2px,color:#fff
+    classDef db fill:#2c3e50,stroke:#34495e,stroke-width:3px,color:#fff
+    classDef choice fill:#9b59b6,stroke:#8e44ad,stroke-width:2px,color:#fff
+    
+    class A user
+    class B choice
+    class C cli
+    class D gui
+    class E db
 ```
 
 <figure><img src="../.gitbook/assets/phpmyadmin.jpg" alt=""><figcaption></figcaption></figure>
