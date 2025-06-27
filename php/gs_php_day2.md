@@ -37,20 +37,20 @@
 
 のイメージ。
 
-![エクセルで言うところのファイルがデータベース](<../.gitbook/assets/スクリーンショット 2022-01-16 11.19.57.png>)
+![エクセルで言うところのファイルがDB](<../.gitbook/assets/スクリーンショット 2022-01-16 11.19.57.png>)
 
 ![](<../.gitbook/assets/スクリーンショット 2022-01-16 12.18.33.png>)
 
 スプレッドシートだと、画面見ながら操作できる DB は **通常 CLI（コマンドラインインターフェース） = 黒い画面に文字で操作します**
 
-それだととっつきにくいので、CGI で操作できる`phpMyAdmin`というソフトを利用する。
+それだととっつきにくいので、GUI で操作できる`phpMyAdmin`というソフトを利用する。
 
 {% hint style="info" %}
 `phpMyAdmin` = DB ではありません。 DB 操作をする際に、便利に操作するためのソフトが`phpMyAdmin`です
 {% endhint %}
 
 {% hint style="info" %}
-ちなみに、リレーショナルデータベースの**リレーションという言葉**は、数学で「二次元表」を表す単語らしいよ
+ちなみに、リレーショナルDBの**リレーションという言葉**は、数学で「二次元表」を表す単語らしいよ
 {% endhint %}
 
 ## phpMyAdmin
@@ -72,7 +72,7 @@
 ### 新規 DB 作成
 
 1. 左メニューから\[新規作成]
-2. データベース名は **`gs_db_class`**
+2. DB名は **`gs_db_class`**
 3. 照合順序&#x306F;**`utf8mb4_general_ci`** (ディフォルトのまま)
 4. 作成クリック。
 5. 特にエラーの文言が出なければ ok
@@ -87,7 +87,7 @@
 ### カラムを作成
 
 {% hint style="info" %}
-以下の例のように、項目名にはアルファベットを利用してください。
+以下の例のように、カラム名にはアルファベットを利用してください。
 {% endhint %}
 
 ```
@@ -105,15 +105,15 @@
 {% hint style="info" %}
 varchar と text 違い → メモリ容量
 
-varchar 型の文字列はデータベースに直接保存されます。
+varchar 型の文字列はDBに直接保存されます。
 
-text 型の文字列はデータベースとは別に保存。データベースにはそのポインターのみ保存されます。
+text 型の文字列はDBとは別に保存。DBにはそのポインターのみ保存されます。
 
 そのため、短い文字列であれば varchar を使った方が効率良く処理できます。
 {% endhint %}
 
 {% hint style="info" %}
-【プライマリキー】 データを一意に識別するために使われる項目。 例えば、データの中から、名前が「田中」を抽出した場合他の人と被る可能性がある。 連番 ID であれば、他のデータと被らない。 ※データは必ず入力しなければならない。(NULL)にはならない。
+【プライマリキー】 データを一意に識別するために使われるカラム。 例えば、データの中から、名前が「田中」を抽出した場合他の人と被る可能性がある。 連番 ID であれば、他のデータと被らない。 ※データは必ず入力しなければならない。(NULL)にはならない。
 {% endhint %}
 
 {% hint style="info" %}
@@ -212,7 +212,7 @@ SELECT * FROM テーブル名 LIMIT 3,5; --4番目のデータから最大5件�
 
 ## PHP から MySQL を操作
 
-DB というものと、BD を操作するための`SQL`を学びました。 次に PHP 内で、`SQL`を書いて`MySQL`を操作していきます。
+DB というものと、DB を操作するための`SQL`を学びました。 次に PHP 内で、`SQL`を書いて`MySQL`を操作していきます。
 
 <figure><img src="../.gitbook/assets/php_n_db.jpg" alt=""><figcaption></figcaption></figure>
 
@@ -236,15 +236,17 @@ $name = $_POST['name'];
 $email = $_POST['email'];
 $content = $_POST['content'];
 
-//2. DB接続
+// 2. DB接続
 try {
     //Password注意。MAMP='root'　XAMPP=''
     $pdo = new PDO('mysql:dbname=gs_db_class; charset=utf8; host=localhost', 'root', '');
 } catch (PDOException $e) {
+    // 開発環境：学習用に詳細なエラー情報を表示
+    // 本番環境：詳細情報は非表示にしてログに記録するようにしてください。
     exit('DBConnectError:' . $e->getMessage());
 }
 
-//３．データ登録SQL作成
+// 3．データ登録SQL作成
 $stmt = $pdo->prepare('INSERT INTO gs_an_table(id, name, email, content, date)
                         VALUES(NULL, :name, :email, :content, now())');
 
@@ -255,7 +257,7 @@ $stmt->bindValue(':email', $email, PDO::PARAM_STR);
 $stmt->bindValue(':content', $content, PDO::PARAM_STR);
 $status = $stmt->execute();
 
-//４．データ登録処理後
+// 4．データ登録処理後
 if ($status === false) {
     //SQL実行時にエラーがある場合（エラーオブジェクト取得して表示）
     $error = $stmt->errorInfo();
@@ -264,6 +266,11 @@ if ($status === false) {
     header('Location: index.php');
 }
 ```
+{% hint style="warning" %}
+本番環境での注意点
+開発・学習段階では詳細なエラー情報を表示していますが、本番環境では $e->getMessage() を直接表示せず、
+ログファイルに記録して、ユーザーには一般的なエラーメッセージを表示するようにしてください。
+{% endhint %}
 
 {% hint style="info" %}
 `if ($status === false)`の部分は、 `if (!$status)`と書くことも可能。
@@ -321,14 +328,14 @@ INSERT INTO gs_an_table (name) VALUES ('\'; DROP TABLE gs_an_table; --')
 
 **エスケープ処理の仕組み**
 
-- プレースホルダーを使うと、文字列中の特殊文字（シングルクォート `'`、ダブルクォート `"`, バックスラッシュ `\`）は、データベースエンジンによって自動的にエスケープされる。
+- プレースホルダーを使うと、文字列中の特殊文字（シングルクォート `'`、ダブルクォート `"`, バックスラッシュ `\`）は、DBエンジンによって自動的にエスケープされる。
 - 例えば、シングルクォート `'` は通常次のようにエスケープされる。
   - `'` → `\'` (MySQL のエスケープ形式)
 
 #### 大事なポイント
 
 - **変わるのは SQL 文内の扱い方で、元の文字列そのものは変更されない。**
-- 入力された文字はそのままデータベースに保存され、`'; DROP TABLE gs_an_table; --` として格納される。
+- 入力された文字はそのままDBに保存され、`'; DROP TABLE gs_an_table; --` として格納される。
 - **ただし、SQL 文の構造を壊さない** ようにエスケープされるため、**テーブルの削除命令は実行されない。**
 
 ---
@@ -340,7 +347,7 @@ INSERT INTO gs_an_table (name) VALUES ('\'; DROP TABLE gs_an_table; --')
 ```php
 <?php
 
-//1.  DB接続
+// 1.  DB接続
 try {
     //Password....最後の引数の部分。MAMP='root',XAMPP=''
     $pdo = new PDO('mysql:dbname=gs_db_class;charset=utf8;host=localhost', 'root', '');
@@ -348,11 +355,11 @@ try {
     exit('DBConnectError' . $e->getMessage());
 }
 
-//２．データ取得SQL作成
+// 2．データ取得SQL作成
 $stmt = $pdo->prepare('SELECT * FROM gs_an_table');
 $status = $stmt->execute();
 
-//３．データ表示
+// 3．データ表示
 $view = '';
 if ($status === false) {
     //execute（SQL実行時にエラーがある場合）
@@ -421,7 +428,7 @@ while ($result = $stmt->fetch(PDO::FETCH_ASSOC)) {
 
 - DB 名:自由
 - table 名:`gs_bm_table`
-- 項目（カラム）名
+- カラム名
   - ※ カラム名は下記を参照して英語にしてください。例:書籍名は book とか、name とか。
   - ユニーク値 (int 12 , PRIMARY, AutoIncrement)
   - 書籍名 (varChar 64)
