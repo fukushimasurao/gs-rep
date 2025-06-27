@@ -425,10 +425,23 @@ if ($status === false) {
 * フロント表示部分
 
 ```php
-    <!-- Main[Start] -->
-    <div>
-        <div class="container jumbotron"><?= $view ?></div>
-    </div>
+<div class="data-container">
+    <?php if(empty($view)): ?>
+        <!-- もし $view データがない場合の表示 -->
+        <div class="empty-state">
+            <div class="empty-icon">
+                <i class="fas fa-inbox"></i>
+            </div>
+            <p>まだデータがありません</p>
+            <p style="margin-top: 0.5rem; font-size: 0.9rem; color: #999;">
+                最初のアンケートを投稿してみましょう！
+            </p>
+        </div>
+    <?php else: ?>
+        <!-- もし $view データが存在する場合 -->
+        <?= $view ?>
+    <?php endif; ?>
+</div>
 ```
 
 ### セキュリティ対策 XSS -1
