@@ -65,6 +65,18 @@
 
 ブラウザの URL からは、多分 `http://localhost/phpmyadmin/`で行ける。
 
+
+## 📊 データベースアクセス方法
+
+```mermaid
+graph TD
+    A[👤 USER] --> B{アクセス方法}
+    B -->|上級者向け| C[⌨️ CLI<br/>コマンドライン]
+    B -->|初心者向け| D[🖱️ phpMyAdmin<br/>GUI操作]
+    C --> E[(🗄️ DATABASE<br/>MySQL)]
+    D --> E
+```
+
 <figure><img src="../.gitbook/assets/phpmyadmin.jpg" alt=""><figcaption></figcaption></figure>
 
 ## DB 作成
