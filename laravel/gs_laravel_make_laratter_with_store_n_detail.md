@@ -1,4 +1,4 @@
-# 🍄 006\_作成処理と詳細画面の実装
+# 006\_作成処理と詳細画面の実装
 
 ## 今回やること
 
@@ -18,8 +18,7 @@
 * (2)について
   * ※前提 : ツイートを数件作成しておいてください。
   * Tweet一覧ページ http://localhost/tweets に各ツイートの詳細へのリンクがあり。
-  * Tweet一覧ページ`view('tweets.index')`の中のコードに`<a href="{{ route('tweets.show', $tweet) }}"` の記載を確認しよう。
-  *`route('tweets.show'`を`route`で見ると`TweetController@show` なので、`TweetController`の`show`メソッドを記入していく。
+  * Tweet一覧ページ`view('tweets.index')`の中のコードに`<a href="{{ route('tweets.show', $tweet) }}"` の記載を確認しよう。 \*`route('tweets.show'`を`route`で見ると`TweetController@show` なので、`TweetController`の`show`メソッドを記入していく。
     * なお、`route('tweets.show', $tweet)` は自動で`$tweetの主キー`を渡す。`$tweet->id`と書かなくてもok。
 
 ## Tweet 作成処理の実装
@@ -27,15 +26,15 @@
 Tweet の作成処理は`TweetController` の `store` メソッドに記載していきましょう！
 
 フォームのPOSTを受け取るときの基本的な流れは、
-- フォームを受け取る
-- バリデーションチェックする
-- バリデーションに問題なければ、処理をする
-という流れになります。
 
-なお、`フォーム`から送信されてきたデータは `$request`に格納されています。
-この`$request`に対して`validate` を用いてデータのバリデーションを行っていきます。
+* フォームを受け取る
+* バリデーションチェックする
+* バリデーションに問題なければ、処理をする という流れになります。
+
+なお、`フォーム`から送信されてきたデータは `$request`に格納されています。 この`$request`に対して`validate` を用いてデータのバリデーションを行っていきます。
 
 ここでのバリデーションルールは、
+
 * `tweet が空でないこと`
 * `長さが 255 以内であること` を確認します。
 
@@ -52,8 +51,7 @@ $requestには、formから送られてきた中身が入っています。
 {% endhint %}
 
 {% hint style="info" %}
-以下コードの詳細はLaravel Tipsのレコード作成のパターンも参照。
-`https://nu0640042.gitbook.io/gs_php/laravel/laravel-tips/rekdonopatn`
+以下コードの詳細はLaravel Tipsのレコード作成のパターンも参照。 `https://nu0640042.gitbook.io/gs_php/laravel/laravel-tips/rekdonopatn`
 {% endhint %}
 
 ```php

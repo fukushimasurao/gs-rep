@@ -1,4 +1,4 @@
-# 🐔 005\_一覧画面と作成画面の実装
+# 005\_一覧画面と作成画面の実装
 
 今回やること
 
@@ -14,10 +14,7 @@
 
 です。
 
-それぞれブラウザで
-tweetsにアクセスしたときindexメソッドが、
-tweets/createにアクセスしたときcreateメソッドが
-呼ばれます。
+それぞれブラウザで tweetsにアクセスしたときindexメソッドが、 tweets/createにアクセスしたときcreateメソッドが 呼ばれます。
 
 ```bash
 $ ./vendor/bin/sail artisan route:list --path=tweets
@@ -26,12 +23,8 @@ $ ./vendor/bin/sail artisan route:list --path=tweets
   GET|HEAD        tweets/create .. tweets.create › TweetController@create
   // 省略
 ```
-                                    
 
-
-
-`index` メソッドではTweet全件を`新しい順`に取得するために `latest` メソッドを使用します。
-<br>
+`index` メソッドではTweet全件を`新しい順`に取得するために `latest` メソッドを使用します。\
 `Tweet`に関連するユーザ情報を取得するために `with` メソッドを使用します。
 
 {% hint style="info" %}
@@ -78,10 +71,8 @@ class TweetController extends Controller
 
 #### 一覧画面の作成
 
-`resources/views/tweets/index.blade.php` ファイルを開きTweet の一覧を表示するためのコードを追加しましょう。
-<br>
-`@foreach` ディレクティブを使用してTweetの一覧を表示します。
-<br>
+`resources/views/tweets/index.blade.php` ファイルを開きTweet の一覧を表示するためのコードを追加しましょう。\
+`@foreach` ディレクティブを使用してTweetの一覧を表示します。\
 モデルで`Tweet` と `User` を連携しているため，`$tweet->user->name` で Tweet に関連するユーザの名前を取得できる．
 
 ```php
@@ -122,7 +113,7 @@ class TweetController extends Controller
 
 #### 作成画面の作成
 
-`resources/views/tweets/create.blade.php` ファイルを開きTweet の作成画面を表示するためのコードを追加する。&#x20;
+`resources/views/tweets/create.blade.php` ファイルを開きTweet の作成画面を表示するためのコードを追加する。
 
 `@csrf` ディレクティブを使用して`CSRF（Cross-Site Request Forgery）トークン`を生成する。
 
@@ -163,10 +154,8 @@ class TweetController extends Controller
 
 #### Tailwind CSS の適用
 
-一部 CSS が適用されない部分があるため下記コマンドで Tailwind CSS を適用しましょう。
-<br>
+一部 CSS が適用されない部分があるため下記コマンドで Tailwind CSS を適用しましょう。\
 👹ビューファイルを変更した場合は必ず実行するようにしましょう。👹
-
 
 {% hint style="info" %}
 CSRFについて : https://www.ipa.go.jp/security/vuln/websecurity/csrf.html
@@ -176,29 +165,23 @@ CSRFについて : https://www.ipa.go.jp/security/vuln/websecurity/csrf.html
 Laravelにて、postのformで、`@csrf`を書き忘れると、formを送った際に`419`のエラーレスポンスになります。
 {% endhint %}
 
-
-
 ```bash
 $ ./vendor/bin/sail npm run build
 ```
 
 #### 動作確認
 
-一覧画面に移動しエラーが発生しないことを確認しましょう。
-<br>
+一覧画面に移動しエラーが発生しないことを確認しましょう。\
 作成画面に移動し入力フォームが表示されていることを確認する。※まだ登録できないよ。
 
 ## 【補足】エラーメッセージの表示
 
-この画面では入力したデータに不備があった場合（未入力や文字列が長すぎるなど）にエラーメッセージを表示しましょう。
-<br>
-エラーメッセージは`@error` ディレクティブを使用して表示できます。
-<br>
+この画面では入力したデータに不備があった場合（未入力や文字列が長すぎるなど）にエラーメッセージを表示しましょう。\
+エラーメッセージは`@error` ディレクティブを使用して表示できます。\
 なお `@error`ディレクティブは指定した項目にエラーがある場合にのみ表示される。
 
 {% hint style="info" %}
-この時点ではまだtweetの登録できないが、sqlから登録することが可能です。
-いくつか登録してみましょう！
+この時点ではまだtweetの登録できないが、sqlから登録することが可能です。 いくつか登録してみましょう！
 
 ※下記では、user id 1の人で登録しています。（多分id1はいると思いますが、）もしid 1がいなければ実際にuserテーブルに存在しているuser id で実行してください。
 {% endhint %}
@@ -208,6 +191,3 @@ insert into
   tweets (id, user\_id, tweet, created\_at, updated\_at)
   values (null, 1, 'test', now(), now());
 ```
-
-
-&#x20;

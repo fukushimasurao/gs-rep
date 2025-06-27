@@ -1,4 +1,4 @@
-# 😚 013\_gs\_php\_day3
+# 013\_gs\_php\_day3
 
 ### 授業資料 <a href="#shou-ye-zi-liao" id="shou-ye-zi-liao"></a>
 
@@ -469,4 +469,4 @@ if ($status === false) {
 
 前回の課題に更新・削除機能を追加して提出していただいてもいいですし、 新たに課題作成して頂いてもokです。
 
-1. 課題を提出するときは、必ずsqlファイルも提出。 ファイルの用意の仕方は[ここを参照](https://gitlab.com/gs\_hayato/gs-php-01/-/blob/master/%E3%81%9D%E3%81%AE%E4%BB%96/howToExportSql.md)
+1. 課題を提出するときは、必ずsqlファイルも提出。 ファイルの用意の仕方は[ここを参照](https://gitlab.com/gs_hayato/gs-php-01/-/blob/master/%E3%81%9D%E3%81%AE%E4%BB%96/howToExportSql.md)

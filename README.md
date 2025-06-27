@@ -2,7 +2,7 @@
 description: このページについて
 ---
 
-# 📘 READ ME
+# READ ME
 
 授業で利用するページ（β版）です。
 

@@ -1,4 +1,4 @@
-# 🎇 010\_Comment 機能の実装（ファイルの準備と設定）
+# 010\_Comment機能の実装（ファイルの準備と設定）
 
 ### ここでやりたいこと
 
@@ -9,8 +9,6 @@
 * 各コメントをクリックするとコメント詳細画面に移動できて、編集や削除ができる。
 
 ### 必要なファイルの作成 <a href="#nafairuno" id="nafairuno"></a>
-
-
 
 モデル、リソースコントローラ、マイグレーションファイルを作成する。
 
@@ -29,10 +27,8 @@ Tweet に関するファイルを作成するときと同様の流れ。
 
 commentsテーブルを作成するため（テーブルの設計書となる）のマイグレーションファイルを記述します。
 
-`comment` カラムに加えて `tweet_id` と `user_id` を設定します。
-<br>
+`comment` カラムに加えて `tweet_id` と `user_id` を設定します。\
 「どの Tweet に対する」「どのユーザの」という情報を保存します。
-
 
 * Tweet と Comment の関係は `1 対多`
 * User と Comment の関係は `1 対多`
@@ -86,12 +82,11 @@ public function up(): void
 * Tweet と Comment が 1 対多．
 * User と Comment が 1 対多．
 
-これら３つの関係者のモデルファイルに設定を書きます。
-つまり、
-- `app/Models/Comment.php`
-- `app/Models/Tweet.php`
-- `app/Models/User.php`
-それぞれに連携を設定しましょう。
+これら３つの関係者のモデルファイルに設定を書きます。 つまり、
+
+* `app/Models/Comment.php`
+* `app/Models/Tweet.php`
+* `app/Models/User.php` それぞれに連携を設定しましょう。
 
 なお、`Comment.php` に対してはコメントが登録できるように`$fillable` も設定しましょう。
 
@@ -159,8 +154,7 @@ class Tweet extends Model
 
 ### ビューファイルの作成 <a href="#byfairuno" id="byfairuno"></a>
 
-コメント機能で使用するビューファイルを作成しましょう。
-TweetのCRUD処理とほとんど同じだが、コメント一覧は `tweets.show` に追加するため `index.blade.php` は作成しなくて OK．
+コメント機能で使用するビューファイルを作成しましょう。 TweetのCRUD処理とほとんど同じだが、コメント一覧は `tweets.show` に追加するため `index.blade.php` は作成しなくて OK．
 
 ```bash
 $ ./vendor/bin/sail artisan make:view tweets.comments.create
@@ -172,8 +166,7 @@ $ ./vendor/bin/sail artisan make:view tweets.comments.edit
 
 リソースコントローラを使用しているのでルーティングは1行書くだけでok
 
-ただし、CommentはTweetに従うためルーティングは`tweet.comment` となります。
-このような記述を行う理由として、Comment に対する処理（表示，編集，削除）を行う場合に Comment の元の Tweet の情報が必要となるためです。
+ただし、CommentはTweetに従うためルーティングは`tweet.comment` となります。 このような記述を行う理由として、Comment に対する処理（表示，編集，削除）を行う場合に Comment の元の Tweet の情報が必要となるためです。
 
 ルーティングを上記のように記述すると Tweet の情報も合わせて得ることができます（後述）。
 
@@ -232,4 +225,4 @@ Comment に関する CRUD 処理のルートが自動的に追加されている
 +--------+-----------+------------------------------------------+-------------------------+-------------------------------------------------------+-----------------+
 ```
 
-\
+\\

@@ -1,6 +1,6 @@
-# ☠️ sqlインジェクション確認
+# sqlインジェクション確認
 
-サンプルファイルは[こちら](https://gitlab.com/gs\_hayato/gs-php-01/-/blob/master/sql\_injection.zip)。
+サンプルファイルは[こちら](https://gitlab.com/gs_hayato/gs-php-01/-/blob/master/sql_injection.zip)。
 
 単純なログイン機能になっている。 id, pwは以下の通り。
 

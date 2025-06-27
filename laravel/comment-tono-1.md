@@ -1,4 +1,4 @@
-# 🐖 012\_Comment 更新処理と削除処理の実装
+# 012\_Comment更新処理と削除処理の実装
 
 ### ここでやりたいこと <a href="#kokodeyaritaikoto" id="kokodeyaritaikoto"></a>
 
@@ -8,8 +8,7 @@
 
 ### 編集と削除の実装 <a href="#tono" id="tono"></a>
 
-まずCommentの編集画面を表示します。
-編集画面にはTweetとCommentを表示するのでそれぞれデータを渡します。
+まずCommentの編集画面を表示します。 編集画面にはTweetとCommentを表示するのでそれぞれデータを渡します。
 
 <pre class="language-php"><code class="lang-php">// app/Http/Controllers/CommentController.php
 
@@ -20,8 +19,7 @@
 
 </code></pre>
 
-編集画面のビューは下記のように記述しましょう。
-書き換えた後、UpdateボタンをクリックするとCommentの更新処理が実行されます。
+編集画面のビューは下記のように記述しましょう。 書き換えた後、UpdateボタンをクリックするとCommentの更新処理が実行されます。
 
 ```php
 <!-- resources/views/tweets/comments/edit.blade.php -->
@@ -60,9 +58,7 @@
 
 ### 更新処理 <a href="#geng-xin-chu-li" id="geng-xin-chu-li"></a>
 
-データを受け取って更新処理を行います。
-（更新後はComment詳細画面に遷移）
-ルーティングで2つのパラメータを設定する必要があるので配列を渡しましょう。
+データを受け取って更新処理を行います。 （更新後はComment詳細画面に遷移） ルーティングで2つのパラメータを設定する必要があるので配列を渡しましょう。
 
 ```
 tweets/{tweet}/comments/{comment}

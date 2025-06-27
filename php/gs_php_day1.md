@@ -2,14 +2,13 @@
 description: php 第１日目
 ---
 
-# 😀 011_gs_php_day1
+# 011\_gs\_php\_day1
 
 ### 授業資料 <a href="#shou-ye-zi-liao" id="shou-ye-zi-liao"></a>
 
 [WEBについて超概略](https://fukushimasurao.github.io/client-server-presentation/)
 
-
-[https://gitlab.com/gs_hayato/gs-php-01/-/blob/master/php01.zip](https://gitlab.com/gs_hayato/gs-php-01/-/blob/master/php01.zip)
+[https://gitlab.com/gs\_hayato/gs-php-01/-/blob/master/php01.zip](https://gitlab.com/gs_hayato/gs-php-01/-/blob/master/php01.zip)
 
 ![](<../.gitbook/assets/スクリーンショット 2022-01-09 2.30.21.png>)
 
@@ -23,13 +22,13 @@ Mac を利用されている人は、data/data.txt ファイルの書き込み�
 
 授業ごとに ZIP 化した配布資料を共有します。
 
-解凍したファイルは、必ず**htdocs/gs_code**に格納してください。
+解凍したファイルは、必ず**htdocs/gs\_code**に格納してください。
 
-※gs_code フォルダがなければ、作成してください。
+※gs\_code フォルダがなければ、作成してください。
 
 ## 基礎文法
 
-### _gs_code/php01/hello01.php_
+### _gs\_code/php01/hello01.php_
 
 ```php
 <?php
@@ -50,20 +49,20 @@ echo 'hello world';
 ブラウザの URL に`localhost/gs_code/php01/hello01.php`と記入して出力を確認してみましょう。
 
 {% hint style="danger" %}
-mamp を使っている場合や、設定によっては、localhost:8888/gs_code/php01/hello01.php
+mamp を使っている場合や、設定によっては、localhost:8888/gs\_code/php01/hello01.php
 {% endhint %}
 
 {% hint style="danger" %}
 エラーの場合は以下を確認してみてください。
 
-- `XAMPP`を起動しているか。
-- 開始タグ・終了タグに間違いが無いか。
-- htdocs/gs_code に格納しているか。
-- 書き間違いが無いか。
-- 文の最後に ; が抜けていないか。
-- 全角スペースを記入していないか。
-- その他不要な文字などが入ってないか。
-  {% endhint %}
+* `XAMPP`を起動しているか。
+* 開始タグ・終了タグに間違いが無いか。
+* htdocs/gs\_code に格納しているか。
+* 書き間違いが無いか。
+* 文の最後に ; が抜けていないか。
+* 全角スペースを記入していないか。
+* その他不要な文字などが入ってないか。
+{% endhint %}
 
 {% hint style="danger" %}
 表示がされない場合、
@@ -202,9 +201,9 @@ php にて組み込み関数（最初から用意されている関数）を利�
 ```
 
 {% hint style="info" %}
-php のデフォルトのタイムゾーンはドイツ・ベルリンになっています。
-タイムゾーンの変更はこちらを参照してください。
-https://nu0640042.gitbook.io/gs_php/php/something#xamppnotaimuzn
+php のデフォルトのタイムゾーンはドイツ・ベルリンになっています。\
+タイムゾーンの変更はこちらを参照してください。\
+https://nu0640042.gitbook.io/gs\_php/php/something#xamppnotaimuzn
 {% endhint %}
 
 文字長さを計るには、`strlen('文字列')`関数を利用します。 例えば`alphabet`という　単語の文字数を画面に出力するにはどのように書けばよいでしょうか。
@@ -254,7 +253,7 @@ date()の引数はたくさん種類あります。
 [https://www.php.net/manual/ja/function.date.php](https://www.php.net/manual/ja/function.date.php)
 {% endhint %}
 
-### php と JS/CSS の動きを確認 ... other_lang.php
+### php と JS/CSS の動きを確認 ... other\_lang.php
 
 ```php
 <html>
@@ -306,7 +305,6 @@ for ($i = 0; $i < $num; $i++) {
     # code...
 }
 ```
-
 {% endhint %}
 
 ```php
@@ -386,7 +384,7 @@ Form で大事な項目は３つ。
 1. _action で、送信先を設定_
 2. _method で送信メソッドを設定_
 3. _input タグ内の name でそれぞれ送る情報に名前をつける。_
-   {% endhint %}
+{% endhint %}
 
 _get.php （送信側）_
 
@@ -398,7 +396,7 @@ _get.php （送信側）_
     </form>
 ```
 
-get*confirm.php *（受け取り側）\_
+get\*confirm.php \*（受け取り側）\_
 
 ```php
 <?php
@@ -434,7 +432,7 @@ $mail = $_GET['mail'];
 ```
 
 {% hint style="info" %}
-var_dump は\<pre>で囲ってあげると、整形されて見やすいです。
+var\_dump は\<pre>で囲ってあげると、整形されて見やすいです。
 
 ```php
 // ↓ こんな感じ
@@ -442,7 +440,6 @@ echo '<pre>';
 var_dump($_GET);
 echo '</pre>';
 ```
-
 {% endhint %}
 
 {% hint style="info" %}
@@ -453,7 +450,6 @@ HTML 内では、echo は以下のように省略した記述が可能です。
 // ↓
 <?= $name ?>
 ```
-
 {% endhint %}
 
 {% hint style="success" %}
@@ -475,11 +471,11 @@ _post.php(送信側)_
 _get と post は method を変えるだけです。_
 {% endhint %}
 
-_post_confirm.php(受け取り側)_
+_post\_confirm.php(受け取り側)_
 
 {% hint style="info" %}
-フォームから値が送信されていない場合、$_POST['name']のように直接アクセスすると「Notice: Undefined index」が表示されることがあります。
-そのため、isset($\_POST['name'])や$\_POST['name'] ?? ''のように、isset を用いて値が存在するか確認してから使いましょう
+フォームから値が送信されていない場合、$\_POST\['name']のように直接アクセスすると「Notice: Undefined index」が表示されることがあります。\
+そのため、isset($\_POST\['name'])や$\_POST\['name'] ?? ''のように、isset を用いて値が存在するか確認してから使いましょう
 {% endhint %}
 
 ```php
@@ -513,9 +509,9 @@ $password = $_POST['password'];
 {% hint style="info" %}
 `POST`と`GET`は以下のように違いを捉えてください。
 
-- `POST`:リソース（DB の中身）を変化させるもの。例えば、何かを登録するときなど。
-- `GET`:リソース（DB の中身）の取得をするのみ。例えば、検索してその結果を取得する場合など。
-  {% endhint %}
+* `POST`:リソース（DB の中身）を変化させるもの。例えば、何かを登録するときなど。
+* `GET`:リソース（DB の中身）の取得をするのみ。例えば、検索してその結果を取得する場合など。
+{% endhint %}
 
 ### セキュリティ / XSS(クロスサイトスクリプティング)
 
@@ -540,7 +536,7 @@ $password = $_POST['password'];
 {% hint style="info" %}
 ipa の「安全なウェブサイトの作り方 - 1.5 クロスサイト・スクリプティング」に詳しい。
 
-[https://www.ipa.go.jp/security/vuln/websecurity-HTML-1_5.html](https://www.ipa.go.jp/security/vuln/websecurity-HTML-1_5.html)
+[https://www.ipa.go.jp/security/vuln/websecurity-HTML-1\_5.html](https://www.ipa.go.jp/security/vuln/websecurity-HTML-1_5.html)
 
 なお、セキュリティについて確認したい場合は、基本的に ipa のサイト（個人のブログ等ではなく）を確認することをお勧めします。
 {% endhint %}
@@ -559,7 +555,7 @@ GET や POST で受け取ったデータを出力する場合は**必ず**以下
 
 `htmlspecialchars()`はフォームから受け取った文字列をブラウザに出力する際に利用します。
 
-_post_confirm.php_
+_post\_confirm.php_
 
 ```php
 <body>
@@ -687,7 +683,7 @@ echo nl2br($data);
 
 #### input.php
 
-すでに書いてあるのでそのまま。
+すでに書いてあるのでそのまま。\
 actionや、methodを確認しておいてください。
 
 #### write.php
@@ -713,9 +709,9 @@ file_put_contents('data/data.txt', $data, FILE_APPEND);
 
 #### 【課題】 アンケート集計/表示アプリ
 
-- `post.php` (データ入力)
-- `write.php` (データ登録)
-- `read.php` (データ表示)
+* `post.php` (データ入力)
+* `write.php` (データ登録)
+* `read.php` (データ表示)
 
 1. データ登録:名前,Email,聞きたい問い複数
 2. データ表示:登録されてるデータを表で表示
@@ -747,12 +743,11 @@ fclose($file);
 ?>
 ```
 
-- fopen の引数について fopen の第２引数(open モード)には以下のような種類があります。 方法によって使い分けてください。
+* fopen の引数について fopen の第２引数(open モード)には以下のような種類があります。 方法によって使い分けてください。
 
 間違えると、中身を削除してしまうので、ご利用は慎重に。
 
 {% hint style="info" %}
-
 ```
 r 読み込みのみでオープンします。
 r+ 読み込み/書込み用にオープンします。
@@ -763,7 +758,6 @@ w+ 読み込み/書込み用でオープンします。内容をまず削除、�
 a 追加書込み用のみでオープンします。ファイルがなければ作成
 a+ 読み込み/追加書込み用でオープンします。ファイルがなければ作成
 ```
-
 {% endhint %}
 
 {% hint style="info" %}
@@ -772,7 +766,7 @@ a+ 読み込み/追加書込み用でオープンします。ファイルがな�
 1. open
 2. 処理
 3. close の３つがセットです。
-   {% endhint %}
+{% endhint %}
 
 #### read.php
 
@@ -805,7 +799,6 @@ fgets($openFile)でファイルの上から１行ずつ取得して、$strに代
 $strをechoする。その際に、text内の改行を<br>に変換させるnl2brを利用
 もし読み込む行がなくなった場合、条件はFALSEになり、whileは終了する。
 ```
-
 {% endhint %}
 
 ### `input.php`から`write.php`に内容を送ってみよう

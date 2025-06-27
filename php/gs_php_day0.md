@@ -2,7 +2,7 @@
 description: php 第0日目 開発環境について
 ---
 
-# 🐘 001\_gs\_php\_day0(開発環境)
+# 001\_gs\_php\_day0(開発環境)
 
 ## 🐘 001\_gs\_php\_day0(開発環境)
 

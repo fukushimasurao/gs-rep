@@ -1,4 +1,4 @@
-# 🍎 001\_2\_Docker導入\_Mac
+# 001\_2\_Docker導入\_Mac
 
 **WINDOWS向けの記事です！** **Macは次のページへ！**
 
@@ -34,10 +34,6 @@ https://minegishirei.hatenablog.com/entry/2023/05/04/124946
 
 動画内に映るスクリプトと以下スクリプトの内容が若干異なりますが、 **以下のスクリプトを正**としてください。 （もしくは動画内の字幕を正としてください。）
 
-
-
-
-
 動画では出てないですが、初めて`./vendor/bin/sail up -d`した際に以下のようなエラーが出ることがあります。
 
 <figure><img src="../.gitbook/assets/スクリーンショット 2025-01-18 14.11.12.png" alt=""><figcaption></figcaption></figure>
@@ -48,11 +44,9 @@ https://minegishirei.hatenablog.com/entry/2023/05/04/124946
 ./vendor/bin/sail artisan migrate
 ```
 
-&#x20; を実行してください。
+を実行してください。
 
 参考 windowsの動画([https://www.youtube.com/watch?v=jlLolZ-ZfBk](https://www.youtube.com/watch?v=jlLolZ-ZfBk))の3:50あたりを参考にしてください。
-
-
 
 動画内で利用しているスクリプトはこちら
 
@@ -85,5 +79,4 @@ phpmyadmin:
 platform: linux/amd64
 ```
 
-動画
-https://youtu.be/qHF9JU629QM
+動画 https://youtu.be/qHF9JU629QM

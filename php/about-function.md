@@ -2,7 +2,7 @@
 description: 関数について、ざっくり説明します。
 ---
 
-# 😇 about function(仮)
+# about function(仮)
 
 ### 関数が無い場合
 

@@ -1,4 +1,4 @@
-# 🎁 009\_Like! 機能の実装（多対多データの操作）
+# 009\_Like! 機能の実装（多対多データの操作）
 
 ### ここでやりたいこと
 
@@ -18,18 +18,18 @@
 ### 前提
 
 イメージは
-- viewのいいねが押される
-- →routeの確認
-- →controllerで処理される
-- →modelでデータが保存される。
-という感じです。
+
+* viewのいいねが押される
+* →routeの確認
+* →controllerで処理される
+* →modelでデータが保存される。 という感じです。
 
 以下では、
 
-- コントローラの作成
-- routeの設定
-- controller + model記述
-- view記述
+* コントローラの作成
+* routeの設定
+* controller + model記述
+* view記述
 
 の順番で対応していきます。
 
@@ -51,14 +51,11 @@ $ ./vendor/bin/sail artisan make:controller TweetLikeController --resource
 
 コントローラのメソッドをルーティングに追加。
 
-今回は`like` と `dislike` の 2 つを追加するため`resource` ではなく個別に記述します。
-※ つまりresourceの場合は、crud処理全部(例えばindexとかcreateとかupdateとか)が自動で処理されますが、今回は、store と destroyだけでいいので個別にします。
+今回は`like` と `dislike` の 2 つを追加するため`resource` ではなく個別に記述します。 ※ つまりresourceの場合は、crud処理全部(例えばindexとかcreateとかupdateとか)が自動で処理されますが、今回は、store と destroyだけでいいので個別にします。
 
 * like の場合は `store` メソッドを実行します。呼び出しやすいように`tweets.like` という名前をつけましょう。
 * dislike の場合は `destroy` メソッドを実行します。呼び出しやすいように `tweets.dislike` という名前をつけましょう。
-* like と dislike の操作ではTweetを指定したいため、URLパラメータとしてtweetを指定している．
-どちらの場合もターゲットとなる Tweet と指定し、認証中のユーザが `like` または `dislike` するという動きになります。
-URLにTweetを特定するためのパラメータとして `{tweet}` を指定しています。(`ルートモデル結合`)
+* like と dislike の操作ではTweetを指定したいため、URLパラメータとしてtweetを指定している． どちらの場合もターゲットとなる Tweet と指定し、認証中のユーザが `like` または `dislike` するという動きになります。 URLにTweetを特定するためのパラメータとして `{tweet}` を指定しています。(`ルートモデル結合`)
 
 <pre><code>// routes/web.php
 
