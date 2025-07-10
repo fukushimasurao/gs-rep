@@ -16,7 +16,7 @@
 
 内容は、テーブルのJOINと画像登録についてです。
 
-## MAMPの起動、DB準備
+## Xamppの起動、DB準備
 
 1. MAMPを起動
 2. WebStartボタンから起動トップページを表示
@@ -65,7 +65,7 @@ RDBは通常複数のテーブルで構成されます。
 
 例.
 
-* 例えば、学生についての塊を作りないなら`students`テーブル
+* 例えば、学生についての塊を作りたいなら`students`テーブル
 * 例えば、会社の社員が所属する部門の塊なら`dept`テーブル
 * 例えば、駅の塊なら`stations`テーブル
 
@@ -115,7 +115,7 @@ RDBにおいて、分けたテーブルは結合して表示することが可�
 
 employeesテーブルに、部門のidが記載されています。 departmentsテーブルに、どの部門かが記載されています。
 
-この分割のメリットは、部門名が変わったときにdepartmentsテーブルを変えればそれで住むという点です。
+この分割のメリットは、部門名が変わったときにdepartmentsテーブルを変えればそれで済むという点です。
 
 さて、 employeesテーブルとdepartmentsを結合してみましょう。
 
@@ -131,25 +131,25 @@ SELECT
     *
 FROM
     employees
-join
+JOIN
     departments
-    on employees.dept_id = departments.id;
+    ON employees.dept_id = departments.id;
 ```
 
 {% hint style="info" %}
-ただの`join`と書いた場合、`innner join`となる。 `join`の違いはざっくりと、 左側のテーブルに必ずデータを含めたい場合 → `LEFT JOIN` 両方のテーブルに一致するデータだけが必要 →`INNER JOIN` 右側のテーブルを基準にデータを取得したい場合 → `RIGHT JOIN` 両方のテーブルのすべてのデータを取得したい場合 → `FULL OUTER JOIN`
+ただの`join`と書いた場合、`inner join`となる。 `join`の違いはざっくりと、 左側のテーブルに必ずデータを含めたい場合 → `LEFT JOIN` 両方のテーブルに一致するデータだけが必要 →`INNER JOIN` 右側のテーブルを基準にデータを取得したい場合 → `RIGHT JOIN` 両方のテーブルのすべてのデータを取得したい場合 → `FULL OUTER JOIN`
 {% endhint %}
 
-特定のテーブルのカラムを提示する場合は、`テーブル.カラム`のように指定する。
+特定のテーブルのカラムを指定する場合は、`テーブル.カラム`のように指定する。
 
-```
+```sql
 SELECT
     employees.id, employees.name, departments.name
 FROM
     employees
-join
+JOIN
     departments
-    on employees.dept_id = departments.id;
+    ON employees.dept_id = departments.id;
 ```
 
 #### アプリケーションで動きを知る。
@@ -185,6 +185,9 @@ if($val['id'] !== '') {
 
 ```php
 <?php
+session_start();
+require_once 'funcs.php';
+loginCheck();
 
 //1. POSTデータ取得
 $content = $_POST['content'];
@@ -194,10 +197,19 @@ $user_id = $_SESSION['user_id']; // ← 追記
 //2. DB接続します
 $pdo = db_conn();
 
-//３．つぶやき登録SQL作成
+//３．データ登録SQL作成
 $stmt = $pdo->prepare('INSERT INTO contents(user_id, content, created_at)VALUES(:user_id, :content, NOW());'); // user_idへの記録を追加
 $stmt->bindValue(':content', $content, PDO::PARAM_STR);
 $stmt->bindValue(':user_id', $user_id, PDO::PARAM_INT);  // bindValue追加
+$status = $stmt->execute(); //実行
+
+// 処理後のリダイレクト
+if($status === false) {
+    sql_error($stmt);
+} else {
+    redirect('select.php');
+}
+?>
 ```
 
 #### 実際に登録してみる
@@ -216,7 +228,7 @@ session_start();
 require_once 'funcs.php';
 loginCheck();
 
-//２．つぶやき登録SQL作成
+//２．データベース登録SQL作成
 $pdo = db_conn();
 $stmt = $pdo->prepare('SELECT
 contents.id as id,
@@ -328,13 +340,13 @@ session_start();
 require_once 'funcs.php';
 loginCheck();
 
-//1. POSTつぶやき取得
+//1. POSTデータ取得
 $content = $_POST['content'];
 $user_id = $_SESSION['user_id']; 
 
 // 画像アップロードの処理をここら辺に追加
 $image = '';
-if (isset($_FILES['image'])) {
+if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
     // アップロードする画像をリネームする準備
     $upload_file = $_FILES['image']['tmp_name'];
     $extension = pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION);
@@ -353,11 +365,18 @@ if (isset($_FILES['image'])) {
 併せて、SQL部分とバインドバリュー部分も変更しよう。
 
 ```php
-$stmt = $pdo->prepare('INSERT INTO contents(user_id, content, image, created_at)VALUES(:user_id, :content, :image, NOW());'); // user_idへの記録を追加
+$stmt = $pdo->prepare('INSERT INTO contents(user_id, content, image, created_at)VALUES(:user_id, :content, :image, NOW());');
 $stmt->bindValue(':content', $content, PDO::PARAM_STR);
 $stmt->bindValue(':image', $image, PDO::PARAM_STR);
 $stmt->bindValue(':user_id', $user_id, PDO::PARAM_INT);
 $status = $stmt->execute(); //実行
+
+// 処理後のリダイレクト
+if($status === false) {
+    sql_error($stmt);
+} else {
+    redirect('select.php');
+}
 ```
 
 ここまでできたら、一旦`index.php`のフォームから画像を送り、imgフォルダに画像が格納されることを確認してください。
@@ -395,7 +414,9 @@ $status = $stmt->execute(); //実行
 </form>
 ```
 
-### 画像の表示01
+これで画像が表示できた。
+
+### 画像の表示02
 
 `select.php`にも表示させる。
 
@@ -406,14 +427,15 @@ contents.id as id,
 contents.content as content,
 contents.image as image, // ←追加
 users.name as name
-FROM contents JOIN users ON contents.user_id = users.id '); // ← sqlを変更する。
+FROM contents JOIN users ON contents.user_id = users.id ');
 $status = $stmt->execute();
 
 // 省略
 
-$view .= '<img src="' . h($r['image']) . '" class="image-class">'; ←追加
+if (!empty($r['image'])) {
+    $view .= '<img src="' . h($r['image']) . '" class="image-class" alt="投稿画像">'; // ←追加
+}
 $view .= '</p></div>';
-
 ```
 
 これで画像が表示できた。
