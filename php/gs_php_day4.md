@@ -282,8 +282,9 @@ $val = $stmt->fetch();
 //5. 該当レコードがあればSESSIONに値を代入
 //* if(password_verify($lpw, $val['lpw'])){
 if( $val['id'] != '' ){
-
-  // サーバーとクライアントで共有しているSessionIDをchk_ssidに記録しておく。
+  // セッションIDを新しいものに更新する
+  session_regenerate_id(true);
+  // サーバーとクライアントで共有している"最新の"SessionIDをchk_ssidに記録しておく。
   $_SESSION['chk_ssid']  = session_id();
 
   //権限判断したい場合は、kanri_flgをsessionに入れておく。
@@ -316,7 +317,7 @@ if (!isset($_SESSION['chk_ssid']) || $_SESSION['chk_ssid'] != session_id()) {
 }
 
 session_regenerate_id(true);
-    $_SESSION['chk_ssid'] = session_id();
+$_SESSION['chk_ssid'] = session_id();
 
 //以下ログインユーザーのみ処理が行われる。
 // (以下略)
