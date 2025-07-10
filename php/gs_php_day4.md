@@ -1,8 +1,8 @@
-# 014\_gs\_php\_day4
+# 014_gs_php_day4
 
 ユーザー側にデータを授業資料
 
-[https://gitlab.com/gs\_hayato/gs-php-01/-/blob/master/PHP04.zip](https://gitlab.com/gs_hayato/gs-php-01/-/blob/master/PHP04.zip)
+[https://gitlab.com/gs_hayato/gs-php-01/-/blob/master/PHP04.zip](https://gitlab.com/gs_hayato/gs-php-01/-/blob/master/PHP04.zip)
 
 ## 前回のおさらい
 
@@ -18,14 +18,10 @@
 
 * `CRUD`とは？ [https://wa3.i-3-i.info/word123.html](https://wa3.i-3-i.info/word123.html)
 
-## MAMPの起動、DB準備
+## Xamppの起動、DB準備
 
-1. MAMPを起動
-2. WebStartボタンから起動トップページを表示
-3. ページの真ん中MySQLのタブからphpMyAdminのリンクをクリック
-4. 起動した画面がMySQLを管理するphpMyAdminの画面が表示されます。
-5. データベースタブをクリック
-6. データベースを作成から以下の名前で作成
+1. Xamppを起動
+2. phpMyAdminから、あたらしいDBを作成
 
 ```
 データベース名：gs_db_class4
@@ -49,7 +45,7 @@
 
 今日のプロダクトのイメージ
 
-<figure><img src="../.gitbook/assets/about.jpg" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/about.jpg" alt=""></figure>
 
 ## 今日のゴール
 
@@ -57,9 +53,25 @@
 
 ### `SESSION`の確認
 
-`SESSION`そのものは概念……お互いが誰かを認識した状態でやりとりすること・やりとりを管理すること。
+- Amazonでカートに商品を入れたまま、他のページを見ても商品が残っている
+- 一度ログインすると、他のページに移動してもログイン状態が保持される
+- 銀行のATMで暗証番号を入力した後、複数の操作ができる
 
-インターネットの仕組み……ステートレス。 これだと買い物等しずらい。そのためsessionを利用する。
+これらを実現するのがSESSIONの仕組みです。
+
+`SESSION`そのものは概念 …… お互いが誰かを認識した状態でやりとりすること・やりとりを管理すること。
+
+インターネットの通信（HTTP通信）はステートレス（State-less）です。これは、サーバーが過去のやりとりを記憶せず、アクセスがあるたびに毎回「初めまして」の状態になる、という意味です。これではECサイトなどで買い物カゴの状態を保持できないため、SESSIONを使ってユーザーの状態を維持します。
+
+**例：ステートレスの問題**
+
+```
+1回目のアクセス: 「こんにちは、私は田中です」
+2回目のアクセス: サーバー「はじめまして」（田中さんのことを覚えていない）
+3回目のアクセス: サーバー「はじめまして」（また忘れている）
+```
+これではECサイトなどで買い物カゴの状態を保持できないため、SESSIONを使ってユーザーの状態を維持します。
+
 
 `session`を利用するために...`session_start();`を利用する。
 
@@ -71,16 +83,19 @@
 
 ```php
 // test01.php
-
+<?php
 $name = 'yamada';
 echo $name;
 // yamadaと出力される
+?>
 ```
 
 ```php
 // test02.php
+<?php
 echo $name;
 // エラー。test02.phpの中には変数定義されていない。
+?>
 ```
 
 #### `session01.php`を作成
@@ -96,20 +111,18 @@ echo $name;
 // この１行で、新しいセッションを開始しセッションIDが割り当てられて、ファイルが作成される。
 session_start();
 
-```
-
-#### `session01.php`の`session_start()`の下に以下処理を追加
-
-```php
-
 $name = 'jone';
 $age = 30;
 
-echo $name . $age;
+echo "通常の変数: " . $name . " " . $age . "<br>";
 
 // SESSION変数にデータを登録
 $_SESSION['name'] = $name;
 $_SESSION['age'] = $age;
+
+echo "セッション変数に保存しました。<br>";
+echo '<a href="session02.php">session02.phpへ移動</a>';
+?>
 ```
 
 {% hint style="info" %}
@@ -129,8 +142,9 @@ session_start();
 $name = $_SESSION['name'];
 $age = $_SESSION['age'];
 
-echo $name;
-echo $age;
+echo "セッション変数から取得: " . $name . " " . $age . "<br>";
+echo "session01.phpで設定した値が取得できました！<br>";
+echo '<a href="session01.php">session01.phpに戻る</a>';
 ?>
 ```
 
@@ -163,7 +177,7 @@ echo $sid;
 
 このidは**ブラウザ / サーバー の両方に同じIDが保存されています。**
 
-<figure><img src="../.gitbook/assets/セッション流れ.png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/セッション流れ.png" alt=""></figure>
 
 _確認場所_
 
@@ -242,33 +256,9 @@ $lid = $_POST['lid'];
 $lpw = $_POST['lpw'];
 ```
 
-1. データ登録SQL作成
+3. ログイン処理の作成
 
-```php
-$stmt = $pdo->prepare('SELECT * FROM gs_user_table WHERE lid = :lid AND lpw=:lpw');
-$stmt->bindValue(':lid', $lid, PDO::PARAM_STR);
-$stmt->bindValue(':lpw', $lpw, PDO::PARAM_STR); //* Hash化する場合はコメントする
-$status = $stmt->execute();
-```
-
-1. 処理後のリダイレクト先を設定
-
-```php
-//5. 該当レコードがあればSESSIONに値を代入
-//* if(password_verify($lpw, $val['lpw'])){
-if( $val['id'] != '' ){
-
-  // サーバーとクライアントで共有しているSessionIDをchk_ssidに記録しておく。
-  $_SESSION['chk_ssid']  = session_id();
-
-  //権限判断したい場合は、kanri_flgをsessionに入れておく。
-  // $_SESSION['kanri_flg'] = $val['kanri_flg']; 
-  redirect('select.php');
-}else{
-  //Login失敗時(Logout経由)
-  redirect('login.php');
-}
-```
+ログイン処理の具体的な実装は、後の「パスワードのハッシュ化」のセクションで、セキュリティを考慮した安全な方法を解説します。まずは、ログイン全体の流れを理解しましょう。
 
 これで、ログインのような動きはできましたが、実際には機能していません。 ログインしようとしまいと、`select.php`にアクセスできてしまうからです。
 
@@ -315,7 +305,7 @@ function loginCheck(){
 }
 ```
 
-1. `select.php`のログインチェック処理をリファクタリング
+1. `select.php`のログインチェック処理をリファクタリング（リファクタリングとは、外部から見たときの動作を変えずに、内部の構造を整理して、より効率的で分かりやすいコードに改善することです）
 
 ```php
 //SESSIONスタート
@@ -368,6 +358,27 @@ if($_SESSION['kanri_flg'] !== 1) {
 
 ## パスワードのハッシュ化
 
+### なぜパスワードをハッシュ化するのか？
+
+**セキュリティの基本原則：** パスワードは平文（生のまま）で保存してはいけません。
+
+
+#### 悪い例：平文でパスワード保存
+```sql
+-- データベースの中身
+ユーザー名: tanaka, パスワード: mypassword123
+ユーザー名: sato,   パスワード: secret456
+```
+→ データベースが漏洩した場合、パスワードがそのまま見られてしまう
+
+#### 良い例：ハッシュ化してパスワード保存
+```sql
+-- データベースの中身
+ユーザー名: tanaka, パスワード: $2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi
+ユーザー名: sato,   パスワード: $2y$10$8OYGhF7w4l1rC9qA6Nk8z.fR3tP5mQ8sV2xL4oE1dM6pK7cH9aB2e
+```
+→ 元のパスワードが分からない（不可逆的）
+
 _**万が一パスワードが盗まれた場合に備えて、パスワードをハッシュ化**_
 
 * `ハッシュ化` ... 不可逆的
@@ -399,23 +410,32 @@ echo $hashed_pw;
 
 1. `login_act.php`の中の処理を一部変更
 
+まず、SQL文を `lid` のみでユーザーを検索するように変更し、SQL実行後に `fetch()` で結果を1件取得します。
+**なぜなら、パスワードはハッシュ化されているため、SQLの `WHERE` 句で直接比較することはできないからです。**まずユーザーIDでユーザー情報を取得し、その後PHP側で `password_verify()` 関数を使ってパスワードが一致するかを検証する必要があります。
+
 ```php
-// ↓ここをlidだけに変更
+// ↓lidでの検索結果を取得
 $stmt = $pdo->prepare('SELECT * FROM gs_user_table WHERE lid = :lid;');
 $stmt->bindValue(':lid',$lid, PDO::PARAM_STR);
-
-// *Hash化する場合はコメントする
-// $stmt->bindValue(':lpw',$lpw, PDO::PARAM_STR);
 $status = $stmt->execute();
+
+// データを1件取得
+$val = $stmt->fetch();
 ```
 
+次に、取得したデータと入力されたパスワードを照合します。
+`$val` にユーザー情報が取得できていて、かつ `password_verify()` が `true` を返した場合にログイン成功とします。
+
 ```php
-//5. 該当レコードがあればSESSIONに値を代入この部分のif文をpassword_verifyに変更
-if ($val['id'] != '' && password_verify($lpw, $val['lpw'])) {
-  // Login成功時
-  // 省略
+//5. 該当レコードがあればSESSIONに値を代入
+if( $val && password_verify($lpw, $val['lpw']) ){
+  //Login成功時
+  $_SESSION['chk_ssid']  = session_id();
+  $_SESSION['kanri_flg'] = $val['kanri_flg'];
+  redirect('select.php');
 }else{
-  // 省略
+  //Login失敗時(Logout経由)
+  redirect('login.php');
 }
 ```
 
