@@ -548,16 +548,20 @@ $password = 'test';
 $hashed_pw = password_hash($password, PASSWORD_DEFAULT);
 echo $hashed_pw;
 
-// 表示された内容が 'test1' を hash化したもの
+// 表示された内容が 'test' を hash化したもの
 ?>
 ```
 
-1. パスワードの書き換え
+`gs_user_table`のh_test1〜h_test3はそれぞれパスワードがハッシュ化済みである。
+それぞれ、test1, test2,test3をハッシュ化したものである。
+# ユーザーテーブル
 
-* ↑で表示されたハッシュ値をコピー
-* `phpMyAdmin`にて、`lpw`の`test1`をコピーしたハッシュ値に書き換える。
+| id | password（ハッシュを複合したもの） |
+|-------|----------|
+| h_test1 | test1 |
+| h_test2 | test2 |
+| h_test3 | test3 |
 
-![](../.gitbook/assets/php04/hash.png)
 
 1. `login_act.php`の中の処理を一部変更
 
