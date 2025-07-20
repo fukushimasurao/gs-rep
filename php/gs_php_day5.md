@@ -16,9 +16,9 @@
 
 内容は、テーブルのJOINと画像登録についてです。
 
-## Xamppの起動、DB準備
+## Xampp（またはMAMP）の起動、DB準備
 
-1. MAMPを起動
+1. Xamppを起動
 2. WebStartボタンから起動トップページを表示
 3. ページの真ん中MySQLのタブからphpMyAdminのリンクをクリック
 4. 起動した画面がMySQLを管理するphpMyAdminの画面が表示されます。
@@ -388,7 +388,7 @@ if($status === false) {
 ```html
 <form method="POST" action="update.php" enctype="multipart/form-data">
 
-    <!-- # 省略 -->
+    <!-- 省略 -->
 
             <div>
                 <label for="content">内容：</label>
@@ -423,10 +423,10 @@ if($status === false) {
 ```php
 $pdo = db_conn();
 $stmt = $pdo->prepare('SELECT
-contents.id as id,
-contents.content as content,
-contents.image as image, // ←追加
-users.name as name
+    contents.id as id,
+    contents.content as content,
+    contents.image as image, // ←追加
+    users.name as name
 FROM contents JOIN users ON contents.user_id = users.id ');
 $status = $stmt->execute();
 
