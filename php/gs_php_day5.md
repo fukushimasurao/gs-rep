@@ -418,11 +418,6 @@ $stmt->bindValue(':content', $content, PDO::PARAM_STR);
 $stmt->bindValue(':user_id', $user_id, PDO::PARAM_INT);  // bindValue追加
 $status = $stmt->execute(); //実行
 
-{% hint style="info" %}
-**bindValueを使う理由**
-bindValueを使うことで、SQLインジェクション攻撃を防ぐことができます。ユーザーが入力したデータをそのままSQLに埋め込むと、悪意のあるSQLコードを実行される危険性があります。
-{% endhint %}
-
 // 処理後のリダイレクト
 if($status === false) {
     sql_error($stmt);
