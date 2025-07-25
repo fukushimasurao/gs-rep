@@ -635,11 +635,14 @@ if($status === false) {
 
 `detail.php`にて登録した画像を表示してみましょう。
 
+
 {% hint style="info" %}
+
 **画像表示の仕組み**
 1. データベースから画像のファイルパスを取得
 2. HTMLの`<img>`タグの`src`属性にファイルパスを設定
 3. ブラウザが指定されたパスから画像を読み込んで表示
+
 {% endhint %}
 
 基本的には、DBのimageカラムに画像の格納先があるので、これを`<img>`タグのsrcに記述するだけです。
@@ -660,10 +663,6 @@ if($status === false) {
                 echo '<img src="' . h($row['image']) . '" class="image-class">';
             }
             ?>
-            <div>
-                <label for="new_image">新しい画像を追加する場合は以下から登録：</label>
-                <input type="file" id="new_image" name="new_image">
-            </div>
             <div>
                 <input type="submit" value="更新">
                 <input type="hidden" name="id" value="<?= $id ?>">
