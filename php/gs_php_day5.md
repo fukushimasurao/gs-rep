@@ -431,7 +431,7 @@ if($status === false) {
 
 上記処理を追加後、一旦ログアウト → ログイン
 
-※ `PHPMyAdmin`にてuser1,2,3それぞれにログインして、2〜3個データを登録する。
+※ `PHPMyAdmin`にてcontentsテーブルのレコードのuser_idカラムに意図したuser_idが記録されているか確認する。
 
 ### アンケート一覧で投稿者名を横に表示する（リレーション先のデータ取得）
 
@@ -489,11 +489,20 @@ https://techlib.circlearound.co.jp/entries/db-table-many-to-many/ https://techli
 配布した以下のテーブルをphpMyAdminで結合してみる。 clubs clubs\_students students
 
 ```sql
-SELECT * FROM clubs join clubs_students on clubs.id = clubs_students.clubs_id;
+SELECT
+    *
+FROM
+    clubs
+join clubs_students
+on clubs.id = clubs_students.clubs_id;
 ```
 
 ```sql
-SELECT * FROM `clubs` join clubs_students on clubs.id = clubs_students.clubs_id join students on clubs_students.students_id= students.id;
+SELECT 
+    *
+FROM `clubs`
+join clubs_students on clubs.id = clubs_students.clubs_id
+join students on clubs_students.students_id= students.id;
 ```
 
 ---
