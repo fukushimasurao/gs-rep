@@ -238,6 +238,17 @@ docker-compose.yml への phpMyAdmin 設定追加が詳しく説明されてい�
 
 ### docker-compose.ymlファイルの編集
 
+{% hint style="info" %}
+**docker-compose.ymlファイルの場所**
+`docker-compose.yml` ファイルは、先ほど作成した `laratter` フォルダの中にあります。
+
+**具体的な場所:**
+- WSL Ubuntuターミナルで `cd laratter` を実行した場所
+- VS Codeなどのエディタで `laratter` フォルダを開いた時に、フォルダの直下に表示されるファイル
+- ファイル名は `docker-compose.yml`（拡張子は `.yml`）
+
+{% endhint %}
+
 {% hint style="warning" %}
 **YAML形式の注意点**
 `.yml` ファイルは改行やインデント（スペース）が正確でないとエラーになります。
@@ -246,7 +257,7 @@ docker-compose.yml への phpMyAdmin 設定追加が詳しく説明されてい�
 - 気になる人は、生成AIと相談しながら記述することを推奨します
 {% endhint %}
 
-プロジェクトフォルダ内の `docker-compose.yml` ファイルを開き、以下を追加：
+`laratter` フォルダ内の `docker-compose.yml` ファイルを開き、以下を追加：
 
 ```bash
 phpmyadmin:
