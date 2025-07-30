@@ -259,6 +259,12 @@ docker-compose.yml への phpMyAdmin 設定追加が詳しく説明されてい�
 
 `laratter` フォルダ内の `docker-compose.yml` ファイルを開き、以下を追加：
 
+{% hint style="warning" %}
+**追加する場所に注意！**
+以下のコードは、`docker-compose.yml` ファイルの **`networks:` より上の位置** に追加してください。
+具体的には、既存のサービス（`laravel.test`, `mysql`, `redis` など）と同じレベルで追加します。
+{% endhint %}
+
 ```bash
 phpmyadmin:
     image: phpmyadmin/phpmyadmin
