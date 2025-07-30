@@ -263,6 +263,11 @@ phpmyadmin:
         - sail
 ```
 
+{% hint style="info" %}
+**設定内容の確認**
+`docker-compose.yml` の内容を生成AIに見せて、インデントや改行が正しいか確認してください。YAMLファイルは記述ミスがあると動作しません。
+{% endhint %}
+
 ### phpMyAdminの利用方法
 
 1. 上記設定を追加後、Ubuntuターミナルでコンテナを再起動：
@@ -276,6 +281,11 @@ phpmyadmin:
 3. ログイン情報：
    - **ユーザー名**: `sail`
    - **パスワード**: `password`
+
+4. **phpMyAdmin動作確認**：
+   - ログイン後、左側に `laratter` データベースが表示されることを確認
+   - データベースをクリックして、テーブル一覧が表示されることを確認
+   - もしテーブルが表示されない場合は、先ほどの `./vendor/bin/sail artisan migrate` が実行されているか確認
 
 {% hint style="success" %}
 **完了！**
