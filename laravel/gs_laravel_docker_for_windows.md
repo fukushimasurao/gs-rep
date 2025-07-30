@@ -52,7 +52,7 @@ Docker Desktop のインストール手順が詳しく解説されています�
    - **「管理者として実行」** を選択してインストール
    - インストール後、必ず起動させておく
    - Docker Desktop の **Settings** から設定を確認
-   - **Disk image location** が `Docker\wsl` に設定されていることを確認
+   - **Disk image location** が `... Docker\wsl` に設定されていることを確認
 
 2. **WSL（Windows Subsystem for Linux）の確認**
    - PowerShellを **管理者として実行**

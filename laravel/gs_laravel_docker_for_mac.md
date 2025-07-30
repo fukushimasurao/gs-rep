@@ -113,6 +113,14 @@ curl -s "https://laravel.build/laratter" | bash
 `curl -s "https://laravel.build/laratter" | bash` で実行してください。
 {% endhint %}
 
+{% hint style="warning" %}
+**パスワード入力について**
+コマンド実行の最後に `Password for XXX:` と表示され、**パソコンのログインパスワード**の入力を求められます。
+- **注意**: パスワードを入力しても画面には文字が表示されません（セキュリティのため）
+- 見た目は何も入力されていないように見えますが、正しく入力されています
+- パスワードを入力後、Enterキーを押してください
+{% endhint %}
+
 {% hint style="info" %}
 **このコマンドの意味:**
 - `laratter` という名前でLaravelプロジェクトを作成
@@ -121,6 +129,8 @@ curl -s "https://laravel.build/laratter" | bash
 {% endhint %}
 
 ### 手順2: プロジェクトディレクトリに移動
+
+ターミナルで以下のコマンドを実行します：
 
 ```bash
 cd laratter
@@ -141,6 +151,7 @@ cd laratter
 
 ### 手順3: Dockerコンテナの起動
 
+ターミナルで以下のコマンドを実行します：
 ```bash
 ./vendor/bin/sail up -d
 ```
@@ -153,12 +164,12 @@ cd laratter
 
 ### 手順4: データベースのセットアップ
 
-初回 `./vendor/bin/sail up -d` 実行後、ブラウザで http://localhost にアクセスしてみてください。
+初回 `./vendor/bin/sail up -d` 実行後、ブラウザで `http://localhost` にアクセスしてみてください。
 
 {% hint style="warning" %}
 **SQLSTATEエラーが表示された場合**
-もし「SQLSTATE...」というエラー画面が表示された場合は、データベースの初期設定が必要です。
-以下のコマンドを実行してください。
+🚨もし「SQLSTATE...」というエラー画面が表示された場合は、データベースの初期設定が必要です。
+以下のコマンドをターミナルで実行してください。
 {% endhint %}
 
 ```bash
@@ -184,7 +195,7 @@ cd laratter
 
 ### 手順6: 開発終了時（コンテナの停止）
 
-作業を終了する際は以下のコマンドでコンテナを停止：
+作業を終了する際は以下のコマンドでターミナルで実行してコンテナを停止：
 
 ```bash
 ./vendor/bin/sail down
@@ -243,7 +254,7 @@ platform: linux/amd64
 
 ### phpMyAdminの利用方法
 
-1. 上記設定を追加後、コンテナを再起動：
+1. 上記設定を追加後、ターミナルで以下を1行ずつ実行してコンテナを再起動(シャットダウン + 起動)：
    ```bash
    ./vendor/bin/sail down
    ./vendor/bin/sail up -d
