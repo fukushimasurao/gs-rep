@@ -1,3 +1,4 @@
+
 # 001\_3\_Laravelの基本: Route-Controller-Viewとデータの受け渡し
 
 この資料は、Laravelの最も基本的なデータフローである **「Route → Controller → View」** と、**「ControllerからViewへデータを渡す」** 流れを理解するための最小限のチュートリアルです。
@@ -55,12 +56,6 @@ Route::get('/dashboard', function () {
 /* ... 省略 ... */
 ```
 
-{% hint style="info" %}
-**コード解説:**
-`Route::get('/hello', ...)` は、ブラウザから `/hello` というURLへのGETリクエストがあった場合に、
-`[HelloController::class, 'index']`、つまり `HelloController` の `index` メソッドを呼び出す、という設定です。
-{% endhint %}
-
 ---
 
 ## Step 2: コントローラの作成 (Controller)
@@ -77,9 +72,9 @@ Route::get('/dashboard', function () {
 
 ---
 
-## Step 3: コントローラの編集 (★修正点)
+## Step 3: コントローラの編集 (★compact版)
 
-生成された `HelloController.php` を開き、`index` メソッドを追加します。このメソッドの中で **Viewに渡すデータを作成** し、`view()` 関数の第2引数で渡します。
+生成された `HelloController.php` を開き、`index` メソッドを追加します。このメソッドの中で **Viewに渡すデータを作成** し、`compact()` を使って渡します。
 
 ```php
 // app/Http/Controllers/HelloController.php
@@ -98,18 +93,15 @@ class HelloController extends Controller
         $message = "これはコントローラから渡されたメッセージです。";
         $description = "このように、Controllerで処理した結果やデータベースから取得した値をViewに渡すことができます。";
 
-        // 🔽 2. view()ヘルパの第2引数に配列でデータを渡す
-        return view('hello.index', [
-            'message' => $message,
-            'description' => $description,
-        ]);
+        // 🔽 2. compact() を使ってデータをビューに渡す
+        return view('hello.index', compact('message', 'description'));
     }
 }
 ```
 
 {% hint style="info" %}
 **コード解説:**
-`view('ビュー名', ['変数名' => 値])` とすることで、指定したビューの中で `$` を付けた変数名（例: `$message`）として値を使うことができます。
+`compact('message', 'description')` は、`['message' => $message, 'description' => $description]` と書くのと同じ意味です。変数が多くなってもコードを短く保つことができます。
 {% endhint %}
 
 ---
@@ -121,8 +113,6 @@ class HelloController extends Controller
 まず、`resources/views` の中に `hello` という名前のディレクトリを作成します。
 次に、`hello` ディレクトリの中に `index.blade.php` というファイルを作成します。
 
-コマンドで作成する場合は、以下のようになります。
-
 ```bash
 # 1. ディレクトリを作成
 mkdir -p resources/views/hello
@@ -133,7 +123,7 @@ touch resources/views/hello/index.blade.php
 
 ---
 
-## Step 5: ビューの編集 (★修正点)
+## Step 5: ビューの編集
 
 作成した `resources/views/hello/index.blade.php` に、表示したい内容を記述します。
 Controllerから渡された変数を `{{ }}` (Blade記法) を使って表示します。
@@ -181,6 +171,26 @@ Controllerから渡された変数を `{{ }}` (Blade記法) を使って表示�
 ブラウザで **http://localhost/hello** にアクセスしてください。
 
 レイアウトの中に、「Hello Laravel!」というタイトルと共に、**Controllerで定義した2つのメッセージが表示されていれば成功です。**
+
+---
+
+## 次のステップ: Modelの役割 (★追加)
+
+今回のチュートリアルでは、コントローラ内で直接データ（文字列）を作成しました。
+
+しかし、実際のアプリケーションでは、ユーザー情報や投稿データなどは**データベース(DB)**に保存されています。
+
+この**データベースと対話する役割を担うのが `Model`** です。
+
+{% hint style="success" %}
+**Modelとは？**
+
+*   データベースの **テーブル** と1対1で対応するファイルです。
+*   例えば、`users` テーブルのデータを操作したい場合は、`app/Models/User.php` という **Userモデル** を通じて行います。
+*   同様に、`tweets` テーブルを扱う場合は `Tweet` モデル、`comments` テーブルを扱う場合は `Comment` モデルを使用します。
+
+**今後のチュートリアル (`002`や`003`以降) では、このModelを使ってデータベースからデータを取得し、それをControllerがViewに渡す、というより実践的な流れを学びます。**
+{% endhint %}
 
 ### まとめ：リクエストとデータの流れ
 
