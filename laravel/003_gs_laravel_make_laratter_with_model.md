@@ -182,7 +182,7 @@ public function up(): void
 
 phpMyAdmin（http://localhost:8080）を確認して、テーブルのカラムを確認しましょう。以下のような構造になっていればOKです：
 
-```sql
+```bash
 +------------+---------------------+------+-----+---------+----------------+
 | Field      | Type                | Null | Key | Default | Extra          |
 +------------+---------------------+------+-----+---------+----------------+
@@ -344,7 +344,7 @@ require __DIR__ . '/auth.php';
 
 実行すると以下のような出力が表示されます：
 
-```text
+```bash
   GET|HEAD        tweets ...................... tweets.index  › TweetController@index
   POST            tweets ...................... tweets.store  › TweetController@store
   GET|HEAD        tweets/create ............. tweets.create   › TweetController@create

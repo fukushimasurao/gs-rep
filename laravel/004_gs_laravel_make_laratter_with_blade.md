@@ -2,50 +2,126 @@
 
 ## 今回やること
 
-* アプリケーションで使用する
-  * 「Tweet 作成画面」
-  * 「Tweet 一覧画面」
-  * 「Tweet 詳細画面」
-  * 「Tweet 編集画面」のファイルを作成します。
-* 各画面へスムーズに移動できるようナビゲーションバーにリンクを追加します。
+* アプリケーションで使用する画面ファイルを作成します：
+  * **Tweet作成画面** - 新しいツイートを投稿する画面
+  * *{% hint style="succes{% hint style="success" %}
+**ファイル作成完了！**
+4つのBladeテンプレートファイルが正常に作成されました。次の手順でナビゲーションリンクを追加していきます。
+{% endhint %}
+
+## ナビゲーションバーの設定
+
+### 各画面へのリンク追加ナビゲーションバーの設定！**
+4つのBladeテンプレートファイルが正常に作成されました。次の手順でナビゲーションリンクを追加していきます。
+{% endhint %}
+
+## ナビゲーションバーの設定
+
+### 各画面へのリンク追加
+
+各画面へ簡単に移動できるようにナビゲーションバーにリンクを追加します。ナビゲーションバーは`resources/views/layouts/navigation.blade.php`に記述されています。
+
+初期状態では`Dashboard`のリンクが追加されているため、同様の形式で一覧画面と作成画面へのリンクを作成します。
+
+{% hint style="warning" %}
+**重要な注意点**
+このファイルでは**PC画面**と**モバイル画面**で表示する内容を変えているため、それぞれ**2箇所**にリンクのコードを追加する必要があります。
+{% endhint %}
+
+### navigation.blade.phpファイルの編集
+
+`resources/views/layouts/navigation.blade.php`ファイルを開き、以下のように編集してください：のツイートを表示する画面
+  * **Tweet詳細画面** - 個別のツイートを詳しく表示する画面
+  * **Tweet編集画面** - 既存のツイートを編集する画面
+* 各画面へスムーズに移動できるようナビゲーションバーにリンクを追加します
+
+## 事前準備
+
+### Dockerコンテナが起動していることを確認
+
+```bash
+./vendor/bin/sail up -d
+```
+
+### プロジェクトディレクトリにいることを確認
+
+```bash
+cd laratter
+```
+
+## Bladeテンプレートとは？
+
+Laravelでは画面を作成する際に**Bladeテンプレート**を使用します。
+
+{% hint style="info" %}
+**Bladeテンプレートの特徴**
+- HTMLのタグを書きながらコントローラから受け取ったデータを埋め込むことができます
+- HTMLとPHPを組み合わせたような記法で書けます
+- `@if`や`@foreach`などの制御構文も使用できるため、簡単に条件分岐や繰り返し処理を書けます
+- ファイル拡張子は`.blade.php`になります
+{% endhint %}
+
+今回は、Bladeテンプレートを作成して**Tailwind CSS**でスタイリングします。
+
+{% hint style="info" %}
+**Tailwind CSSとは？**
+CSSフレームワークの一つです。HTMLのclassに直接デザインを指定して書くことができるユーティリティファーストのCSSライブラリです。Laravel Breezeにあらかじめ含まれています。
+{% endhint %}
 
 ## ビューファイルの作成
 
-Laravelでは画面を作成する際に `Blade テンプレート`を使用します。
+### Bladeテンプレートファイルの生成
 
-Blade テンプレートは HTML のタグを書きながらコントローラから受け取ったデータを埋め込むことができます。\
-htmlとphp足して２で割った感じのものです。
+以下のコマンドを`laratter`ディレクトリで**1行ずつ**実行してください：
 
-また`@if` や `@foreach` などの制御構文も使用できるため、簡単に条件分岐や繰り返しで表示非表示などを制御できます。
-
-今回は、Bladeテンプレートを作成して`tailwindcss`でスタイリングします。
-
-{% hint style="info" %}
-tailwindcssは、cssのライブラリです。htmlのclassにデザインを指定して書くことができるよ。
+{% hint style="warning" %}
+**重要**: 4行を一気にコピペしないで、1行ずつコピーして実行してください。
 {% endhint %}
 
-まずはcms階層で以下のコマンドを順番に実行しましょう。
-
-⭐️１行ずつコピーして実行してね。４行一気にしないように。
-
 ```bash
-$ ./vendor/bin/sail artisan make:view tweets.index
-$ ./vendor/bin/sail artisan make:view tweets.create
-$ ./vendor/bin/sail artisan make:view tweets.show
-$ ./vendor/bin/sail artisan make:view tweets.edit
+./vendor/bin/sail artisan make:view tweets.index
+./vendor/bin/sail artisan make:view tweets.create
+./vendor/bin/sail artisan make:view tweets.show
+./vendor/bin/sail artisan make:view tweets.edit
 ```
 
-上記を実行すると`resources/views`内に`tweets`フォルダが作成されて、以下 4 つのファイルが作成されます。
+{% hint style="info" %}
+**各コマンドの意味:**
+- `make:view tweets.index`: Tweet一覧画面のBladeファイルを作成
+- `make:view tweets.create`: Tweet作成画面のBladeファイルを作成
+- `make:view tweets.show`: Tweet詳細画面のBladeファイルを作成
+- `make:view tweets.edit`: Tweet編集画面のBladeファイルを作成
+{% endhint %}
 
-* Tweet の作成画面 (`tweets/create.blade.php`)
-* Tweet の一覧画面 (`tweets/index.blade.php`)
-* Tweet の詳細画面 (`tweets/show.blade.php`)
-* Tweet の編集画面 (`tweets/edit.blade.php`)
+上記を実行すると`resources/views`内に`tweets`フォルダが作成されて、以下4つのファイルが作成されます：
 
-結果、以下のようなファイル構成になりますので、確認しましょう。
+* **Tweet作成画面** (`tweets/create.blade.php`)
+* **Tweet一覧画面** (`tweets/index.blade.php`)
+* **Tweet詳細画面** (`tweets/show.blade.php`)
+* **Tweet編集画面** (`tweets/edit.blade.php`)
 
-```bash
-[views]
+結果、以下のようなファイル構成になりますので、確認しましょう：
+
+```text
+[resources/views]
+│
+├── dashboard.blade.php
+├── layouts
+│   ├── app.blade.php
+│   ├── guest.blade.php
+│   └── navigation.blade.php
+├── tweets
+│   ├── create.blade.php [← ⭐️NEW⭐️]
+│   ├── edit.blade.php   [← ⭐️NEW⭐️]
+│   ├── index.blade.php  [← ⭐️NEW⭐️]
+│   └── show.blade.php   [← ⭐️NEW⭐️]
+└── welcome.blade.php
+```
+
+{% hint style="success" %}
+**ファイル作成完了！**
+4つのBladeテンプレートファイルが正常に作成されました。次の手順でナビゲーションリンクを追加していきます。
+{% endhint %}
 │
 ├── dashboard.blade.php
 ├── layouts
@@ -201,15 +277,30 @@ $ ./vendor/bin/sail artisan make:view tweets.edit
 ```
 
 {% hint style="info" %}
-bladeの中に記述されている`<x-...>`というタグは、コンポーネントという部品のようなものです。
+**Bladeコンポーネントについて**
+Bladeの中に記述されている`<x-...>`というタグは、**コンポーネント**という部品のようなものです。
 
-実体は`views/components`の中にあります。
+実体は`resources/views/components`の中にあります。例えば`<x-nav-link>`は、`resources/views/components/nav-link.blade.php`に実装があります。
 
-例えば`<x-dropdown align="right" width="48">`は、`views/components/dropdown-link.blade.php`に記載があります。
-
-同じような部品はコンポーネントに用意して複数のページで使いまわしましょう。
+同じような部品はコンポーネントに用意して複数のページで使いまわすことで、コードの重複を避けることができます。
 {% endhint %}
 
-### 動作確認
+## 動作確認
 
-画面上部にナビゲーションバーが表示されていることを確認する。 ※リンク先のファイルは未実装のため動作しない状態で OK
+### ナビゲーションバーの確認
+
+ブラウザで http://localhost にアクセスし、ログイン後に画面上部にナビゲーションバーが表示されていることを確認してください。
+
+新しく追加したリンクが表示されていればOKです：
+- **Tweet一覧**
+- **Tweet作成**
+
+{% hint style="warning" %}
+**動作について**
+現時点ではリンク先のファイル（コントローラーやビュー）は未実装のため、リンクをクリックしてもエラーが表示される状態でOKです。次の章で実装していきます。
+{% endhint %}
+
+{% hint style="success" %}
+**ナビゲーション設定完了！**
+画面ファイルの作成とナビゲーションリンクの追加が完了しました。次の章では、これらの画面に実際のコンテンツを実装していきます。
+{% endhint %}
