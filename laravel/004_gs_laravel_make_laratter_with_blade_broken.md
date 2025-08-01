@@ -4,7 +4,27 @@
 
 * アプリケーションで使用する画面ファイルを作成します：
   * **Tweet作成画面** - 新しいツイートを投稿する画面
-  * **Tweet一覧画面** - 投稿されたツイートを表示する画面
+  * *{% hint style="success" %}
+**ファイル作成完了！**
+4つのBladeテンプレートファイルが正常に作成されました。次の手順でナビゲーションリンクを追加していきます。
+{% endhint %}
+
+## ナビゲーションバーの設定
+
+### 各画面へのリンク追加
+
+各画面へ簡単に移動できるようにナビゲーションバーにリンクを追加します。ナビゲーションバーは`resources/views/layouts/navigation.blade.php`に記述されています。
+
+初期状態では`Dashboard`のリンクが追加されているため、同様の形式で一覧画面と作成画面へのリンクを作成します。
+
+{% hint style="warning" %}
+**重要な注意点**
+このファイルでは**PC画面**と**モバイル画面**で表示する内容を変えているため、それぞれ**2箇所**にリンクのコードを追加する必要があります。
+{% endhint %}
+
+### navigation.blade.phpファイルの編集
+
+`resources/views/layouts/navigation.blade.php`ファイルを開き、以下のように編集してください：されたツイートを表示する画面
   * **Tweet詳細画面** - 個別のツイートを詳しく表示する画面
   * **Tweet編集画面** - 既存のツイートを編集する画面
 * 各画面へスムーズに移動できるようナビゲーションバーにリンクを追加します
@@ -96,28 +116,34 @@ CSSフレームワークの一つです。HTMLのclassに直接デザインを�
 **ファイル作成完了！**
 4つのBladeテンプレートファイルが正常に作成されました。次の手順でナビゲーションリンクを追加していきます。
 {% endhint %}
+│
+├── dashboard.blade.php
+├── layouts
+│   ├── app.blade.php
+│   ├── guest.blade.php
+│   └── navigation.blade.php
+├── tweets
+│   ├── create.blade.php [← ⭐️NEW⭐️]
+│   ├── edit.blade.php　[← ⭐️NEW⭐️]
+│   ├── index.blade.php　[← ⭐️NEW⭐️]
+│   └── show.blade.php　[← ⭐️NEW⭐️]
+└── welcome.blade.php
 
-## ナビゲーションバーの設定
+```
 
 ### 各画面へのリンク追加
 
-各画面へ簡単に移動できるようにナビゲーションバーにリンクを追加します。ナビゲーションバーは`resources/views/layouts/navigation.blade.php`に記述されています。
+まず、各画面へ簡単に移動できるようにナビゲーションバーにリンクを追加します。。 ナビゲーションバーは`layouts/navigation.blade.php`に記述されています。 初期状態では`Dashboard`のリンクが追加されているため、同様の形式で一覧画面と作成画面へのリンクを作成します。
 
-初期状態では`Dashboard`のリンクが追加されているため、同様の形式で一覧画面と作成画面へのリンクを作成します。
-
-{% hint style="warning" %}
-**重要な注意点**
-このファイルでは**PC画面**と**モバイル画面**で表示する内容を変えているため、それぞれ**2箇所**にリンクのコードを追加する必要があります。
-{% endhint %}
-
-### navigation.blade.phpファイルの編集
-
-`resources/views/layouts/navigation.blade.php`ファイルを開き、以下のように編集してください：
+【注意】\
+このファイルでは`PC 画面`と`モバイル画面`で表示する内容を変えているため、それぞれ`2箇所`にリンクのコードを追加する必要があります。
 
 {% hint style="info" %}
+```
 記載する、"route('tweets.index')" という箇所は、routeで設定した（された）名前です。
 
 `$ php artisan route:list --path=tweets`の出力を思い出そう！
+```
 {% endhint %}
 
 ```php
@@ -241,6 +267,7 @@ CSSフレームワークの一つです。HTMLのclassに直接デザインを�
     </div>
   </div>
 </nav>
+
 ```
 
 {% hint style="info" %}
