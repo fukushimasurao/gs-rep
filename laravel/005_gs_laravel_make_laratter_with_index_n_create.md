@@ -1,11 +1,25 @@
 # 005\_一覧画面と作成画面の実装
 
-今回やること
+## 今回やること
 
 * Tweet の一覧画面(index)を作成する。
 * Tweet の作成画面(create)を作成する。
 
-### コントローラのメソッド
+## 事前準備
+
+### Dockerコンテナが起動していることを確認
+
+```bash
+./vendor/bin/sail up -d
+```
+
+### プロジェクトディレクトリにいることを確認
+
+```bash
+cd laratter
+```
+
+## コントローラのメソッド
 
 `TweetController` の `index` メソッドと `create` メソッドを編集していきます。 それぞれ、
 
@@ -17,7 +31,7 @@
 それぞれブラウザで tweetsにアクセスしたときindexメソッドが、 tweets/createにアクセスしたときcreateメソッドが 呼ばれます。
 
 ```bash
-$ ./vendor/bin/sail artisan route:list --path=tweets
+./vendor/bin/sail artisan route:list --path=tweets
   // 省略
   GET|HEAD        tweets ........  tweets.index › TweetController@index
   GET|HEAD        tweets/create .. tweets.create › TweetController@create
@@ -28,10 +42,16 @@ $ ./vendor/bin/sail artisan route:list --path=tweets
 `Tweet`に関連するユーザ情報を取得するために `with` メソッドを使用します。
 
 {% hint style="info" %}
-```
-Tweet::with('user')の 'user'は、さっきTweetモデルに追加した`user()`のことです。
-`user()`を定義していないと、`with('user')`と書けないよ。
-```
+**重要な概念**
+- `Tweet::with('user')の 'user'`は、前回Tweetモデルに追加した`user()`リレーションメソッドのことです
+- `user()`メソッドを定義していないと、`with('user')`は使用できません
+- `latest()`は`created_at`の降順（新しい順）でデータを取得します
+- `with('user')`により、N+1問題を回避してユーザー情報を効率的に取得できます
+{% endhint %}
+
+{% hint style="warning" %}
+**N+1問題とは？**
+ユーザー情報なしでTweetを取得し、その後各Tweetに対してユーザー情報を個別に取得すると、データベースへのクエリが大量に発生します。`with('user')`を使うことで、1回のクエリでまとめて取得できます。
 {% endhint %}
 
 ```php
@@ -69,7 +89,7 @@ class TweetController extends Controller
 
 ```
 
-#### 一覧画面の作成
+## 一覧画面の作成
 
 `resources/views/tweets/index.blade.php` ファイルを開きTweet の一覧を表示するためのコードを追加しましょう。\
 `@foreach` ディレクティブを使用してTweetの一覧を表示します。\
@@ -108,16 +128,33 @@ class TweetController extends Controller
 ```
 
 {% hint style="info" %}
-`<x-app-layout></x-app-layout>`で囲って記載すると、`views/layouts/app.blade.php`内の`{{ $slot }}`という箇所に、 この囲ったコードがすべて埋め込まれます。
+**Bladeレイアウトについて**
+`<x-app-layout></x-app-layout>`で囲って記載すると、`resources/views/layouts/app.blade.php`内の`{{ $slot }}`という箇所に、この囲ったコードがすべて埋め込まれます。
+
+これにより、ヘッダーやナビゲーションなどの共通部分を自動で含めることができます。
 {% endhint %}
 
-#### 作成画面の作成
+## 作成画面の作成
 
 `resources/views/tweets/create.blade.php` ファイルを開きTweet の作成画面を表示するためのコードを追加する。
 
+### CSRFトークンについて
+
 `@csrf` ディレクティブを使用して`CSRF（Cross-Site Request Forgery）トークン`を生成する。
 
-👹`@csrf`はフォームを用いてデータを送信する場合には必ず設定すること👹
+{% hint style="warning" %}
+**CSRFトークンとは？**
+CSRF攻撃を防ぐためのセキュリティ機能です。悪意のあるサイトが、ユーザーの知らない間に別のサイトに不正な要求を送信することを防ぎます。
+
+**重要**: フォームを用いてデータを送信する場合には**必ず**`@csrf`を設定してください。忘れると419エラーが発生します。
+{% endhint %}
+
+{% hint style="info" %}
+**CSRFの詳細**
+- CSRFについて詳しく: https://www.ipa.go.jp/security/vuln/websecurity/csrf.html
+- Laravelでpostのformに`@csrf`を書き忘れると、フォーム送信時に`419 Page Expired`エラーが発生します
+- `@csrf`は送信フォーム内に隠しフィールドとしてトークンを生成します
+{% endhint %}
 
 ```php
 <!-- resources/views/tweets/create.blade.php -->
@@ -152,42 +189,45 @@ class TweetController extends Controller
 
 ```
 
-#### Tailwind CSS の適用
+## Tailwind CSS の適用
 
-一部 CSS が適用されない部分があるため下記コマンドで Tailwind CSS を適用しましょう。\
-👹ビューファイルを変更した場合は必ず実行するようにしましょう。👹
+ビューファイルを変更した後は、Tailwind CSSを再ビルドする必要があります。
 
-{% hint style="info" %}
-CSRFについて : https://www.ipa.go.jp/security/vuln/websecurity/csrf.html
+{% hint style="warning" %}
+**重要**: ビューファイル（.blade.php）を変更した場合は必ず以下のコマンドを実行してください。
 {% endhint %}
 
 {% hint style="info" %}
-Laravelにて、postのformで、`@csrf`を書き忘れると、formを送った際に`419`のエラーレスポンスになります。
+**なぜ再ビルドが必要？**
+Tailwind CSSは使用されているクラスのみを含む最適化されたCSSファイルを生成します。新しいクラスを追加した場合、それらを含めるために再ビルドが必要です。
 {% endhint %}
 
 ```bash
-$ ./vendor/bin/sail npm run build
+./vendor/bin/sail npm run build
 ```
 
-#### 動作確認
+## 動作確認
 
 一覧画面に移動しエラーが発生しないことを確認しましょう。\
 作成画面に移動し入力フォームが表示されていることを確認する。※まだ登録できないよ。
 
 ## 【補足】エラーメッセージの表示
 
-この画面では入力したデータに不備があった場合（未入力や文字列が長すぎるなど）にエラーメッセージを表示しましょう。\
+この画面では入力したデータに不備があった場合（未入力や文字列が長すぎるなど）にエラーメッセージを表示します。\
 エラーメッセージは`@error` ディレクティブを使用して表示できます。\
-なお `@error`ディレクティブは指定した項目にエラーがある場合にのみ表示される。
+`@error`ディレクティブは指定した項目にエラーがある場合にのみ表示されます。
 
 {% hint style="info" %}
-この時点ではまだtweetの登録できないが、sqlから登録することが可能です。 いくつか登録してみましょう！
+**テストデータの登録**
+この時点ではまだフォームからのTweet登録機能は実装していませんが、SQLを使って直接データベースに登録することができます。
 
-※下記では、user id 1の人で登録しています。（多分id1はいると思いますが、）もしid 1がいなければ実際にuserテーブルに存在しているuser id で実行してください。
+以下のSQLでテストデータを登録してみましょう！
+
+**注意**: `user_id`は実際にuserテーブルに存在するIDを指定してください。多くの場合、最初に登録したユーザーのIDは1です。
 {% endhint %}
 
 ```sql
 insert into
-  tweets (id, user\_id, tweet, created\_at, updated\_at)
+  tweets (id, user_id, tweet, created_at, updated_at)
   values (null, 1, 'test', now(), now());
 ```
