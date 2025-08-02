@@ -1,9 +1,46 @@
-# 003\_Modelとテーブルの用意
+# 003_Modelとテーブルの用意
 
 ## 今回やること
 
 * 実際にコードを書き、動くものを作る
 * Tweetデータを扱うためのモデルとテーブルを作成する
+
+## なぜTweetモデルを用意するのか？
+
+### アプリケーションの要件
+
+今回作成するlaratterアプリケーションでは、以下の機能が必要です：
+
+- **ユーザー**がログインできる
+- **ユーザー**がつぶやき（Tweet）を投稿できる
+- 投稿されたつぶやきを一覧表示できる
+
+### データベース設計の考え方
+
+この機能を実現するためには、以下のデータが必要です：
+
+1. **ユーザー情報**：既にusersテーブルが存在している
+2. **つぶやき情報**：新たにtweetsテーブルが必要
+
+そして、これら2つのテーブルは**リレーション**（関係性）を持ちます：
+- 1人のユーザーは複数のつぶやきを投稿できる（1対多の関係）
+- 1つのつぶやきは必ず1人のユーザーに属する
+
+### Laravelでのデータベース操作
+
+Laravelでは、**データベースのテーブルを直接操作するのではなく、モデルを介してデータを操作**します。
+
+これにより以下のメリットがあります：
+- データの整合性を保ちやすい
+- リレーション（関係性）を簡単に扱える
+- セキュリティが向上する（SQLインジェクション対策など）
+
+{% hint style="info" %}
+**モデルとは？**
+モデルは、データベースのテーブルとPHPコードを繋ぐ橋渡し役です。例えば：
+- `User`モデル → `users`テーブル
+- `Tweet`モデル → `tweets`テーブル（これから作成）
+{% endhint %}
 
 ## 事前準備
 
@@ -122,22 +159,32 @@ pwd
 ```php
 // database/migrations/xxxx_xx_xx_xxxxxx_create_tweets_table.php
 
-// 省略
+<?php
 
-public function up(): void
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
 {
-  Schema::create('tweets', function (Blueprint $table) {
-    $table->id();
-    
-    // 🔽 2カラム追加
-    $table->foreignId('user_id')->constrained()->cascadeOnDelete();
-    $table->string('tweet');
+    public function up(): void
+    {
+        Schema::create('tweets', function (Blueprint $table) {
+            $table->id();
+            
+            // 🔽 2カラム追加
+            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+            $table->string('tweet');
 
-    $table->timestamps();
-  });
-}
+            $table->timestamps();
+        });
+    }
 
-// 省略
+    public function down(): void
+    {
+        Schema::dropIfExists('tweets');
+    }
+};
 ```
 
 {% hint style="info" %}
@@ -180,19 +227,15 @@ public function up(): void
 
 ### データベースの確認
 
-phpMyAdmin（http://localhost:8080）を確認して、テーブルのカラムを確認しましょう。以下のような構造になっていればOKです：
+phpMyAdmin（http://localhost:8080）にアクセスして、テーブル構造を確認しましょう。以下のような構造になっていればOKです：
 
-```bash
-+------------+---------------------+------+-----+---------+----------------+
 | Field      | Type                | Null | Key | Default | Extra          |
-+------------+---------------------+------+-----+---------+----------------+
+|------------|---------------------|------|-----|---------|----------------|
 | id         | bigint(20) unsigned | NO   | PRI | NULL    | auto_increment |
 | user_id    | bigint(20) unsigned | NO   | MUL | NULL    |                |
 | tweet      | varchar(255)        | NO   |     | NULL    |                |
 | created_at | timestamp           | YES  |     | NULL    |                |
 | updated_at | timestamp           | YES  |     | NULL    |                |
-+------------+---------------------+------+-----+---------+----------------+
-```
 
 {% hint style="success" %}
 **テーブル作成完了！**
@@ -222,28 +265,31 @@ phpMyAdmin（http://localhost:8080）を確認して、テーブルのカラム�
 ```php
 // app/Models/User.php
 
-// 省略
+<?php
+
+namespace App\Models;
+
+// ... other imports
 
 class User extends Authenticatable
 {
+    // 省略
 
-  // 省略
-
-  protected function casts(): array
-  {
-      return [
-          'email_verified_at' => 'datetime',
-          'password' => 'hashed',
-      ];
-  }
-  
-  // ⭐️ここから↓追加⭐️
-  // 一番下に以下のメソッドを追加する
-  public function tweets()
-  {
-    // $thisは、Userモデルそのものと思ってください
-    return $this->hasMany(Tweet::class);
-  }
+    protected function casts(): array
+    {
+        return [
+            'email_verified_at' => 'datetime',
+            'password' => 'hashed',
+        ];
+    }
+    
+    // ⭐️ここから↓追加⭐️
+    // 一番下に以下のメソッドを追加する
+    public function tweets()
+    {
+        // $thisは、Userモデルそのものと思ってください
+        return $this->hasMany(Tweet::class);
+    }
 }
 ```
 
@@ -265,19 +311,23 @@ class User extends Authenticatable
 ```php
 // app/Models/Tweet.php
 
-// 省略
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
 
 class Tweet extends Model
 {
-  // ⭐️ここから下追加する
-  // 追加：↓1行
-  protected $fillable = ['tweet'];
+    // ⭐️ここから下追加する
+    // 追加：↓1行
+    protected $fillable = ['tweet'];
 
-  // 追加：userメソッド
-  public function user()
-  {
-    return $this->belongsTo(User::class);
-  }
+    // 追加：userメソッド
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }
 ```
 
