@@ -46,11 +46,8 @@ CSSフレームワークの一つです。HTMLのclassに直接デザインを�
 
 ### Bladeテンプレートファイルの生成
 
-以下のコマンドを`laratter`ディレクトリで**1行ずつ**実行してください：
-
-{% hint style="warning" %}
-**重要**: 4行を一気にコピペしないで、1行ずつコピーして実行してください。
-{% endhint %}
+以下のコマンドを`laratter`ディレクトリで実行してください：
+4行を一気にコピペでもokです。
 
 ```bash
 ./vendor/bin/sail artisan make:view tweets.index
@@ -115,9 +112,11 @@ CSSフレームワークの一つです。HTMLのclassに直接デザインを�
 `resources/views/layouts/navigation.blade.php`ファイルを開き、以下のように編集してください：
 
 {% hint style="info" %}
-記載する、"route('tweets.index')" という箇所は、routeで設定した（された）名前です。
+**編集方法について**
+以下のコードは**ファイル全体**を置き換えるものです。既存の内容をすべて削除して、以下のコードをコピペしてください。
 
-`$ php artisan route:list --path=tweets`の出力を思い出そう！
+記載されている`route('tweets.index')`などは、routeで設定されたルート名です。
+`./vendor/bin/sail artisan route:list --path=tweets`の出力を思い出してください！
 {% endhint %}
 
 ```php
