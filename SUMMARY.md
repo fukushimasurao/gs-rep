@@ -38,6 +38,8 @@
     * [N + 1 問題](laravel/laravel-tips/n-+-1-wen-ti.md)
     * [ルートモデル結合](laravel/laravel-tips/rtomoderu.md)
     * [命名規則に従わない場合の多対多連携](laravel/laravel-tips/niwanaino.md)
+    * [練習のための新しいプロジェクトを作成したい場合](laravel/laravel-tips/new_project.md)
+
 * [VS code関連](vs-code.md)
 * [便利情報](good-tools.md)
 * [sqlインジェクション確認](sql_injection.md)
