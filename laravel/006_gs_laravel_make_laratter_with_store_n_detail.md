@@ -214,6 +214,19 @@ class TweetController extends Controller
 
 ```
 
+{% hint style="info" %}
+**リレーションの活用について**
+`{{ $tweet->user->name }}`の`$tweet->user`は、`Tweet.php`に定義した`user()`メソッドによるリレーションです。これにより、ツイートから投稿者のユーザー情報を簡単に取得できます。
+
+```php
+// Tweet.phpで定義したリレーション
+public function user()
+{
+    return $this->belongsTo(User::class);
+}
+```
+{% endhint %}
+
 ## 動作確認
 
 一覧画面から詳細画面に移動してツイートの詳細が表示されることを確認してください。
