@@ -1,29 +1,33 @@
-# 008\_Like! 機能の実装（多対多のリレーション）
+# 008_Like機能の実装（多対多のリレーション）
 
-### やること
+## 事前準備
 
-* User と Tweet の関係が`多対多`となる`Like機能`の実装。
+以下の環境が整っていることを確認してください：
+- Laravel Sailが起動していること（`./vendor/bin/sail up -d`）
+- 前回までのTweetアプリケーションが動作していること
+
+## やること
+
+UserとTweetの関係が**多対多**となる`Like機能`の実装。
 
 <figure><img src="../.gitbook/assets/like_many-many.jpg" alt=""><figcaption></figcaption></figure>
 
-多対多の場合は
+多対多の場合は以下の流れが基本です：
 
-* 中間テーブルを作成
-* モデルに多対多の連携を定義
+1. 中間テーブルを作成
+2. モデルに多対多の連携を定義
 
-の流れが基本です。
+## 多対多リレーションの概念
 
-### 前提
+多対多の場合は、中間テーブルを作成する必要があります。
 
-* 多対多の場合は、中間テーブルを作成する。
-*   中間テーブルに欲しい情報は、
+中間テーブルに必要な情報：
+- id
+- tweet_id（どのツイートに）
+- user_id（どのユーザーが）
+- 日付（created_at, updated_at）
 
-    * id
-    * tweetのid
-    * userのid
-    * 日付
-
-    の項目。イメージは以下の通り。
+テーブル構造のイメージ：
 
 | id | tweet\_id | user\_id | created\_at | updated\_at |
 | -- | --------- | -------- | ----------- | ----------- |
@@ -31,41 +35,46 @@
 | 2  | 2         | 1        | ...         | ...         |
 | 3  | 1         | 2        | ...         | ...         |
 
-※ただし以下のような重複は登録しないようにする。
+{% hint style="warning" %}
+**重要：重複防止**
+同じユーザーが同じツイートに複数回いいねすることを防ぐため、以下のような重複レコードは登録できないようにします。
 
 | id | tweet\_id | user\_id | created\_at | updated\_at |
 | -- | --------- | -------- | ----------- | ----------- |
 | 1  | 1         | 1        | ...         | ...         |
 | 2  | 1         | 1        | ...         | ...         |
+{% endhint %}
 
-### Like 機能実装の流れ
+## Like機能実装の流れ
 
-↓ここでは 1 を実施する↓
+この章では以下の手順でLike機能を実装します：
 
-1. 中間テーブルの作成と各モデルの連携
-2. コントローラに Like 機能の実装
-3. ビューファイルに like ボタンを設置
+1. **中間テーブルの作成と各モデルの連携** ← 今回実装
+2. コントローラにLike機能の実装
+3. ビューファイルにlikeボタンを設置
 
-### 中間テーブルの作成と各モデルの連携
+## 中間テーブルの作成と各モデルの連携
 
-下記のコマンドを実行して中間テーブルを作成しよう。
+### マイグレーションファイルの作成
 
-<pre><code><strong>$ ./vendor/bin/sail artisan make:migration create_tweet_user_table --create=tweet_user
-</strong></code></pre>
+下記のコマンドを実行して中間テーブルを作成します。
 
-このテーブルには「`どの Tweet に`」「`どの User` 」がlike したのか、という情報が入ります。 今回はモデルを作成しないため直接マイグレーションファイルを作成しましょう。
+```bash
+./vendor/bin/sail artisan make:migration create_tweet_user_table --create=tweet_user
+```
 
-テーブル名は `tweet_user` 。
+{% hint style="info" %}
+**中間テーブルの命名規則**
+- テーブル名：`tweet_user`
+- 命名ルール：「**アルファベット順に並べたテーブル名の単数形をアンダースコアでつなげる**」
+- 今回は2つのテーブルをリレーションできればよいため、専用のモデルは作成しません
+{% endhint %}
 
-命名のルールは「**アルファベット順に並べたテーブル名の単数形をアンダースコアでつなげる**」
+### マイグレーションファイルの編集
 
-今回は 2 つのテーブルをリレーションできればよいためモデルは作成**しません。**
+マイグレーションファイルを開き、以下のように編集します。
 
-### マイグレーションファイルの記述と実行
-
-マイグレーションファイルを開き下記のように編集しよう。
-
-中間テーブルとなるためカラムは id 以外に tweet\_id と user\_id を追加。
+中間テーブルとなるため、カラムはid以外に`tweet_id`と`user_id`を追加します。
 
 ```php
 // database/migrations/xxxx_xx_xx_000000_create_tweet_user_table.php
@@ -74,69 +83,73 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class CreateTweetUserTable extends Migration
 {
-  /**
-   * Run the migrations.
-   */
-  public function up(): void
-  {
-    Schema::create('tweet_user', function (Blueprint $table) {
-      $table->id();
-      
-      // 🔽 3行追加 🔽
-      $table->foreignId('tweet_id')->constrained()->cascadeOnDelete();
-      $table->foreignId('user_id')->constrained()->cascadeOnDelete();
-      $table->unique(['tweet_id', 'user_id']);
-      
-      $table->timestamps();
-    });
-  }
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        Schema::create('tweet_user', function (Blueprint $table) {
+            $table->id();
+            
+            // 🔽 3行追加 🔽
+            $table->foreignId('tweet_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+            $table->unique(['tweet_id', 'user_id']);
+            
+            $table->timestamps();
+        });
+    }
 
-  /**
-   * Reverse the migrations.
-   */
-  public function down(): void
-  {
-    Schema::dropIfExists('tweet_user');
-  }
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::dropIfExists('tweet_user');
+    }
 }
 ```
 
 {% hint style="info" %}
-```
-- $table->foreignId('tweet_id')->constrained()->cascadeOnDelete();
-tweetsテーブルからレコードが削除されると、そのtweet_idを持つtweet_userテーブルのすべてのレコードが自動的に削除
+**外部キー制約の説明**
+- `$table->foreignId('tweet_id')->constrained()->cascadeOnDelete();`  
+  tweetsテーブルからレコードが削除されると、そのtweet_idを持つtweet_userテーブルのすべてのレコードが自動的に削除
 
-- $table->foreignId('user_id')->constrained()->cascadeOnDelete();
-usersテーブルからレコードが削除されると、そのuser_idを持つtweet_userテーブルのすべてのレコードが自動的に削除
+- `$table->foreignId('user_id')->constrained()->cascadeOnDelete();`  
+  usersテーブルからレコードが削除されると、そのuser_idを持つtweet_userテーブルのすべてのレコードが自動的に削除
 
-- $table->unique(['tweet_id', 'user_id']);
-tweet_userテーブルのtweet_idカラムとuser_idカラムの組み合わせを一意にする。
-
-```
+- `$table->unique(['tweet_id', 'user_id']);`  
+  tweet_userテーブルのtweet_idカラムとuser_idカラムの組み合わせを一意にして重複を防止
 {% endhint %}
 
 {% hint style="info" %}
-constrainedを利用しない書き方は以下の通りのイメージ。ちょっとめんどい。
+**参考：constrainedを使わない書き方**
+`constrained()`メソッドを使わない場合は以下のように記述します（より冗長になります）：
 
 `$table->foreignId('user_id')->references('id')->on('users')->onDelete('cascade');`
 {% endhint %}
 
-記述したらマイグレーションを実行!!!!!
+### マイグレーションの実行
 
+記述したらマイグレーションを実行します：
+
+```bash
+./vendor/bin/sail artisan migrate
 ```
-$ ./vendor/bin/sail artisan migrate
-```
 
-### モデルの編集
+## モデルの編集
 
-中間テーブルの作成が完了したら各モデルに中間テーブルとの関連を定義。
+中間テーブルの作成が完了したら、各モデルに中間テーブルとの関連を定義します。
 
-今回の場合は、`User` モデルと `Tweet` モデルの両方に関連を定義する必要があり。
+今回の場合は、`User`モデルと`Tweet`モデルの両方に関連を定義する必要があります。
 
-多対多の場合は `belongsToMany` を使用しましょう。
+多対多の場合は`belongsToMany`を使用します。
+
+### Userモデルの編集
 
 ```php
 // app/Models/User.php
@@ -147,16 +160,17 @@ $ ./vendor/bin/sail artisan migrate
 
 class User extends Authenticatable
 {
+    // ...
 
-  // ...
-
-  // 🔽 追加 🔽 
-  public function likes()
-  {
-      return $this->belongsToMany(Tweet::class)->withTimestamps();
-  }
+    // 🔽 追加 🔽 
+    public function likes()
+    {
+        return $this->belongsToMany(Tweet::class)->withTimestamps();
+    }
 }
 ```
+
+### Tweetモデルの編集
 
 ```php
 // app/Models/Tweet.php
@@ -167,16 +181,21 @@ class User extends Authenticatable
 
 class Tweet extends Model
 {
+    // 省略
 
-  // 省略
-
-  // 🔽 今回はこれを追加!!!! 🔽 
-  public function liked()
-  {
-      return $this->belongsToMany(User::class)->withTimestamps();
-  }
+    // 🔽 追加 🔽 
+    public function likedByUsers()
+    {
+        return $this->belongsToMany(User::class)->withTimestamps();
+    }
 }
 ```
+
+{% hint style="info" %}
+**withTimestamps()について**
+- 中間テーブルに`created_at`と`updated_at`を記録する場合に必要
+- いいねした日時を記録できるため、分析やソート機能で活用可能
+{% endhint %}
 
 {% hint style="warning" %}
 **Point**
