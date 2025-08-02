@@ -2,26 +2,48 @@
 
 ## 今回やること
 
-1. Tweet の更新
+1. Tweet の更新（編集機能）
 2. Tweet の削除
 
-### 前提
+## 事前準備
 
-どちらも、`tweets/{tweet}`のページです。viewは`viewは'tweets.show'`、controllerは、`TweetController@show`です。
+### Dockerコンテナが起動していることを確認
 
-* (1)について
-  * 先ほど書いた'tweets.show'内に`href="{{ route('tweets.edit', $tweet) }}"`と書いてあることを確認してください。
-  * これをrouteで確認するとメソッドは`TweetController@edit`とわかります。
-* (2)について
-  * view内に`<form action="{{ route('tweets.destroy', $tweet) }}"`を確認してください。
-  * routeで確認すると`TweetController@destroy`とわかります。
+```bash
+./vendor/bin/sail up -d
+```
 
-\--
+### プロジェクトディレクトリにいることを確認
 
-## Tweet 作成処理の実装
+```bash
+cd laratter
+```
+
+## 実装の流れ確認
+
+どちらの機能も、詳細画面（`tweets/{tweet}`）から開始します。viewは`tweets.show`、controllerは`TweetController@show`です。
+
+### (1) Tweet更新について
+
+* 詳細画面`tweets.show`内に`href="{{ route('tweets.edit', $tweet) }}"`が記載されています
+* routeを確認すると`TweetController@edit`メソッドが呼び出されます
+
+### (2) Tweet削除について  
+
+* 詳細画面内に`<form action="{{ route('tweets.destroy', $tweet) }}"`が記載されています
+* routeを確認すると`TweetController@destroy`メソッドが呼び出されます
+
+{% hint style="info" %}
+**権限チェック**
+前章で実装した通り、編集・削除ボタンは投稿者本人にのみ表示されます。
+{% endhint %}
+
+## Tweet更新処理の実装
+
+### editメソッドの実装
 
 TweetController の `edit` メソッドを編集します。\
-`edit` メソッドは，Tweet の編集画面を表示するためのものです。 ただフォームの画面を表示するだけなので、return viewだけで大丈夫です。
+`edit` メソッドは，Tweet の編集画面を表示するためのものです。編集対象のツイートデータをビューに渡すだけのシンプルな処理です。
 
 ```php
 // app/Http/Controllers/TweetController.php
@@ -41,10 +63,16 @@ class TweetController extends Controller
 
 ### 編集画面の作成
 
-TweetControllerのeditメソッドは、tweets.editを開きます。 よって、`resources/views/tweets/edit.blade.php` ファイルを開きTweet の編集画面を表示するためのコードを追加します。\
-作成画面と同様に`@error`を用いてエラーメッセージを表示しましょう。\
-また、`@method('PUT')` ディレクティブを使用してフォームから送信される `HTTP メソッド`を `PUT` に変更します。\
-これはルーティングで `PUT` メソッドが使用されている一方で、フォームから送信される HTTP メソッドは `GET` と `POST`だけであることに起因しています。
+`TweetController`の`edit`メソッドは、`tweets.edit`ビューを表示します。\
+`resources/views/tweets/edit.blade.php` ファイルを開き、Tweet の編集画面を表示するためのコードを追加します。
+
+作成画面と同様に`@error`を用いてエラーメッセージを表示します。\
+また、`@method('PUT')` ディレクティブを使用してフォームから送信される `HTTP メソッド`を `PUT` に変更します。
+
+{% hint style="info" %}
+**@method('PUT')について**
+HTMLフォームは`GET`と`POST`しかサポートしていませんが、RESTfulなルーティングでは`PUT`や`DELETE`も使用します。Laravelの`@method`ディレクティブを使用することで、これらのHTTPメソッドをエミュレートできます。
+{% endhint %}
 
 ```php
 <!-- resources/views/tweets/edit.blade.php -->
@@ -80,11 +108,13 @@ TweetControllerのeditメソッドは、tweets.editを開きます。 よって�
 </x-app-layout>
 ```
 
-### 更新処理の実装
+### updateメソッドの実装
 
-↑の編集画面で用いられたformは`method="POST" action="{{ route('tweets.update', $tweet) }}"`と記載しました。 よって、Tweet の更新処理を実装するために`TweetController` の`update` メソッドを編集しよう。\
-このメソッドはTweetの更新処理を行います。\
-該当するTweetのデータを受け取り`update` メソッドを用いて新しいデータ（`$request の tweet 項目`）で上書きします。
+編集画面のフォームは`method="POST" action="{{ route('tweets.update', $tweet) }}"`として送信されます。\
+Tweet の更新処理を実装するために`TweetController` の`update` メソッドを編集します。
+
+このメソッドはツイートの更新処理を行います。\
+該当するツイートのデータを受け取り`update` メソッドを用いて新しいデータで上書きします。
 
 ```php
 // app/Http/Controllers/TweetController.php
@@ -94,32 +124,40 @@ TweetControllerのeditメソッドは、tweets.editを開きます。 よって�
 class TweetController extends Controller
 {
   // 省略
+  
   public function update(Request $request, Tweet $tweet)
   {
+    // バリデーション実行
     $request->validate([
       'tweet' => 'required|max:255',
     ]);
 
+    // ツイート内容を更新
     $tweet->update($request->only('tweet'));
 
+    // 詳細画面にリダイレクト
     return redirect()->route('tweets.show', $tweet);
   }
 }
 ```
+
+{% hint style="info" %}
+**updateメソッドについて**
+- `$request->only('tweet')`: リクエストから`tweet`フィールドのみ取得
+- `$tweet->update()`: 指定されたデータでモデルを更新
+- セキュリティのため、更新可能なフィールドを限定しています
+{% endhint %}
 
 ### 動作確認
 
 詳細画面から編集画面に移動しtweet を編集できることを確認しよう。\
 編集した tweet が詳細画面に反映されることを確認しよう。
 
-### Tweet 削除処理の実装
+### Tweet削除処理の実装
 
-Tweet の削除処理を実装するために`TweetController` の `destroy` メソッドを編集します。\
-このメソッドはTweetの削除処理を行います。\
-該当するTweetのデータを受け取り、`delete` メソッドを用いて削除しよう。
+削除処理（`destroy`メソッド）を実装します。
 
 ```php
-
 // app/Http/Controllers/TweetController.php
 
 // 省略
@@ -127,25 +165,38 @@ Tweet の削除処理を実装するために`TweetController` の `destroy` メ
 class TweetController extends Controller
 {
   // 省略
-
+  
   public function destroy(Tweet $tweet)
   {
+    // ツイートを削除
     $tweet->delete();
 
+    // 一覧画面にリダイレクト
     return redirect()->route('tweets.index');
   }
 }
 ```
 
-※ deleteは処理だけして、何かを映す画面は無いので不要。
+{% hint style="info" %}
+**destroyメソッドについて**
+- `$tweet->delete()`: モデルインスタンスを削除
+- 削除後は一覧画面にリダイレクトしてユーザーにフィードバック
+- Route Model Bindingにより、URLパラメータから自動的にモデルが取得されます
+{% endhint %}
 
-### Tailwind CSS の適用
+### Tailwind CSSの適用
 
-画面いじったので、`Tailwind CSS` を適用
+画面を変更したため、CSS更新のためにビルドを実行します。
 
 ```bash
-$ ./vendor/bin/sail npm run build
+./vendor/bin/sail npm run build
 ```
+
+{% hint style="info" %}
+**Tailwind CSSのビルドについて**
+- HTMLテンプレートを変更した際は、使用されているCSSクラスを検出するためビルドが必要
+- 本番環境では未使用のCSSクラスは自動的に除去されます
+{% endhint %}
 
 ### 動作確認
 
