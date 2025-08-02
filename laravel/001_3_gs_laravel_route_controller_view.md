@@ -130,36 +130,24 @@ Controllerから渡された変数を `{{ }}` (Blade記法) を使って表示�
 
 ```php
 <!-- resources/views/hello/index.blade.php -->
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>Hello Laravel!</title>
+</head>
+<body>
+    <h2>Hello Laravel!</h2>
 
-<x-app-layout>
-  <x-slot name="header">
-    <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-      {{ __('Hello Laravel!') }}
-    </h2>
-  </x-slot>
-
-  <div class="py-12">
-    <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-      <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-        <div class="p-6 text-gray-900 dark:text-gray-100">
-          
-          <h3 class="text-lg font-bold mb-4">コントローラからのメッセージ:</h3>
-          
-          {{-- 🔽 Controllerから渡された $message を表示 --}}
-          <p class="mb-4 p-4 bg-green-100 text-green-800 rounded">
-            {{ $message }}
-          </p>
-
-          {{-- 🔽 Controllerから渡された $description を表示 --}}
-          <p class="text-sm text-gray-600">
-            {{ $description }}
-          </p>
-
-        </div>
-      </div>
-    </div>
-  </div>
-</x-app-layout>
+    <h3>コントローラからのメッセージ:</h3>
+    <p style="background: #d1fae5; color: #065f46; padding: 1em; border-radius: 0.5em;">
+        {{ $message }}
+    </p>
+    <p style="color: #4b5563;">
+        {{ $description }}
+    </p>
+</body>
+</html>
 ```
 
 ---
