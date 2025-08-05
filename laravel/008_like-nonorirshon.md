@@ -85,7 +85,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateTweetUserTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -111,7 +111,7 @@ class CreateTweetUserTable extends Migration
     {
         Schema::dropIfExists('tweet_user');
     }
-}
+};
 ```
 
 {% hint style="info" %}
@@ -211,3 +211,112 @@ class Tweet extends Model
 
 Laravel では**可能な限り命名規則に従うことを強く推奨します。**
 {% endhint %}
+
+## 動作確認
+
+実装が正しく行われているかを確認しましょう。
+
+### マイグレーションの確認
+
+まず、マイグレーションが正常に実行されているか確認します：
+
+```bash
+./vendor/bin/sail artisan migrate:status
+```
+
+**実行済みの場合の出力例：**
+```
++------+------------------------------------------------+-------+
+| Ran? | Migration                                      | Batch |
++------+------------------------------------------------+-------+
+| Yes  | 2014_10_12_000000_create_users_table          | 1     |
+| Yes  | 2014_10_12_100000_create_password_resets_table| 1     |
+| Yes  | 2019_08_19_000000_create_failed_jobs_table    | 1     |
+| Yes  | 2023_01_01_000000_create_tweets_table         | 2     |
+| Yes  | 2023_01_02_000000_create_tweet_user_table     | 3     |
++------+------------------------------------------------+-------+
+```
+
+**未実行の場合の出力例：**
+```
++------+------------------------------------------------+-------+
+| Ran? | Migration                                      | Batch |
++------+------------------------------------------------+-------+
+| Yes  | 2014_10_12_000000_create_users_table          | 1     |
+| Yes  | 2014_10_12_100000_create_password_resets_table| 1     |
+| Yes  | 2019_08_19_000000_create_failed_jobs_table    | 1     |
+| Yes  | 2023_01_01_000000_create_tweets_table         | 2     |
+| No   | 2023_01_02_000000_create_tweet_user_table     |       |
++------+------------------------------------------------+-------+
+```
+
+`create_tweet_user_table`が「No」となっている場合は、マイグレーションが未実行です。
+
+### データベースの確認
+
+phpMyAdminやTablePlusなどのデータベース管理ツールで以下を確認：
+
+1. `tweet_user`テーブルが作成されていること
+2. カラム構成が正しいこと：
+   - `id`
+   - `tweet_id`
+   - `user_id` 
+   - `created_at`
+   - `updated_at`
+3. 外部キー制約が設定されていること
+
+### ブラウザでの動作確認
+
+次の章でコントローラーとビューを実装した後、ブラウザ上でいいね機能が正常に動作するかを確認します。
+
+具体的には以下の動作を確認：
+- いいねボタンをクリックしてレコードが作成されること
+- 重複いいねが防止されること
+- いいね解除が正常に動作すること
+
+## よくあるエラーと対処法
+
+### エラー1: テーブルが存在しない
+```
+SQLSTATE[42S02]: Base table or view not found: 1146 Table 'laravel.tweet_user' doesn't exist
+```
+
+**対処法：**
+```bash
+# マイグレーションが実行されているか確認
+./vendor/bin/sail artisan migrate:status
+
+# 未実行の場合はマイグレーションを実行
+./vendor/bin/sail artisan migrate
+```
+
+### エラー2: 外部キー制約エラー
+```
+SQLSTATE[23000]: Integrity constraint violation
+```
+
+**対処法：**
+- 存在しないtweet_idやuser_idを指定していないか確認
+- 削除されたレコードを参照していないか確認
+
+### エラー3: 重複エラー
+```
+SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry
+```
+
+**対処法：**
+```php
+// 既にいいねしているかチェックしてから追加
+if (!$user->likes()->where('tweet_id', $tweet->id)->exists()) {
+    $user->likes()->attach($tweet->id);
+}
+```
+
+## 次のステップ
+
+中間テーブルとモデルの設定が完了したら、次は以下を実装します：
+
+1. **コントローラーの作成**：Like機能のロジック実装
+2. **ルーティングの設定**：いいね/いいね解除のエンドポイント作成
+3. **ビューの実装**：いいねボタンの表示と操作
+4. **いいね数の表示**：各ツイートのいいね数カウント機能
