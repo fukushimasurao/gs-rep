@@ -650,8 +650,8 @@ Mac を利用されている人は、data/data.txtファイルの書き込み権
 $time = date('Y-m-d H:i:s');
 
 // 書き込むデータの内容を整形する。
-// "\n"は改行。HTMLの<br>と同じようにtext中で利用されるとtextは改行される。
-$data = $time . 'test' . "\n";
+// PHP_EOLは改行。環境に応じた適切な改行コードが使用される（Windows: \r\n, Mac/Linux: \n）
+$data = $time . 'test' . PHP_EOL;
 
 // 第３引数に、FILE_APPENDしないと上書きされちゃう
 file_put_contents('data/data.txt', $data, FILE_APPEND);
@@ -660,6 +660,21 @@ file_put_contents('data/data.txt', $data, FILE_APPEND);
 
 {% hint style="info" %}
 `write.php`に上記コードを書いたあとに（書き込み権限を修正して）`write.php`をブラウザで開くと、`data.txt`に自動で書き込みされます。
+{% endhint %}
+
+{% hint style="info" %}
+**PHP_EOLについて**
+
+`PHP_EOL`は環境に応じた適切な改行コードを表す定数です：
+- Windows: `\r\n`（円記号¥r¥nで表示される場合があります）
+- Mac/Linux: `\n`（バックスラッシュ\nで表示）
+
+`"\n"`の代わりに`PHP_EOL`を使用することで、WindowsとMac両方の環境で正しく動作します。
+
+**注意**: WindowsとMacでは`\`（バックスラッシュ）の表示が異なります：
+- Mac/Linux: `\` として表示
+- Windows: `¥`（円記号）として表示
+しかし、文字コードは同じなので動作に違いはありません。
 {% endhint %}
 
 #### read.php
@@ -671,7 +686,7 @@ txt ファイルに保存した内容をブラウザでも確認するため、`
 // ファイルを開いて内容を読み込む
 $data = file_get_contents('data/data.txt');
 
-// nl2br ... textファイルの改行"\n"を<br>に変換する関数
+// nl2br ... textファイルの改行をHTMLの<br>に変換する関数
 echo nl2br($data);
 ```
 
@@ -698,8 +713,8 @@ $birthPlace = $_POST['birthPlace'];
 $time = date("Y-m-d H:i:s");
 
 // 書き込むデータの内容を整形する。
-// "\n"は改行。HTMLの<br>と同じようにtext中で利用されるとtextは改行される。
-$data = $time . '/' . $name . '/' . $birthPlace . "\n";
+// PHP_EOLは改行。環境に応じた適切な改行コードが使用される
+$data = $time . '/' . $name . '/' . $birthPlace . PHP_EOL;
 
 // 第３引数に、FILE_APPENDしないと上書きされちゃう
 file_put_contents('data/data.txt', $data, FILE_APPEND);
@@ -735,8 +750,8 @@ $time = date("Y-m-d H:i:s");
 // aモードでファイルをオーブン
 $file = fopen('data/data.txt', 'a');
 
-//ファイルへの書き込み。"\n"は「ファイル内での改行」を指示する記述。ブラウザでいう<br>とのようなもの。
-fwrite($file, $time."\n");
+//ファイルへの書き込み。PHP_EOLは環境に応じた適切な改行コードが使用される
+fwrite($file, $time . PHP_EOL);
 
 //ファイルを閉じる
 fclose($file);
@@ -817,6 +832,6 @@ $str = $time . ' / ' . $name . ' /' .  $mail . ' ' . $birthPlace;
 
 // ファイルに書き込み
 $file = fopen('data/data.txt', 'a');
-fwrite($file, $str . "\n");
+fwrite($file, $str . PHP_EOL);
 fclose($file);
 ```
