@@ -57,9 +57,10 @@ $ ./vendor/bin/sail artisan make:controller TweetLikeController --resource
 * dislike の場合は `destroy` メソッドを実行します。呼び出しやすいように `tweets.dislike` という名前をつけましょう。
 * like と dislike の操作ではTweetを指定したいため、URLパラメータとしてtweetを指定している． どちらの場合もターゲットとなる Tweet と指定し、認証中のユーザが `like` または `dislike` するという動きになります。 URLにTweetを特定するためのパラメータとして `{tweet}` を指定しています。(`ルートモデル結合`)
 
-<pre><code>// routes/web.php
+```php
+// routes/web.php
 
-&#x3C;?php
+<?php
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TweetController;
@@ -77,15 +78,14 @@ Route::middleware('auth')->group(function () {
   Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
   Route::resource('tweets', TweetController::class);
 
-  // 🔽 2行追加  🔽
-<strong>  Route::post('/tweets/{tweet}/like', [TweetLikeController::class, 'store'])->name('tweets.like');
-</strong>  Route::delete('/tweets/{tweet}/like', [TweetLikeController::class, 'destroy'])->name('tweets.dislike');
+  // 🔽 2行追加 🔽
+  Route::post('/tweets/{tweet}/like', [TweetLikeController::class, 'store'])->name('tweets.like');
+  Route::delete('/tweets/{tweet}/like', [TweetLikeController::class, 'destroy'])->name('tweets.dislike');
 
 });
 
 require __DIR__ . '/auth.php';
-
-</code></pre>
+```
 
 ### Like 機能の実装
 
@@ -97,9 +97,10 @@ store メソッドと destroy メソッドを実装しましょうお！！！�
 * 同様に中間テーブルのデータ削除には `detach` メソッドを利用！
   * attach/detachを利用すると、勝手に中間テーブルに対して処理してくれるよ
 
-<pre class="language-php"><code class="lang-php">// app/Http/Controllers/TweetLikeController.php
+```php
+// app/Http/Controllers/TweetLikeController.php
 
-&#x3C;?php
+<?php
 
 namespace App\Http\Controllers;
 
@@ -114,28 +115,28 @@ class TweetLikeController extends Controller
    */
   public function store(Tweet $tweet)
   {
-    $tweet->liked()->attach(auth()->id());
+    $tweet->likedByUsers()->attach(auth()->id());
     return back();
   }
 
   /**
    * Remove the specified resource from storage.
    */
-<strong>  public function destroy(Tweet $tweet)
-</strong>  {
-    $tweet->liked()->detach(auth()->id());
+  public function destroy(Tweet $tweet)
+  {
+    $tweet->likedByUsers()->detach(auth()->id());
     return back();
   }
 }
-</code></pre>
+```
 
 ### like ボタンの設置（ビューファイル編集）
 
 画面から操作できるように`like` ボタンを設置しましょう。一覧画面と詳細画面の両方に設置
 
-* `$tweet->liked` で、該当する Tweet に対して like しているユーザのコレクションを取得できます
+* `$tweet->likedByUsers` で、該当する Tweet に対して like しているユーザのコレクションを取得できます
 * `contains` メソッドを用いて、認証中のユーザが like しているかどうかを判定します。like 済の場合には dislike ボタンを表示、like していない場合には like ボタンを表示します。
-* like ボタン（と dislike ボタン）の横にはlike しているユーザの数を表示します。`$tweet->liked->count()` で 該当する Tweet に対して like しているユーザの数を取得します。
+* like ボタン（と dislike ボタン）の横にはlike しているユーザの数を表示します。`$tweet->likedByUsers->count()` で 該当する Tweet に対して like しているユーザの数を取得します。
 
 ### 一覧画面
 
@@ -143,7 +144,7 @@ class TweetLikeController extends Controller
 
 これは各 Tweet に対して like 数を表示したいためです。
 
-ここでは，Tweet モデルで `liked()` を作成しているため，`with()` 内に記述することで like したユーザのデータを取得できます。
+ここでは，Tweet モデルで `likedByUsers()` を作成しているため，`with()` 内に記述することで like したユーザのデータを取得できます。
 
 ```php
 // app/Http/Controllers/TweetController.php
@@ -154,8 +155,8 @@ class TweetController extends Controller
 
   public function index()
   {
-    // 🔽 liked のデータも合わせて取得するよう修正
-    $tweets = Tweet::with(['user', 'liked'])->latest()->get();
+    // 🔽 likedByUsers のデータも合わせて取得するよう修正
+    $tweets = Tweet::with(['user', 'likedByUsers'])->latest()->get();
     // dd($tweets);
     return view('tweets.index', compact('tweets'));
   }
@@ -198,16 +199,16 @@ like ボタンはユーザが like しているかどうかによって like（l
             <a href="{{ route('tweets.show', $tweet) }}" class="text-blue-500 hover:text-blue-700">詳細を見る</a>
             {{-- 🔽 追加 --}}
             <div class="flex">
-              @if ($tweet->liked->contains(auth()->id()))
+              @if ($tweet->likedByUsers->contains(auth()->id()))
               <form action="{{ route('tweets.dislike', $tweet) }}" method="POST">
                 @csrf
                 @method('DELETE')
-                <button type="submit" class="text-red-500 hover:text-red-700">dislike {{$tweet->liked->count()}}</button>
+                <button type="submit" class="text-red-500 hover:text-red-700">dislike {{$tweet->likedByUsers->count()}}</button>
               </form>
               @else
               <form action="{{ route('tweets.like', $tweet) }}" method="POST">
                 @csrf
-                <button type="submit" class="text-blue-500 hover:text-blue-700">like {{$tweet->liked->count()}}</button>
+                <button type="submit" class="text-blue-500 hover:text-blue-700">like {{$tweet->likedByUsers->count()}}</button>
               </form>
               @endif
             </div>
@@ -260,16 +261,16 @@ like ボタンはユーザが like しているかどうかによって like（l
           @endif
           {{-- 🔽 追加 --}}
           <div class="flex mt-4">
-            @if ($tweet->liked->contains(auth()->id()))
+            @if ($tweet->likedByUsers->contains(auth()->id()))
             <form action="{{ route('tweets.dislike', $tweet) }}" method="POST">
               @csrf
               @method('DELETE')
-              <button type="submit" class="text-red-500 hover:text-red-700">dislike {{$tweet->liked->count()}}</button>
+              <button type="submit" class="text-red-500 hover:text-red-700">dislike {{$tweet->likedByUsers->count()}}</button>
             </form>
             @else
             <form action="{{ route('tweets.like', $tweet) }}" method="POST">
               @csrf
-              <button type="submit" class="text-blue-500 hover:text-blue-700">like {{$tweet->liked->count()}}</button>
+              <button type="submit" class="text-blue-500 hover:text-blue-700">like {{$tweet->likedByUsers->count()}}</button>
             </form>
             @endif
           </div>
