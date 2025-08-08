@@ -29,12 +29,9 @@ use Illuminate\Http\Request;
 
 まずCommentの編集画面を表示します。 編集画面にはTweetとCommentを表示するのでそれぞれデータを渡します。
 
-{% hint style="info" %}
-**編集権限のチェック**
-
-本来であれば、コントローラーで編集権限をチェックすべきです：
-
 ```php
+// app/Http/Controllers/CommentController.php
+
 public function edit(Tweet $tweet, Comment $comment)
 {
   // コメント投稿者のみ編集可能
@@ -42,18 +39,6 @@ public function edit(Tweet $tweet, Comment $comment)
     abort(403, 'このコメントを編集する権限がありません');
   }
   
-  return view('tweets.comments.edit', compact('tweet', 'comment'));
-}
-```
-
-現在はビュー側で編集ボタンの表示制御のみ行っていますが、URLを直接叩かれた場合の対策として、コントローラー側でも権限チェックを行うのがベストプラクティスです。
-{% endhint %}
-
-```php
-// app/Http/Controllers/CommentController.php
-
-public function edit(Tweet $tweet, Comment $comment)
-{
   return view('tweets.comments.edit', compact('tweet', 'comment'));
 }
 ```
@@ -158,7 +143,7 @@ public function update(Request $request, Tweet $tweet, Comment $comment)
 ```
 {% endhint %}
 
-```
+
 
 ### 削除処理 <a href="#xiao-chu-chu-li" id="xiao-chu-chu-li"></a>
 
