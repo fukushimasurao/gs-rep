@@ -14,8 +14,9 @@
 
 Tweet に関するファイルを作成するときと同様の流れ。
 
-<pre class="language-bash"><code class="lang-bash"><strong>$ ./vendor/bin/sail artisan make:model Comment -rm
-</strong></code></pre>
+```
+./vendor/bin/sail artisan make:model Comment -rm
+```
 
 下記のファイルが作成されます。
 
@@ -57,8 +58,9 @@ public function up(): void
 
 作成したら下記コマンドを実行してマイグレーションを実行しましょう。
 
-<pre class="language-bash"><code class="lang-bash"><strong>$ ./vendor/bin/sail artisan migrate
-</strong></code></pre>
+```
+./vendor/bin/sail artisan migrate
+```
 
 実行後、commentsテーブルが作成されていることと、その中身を確認しましょう。．
 
@@ -122,16 +124,26 @@ class Comment extends Model
 
 class User extends Authenticatable
 {
-
   // 省略
 
-  // 🔽 1対多の関係
+  // 🔽 1対多の関係（ユーザーとツイート）
+  public function tweets()
+  {
+    return $this->hasMany(Tweet::class);
+  }
+
+  // 🔽 多対多の関係（いいね機能）
+  public function likes()
+  {
+    return $this->belongsToMany(Tweet::class)->withTimestamps();
+  }
+
+  // 🔽 1対多の関係（ユーザーとコメント）
   public function comments()
   {
     return $this->hasMany(Comment::class);
   }
 }
-
 ```
 
 ```php
@@ -143,12 +155,25 @@ class Tweet extends Model
 {
   protected $fillable = ['tweet'];
 
-  // 🔽 1対多の関係
+  // 🔽 1対多の関係（ユーザーとツイート）
+  public function user()
+  {
+    return $this->belongsTo(User::class);
+  }
+
+  // 🔽 多対多の関係（いいね機能）
+  public function likedByUsers()
+  {
+    return $this->belongsToMany(User::class)->withTimestamps();
+  }
+
+  // 🔽 1対多の関係（ツイートとコメント）
   public function comments()
   {
     return $this->hasMany(Comment::class)->orderBy('created_at', 'desc');
   }
 }
+```
 
 ```
 
@@ -157,9 +182,9 @@ class Tweet extends Model
 コメント機能で使用するビューファイルを作成しましょう。 TweetのCRUD処理とほとんど同じだが、コメント一覧は `tweets.show` に追加するため `index.blade.php` は作成しなくて OK．
 
 ```bash
-$ ./vendor/bin/sail artisan make:view tweets.comments.create
-$ ./vendor/bin/sail artisan make:view tweets.comments.show
-$ ./vendor/bin/sail artisan make:view tweets.comments.edit
+./vendor/bin/sail artisan make:view tweets.comments.create
+./vendor/bin/sail artisan make:view tweets.comments.show
+./vendor/bin/sail artisan make:view tweets.comments.edit
 ```
 
 ### ルーティングの設定
@@ -175,11 +200,11 @@ $ ./vendor/bin/sail artisan make:view tweets.comments.edit
 
 <?php
 
-// 🔽 追加
-use App\Http\Controllers\CommentController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TweetController;
 use App\Http\Controllers\TweetLikeController;
+// 🔽 追加
+use App\Http\Controllers\CommentController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
