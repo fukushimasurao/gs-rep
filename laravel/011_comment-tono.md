@@ -285,8 +285,6 @@ Comment::create([
 - 新しく作成されたコメントがすぐに表示される
 {% endhint %}
 
-```
-
 ### Comment の詳細画面 <a href="#comment-no" id="comment-no"></a>
 
 Tweet詳細画面のComment をクリックでComment詳細画面に遷移します。 Comment詳細画面にて、編集や削除ができるようにします。
@@ -362,7 +360,6 @@ tweets/{tweet}/comments/{comment}
     </div>
   </div>
 </x-app-layout>
-
 ```
 
 {% hint style="info" %}
