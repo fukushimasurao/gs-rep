@@ -198,11 +198,10 @@ class Tweet extends Model
 }
 ```
 
-```
+### ビューファイルの作成
 
-### ビューファイルの作成 <a href="#byfairuno" id="byfairuno"></a>
-
-コメント機能で使用するビューファイルを作成しましょう。 TweetのCRUD処理とほとんど同じだが、コメント一覧は `tweets.show` に追加するため `index.blade.php` は作成しなくて OK．
+コメント機能で使用するビューファイルを作成しましょう。
+TweetのCRUD処理とほとんど同じだが、コメント一覧は `tweets.show` に追加するため `index.blade.php` は作成しなくて OK．
 
 ```bash
 ./vendor/bin/sail artisan make:view tweets.comments.create
@@ -214,9 +213,51 @@ class Tweet extends Model
 
 リソースコントローラを使用しているのでルーティングは1行書くだけでok
 
-ただし、CommentはTweetに従うためルーティングは`tweet.comment` となります。 このような記述を行う理由として、Comment に対する処理（表示，編集，削除）を行う場合に Comment の元の Tweet の情報が必要となるためです。
+ただし、CommentはTweetに従うためルーティングは`tweets.comments` となります。
+このような記述を行う理由として、Comment に対する処理（表示，編集，削除）を行う場合に Comment の元の Tweet の情報が必要となるためです。
 
 ルーティングを上記のように記述すると Tweet の情報も合わせて得ることができます（後述）。
+
+{% hint style="info" %}
+**ネストリソースルーティング `tweets.comments` について**
+
+`Route::resource('tweets.comments', CommentController::class);` と記述すると、以下のような**ネストした URL構造**が自動生成されます：
+
+**通常のリソースルーティングとの比較：**
+
+**❌ 通常の場合（`Route::resource('comments', CommentController::class)`）:**
+```
+GET    /comments          → index
+POST   /comments          → store
+GET    /comments/create   → create
+GET    /comments/{id}     → show
+GET    /comments/{id}/edit → edit
+PUT    /comments/{id}     → update
+DELETE /comments/{id}     → destroy
+```
+
+**✅ ネストした場合（`Route::resource('tweets.comments', CommentController::class)`）:**
+```
+GET    /tweets/{tweet}/comments          → index
+POST   /tweets/{tweet}/comments          → store
+GET    /tweets/{tweet}/comments/create   → create
+GET    /tweets/{tweet}/comments/{comment} → show
+GET    /tweets/{tweet}/comments/{comment}/edit → edit
+PUT    /tweets/{tweet}/comments/{comment} → update
+DELETE /tweets/{tweet}/comments/{comment} → destroy
+```
+
+**メリット：**
+- URLから「どのツイートに対するコメントか」が明確
+- コントローラーで`$tweet`パラメータが自動で取得可能
+- RESTfulな設計に従った分かりやすいURL構造
+- ルートモデル結合により、`Tweet`モデルのインスタンスが自動注入される
+
+**実際の使用例：**
+- ツイートID 5 のコメント一覧: `/tweets/5/comments`
+- ツイートID 5 のコメント作成: `/tweets/5/comments/create`
+- ツイートID 5 のコメントID 3 の詳細: `/tweets/5/comments/3`
+{% endhint %}
 
 ```php
 // routes/web.php
