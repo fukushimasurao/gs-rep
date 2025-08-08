@@ -18,6 +18,29 @@ Tweet に関するファイルを作成するときと同様の流れ。
 ./vendor/bin/sail artisan make:model Comment -rm
 ```
 
+{% hint style="info" %}
+**`-rm`オプションについて**
+
+`-rm`は複数のオプションを組み合わせたものです：
+
+- **`-r`** : リソースコントローラ（`CommentController`）を同時に作成
+- **`-m`** : マイグレーションファイルを同時に作成
+
+**個別に実行する場合：**
+```bash
+./vendor/bin/sail artisan make:model Comment
+./vendor/bin/sail artisan make:controller CommentController --resource
+./vendor/bin/sail artisan make:migration create_comments_table
+```
+
+**他の便利なオプション：**
+- `-f` : ファクトリファイルも作成
+- `-s` : シーダーファイルも作成
+- `-a` : 全て作成（`-rmfs`と同じ）
+
+複数のファイルを一度に作成できるため、開発効率が向上します。
+{% endhint %}
+
 下記のファイルが作成されます。
 
 * `app/Models/Comment.php`
