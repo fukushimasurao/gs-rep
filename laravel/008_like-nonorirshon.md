@@ -10,6 +10,25 @@
 
 UserとTweetの関係が**多対多**となる`Like機能`の実装。
 
+### なぜ多対多なのか？
+
+Like機能では以下の関係が成り立ちます：
+
+**ユーザー側から見ると：**
+- 1人のユーザーは複数のツイートにいいねできる
+
+**ツイート側から見ると：**
+- 1つのツイートは複数のユーザーからいいねされる
+
+この「1人のユーザー ↔ 複数のツイート」かつ「1つのツイート ↔ 複数のユーザー」の関係が**多対多（Many to Many）**です。
+
+**具体例：**
+- ユーザーA：ツイート1、ツイート3、ツイート5にいいね
+- ユーザーB：ツイート1、ツイート2にいいね
+- ユーザーC：ツイート3、ツイート4、ツイート5にいいね
+
+この場合、ツイート1はユーザーAとBからいいねされ、ツイート3はユーザーAとCからいいねされています。
+
 <figure><img src="../.gitbook/assets/like_many-many.jpg" alt=""><figcaption></figcaption></figure>
 
 多対多の場合は以下の流れが基本です：
@@ -19,7 +38,21 @@ UserとTweetの関係が**多対多**となる`Like機能`の実装。
 
 ## 多対多リレーションの概念
 
-多対多の場合は、中間テーブルを作成する必要があります。
+**1対多との違い**
+
+これまで学習した「1対多」の関係（例：1人のユーザーが複数のツイートを投稿）とは異なり、Like機能では「多対多」の関係が必要です。
+
+**1対多の例（ツイート投稿）：**
+- 1人のユーザー → 複数のツイートを投稿
+- 1つのツイート → 1人のユーザーが投稿
+
+**多対多の例（いいね機能）：**
+- 1人のユーザー → 複数のツイートにいいね
+- 1つのツイート → 複数のユーザーからいいね
+
+**中間テーブルの必要性**
+
+多対多の場合は、中間テーブルを作成する必要があります。これは「どのユーザーが」「どのツイートに」いいねしたかを記録するためです。
 
 中間テーブルに必要な情報：
 - id
@@ -68,11 +101,15 @@ UserとTweetの関係が**多対多**となる`Like機能`の実装。
 - テーブル名：`tweet_user`
 - 命名ルール：「**アルファベット順に並べたテーブル名の単数形をアンダースコアでつなげる**」
 - 今回は2つのテーブルをリレーションできればよいため、専用のモデルは作成しません
+
+**例：**
+- `tweets` と `users` テーブル → `tweet_user`（アルファベット順: t, u）
+- `posts` と `tags` テーブル → `post_tag`（アルファベット順: p, t）
 {% endhint %}
 
 ### マイグレーションファイルの編集
 
-マイグレーションファイルを開き、以下のように編集します。
+作成されたマイグレーションファイルを開きます。ファイル名は `database/migrations/` フォルダ内の `xxxx_xx_xx_xxxxxx_create_tweet_user_table.php` のような形式になります。
 
 中間テーブルとなるため、カラムはid以外に`tweet_id`と`user_id`を追加します。
 
@@ -149,7 +186,50 @@ return new class extends Migration
 
 多対多の場合は`belongsToMany`を使用します。
 
+{% hint style="info" %}
+**Laravelのリレーションメソッド一覧**
+
+| リレーション | メソッド | 説明 | 使用例 |
+|-------------|----------|------|--------|
+| **1対1** | `hasOne()` | 1つのモデルが1つの関連モデルを持つ | User → Profile |
+| **1対1** | `belongsTo()` | 1つのモデルが1つの親モデルに属する | Profile → User |
+| **1対多** | `hasMany()` | 1つのモデルが複数の関連モデルを持つ | User → Tweets |
+| **多対1** | `belongsTo()` | 複数のモデルが1つの親モデルに属する | Tweet → User |
+| **多対多** | `belongsToMany()` | 複数のモデルが複数の関連モデルを持つ | User ↔ Tweet (Like) |
+
+**覚え方のコツ：**
+- `has系`：「持っている」関係（親側）
+- `belongsTo系`：「属している」関係（子側）
+- `Many`：複数の関係
+
+**実際のコード例：**
+```php
+// 1対多：ユーザーは複数のツイートを持つ
+class User extends Model {
+    public function tweets() {
+        return $this->hasMany(Tweet::class);
+    }
+}
+
+// 多対1：ツイートは1人のユーザーに属する
+class Tweet extends Model {
+    public function user() {
+        return $this->belongsTo(User::class);
+    }
+}
+
+// 多対多：ユーザーは複数のツイートにいいねし、ツイートは複数のユーザーからいいねされる
+class User extends Model {
+    public function likes() {
+        return $this->belongsToMany(Tweet::class);
+    }
+}
+```
+{% endhint %}
+
 ### Userモデルの編集
+
+`app/Models/User.php` ファイルを開き、以下のリレーションメソッドを追加します：
 
 ```php
 // app/Models/User.php
@@ -171,6 +251,8 @@ class User extends Authenticatable
 ```
 
 ### Tweetモデルの編集
+
+`app/Models/Tweet.php` ファイルを開き、以下のリレーションメソッドを追加します：
 
 ```php
 // app/Models/Tweet.php
@@ -195,6 +277,13 @@ class Tweet extends Model
 **withTimestamps()について**
 - 中間テーブルに`created_at`と`updated_at`を記録する場合に必要
 - いいねした日時を記録できるため、分析やソート機能で活用可能
+- このメソッドを省略すると、中間テーブルのタイムスタンプは更新されません
+
+**使用例：**
+```php
+// いいねした日時順でソート
+$user->likes()->orderBy('pivot_created_at', 'desc')->get();
+```
 {% endhint %}
 
 {% hint style="warning" %}
