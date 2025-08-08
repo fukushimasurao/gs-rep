@@ -195,8 +195,6 @@ public function destroy(Tweet $tweet, Comment $comment)
 - 誤操作を防ぐためのユーザビリティ向上
 {% endhint %}
 
-```
-
 ### 動作確認 <a href="#dong-zuo-que-ren" id="dong-zuo-que-ren"></a>
 
 **基本的な動作：**
