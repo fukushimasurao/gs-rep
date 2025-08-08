@@ -6,22 +6,61 @@
 * Comment更新処理を実装
 * Comment削除処理を実装
 
+{% hint style="info" %}
+**事前確認**
+
+CommentControllerの先頭に必要なuse文が記述されていることを確認してください：
+
+```php
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Http\Controllers\Controller;
+use App\Models\Comment;
+use App\Models\Tweet;  // ← 必要
+use Illuminate\Http\Request;
+```
+
+これらが不足していると、型ヒント（`Tweet $tweet, Comment $comment`）が正しく動作しません。
+{% endhint %}
+
 ### 編集と削除の実装 <a href="#tono" id="tono"></a>
 
 まずCommentの編集画面を表示します。 編集画面にはTweetとCommentを表示するのでそれぞれデータを渡します。
 
-<pre class="language-php"><code class="lang-php">// app/Http/Controllers/CommentController.php
+{% hint style="info" %}
+**編集権限のチェック**
 
-<strong>public function edit(Tweet $tweet, Comment $comment)
-</strong>{
+本来であれば、コントローラーで編集権限をチェックすべきです：
+
+```php
+public function edit(Tweet $tweet, Comment $comment)
+{
+  // コメント投稿者のみ編集可能
+  if (auth()->id() !== $comment->user_id) {
+    abort(403, 'このコメントを編集する権限がありません');
+  }
+  
   return view('tweets.comments.edit', compact('tweet', 'comment'));
 }
+```
 
-</code></pre>
+現在はビュー側で編集ボタンの表示制御のみ行っていますが、URLを直接叩かれた場合の対策として、コントローラー側でも権限チェックを行うのがベストプラクティスです。
+{% endhint %}
+
+```php
+// app/Http/Controllers/CommentController.php
+
+public function edit(Tweet $tweet, Comment $comment)
+{
+  return view('tweets.comments.edit', compact('tweet', 'comment'));
+}
+```
 
 編集画面のビューは下記のように記述しましょう。 書き換えた後、UpdateボタンをクリックするとCommentの更新処理が実行されます。
 
-```php
+```blade
 <!-- resources/views/tweets/comments/edit.blade.php -->
 
 <x-app-layout>
@@ -40,13 +79,13 @@
             @csrf
             @method('PUT')
             <div class="mb-4">
-              <label for="comment" class="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2">Edit Comment</label>
+              <label for="comment" class="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2">コメント編集</label>
               <input type="text" name="comment" id="comment" value="{{ $comment->comment }}" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 dark:text-gray-300 dark:bg-gray-700 leading-tight focus:outline-none focus:shadow-outline">
               @error('comment')
               <span class="text-red-500 text-xs italic">{{ $message }}</span>
               @enderror
             </div>
-            <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Update</button>
+            <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">更新</button>
           </form>
         </div>
       </div>
@@ -77,12 +116,53 @@ public function update(Request $request, Tweet $tweet, Comment $comment)
 
   return redirect()->route('tweets.comments.show', [$tweet, $comment]);
 }
+```
+
+{% hint style="info" %}
+**更新処理の詳細説明**
+
+**1. バリデーション：**
+- `required`: 必須入力
+- `string`: 文字列であること
+- `max:255`: 最大255文字
+
+**2. `$request->only('comment')` について：**
+```php
+// これは以下と同じ意味
+$comment->update([
+  'comment' => $request->comment
+]);
+
+// only()を使うメリット：
+// - 必要なフィールドだけを指定できる
+// - セキュリティの向上（意図しないフィールドの更新を防ぐ）
+// - コードの簡潔性
+```
+
+**3. リダイレクト先：**
+- 更新後はコメント詳細画面に戻る
+- 更新されたコメントがすぐに確認できる
+
+**4. セキュリティ考慮：**
+本来は権限チェックも追加すべきです：
+```php
+public function update(Request $request, Tweet $tweet, Comment $comment)
+{
+  // 権限チェック
+  if (auth()->id() !== $comment->user_id) {
+    abort(403);
+  }
+  
+  // 以下、更新処理...
+}
+```
+{% endhint %}
 
 ```
 
 ### 削除処理 <a href="#xiao-chu-chu-li" id="xiao-chu-chu-li"></a>
 
-削除するだけ。
+削除処理を実装します。削除後はツイート詳細画面に戻ります。
 
 ```php
 // app/Http/Controllers/CommentController.php
@@ -93,13 +173,68 @@ public function destroy(Tweet $tweet, Comment $comment)
 
   return redirect()->route('tweets.show', $tweet);
 }
+```
+
+{% hint style="info" %}
+**削除処理の詳細説明**
+
+**1. シンプルな削除：**
+- `$comment->delete()` でデータベースから削除
+- Eloquentの論理削除（SoftDelete）は使用していない
+
+**2. リダイレクト先：**
+- 削除後はツイート詳細画面に戻る
+- 削除されたコメントが表示されなくなることを確認できる
+
+**3. セキュリティ考慮：**
+本来は削除権限のチェックも必要です：
+```php
+public function destroy(Tweet $tweet, Comment $comment)
+{
+  // 権限チェック（コメント投稿者のみ削除可能）
+  if (auth()->id() !== $comment->user_id) {
+    abort(403, 'このコメントを削除する権限がありません');
+  }
+  
+  $comment->delete();
+  return redirect()->route('tweets.show', $tweet)->with('success', 'コメントを削除しました');
+}
+```
+
+**4. 外部キー制約：**
+- マイグレーションで `cascadeOnDelete()` を設定済み
+- ツイートが削除されると、関連するコメントも自動削除される
+
+**5. 確認ダイアログ：**
+- ビュー側で `onsubmit="return confirm('本当に削除しますか？');"` を設定済み
+- 誤操作を防ぐためのユーザビリティ向上
+{% endhint %}
 
 ```
 
 ### 動作確認 <a href="#dong-zuo-que-ren" id="dong-zuo-que-ren"></a>
 
+**基本的な動作：**
 * Comment詳細画面:「編集」クリックで Comment 編集画面に遷移
 * Comment編集画面でコメントを編集して「更新」クリックで Comment更新処理が実行
-* Comment更新処理が完了するとTweet詳細画面に遷移
+* Comment更新処理が完了するとComment詳細画面に遷移
 * Comment詳細画面で「削除」クリックでComment削除処理が実行
 * Comment削除処理が完了するとTweet詳細画面に遷移
+
+**確認すべきポイント：**
+* **権限チェック**: 自分のコメントのみ編集・削除ボタンが表示される
+* **バリデーション**: 空のコメントや255文字を超える入力でエラーが表示される
+* **確認ダイアログ**: 削除時に確認ダイアログが表示される
+* **リダイレクト**: 更新後はコメント詳細、削除後はツイート詳細に遷移
+* **データ整合性**: 更新・削除後にデータベースが正しく変更されている
+
+**セキュリティテスト：**
+* **URL直接アクセス**: 他人のコメント編集URLに直接アクセスした場合のエラー処理
+* **CSRF保護**: フォーム送信時のCSRFトークンが正しく機能している
+* **SQLインジェクション**: 特殊文字を含むコメントの処理が適切
+
+**発展課題：**
+* **権限チェック**: コントローラー側での権限チェック実装
+* **フラッシュメッセージ**: 更新・削除完了時のメッセージ表示
+* **Ajax対応**: ページ遷移なしでの更新・削除機能
+* **履歴管理**: コメント編集履歴の保存機能
