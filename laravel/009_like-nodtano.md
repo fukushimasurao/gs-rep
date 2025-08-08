@@ -19,10 +19,10 @@
 
 イメージは
 
-* viewのいいねが押される
-* →routeの確認
-* →controllerで処理される
-* →modelでデータが保存される。 という感じです。
+* ブラウザでいいねが押される
+* →route にそって、特定のcontroller メソッドで処理される
+* →modelでデータが保存される。
+という感じです。
 
 以下では、
 
@@ -36,7 +36,7 @@
 ### コントローラの作成
 
 ```
-$ ./vendor/bin/sail artisan make:controller TweetLikeController --resource
+./vendor/bin/sail artisan make:controller TweetLikeController --resource
 ```
 
 {% hint style="info" %}
@@ -51,11 +51,51 @@ $ ./vendor/bin/sail artisan make:controller TweetLikeController --resource
 
 コントローラのメソッドをルーティングに追加。
 
-今回は`like` と `dislike` の 2 つを追加するため`resource` ではなく個別に記述します。 ※ つまりresourceの場合は、crud処理全部(例えばindexとかcreateとかupdateとか)が自動で処理されますが、今回は、store と destroyだけでいいので個別にします。
+今回は`like` と `dislike` の 2 つを追加するため`resource` ではなく個別に記述します。
+
+{% hint style="info" %}
+**resourceを使った場合との比較**
+
+もし`Route::resource('tweet-likes', TweetLikeController::class)`を使用すると、以下の7つのルートが自動生成されます：
+
+| HTTP動詞 | URI | アクション | 名前 |
+|---------|-----|----------|------|
+| GET | /tweet-likes | index | tweet-likes.index |
+| GET | /tweet-likes/create | create | tweet-likes.create |
+| POST | /tweet-likes | store | tweet-likes.store |
+| GET | /tweet-likes/{tweet-like} | show | tweet-likes.show |
+| GET | /tweet-likes/{tweet-like}/edit | edit | tweet-likes.edit |
+| PUT/PATCH | /tweet-likes/{tweet-like} | update | tweet-likes.update |
+| DELETE | /tweet-likes/{tweet-like} | destroy | tweet-likes.destroy |
+
+**今回は以下の理由で個別記述を選択：**
+- Like機能では`store`（いいね追加）と`destroy`（いいね削除）の2つのアクションのみ必要
+- `index`、`create`、`show`、`edit`、`update`は不要
+- URLも`/tweets/{tweet}/like`の形にして、どのツイートに対するいいねかを明確にしたい
+- 不要なルートを作らないことで、セキュリティとパフォーマンスの向上
+
+**実際に使用するルート：**
+```php
+Route::post('/tweets/{tweet}/like', [TweetLikeController::class, 'store'])->name('tweets.like');
+Route::delete('/tweets/{tweet}/like', [TweetLikeController::class, 'destroy'])->name('tweets.dislike');
+```
+{% endhint %}
 
 * like の場合は `store` メソッドを実行します。呼び出しやすいように`tweets.like` という名前をつけましょう。
 * dislike の場合は `destroy` メソッドを実行します。呼び出しやすいように `tweets.dislike` という名前をつけましょう。
 * like と dislike の操作ではTweetを指定したいため、URLパラメータとしてtweetを指定している． どちらの場合もターゲットとなる Tweet と指定し、認証中のユーザが `like` または `dislike` するという動きになります。 URLにTweetを特定するためのパラメータとして `{tweet}` を指定しています。(`ルートモデル結合`)
+
+{% hint style="warning" %}
+**重要：use文の追加を忘れずに！**
+
+`routes/web.php`にルートを追加する際は、ファイルの上部にある`use`文の部分に`TweetLikeController`のインポートを忘れずに追加してください。
+
+```php
+use App\Http\Controllers\TweetLikeController;
+```
+
+これを忘れると「Class 'App\Http\Controllers\TweetLikeController' not found」というエラーが発生します。
+{% endhint %}
 
 ```php
 // routes/web.php
@@ -203,12 +243,12 @@ like ボタンはユーザが like しているかどうかによって like（l
               <form action="{{ route('tweets.dislike', $tweet) }}" method="POST">
                 @csrf
                 @method('DELETE')
-                <button type="submit" class="text-red-500 hover:text-red-700">dislike {{$tweet->likedByUsers->count()}}</button>
+                <button type="submit" class="text-red-500 hover:text-red-700">♥ {{$tweet->likedByUsers->count()}}</button>
               </form>
               @else
               <form action="{{ route('tweets.like', $tweet) }}" method="POST">
                 @csrf
-                <button type="submit" class="text-blue-500 hover:text-blue-700">like {{$tweet->likedByUsers->count()}}</button>
+                <button type="submit" class="text-gray-500 hover:text-red-500">♡ {{$tweet->likedByUsers->count()}}</button>
               </form>
               @endif
             </div>
@@ -265,12 +305,12 @@ like ボタンはユーザが like しているかどうかによって like（l
             <form action="{{ route('tweets.dislike', $tweet) }}" method="POST">
               @csrf
               @method('DELETE')
-              <button type="submit" class="text-red-500 hover:text-red-700">dislike {{$tweet->likedByUsers->count()}}</button>
+              <button type="submit" class="text-red-500 hover:text-red-700">♥ {{$tweet->likedByUsers->count()}}</button>
             </form>
             @else
             <form action="{{ route('tweets.like', $tweet) }}" method="POST">
               @csrf
-              <button type="submit" class="text-blue-500 hover:text-blue-700">like {{$tweet->likedByUsers->count()}}</button>
+              <button type="submit" class="text-gray-500 hover:text-red-500">♡ {{$tweet->likedByUsers->count()}}</button>
             </form>
             @endif
           </div>
