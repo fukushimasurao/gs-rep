@@ -13,6 +13,84 @@ Tweet の詳細取得時に、Comment の一覧も合わせて取得する。
 
 一対多の関係なので`load`メソッドを使用することで子データも合わせて取得できる。
 
+{% hint style="info" %}
+**`load`メソッドについて**
+
+`load`メソッドは**Eager Loading（積極的読み込み）** の一種で、既に取得したモデルに対してリレーションデータを後から追加で読み込む際に使用します。
+
+**使用例：**
+```php
+$tweet = Tweet::find(1);        // ツイートのみ取得
+$tweet->load('comments');       // 後からコメントも読み込み
+$tweet->load('comments.user');  // コメントとコメント投稿者も読み込み
+```
+
+**メリット：**
+- N+1問題の回避（1回のクエリでまとめて取得）
+- 必要な時だけリレーションを読み込める
+- パフォーマンスの向上
+
+**`with`メソッドとの違い：**
+- `with`: 最初のクエリ時にリレーションも同時取得
+- `load`: モデル取得後にリレーションを追加読み込み
+
+**どちらを使うべき？使い分けのポイント：**
+
+**✅ `with`を使うべき場面：**
+```php
+// 最初からコメントが必要だと分かっている場合
+$tweet = Tweet::with('comments')->find(1);
+$tweets = Tweet::with('comments', 'user')->paginate(10); // 一覧でも使える
+```
+- 最初からリレーションが必要だと分かっている
+- パフォーマンス重視（1回のクエリで全て取得）
+- 一覧表示でN+1問題を回避したい
+
+**✅ `load`を使うべき場面：**
+```php
+// 条件によってコメントが必要な場合
+$tweet = Tweet::find(1);
+if ($user->canViewComments()) {
+    $tweet->load('comments');
+}
+```
+- 条件によってリレーションが必要かどうか変わる
+- 既に取得済みのモデルに後から追加したい
+- 複雑な条件分岐がある
+
+**パフォーマンス比較：**
+```php
+// ❌ N+1問題が発生（避けるべき）
+$tweets = Tweet::all();
+foreach ($tweets as $tweet) {
+    echo $tweet->comments->count(); // 各ツイートごとにクエリ実行
+}
+
+// ✅ withで解決
+$tweets = Tweet::with('comments')->get();
+foreach ($tweets as $tweet) {
+    echo $tweet->comments->count(); // 既に読み込み済み
+}
+
+// ✅ loadでも解決可能
+$tweets = Tweet::all();
+$tweets->load('comments'); // コレクション全体に対してまとめて読み込み
+```
+
+**今回のケースでは？**
+Tweet詳細画面では常にコメントを表示するので、`with`の方が適切です：
+```php
+// より良い書き方
+public function show(Tweet $tweet)
+{
+    $tweet = Tweet::with('comments.user')->find($tweet->id);
+    return view('tweets.show', compact('tweet'));
+}
+```
+
+今回の場合、`$tweet->comments` でコメント一覧にアクセスできるようになります。
+{% endhint %}
+
 ```php
 // app/Http/Controllers/TweetController.php
 
@@ -28,7 +106,7 @@ Tweet 詳細画面を下記のように編集しましょう。(まだコメン�
 
 「コメントする」リンクをクリックするとコメント作成画面に遷移します。
 
-```php
+```blade
 <!-- resources/views/tweets/show.blade.php -->
 
 <x-app-layout>
@@ -60,30 +138,33 @@ Tweet 詳細画面を下記のように編集しましょう。(まだコメン�
           </div>
           @endif
           <div class="flex mt-4">
-            @if ($tweet->liked->contains(auth()->id()))
+            @if ($tweet->likedByUsers->contains(auth()->id()))
             <form action="{{ route('tweets.dislike', $tweet) }}" method="POST">
               @csrf
               @method('DELETE')
-              <button type="submit" class="text-red-500 hover:text-red-700">dislike {{$tweet->liked->count()}}</button>
+              <button type="submit" class="text-red-500 hover:text-red-700">💔 {{$tweet->likedByUsers->count()}}</button>
             </form>
             @else
             <form action="{{ route('tweets.like', $tweet) }}" method="POST">
               @csrf
-              <button type="submit" class="text-blue-500 hover:text-blue-700">like {{$tweet->liked->count()}}</button>
+              <button type="submit" class="text-blue-500 hover:text-blue-700">❤️ {{$tweet->likedByUsers->count()}}</button>
             </form>
             @endif
           </div>
+
           <!-- 🔽 追加 -->
           <div class="mt-4">
             <p class="text-gray-600 dark:text-gray-400 ml-4">comment {{ $tweet->comments->count() }}</p>
             <a href="{{ route('tweets.comments.create', $tweet) }}" class="text-blue-500 hover:text-blue-700 mr-2">コメントする</a>
           </div>
-          <!-- 🔽 追加 -->
+
           <div class="mt-4">
             @foreach ($tweet->comments as $comment)
             <p>{{ $comment->comment }} <span class="text-gray-600 dark:text-gray-400 text-sm">{{ $comment->user->name }} {{ $comment->created_at->format('Y-m-d H:i') }}</span></p>
             @endforeach
           </div>
+          <!-- ⬆️ ここまで追加 -->
+
         </div>
       </div>
     </div>
@@ -118,7 +199,7 @@ public function create(Tweet $tweet)
 
 コメント作成画面を編集します。 `form`部分で`Comment`を送信する際に、どの`Tweet`に対する`Comment`かを指定するために引数に`Tweet`を渡しています。
 
-```php
+```blade
 <!-- resources/views/tweets/comments/create.blade.php -->
 
 <x-app-layout>
@@ -173,6 +254,36 @@ public function store(Request $request, Tweet $tweet)
 
   return redirect()->route('tweets.show', $tweet);
 }
+```
+
+{% hint style="info" %}
+**`$tweet->comments()->create()` について**
+
+この書き方により、以下のことが自動的に行われます：
+
+**1. リレーションを通じた作成：**
+```php
+// これは以下と同じ意味
+Comment::create([
+  'comment' => $request->comment,
+  'user_id' => auth()->id(),
+  'tweet_id' => $tweet->id,  // ← 自動的に設定される
+]);
+```
+
+**2. 外部キーの自動設定：**
+- `$tweet->comments()->create()` を使うことで
+- `tweet_id` が自動的に `$tweet->id` に設定される
+- わざわざ `'tweet_id' => $tweet->id` を書く必要がない
+
+**3. バリデーション：**
+- `$fillable` に設定したカラムのみ保存される
+- 今回は `['comment', 'tweet_id', 'user_id']` が設定済み
+
+**4. リダイレクト：**
+- 作成完了後は元のツイート詳細画面に戻る
+- 新しく作成されたコメントがすぐに表示される
+{% endhint %}
 
 ```
 
@@ -186,7 +297,7 @@ Tweet詳細画面のComment をクリックでComment詳細画面に遷移しま
 tweets/{tweet}/comments/{comment}
 ```
 
-```php
+```blade
 <!-- resources/views/tweets/show.blade.php -->
 
 <x-app-layout>
@@ -218,16 +329,16 @@ tweets/{tweet}/comments/{comment}
           </div>
           @endif
           <div class="flex mt-4">
-            @if ($tweet->liked->contains(auth()->id()))
+            @if ($tweet->likedByUsers->contains(auth()->id()))
             <form action="{{ route('tweets.dislike', $tweet) }}" method="POST">
               @csrf
               @method('DELETE')
-              <button type="submit" class="text-red-500 hover:text-red-700">dislike {{$tweet->liked->count()}}</button>
+              <button type="submit" class="text-red-500 hover:text-red-700">💔 {{$tweet->likedByUsers->count()}}</button>
             </form>
             @else
             <form action="{{ route('tweets.like', $tweet) }}" method="POST">
               @csrf
-              <button type="submit" class="text-blue-500 hover:text-blue-700">like {{$tweet->liked->count()}}</button>
+              <button type="submit" class="text-blue-500 hover:text-blue-700">❤️ {{$tweet->likedByUsers->count()}}</button>
             </form>
             @endif
           </div>
@@ -239,7 +350,10 @@ tweets/{tweet}/comments/{comment}
             @foreach ($tweet->comments as $comment)
             <!-- 🔽 リンク追加 -->
             <a href="{{ route('tweets.comments.show', [$tweet, $comment]) }}">
-              <p>{{ $comment->comment }} <span class="text-gray-600 dark:text-gray-400 text-sm">{{ $comment->user->name }} {{ $comment->created_at->format('Y-m-d H:i') }}</span></p>
+              <div class="border-b border-gray-200 dark:border-gray-700 pb-2 mb-2 hover:bg-gray-50 dark:hover:bg-gray-700 p-2 rounded">
+                <p class="text-gray-800 dark:text-gray-300">{{ $comment->comment }}</p>
+                <p class="text-gray-600 dark:text-gray-400 text-sm">{{ $comment->user->name }} • {{ $comment->created_at->format('Y-m-d H:i') }}</p>
+              </div>
             </a>
             @endforeach
           </div>
@@ -278,9 +392,43 @@ public function show(Tweet $tweet, Comment $comment)
 }
 ```
 
+{% hint style="info" %}
+**ルートモデル結合（Route Model Binding）**
+
+`public function show(Tweet $tweet, Comment $comment)` のように書くことで、**ルートモデル結合**が自動的に行われます。
+
+**どういうこと？**
+- URL: `/tweets/5/comments/3`
+- `$tweet` → 自動的に `Tweet::find(5)` が実行される
+- `$comment` → 自動的に `Comment::find(3)` が実行される
+
+**従来の書き方との比較：**
+```php
+// ❌ 従来の書き方
+public function show($tweetId, $commentId)
+{
+  $tweet = Tweet::findOrFail($tweetId);
+  $comment = Comment::findOrFail($commentId);
+  return view('tweets.comments.show', compact('tweet', 'comment'));
+}
+
+// ✅ ルートモデル結合
+public function show(Tweet $tweet, Comment $comment)
+{
+  // $tweet と $comment は既にモデルインスタンス
+  return view('tweets.comments.show', compact('tweet', 'comment'));
+}
+```
+
+**メリット：**
+- コードが簡潔になる
+- 存在しないIDの場合、自動的に404エラーになる
+- 型安全性が向上する
+{% endhint %}
+
 コメント詳細画面に下記を記述します。 詳細画面リンクと同様に、更新と削除のルーティング部分もTweetとCommentの2つのパラメータを渡すため配列で設定します。
 
-```php
+```blade
 <!-- resources/views/tweets/comments/show.blade.php -->
 
 <x-app-layout>
@@ -322,9 +470,21 @@ public function show(Tweet $tweet, Comment $comment)
 
 ### 動作確認
 
+**基本的な動作：**
 * Tweet 詳細画面の「コメントする」クリックで Comment 作成画面に遷移
 * Comment 作成画面でコメントを入力して「コメントする」クリックで Comment が保存される
 * Comment 作成処理が完了すると Tweet 詳細画面に遷移する
 * Tweet 詳細画面に Comment 詳細画面へのリンクが追加される
 * Comment 詳細画面では Comment 作成者のみ編集削除が表示される（動作はまだ）
+
+**追加で確認すべきポイント：**
+* コメント数が正しく表示される
+* コメントが新しい順に表示される（`orderBy('created_at', 'desc')`の効果）
+* ログインユーザーのみコメント作成ができる
+* 他人のコメントには編集・削除ボタンが表示されない
+* コメント投稿者の名前が正しく表示される
+
+**発展課題：**
 * できる人は一覧画面にもコメント数を表示してみよう
+* コメントの文字数制限やバリデーションエラーの表示を確認してみよう
+* コメントにもページネーションを追加してみよう（コメントが多い場合）
