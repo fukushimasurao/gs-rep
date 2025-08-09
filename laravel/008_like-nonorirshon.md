@@ -195,6 +195,21 @@ return new class extends Migration
 };
 ```
 
+{% hint style="warning" %}
+**Point**
+
+【テーブル名とカラム名の命名規則】
+
+データをリレーションさせる場合のテーブル名及びカラム名には命名規則が存在します。
+
+* 1 対多のカラム名は「単数形のテーブル名の末尾に \_id をつける」
+* 多対多の中間テーブル名は「アルファベット順に並べたテーブル名の単数形をアンダースコアでつなげる」
+
+命名規則を守らなくてもモデルの設定でカスタマイズできますが、命名規則に従っておくと，モデルの設定を省略できます。
+
+Laravel では**可能な限り命名規則に従うことを強く推奨します。**
+{% endhint %}
+
 {% hint style="info" %}
 **外部キー制約の説明**
 - `$table->foreignId('tweet_id')->constrained()->cascadeOnDelete();`  
@@ -289,6 +304,7 @@ class User extends Authenticatable
     // 🔽 追加 🔽 
     public function likes()
     {
+        // belongsToManyなので、Laravelは自動的に多対多という関係性であることを認識 = 中間テーブルがあることを認識する。
         return $this->belongsToMany(Tweet::class)->withTimestamps();
     }
 }
@@ -312,6 +328,7 @@ class Tweet extends Model
     // 🔽 追加 🔽 
     public function likedByUsers()
     {
+        // belongsToManyなので、Laravelは自動的に多対多という関係性であることを認識 = 中間テーブルがあることを認識する。
         return $this->belongsToMany(User::class)->withTimestamps();
     }
 }
@@ -363,21 +380,6 @@ foreach ($likedTweets as $tweet) {
 **省略した場合：**
 - エラーにはならないが、いいねした日時が記録されない
 - 後で「いつユーザーがいいねしたか」を知ることができない
-{% endhint %}
-
-{% hint style="warning" %}
-**Point**
-
-【テーブル名とカラム名の命名規則】
-
-データをリレーションさせる場合のテーブル名及びカラム名には命名規則が存在します。
-
-* 1 対多のカラム名は「単数形のテーブル名の末尾に \_id をつける」
-* 多対多の中間テーブル名は「アルファベット順に並べたテーブル名の単数形をアンダースコアでつなげる」
-
-命名規則を守らなくてもモデルの設定でカスタマイズできますが、命名規則に従っておくと，モデルの設定を省略できます。
-
-Laravel では**可能な限り命名規則に従うことを強く推奨します。**
 {% endhint %}
 
 ## 動作確認
