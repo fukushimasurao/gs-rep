@@ -132,8 +132,9 @@ require __DIR__ . '/auth.php';
 store メソッドと destroy メソッドを実装しましょうお！！！！
 
 * ルートモデル結合を使用しているため指定した Tweet モデルのインスタンスを受け取ることが可能！
-* ユーザの情報は `auth()` ヘルパーを用いて取得します
-* 中間テーブルへのデータの追加は `attach` メソッドを用います。「指定した Tweet（の id）」と「認証ユーザの id」を一緒に中間テーブルに追加する動きをします。
+* `$tweet->likedByUsers()` ...から、Tweet modelの`likedByUsers()`を確認
+* Tweet modelの`belongsToMany(User::class)`から多対多であり、中間テーブルが`tweet_user`テーブルと認識
+* 中間テーブルへのデータの追加は `attach` メソッド。「指定した Tweet（の id）」と「認証ユーザの id」を一緒に中間テーブルに追加する
 * 同様に中間テーブルのデータ削除には `detach` メソッドを利用！
   * attach/detachを利用すると、勝手に中間テーブルに対して処理してくれるよ
 
