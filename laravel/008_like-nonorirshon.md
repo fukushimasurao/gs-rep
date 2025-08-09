@@ -105,6 +105,50 @@ Like機能では以下の関係が成り立ちます：
 **例：**
 - `tweets` と `users` テーブル → `tweet_user`（アルファベット順: t, u）
 - `posts` と `tags` テーブル → `post_tag`（アルファベット順: p, t）
+
+**中間テーブルにモデルは必要？**
+
+**今回のシンプルな実装では不要です。** ただし、中間テーブルに**追加の情報やビジネスロジック**が必要な場合はモデルを作成します。
+
+**❌ モデル不要なケース（今回の実装）:**
+```php
+// 基本的な多対多関係（誰が・何に・いつ）のみ
+// UserモデルとTweetモデルだけで十分
+$user->likes()->attach($tweet->id);     // いいね追加
+$user->likes()->detach($tweet->id);     // いいね削除
+$tweet->likedByUsers()->count();        // いいね数取得
+```
+
+**✅ モデルが必要になるケース:**
+中間テーブルに**追加の情報やロジック**を持たせたい場合：
+```php
+// 例: いいねの種類（ハート、親指など）や評価点数を保存
+Schema::create('tweet_user', function (Blueprint $table) {
+    $table->id();
+    $table->foreignId('tweet_id')->constrained();
+    $table->foreignId('user_id')->constrained();
+    $table->string('like_type')->default('heart'); // 追加情報
+    $table->integer('rating')->nullable();         // 追加情報
+    $table->text('comment')->nullable();           // いいねコメント
+    $table->timestamps();
+});
+
+// この場合は TweetUser モデルを作成
+class TweetUser extends Model {
+    protected $fillable = ['tweet_id', 'user_id', 'like_type', 'rating', 'comment'];
+    
+    // ビジネスロジックも追加可能
+    public function isHeartLike() {
+        return $this->like_type === 'heart';
+    }
+}
+```
+
+**つまり：**
+- **シンプルな関係のみ** → モデル不要（`belongsToMany`で十分）
+- **複雑な情報・ロジック** → モデル必要（専用クラスで管理）
+
+**今回のシンプルないいね機能では、基本的な情報（誰が・どのツイートに・いつ）だけで十分なため、モデルは不要です。**
 {% endhint %}
 
 ### マイグレーションファイルの編集
