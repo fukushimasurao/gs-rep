@@ -8,6 +8,8 @@
 * コメントはtweet詳細画面に一覧表示される。
 * 各コメントをクリックするとコメント詳細画面に移動できて、編集や削除ができる。
 
+<figure><img src="../.gitbook/assets/tweet-comment.jpg" alt=""><figcaption><p>tweetとcommentは、1対多の関係</p></figcaption></figure>
+
 ### 必要なファイルの作成 <a href="#nafairuno" id="nafairuno"></a>
 
 モデル、リソースコントローラ、マイグレーションファイルを作成する。
@@ -23,10 +25,11 @@ Tweet に関するファイルを作成するときと同様の流れ。
 
 `-rm`は複数のオプションを組み合わせたものです：
 
-- **`-r`** : リソースコントローラ（`CommentController`）を同時に作成
-- **`-m`** : マイグレーションファイルを同時に作成
+* **`-r`** : リソースコントローラ（`CommentController`）を同時に作成
+* **`-m`** : マイグレーションファイルを同時に作成
 
 **個別に実行する場合：**
+
 ```bash
 ./vendor/bin/sail artisan make:model Comment
 ./vendor/bin/sail artisan make:controller CommentController --resource
@@ -34,9 +37,10 @@ Tweet に関するファイルを作成するときと同様の流れ。
 ```
 
 **他の便利なオプション：**
-- `-f` : ファクトリファイルも作成
-- `-s` : シーダーファイルも作成
-- `-a` : 全て作成（`-rmfs`と同じ）
+
+* `-f` : ファクトリファイルも作成
+* `-s` : シーダーファイルも作成
+* `-a` : 全て作成（`-rmfs`と同じ）
 
 複数のファイルを一度に作成できるため、開発効率が向上します。
 {% endhint %}
@@ -116,6 +120,7 @@ Commentは以下の2つの情報を持つ必要があります：
 2. **誰が投稿したコメントか** → `user_id`（User との関係）
 
 **具体例：**
+
 ```
 Comment ID: 1
 ├── tweet_id: 5 (ツイートID 5「今日はいい天気！」に対するコメント)
@@ -124,19 +129,24 @@ Comment ID: 1
 ```
 
 **テーブル設計での表現：**
-| id | tweet_id | user_id | comment | created_at |
-|----|----------|---------|---------|------------|
-| 1  | 5        | 3       | 本当にいい天気ですね！ | 2023-12-01 10:30:00 |
+{% endhint %}
 
+| id | tweet\_id | user\_id | comment     | created\_at         |
+| -- | --------- | -------- | ----------- | ------------------- |
+| 1  | 5         | 3        | 本当にいい天気ですね！ | 2023-12-01 10:30:00 |
+
+{% hint style="info" %}
 この1つのコメントレコードによって：
-- 「ツイート5に紐づくコメント」として表示できる
-- 「ユーザー3が投稿したコメント」として管理できる
+
+* 「ツイート5に紐づくコメント」として表示できる
+* 「ユーザー3が投稿したコメント」として管理できる
 
 **リレーションの方向：**
-- **Tweet → Comments**: 1対多（1つのツイートに複数のコメント）
-- **User → Comments**: 1対多（1人のユーザーが複数のコメントを投稿）
-- **Comment → Tweet**: 多対1（1つのコメントは1つのツイートに属する）
-- **Comment → User**: 多対1（1つのコメントは1人のユーザーが投稿）
+
+* **Tweet → Comments**: 1対多（1つのツイートに複数のコメント）
+* **User → Comments**: 1対多（1人のユーザーが複数のコメントを投稿）
+* **Comment → Tweet**: 多対1（1つのコメントは1つのツイートに属する）
+* **Comment → User**: 多対1（1つのコメントは1人のユーザーが投稿）
 {% endhint %}
 
 これら３つの関係者のモデルファイルに設定を書きます。 つまり、
@@ -232,8 +242,7 @@ class Tweet extends Model
 
 ### ビューファイルの作成
 
-コメント機能で使用するビューファイルを作成しましょう。
-TweetのCRUD処理とほとんど同じだが、コメント一覧は `tweets.show` に追加するため `index.blade.php` は作成しなくて OK．
+コメント機能で使用するビューファイルを作成しましょう。 TweetのCRUD処理とほとんど同じだが、コメント一覧は `tweets.show` に追加するため `index.blade.php` は作成しなくて OK．
 
 ```bash
 ./vendor/bin/sail artisan make:view tweets.comments.create
@@ -245,8 +254,7 @@ TweetのCRUD処理とほとんど同じだが、コメント一覧は `tweets.sh
 
 リソースコントローラを使用しているのでルーティングは1行書くだけでok
 
-ただし、CommentはTweetに従うためルーティングは`tweets.comments` となります。
-このような記述を行う理由として、Comment に対する処理（表示，編集，削除）を行う場合に Comment の元の Tweet の情報が必要となるためです。
+ただし、CommentはTweetに従うためルーティングは`tweets.comments` となります。 このような記述を行う理由として、Comment に対する処理（表示，編集，削除）を行う場合に Comment の元の Tweet の情報が必要となるためです。
 
 ルーティングを上記のように記述すると Tweet の情報も合わせて得ることができます（後述）。
 
@@ -258,6 +266,7 @@ TweetのCRUD処理とほとんど同じだが、コメント一覧は `tweets.sh
 **通常のリソースルーティングとの比較：**
 
 **❌ 通常の場合（`Route::resource('comments', CommentController::class)`）:**
+
 ```
 GET    /comments          → index
 POST   /comments          → store
@@ -269,6 +278,7 @@ DELETE /comments/{id}     → destroy
 ```
 
 **✅ ネストした場合（`Route::resource('tweets.comments', CommentController::class)`）:**
+
 ```
 GET    /tweets/{tweet}/comments          → index
 POST   /tweets/{tweet}/comments          → store
@@ -280,15 +290,17 @@ DELETE /tweets/{tweet}/comments/{comment} → destroy
 ```
 
 **メリット：**
-- URLから「どのツイートに対するコメントか」が明確
-- コントローラーで`$tweet`パラメータが自動で取得可能
-- RESTfulな設計に従った分かりやすいURL構造
-- ルートモデル結合により、`Tweet`モデルのインスタンスが自動注入される
+
+* URLから「どのツイートに対するコメントか」が明確
+* コントローラーで`$tweet`パラメータが自動で取得可能
+* RESTfulな設計に従った分かりやすいURL構造
+* ルートモデル結合により、`Tweet`モデルのインスタンスが自動注入される
 
 **実際の使用例：**
-- ツイートID 5 のコメント一覧: `/tweets/5/comments`
-- ツイートID 5 のコメント作成: `/tweets/5/comments/create`
-- ツイートID 5 のコメントID 3 の詳細: `/tweets/5/comments/3`
+
+* ツイートID 5 のコメント一覧: `/tweets/5/comments`
+* ツイートID 5 のコメント作成: `/tweets/5/comments/create`
+* ツイートID 5 のコメントID 3 の詳細: `/tweets/5/comments/3`
 {% endhint %}
 
 ```php

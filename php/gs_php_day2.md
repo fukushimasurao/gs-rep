@@ -1,4 +1,4 @@
-# 😁 012\_gs\_php\_day2
+# 012\_gs\_php\_day2
 
 ### 授業資料 <a href="#shou-ye-zi-liao" id="shou-ye-zi-liao"></a>
 
