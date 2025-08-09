@@ -3,12 +3,67 @@
 ### ここでやりたいこと
 
 * 各tweetに対してコメントを投稿できるようにする。
-* tweetとコメントは一対多の関係にする。
+* tweetとコメントは一対多の関係にする。更にuserとコメントは一対多の関係にする。
 * コメントはtweet詳細画面からコメント投稿画面に移動して投稿する。
 * コメントはtweet詳細画面に一覧表示される。
 * 各コメントをクリックするとコメント詳細画面に移動できて、編集や削除ができる。
 
-<figure><img src="../.gitbook/assets/tweet-comment.jpg" alt=""><figcaption><p>tweetとcommentは、1対多の関係</p></figcaption></figure>
+{% hint style="info" %}
+**Comment の リレーション関係図**
+
+Comment は **Tweet** と **User** の両方と関係を持ちます：
+
+```mermaid
+erDiagram
+    User {
+        bigint id PK
+        string name
+        string email
+        timestamp created_at
+        timestamp updated_at
+    }
+    
+    Tweet {
+        bigint id PK
+        string tweet
+        bigint user_id FK
+        timestamp created_at
+        timestamp updated_at
+    }
+    
+    Comment {
+        bigint id PK
+        string comment
+        bigint user_id FK
+        bigint tweet_id FK
+        timestamp created_at
+        timestamp updated_at
+    }
+    
+    User ||--o{ Tweet : "1人のユーザーが複数のツイートを投稿"
+    User ||--o{ Comment : "1人のユーザーが複数のコメントを投稿"
+    Tweet ||--o{ Comment : "1つのツイートに複数のコメントが投稿される"
+```
+
+**関係性の説明：**
+- **1つのUser** → **複数のComment** を投稿可能
+- **1つのTweet** → **複数のComment** を受け取り可能  
+- **1つのComment** → **1つのUser** が投稿（belongsTo）
+- **1つのComment** → **1つのTweet** に属する（belongsTo）
+
+**実際のテーブル構造：**
+| comment_id | user_id | tweet_id | comment | created_at |
+|------------|---------|----------|---------|------------|
+| 1 | 2 (山田花子) | 1 (快晴ツイート) | 本当ですね！ | 2023-12-01 10:30:00 |
+| 2 | 3 (佐藤次郎) | 1 (快晴ツイート) | 散歩したい | 2023-12-01 11:00:00 |
+| 3 | 1 (田中太郎) | 2 (雨ツイート) | 家にいよう | 2023-12-01 12:00:00 |
+
+この設計により：
+- **ツイート詳細画面**でそのツイートの全コメントを表示
+- **ユーザープロフィール**でそのユーザーの全コメントを表示
+- **コメント権限管理**（編集・削除は投稿者のみ）
+が可能になります。
+{% endhint %}
 
 ### 必要なファイルの作成 <a href="#nafairuno" id="nafairuno"></a>
 
