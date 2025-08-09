@@ -265,58 +265,6 @@ like ボタンはユーザが like しているかどうかによって like（l
 
 ```
 
-
-{% hint style="info" %}
-**`$tweet->likedByUsers->contains(auth()->id())` の処理詳細**
-
-この処理は以下のような流れで動作します：
-
-**1. データ取得：**
-```php
-$tweet->likedByUsers // このツイートにいいねした全ユーザーを取得
-// 例：[User1, User2, User3, User4, User5] のコレクション
-```
-
-**2. contains()による検索：**
-```php
-->contains(auth()->id()) // コレクション内に現在ログイン中のユーザーIDが含まれているか確認
-// 例：auth()->id() = 3 の場合、User3が含まれているかチェック
-```
-
-**メリット：**
-- 簡単で分かりやすいコード
-- Eloquentの機能をそのまま活用
-
-**デメリット（パフォーマンス面）：**
-- いいねユーザー全員のデータを取得してからチェック
-- ユーザー数が多いと非効率（100人いいねしていても全員取得）
-
-**より効率的な書き方：**
-```php
-// ❌ 現在の書き方（全ユーザー取得してから検索）
-@if ($tweet->likedByUsers->contains(auth()->id()))
-
-// ✅ より効率的な書き方（存在チェックのみ）
-@if ($tweet->likedByUsers()->where('user_id', auth()->id())->exists())
-```
-
-**実際のSQL比較：**
-```sql
--- 現在の方法：全ユーザーを取得してPHPで検索
-SELECT users.* FROM users 
-INNER JOIN tweet_user ON users.id = tweet_user.user_id 
-WHERE tweet_user.tweet_id = 1;
-
--- より効率的な方法：存在チェックのみ
-SELECT 1 FROM tweet_user 
-WHERE tweet_id = 1 AND user_id = 3 
-LIMIT 1;
-```
-
-今回の実装では学習のためシンプルな書き方を採用していますが、実際のプロダクションでは効率的な方法を検討しましょう。
-{% endhint %}
-
-
 ### 詳細画面
 
 詳細画面も一覧画面と同様に，like ボタンと like 数を表示します
@@ -375,6 +323,58 @@ LIMIT 1;
 </x-app-layout>
 
 ```
+
+{% hint style="info" %}
+**`$tweet->likedByUsers->contains(auth()->id())` の処理詳細**
+
+この処理は以下のような流れで動作します：
+
+**1. データ取得：**
+```php
+$tweet->likedByUsers // このツイートにいいねした全ユーザーを取得
+// 例：[User1, User2, User3, User4, User5] のコレクション
+```
+
+**2. contains()による検索：**
+```php
+->contains(auth()->id()) // コレクション内に現在ログイン中のユーザーIDが含まれているか確認
+// 例：auth()->id() = 3 の場合、User3が含まれているかチェック
+```
+
+**メリット：**
+- 簡単で分かりやすいコード
+- Eloquentの機能をそのまま活用
+
+**デメリット（パフォーマンス面）：**
+- いいねユーザー全員のデータを取得してからチェック
+- ユーザー数が多いと非効率（100人いいねしていても全員取得）
+
+**より効率的な書き方：**
+```php
+// ❌ 現在の書き方（全ユーザー取得してから検索）
+@if ($tweet->likedByUsers->contains(auth()->id()))
+
+// ✅ より効率的な書き方（存在チェックのみ）
+@if ($tweet->likedByUsers()->where('user_id', auth()->id())->exists())
+```
+
+**実際のSQL比較：**
+```sql
+-- 現在の方法：全ユーザーを取得してPHPで検索
+SELECT users.* FROM users 
+INNER JOIN tweet_user ON users.id = tweet_user.user_id 
+WHERE tweet_user.tweet_id = 1;
+
+-- より効率的な方法：存在チェックのみ
+SELECT 1 FROM tweet_user 
+WHERE tweet_id = 1 AND user_id = 3 
+LIMIT 1;
+```
+
+今回の実装では学習のためシンプルな書き方を採用していますが、実際のプロダクションでは効率的な方法を検討しましょう。
+{% endhint %}
+
+
 
 ### 動作確認
 
