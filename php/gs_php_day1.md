@@ -355,7 +355,7 @@ foreach ($variable as $key => $value) {
 
 ### while 文に触れる
 
-foreach は、回数が決まっているものに対して繰り返しをおこなります。
+foreach は、配列の要素数分繰り返すものです。
 
 一方で、回数が決まっていない・条件がある限り繰り返しには、`while文`があります。
 
@@ -692,7 +692,7 @@ echo nl2br($data);
 
 記述後、ブラウザで`read.php`を開いて、保存したデータがブラウザで閲覧できることを確認してください。
 
-<figure><img src="../.gitbook/assets/スクリーンショット 2022-12-04 18.48.51.png" alt=""><figcaption><p>txtに記述したないようが表示されればok</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/スクリーンショット 2022-12-04 18.48.51.png" alt=""><figcaption><p>txtに記述した内容が表示されればok</p></figcaption></figure>
 
 ### `input.php`から`write.php`に内容を送ってみよう
 
