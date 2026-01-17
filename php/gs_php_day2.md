@@ -99,7 +99,7 @@ MySQLデータベースサーバーには、以下の方法でアクセスでき
 4. 作成クリック。
 5. 特にエラーの文言が出なければ ok
 
-![](<../.gitbook/assets/スクリーンショット 2022-01-16 11.29.50.png>)
+<figure><img src="../.gitbook/assets/DB作成.png" alt=""><figcaption></figcaption></figure>
 
 ### 新規テーブル作成
 
