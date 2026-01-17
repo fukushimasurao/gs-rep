@@ -415,6 +415,22 @@ loginCheck();
 
 kanri\_flgにより処理を分けたい場合、以下のコードを追加
 
+(1)
+`login_act.php`にてlogin 処理にてSESSIONに`kanri_flg`を持たせる。
+これで、loginした時に`$_SESSION['kanri_flg']`にこの人のkanri_flgが保持される。
+```php
+if( $val['id'] != '' ){
+  session_regenerate_id(true);
+  $_SESSION['chk_ssid']  = session_id();
+
+  // 🌟これ↓
+  $_SESSION['kanri_flg'] = $val['kanri_flg'];
+
+  redirect('select.php');
+```
+
+(2)
+kanri_flg使いたいところで利用する。
 ```php
 // もし管理者の場合
 if($_SESSION['kanri_flg'] === 1) {
