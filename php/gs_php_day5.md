@@ -523,7 +523,7 @@ join students on clubs_students.students_id= students.id;
 
 ### 画像登録処理の方法を知る。
 
-{% hint style="info" %}
+{% hint style="danger" %}
 **Macの場合の権限設定**
 
 1. Finderで`img`フォルダを右クリック
@@ -579,8 +579,8 @@ join students on clubs_students.students_id= students.id;
 </form>
 ```
 
-{% hint style="info" %}
 受け取り側の`insert.php`にて、以下`var_dump`して、`$_FILES`の中身を見てみましょう。
+
 ```php
 echo '<pre>';
 var_dump($_FILES);
@@ -616,7 +616,7 @@ array(1) {
 }
 ```
 
-```
+````
 {% hint style="info" %}
 
 ### `insert.php`の修正
@@ -662,7 +662,7 @@ if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
         exit();
     }
 }
-```
+````
 
 {% hint style="info" %}
 **一時ファイルについて**
@@ -670,9 +670,11 @@ if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
 `$_FILES['image']['tmp_name']`には、サーバーの一時フォルダ（例：`/tmp/phpXXXXXX`）にアップロードされたファイルのパスが格納されます。
 
 ⚠️ **重要な注意点**:
-- この一時ファイルは**PHPスクリプト ""終了後"" に自動削除**されます
-- `move_uploaded_file()`を使って、永続的な場所に移動する必要があります
-- 一時ファイル名（`phpAS5lOl`など）は毎回ランダムに生成されます
+
+* この一時ファイルは**PHPスクリプト ""終了後"" に自動削除**されます
+* `move_uploaded_file()`を使って、永続的な場所に移動する必要があります
+* 一時ファイル名（`phpAS5lOl`など）は毎回ランダムに生成されます
+
 ```php
 // 一時ファイル → 永続的な保存
 move_uploaded_file(
@@ -682,13 +684,11 @@ move_uploaded_file(
 ```
 {% endhint %}
 
-{% hint style="warning" %}
-**セキュリティ注意点**
+{% hint style="info" %}
+よりよいセキュリティ
 
-* アップロード可能なファイル形式を制限する
-例: `pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION) === 'png'`
-* ファイルサイズの上限を設定する
-例: `$_FILES['image']['size'] > 5 * 1024 * 1024` ( ← 5MBに制限 )
+* アップロード可能なファイル形式を制限する 例: `pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION) === 'png'` ← png形式だけに制限
+* ファイルサイズの上限を設定する 例: `$_FILES['image']['size'] > 5 * 1024 * 1024` ← 5MBに制限&#x20;
 * ファイル名にユニークな名前を付けることで、同名ファイルの上書きを防ぐ
 {% endhint %}
 
@@ -718,13 +718,11 @@ if($status === false) {
 `detail.php`にて登録した画像を表示してみましょう。
 
 {% hint style="info" %}
-
 **画像表示の仕組み**
 
 1. データベースから画像のファイルパスを取得
 2. HTMLの`<img>`タグの`src`属性にファイルパスを設定
 3. ブラウザが指定されたパスから画像を読み込んで表示
-
 {% endhint %}
 
 基本的には、DBのimageカラムに画像の格納先があるので、これを`<img>`タグのsrcに記述するだけです。
@@ -782,14 +780,14 @@ $view .= '</p></div>';
 
 #### 発展
 
-ここまでできたら既存の画像をアップデートする処理も必要です。 チャレンジしてみましょう。
-【画像アップデートのイメージ】
-- detailにimageのformを追加。画像を送れるようにする。
-- update側にて、もし更新用の画像が来たら、
-  - バリデーション処理
-  - 画像保存
-  - テーブルのpathを変更
-  - 古い画像を消す
+ここまでできたら既存の画像をアップデートする処理も必要です。 チャレンジしてみましょう。 【画像アップデートのイメージ】
+
+* detailにimageのformを追加。画像を送れるようにする。
+* update側にて、もし更新用の画像が来たら、
+  * バリデーション処理
+  * 画像保存
+  * テーブルのpathを変更
+  * 古い画像を消す
 
 ***
 
