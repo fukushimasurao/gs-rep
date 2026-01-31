@@ -579,6 +579,45 @@ join students on clubs_students.students_id= students.id;
 </form>
 ```
 
+{% hint style="info" %}
+受け取り側の`insert.php`にて、以下`var_dump`して、`$_FILES`の中身を見てみましょう。
+```php
+echo '<pre>';
+var_dump($_FILES);
+echo '</pre>';
+exit();
+
+↓
+
+```
+//※ 例
+array(1) {
+  ["image"]=>  // フォームのname属性の値
+  array(6) {
+    ["name"]=>      // 元のファイル名
+    string(10) "dora_7.png"
+    
+    ["full_path"]=> // 元のフルパス（PHP 8.1以降）
+    string(10) "dora_7.png"
+    
+    ["type"]=>      // MIMEタイプ
+    string(9) "image/png"
+    
+    ["tmp_name"]=>  // 一時保存場所
+    string(45) "/Applications/XAMPP/xamppfiles/temp/phpAS5lOl"
+    
+    ["error"]=>     // エラーコード（0=成功）
+    int(0)
+    
+    ["size"]=>      // ファイルサイズ（バイト）
+    int(102991)  // 約100KB
+  }
+}
+```
+
+```
+{% hint style="info" %}
+
 ### `insert.php`の修正
 
 `form`を受け取る`insert.php`も修正します。
@@ -600,12 +639,18 @@ $user_id = $_SESSION['user_id'];
 $image = '';
 if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
     // アップロードする画像をリネームする準備
-    $upload_file = $_FILES['image']['tmp_name'];
+
+    // 拡張子確認
     $extension = pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION);
+
+    // ランダムな文字列 + 確認した拡張子を用意
     $new_name = uniqid() . '.' . $extension;
 
-    // image_pathを確認
+    // 保存する予定のimage_pathを用意
     $image_path = 'img/' . $new_name;
+
+    // Formから送られてきた画像の一時保存先を確認
+    $upload_file = $_FILES['image']['tmp_name'];
 
     // move_uploaded_file()で、一時的に保管されているファイルをimage_pathに移動させる。
     if (move_uploaded_file($upload_file, $image_path)) {
@@ -618,11 +663,31 @@ if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
 }
 ```
 
+{% hint style="info" %}
+**一時ファイルについて**
+
+`$_FILES['image']['tmp_name']`には、サーバーの一時フォルダ（例：`/tmp/phpXXXXXX`）にアップロードされたファイルのパスが格納されます。
+
+⚠️ **重要な注意点**:
+- この一時ファイルは**PHPスクリプト ""終了後"" に自動削除**されます
+- `move_uploaded_file()`を使って、永続的な場所に移動する必要があります
+- 一時ファイル名（`phpAS5lOl`など）は毎回ランダムに生成されます
+```php
+// 一時ファイル → 永続的な保存
+move_uploaded_file(
+    $_FILES['image']['tmp_name'],  // 一時ファイル（自動削除される）
+    'img/' . $new_name              // 永続的な保存先
+);
+```
+{% endhint %}
+
 {% hint style="warning" %}
 **セキュリティ注意点**
 
 * アップロード可能なファイル形式を制限する
+例: `pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION) === 'png'`
 * ファイルサイズの上限を設定する
+例: `$_FILES['image']['size'] > 5 * 1024 * 1024` ( ← 5MBに制限 )
 * ファイル名にユニークな名前を付けることで、同名ファイルの上書きを防ぐ
 {% endhint %}
 
@@ -717,6 +782,13 @@ $view .= '</p></div>';
 #### 発展
 
 ここまでできたら既存の画像をアップデートする処理も必要です。 チャレンジしてみましょう。
+【画像アップデートのイメージ】
+- detailにimageのformを追加。画像を送れるようにする。
+- update側にて、もし更新用の画像が来たら、
+  - バリデーション処理
+  - 画像保存
+  - テーブルのpathを変更
+  - 古い画像を消す
 
 ***
 
