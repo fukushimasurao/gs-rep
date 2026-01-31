@@ -717,7 +717,7 @@ if($status === false) {
 
 `detail.php`にて登録した画像を表示してみましょう。
 
-\{% hint style="info" %\}
+{% hint style="info" %}
 
 **画像表示の仕組み**
 
@@ -725,7 +725,7 @@ if($status === false) {
 2. HTMLの`<img>`タグの`src`属性にファイルパスを設定
 3. ブラウザが指定されたパスから画像を読み込んで表示
 
-\{% endhint %\}
+{% endhint %}
 
 基本的には、DBのimageカラムに画像の格納先があるので、これを`<img>`タグのsrcに記述するだけです。
 
