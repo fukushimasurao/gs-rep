@@ -345,8 +345,9 @@ tweets/{tweet}/comments/{comment}
             <a href="{{ route('tweets.comments.create', $tweet) }}" class="text-blue-500 hover:text-blue-700 mr-2">コメントする</a>
           </div>
           <div class="mt-4">
+
+            <!-- 🔽 @foreachの中身を変更 -->
             @foreach ($tweet->comments as $comment)
-            <!-- 🔽 リンク追加 -->
             <a href="{{ route('tweets.comments.show', [$tweet, $comment]) }}">
               <div class="border-b border-gray-200 dark:border-gray-700 pb-2 mb-2 hover:bg-gray-50 dark:hover:bg-gray-700 p-2 rounded">
                 <p class="text-gray-800 dark:text-gray-300">{{ $comment->comment }}</p>
@@ -354,6 +355,8 @@ tweets/{tweet}/comments/{comment}
               </div>
             </a>
             @endforeach
+            <!-- ⬆️ ここまで @foreachの中身を変更 -->
+
           </div>
         </div>
       </div>
