@@ -17,7 +17,7 @@
 
 1. Laravel プロジェクトの作成（`curl -s "https://laravel.build/laratter" | bash`）
 2. プロジェクトディレクトリへの移動（`cd laratter`）
-3. docker-compose.yml への phpMyAdmin 設定追加
+3. compose.yaml への phpMyAdmin 設定追加
 4. `./vendor/bin/sail up -d` でのコンテナ起動
 
 ※ 動画内の一部コマンドと下記テキストで差異がある場合は、**下記テキストを正**として進めてください。
@@ -29,11 +29,11 @@
 
 ## 目次
 
-1. [事前準備](gs_laravel_docker_for_mac.md#事前準備)
-2. [Dockerとは？](gs_laravel_docker_for_mac.md#dockerとは)
-3. [Laravel Sailの導入](gs_laravel_docker_for_mac.md#laravel-sailの導入)
-4. [プロジェクトの起動と確認](gs_laravel_docker_for_mac.md#プロジェクトの起動と確認)
-5. [phpMyAdminの設定](gs_laravel_docker_for_mac.md#phpmyadminの設定)
+1. [事前準備](001_2_gs_laravel_docker_for_mac.md#事前準備)
+2. [Dockerとは？](001_2_gs_laravel_docker_for_mac.md#dockerとは)
+3. [Laravel Sailの導入](001_2_gs_laravel_docker_for_mac.md#laravel-sailの導入)
+4. [プロジェクトの起動と確認](001_2_gs_laravel_docker_for_mac.md#プロジェクトの起動と確認)
+5. [phpMyAdminの設定](001_2_gs_laravel_docker_for_mac.md#phpmyadminの設定)
 
 ***
 
@@ -203,21 +203,21 @@ cd laratter
 ## phpMyAdminの設定
 
 {% hint style="success" %}
-**🎥 動画で詳しく解説** docker-compose.yml への phpMyAdmin 設定追加が詳しく説明されています。
+**🎥 動画で詳しく解説** compose.yaml への phpMyAdmin 設定追加が詳しく説明されています。
 {% endhint %}
 
 データベースを視覚的に管理するため、phpMyAdminを追加します。
 
-### docker-compose.ymlファイルの編集
+### compose.yamlファイルの編集
 
 {% hint style="info" %}
-**docker-compose.ymlファイルの場所** `docker-compose.yml` ファイルは、先ほど作成した `laratter` フォルダの中にあります。
+**compose.yamlファイルの場所** `compose.yaml` ファイルは、先ほど作成した `laratter` フォルダの中にあります。
 
 **具体的な場所:**
 
 * ターミナルで `cd laratter` を実行した場所
 * VS Codeなどのエディタで `laratter` フォルダを開いた時に、フォルダの直下に表示されるファイル
-* ファイル名は `docker-compose.yml`（拡張子は `.yml`）
+* ファイル名は `compose.yaml`（拡張子は `.yml`）
 {% endhint %}
 
 {% hint style="warning" %}
@@ -228,10 +228,10 @@ cd laratter
 * 気になる人は、生成AIと相談しながら記述することを推奨します
 {% endhint %}
 
-`laratter` フォルダ内の `docker-compose.yml` ファイルを開き、以下を追加：
+`laratter` フォルダ内の `compose.yaml` ファイルを開き、以下を追加：
 
 {% hint style="warning" %}
-**追加する場所に注意！** 以下のコードは、`docker-compose.yml` ファイルの **`networks:` より上の位置** に追加してください。 具体的には、既存のサービス（`laravel.test`, `mysql`, `redis` など）と同じレベルで追加します。
+**追加する場所に注意！** 以下のコードは、`compose.yaml` ファイルの **`networks:` より上の位置** に追加してください。 具体的には、既存のサービス（`laravel.test`, `mysql`, `redis` など）と同じレベルで追加します。
 {% endhint %}
 
 ```yaml
@@ -250,7 +250,7 @@ phpmyadmin:
 ```
 
 {% hint style="info" %}
-**設定内容の確認** `docker-compose.yml` の内容を生成AIに見せて、インデントや改行が正しいか確認してください。YAMLファイルは記述ミスがあると動作しません。
+**設定内容の確認** `compose.yaml` の内容を生成AIに見せて、インデントや改行が正しいか確認してください。YAMLファイルは記述ミスがあると動作しません。
 {% endhint %}
 
 {% hint style="info" %}
@@ -303,7 +303,7 @@ platform: linux/amd64
 
 **コマンドが認識されない** → プロジェクトディレクトリ（`laratter`フォルダ）内で実行しているか確認
 
-**M1/M2 Mac での動作不具合** → docker-compose.yml に `platform: linux/amd64` を追加
+**M1/M2 Mac での動作不具合** → compose.yaml に `platform: linux/amd64` を追加
 
 ***
 
@@ -318,7 +318,7 @@ platform: linux/amd64
 
 1. **Laravel プロジェクトの作成**
 2. **プロジェクトディレクトリへの移動**
-3. **docker-compose.yml への phpMyAdmin 設定追加**
+3. **compose.yaml への phpMyAdmin 設定追加**
 4. **`./vendor/bin/sail up -d` でのコンテナ起動**
 
 **推奨**: テキストと合わせて動画を視聴することで、より確実に環境構築ができます。

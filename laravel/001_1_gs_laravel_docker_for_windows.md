@@ -20,7 +20,7 @@
 3. PowerShell で `wsl --list --verbose` を実行してUbuntu確認
 4. WSL Ubuntu の起動
 5. Ubuntu ターミナルで `curl -s "https://laravel.build/laratter" | bash` を実行
-6. docker-compose.yml への phpMyAdmin 設定追加
+6. compose.yaml への phpMyAdmin 設定追加
 7. `./vendor/bin/sail up -d` でのコンテナ起動
 
 ※ 動画内の一部コマンドと下記テキストで差異がある場合は、**下記テキストを正**として進めてください。
@@ -235,21 +235,21 @@ Ubuntuターミナルで以下のコマンドを実行：
 ## phpMyAdminの設定
 
 {% hint style="success" %}
-**🎥 動画で詳しく解説** docker-compose.yml への phpMyAdmin 設定追加が詳しく説明されています。
+**🎥 動画で詳しく解説** compose.yaml への phpMyAdmin 設定追加が詳しく説明されています。
 {% endhint %}
 
 データベースを視覚的に管理するため、phpMyAdminを追加します。
 
-### docker-compose.ymlファイルの編集
+### compose.yamlファイルの編集
 
 {% hint style="info" %}
-**docker-compose.ymlファイルの場所** `docker-compose.yml` ファイルは、先ほど作成した `laratter` フォルダの中にあります。
+**compose.yamlファイルの場所** `compose.yaml` ファイルは、先ほど作成した `laratter` フォルダの中にあります。
 
 **具体的な場所:**
 
 * WSL Ubuntuターミナルで `cd laratter` を実行した場所
 * VS Codeなどのエディタで `laratter` フォルダを開いた時に、フォルダの直下に表示されるファイル
-* ファイル名は `docker-compose.yml`（拡張子は `.yml`）
+* ファイル名は `compose.yaml`（拡張子は `.yml`）
 {% endhint %}
 
 {% hint style="warning" %}
@@ -260,10 +260,10 @@ Ubuntuターミナルで以下のコマンドを実行：
 * 気になる人は、生成AIと相談しながら記述することを推奨します
 {% endhint %}
 
-`laratter` フォルダ内の `docker-compose.yml` ファイルを開き、以下を追加：
+`laratter` フォルダ内の `compose.yaml` ファイルを開き、以下を追加：
 
 {% hint style="warning" %}
-**追加する場所に注意！** 以下のコードは、`docker-compose.yml` ファイルの **`networks:` より上の位置** に追加してください。 具体的には、既存のサービス（`laravel.test`, `mysql`, `redis` など）と同じレベルで追加します。
+**追加する場所に注意！** 以下のコードは、`compose.yaml` ファイルの **`networks:` より上の位置** に追加してください。 具体的には、既存のサービス（`laravel.test`, `mysql`, `redis` など）と同じレベルで追加します。
 {% endhint %}
 
 ```bash
@@ -282,7 +282,7 @@ phpmyadmin:
 ```
 
 {% hint style="info" %}
-**設定内容の確認** `docker-compose.yml` の内容を生成AIに見せて、インデントや改行が正しいか確認してください。YAMLファイルは記述ミスがあると動作しません。
+**設定内容の確認** `compose.yaml` の内容を生成AIに見せて、インデントや改行が正しいか確認してください。YAMLファイルは記述ミスがあると動作しません。
 {% endhint %}
 
 ### phpMyAdminの利用方法
@@ -346,7 +346,7 @@ phpmyadmin:
 2. **Docker Desktop の設定確認**（Disk image location を `Docker\wsl` に設定）
 3. **PowerShell で WSL の確認**（`wsl --list --verbose` コマンド実行）
 4. **WSL Ubuntu の起動と Laravel プロジェクト作成**
-5. **docker-compose.yml への phpMyAdmin 設定追加**
+5. **compose.yaml への phpMyAdmin 設定追加**
 6. **`./vendor/bin/sail up -d` でのコンテナ起動**
 
 **推奨**: テキストと合わせて動画を視聴することで、より確実に環境構築ができます。
