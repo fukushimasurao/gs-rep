@@ -68,7 +68,7 @@ class TweetController extends Controller
 {
   public function index()
   {
-    // ⭐️追加↓
+    // ⭐️追加↓ 全ツイート(Tweet)を、それぞれの投稿者情報も含めて(with('user'))、新しい順で取得(latest()->get())
     $tweets = Tweet::with('user')->latest()->get();
 
     // ⭐️追加↓
