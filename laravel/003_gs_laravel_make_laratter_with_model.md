@@ -336,7 +336,13 @@ class User extends Authenticatable
 **リレーションシップの説明**
 - UserからみるとTweetを複数持っている1対多なので、`hasMany`を使用します
 - `tweets()`はメソッドです
-- UserからTweetを取得するために`tweets()`メソッドが利用できることを覚えておいてください
+{% endhint %}
+
+{% hint style="info" %}
+**tweets()を定義する理由**
+- 直接SQLを書いてUserと紐づくTweetを取得することも可能ですが、毎回`Tweet::where('user_id', $user->id)->get()`と書くのは面倒です
+- `tweets()`を定義しておくことで、`$user->tweets`と簡潔に書けるようになります
+- また、N+1問題対策（`User::with('tweets')`）や、リレーション経由でのデータ作成（`$user->tweets()->create([...])`）など、便利な機能も使えるようになります
 {% endhint %}
 
 ### Tweetモデルの設定
