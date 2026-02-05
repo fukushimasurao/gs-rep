@@ -56,7 +56,12 @@ cd laratter
 - CSS/JSファイルの設定も自動で行われます
 {% endhint %}
 
-コマンドを実行すると、以下のような選択肢が表示されます。**すべてEnterキーを押してデフォルトを選択してください：**
+コマンドを実行すると、以下のような選択肢が表示されます。
+基本Enter押してれば問題ないですが、
+**Which testing framework do you prefer? に関しては、PHPUnitを選択してください。**
+**Pestを選択すると、次に進めません**
+※もし進めなくなったら、ファイルをすべて削除 → 最初から`curl -s "https://laravel.build/laratter" | bash`からやり直しです。
+
 
 ```bash
  ┌ Which Breeze stack would you like to install? ─┐
@@ -68,13 +73,13 @@ cd laratter
  └────────────────────────────────────────────────┘
 
  ┌ Which testing framework do you prefer? ────────┐
- │ PHPUnit                                        │  ← Enterで選択
+ │ PHPUnit                                        │  ← キーボードの矢印でPHPUnitを選択してEnter
  └────────────────────────────────────────────────┘
 ```
 
 {% hint style="warning" %}
 **選択について**
-今回は学習目的のため、すべてデフォルト設定（Enterキー）で進めてください。各選択肢の詳細は、Laravel上級者になってから学習することをお勧めします。
+各選択肢の詳細は、Laravel上級者になってから学習することをお勧めします。
 {% endhint %}
 
 ### 手順3: フロントエンドファイルのビルド
