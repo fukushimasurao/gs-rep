@@ -101,12 +101,12 @@ class TweetController extends Controller
   public function store(Request $request)
   {
     // バリデーション実行
-    $request->validate([
+    $validate = $request->validate([
       'tweet' => 'required|max:255', // tweet必須 + 最大255文字までの制限
     ]);
 
     // ログインユーザーのツイートとして作成
-    $request->user()->tweets()->create($request->all());
+    $request->user()->tweets()->create($validate);
     // リクエストからユーザーの情報を取得し、そのユーザーのツイートとしてデータを作成
 
     // 一覧画面にリダイレクト
@@ -144,6 +144,8 @@ TweetController の `show` メソッドを編集します。\
 * 一覧画面のリンク（`<a href="{{ route('tweets.show', $tweet) }}">`部分）で、tweetのidが`TweetController@show`に渡されます。例えば、id = 1。
 * 受け取った`public function show(Tweet $tweet)`では、idが1番のtweetを探します。見つけたらその中身を`$tweet` にセットします。
 * idが1のデータが`$tweet` に入っているので必要に応じて処理し、bladeに渡します。
+
+
 
 ```php
 // app/Http/Controllers/TweetController.php
