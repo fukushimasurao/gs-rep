@@ -26,16 +26,15 @@ cd laratter
 ### (1) Tweet更新について
 
 * 詳細画面`tweets.show`内に`href="{{ route('tweets.edit', $tweet) }}"`が記載されています
-* routeを確認すると`TweetController@edit`メソッドが呼び出されます
+* routeを確認すると`TweetController@edit`メソッドが呼び出されます。つまり、更新ボタンを押した後の処理は`edit` メソッドを編集するということです。
 
-### (2) Tweet削除について  
+### (2) Tweet削除について
 
 * 詳細画面内に`<form action="{{ route('tweets.destroy', $tweet) }}"`が記載されています
-* routeを確認すると`TweetController@destroy`メソッドが呼び出されます
+* routeを確認すると`TweetController@destroy`メソッドが呼び出されます。つまり削除ボタンを押した後の処理は、`destroy` メソッドを編集するということです。
 
 {% hint style="info" %}
-**権限チェック**
-前章で実装した通り、編集・削除ボタンは投稿者本人にのみ表示されます。
+**権限チェック** 前章で実装した通り、編集・削除ボタンは投稿者本人にのみ表示されます。
 {% endhint %}
 
 ## Tweet更新処理の実装
@@ -70,8 +69,7 @@ class TweetController extends Controller
 また、`@method('PUT')` ディレクティブを使用してフォームから送信される `HTTP メソッド`を `PUT` に変更します。
 
 {% hint style="info" %}
-**@method('PUT')について**
-HTMLフォームは`GET`と`POST`しかサポートしていませんが、RESTfulなルーティングでは`PUT`や`DELETE`も使用します。Laravelの`@method`ディレクティブを使用することで、これらのHTTPメソッドをエミュレートできます。
+**@method('PUT')について** HTMLフォームは`GET`と`POST`しかサポートしていませんが、RESTfulなルーティングでは`PUT`や`DELETE`も使用します。Laravelの`@method`ディレクティブを使用することで、これらのHTTPメソッドをエミュレートできます。
 {% endhint %}
 
 ```php
@@ -143,9 +141,10 @@ class TweetController extends Controller
 
 {% hint style="info" %}
 **updateメソッドについて**
-- `$request->only('tweet')`: リクエストから`tweet`フィールドのみ取得
-- `$tweet->update()`: 指定されたデータでモデルを更新
-- セキュリティのため、更新可能なフィールドを限定しています
+
+* `$request->only('tweet')`: リクエストから`tweet`フィールドのみ取得
+* `$tweet->update()`: 指定されたデータでモデルを更新
+* セキュリティのため、更新可能なフィールドを限定しています
 {% endhint %}
 
 ### 動作確認
@@ -179,9 +178,10 @@ class TweetController extends Controller
 
 {% hint style="info" %}
 **destroyメソッドについて**
-- `$tweet->delete()`: モデルインスタンスを削除
-- 削除後は一覧画面にリダイレクトしてユーザーにフィードバック
-- Route Model Bindingにより、URLパラメータから自動的にモデルが取得されます
+
+* `$tweet->delete()`: モデルインスタンスを削除
+* 削除後は一覧画面にリダイレクトしてユーザーにフィードバック
+* Route Model Bindingにより、URLパラメータから自動的にモデルが取得されます
 {% endhint %}
 
 ### Tailwind CSSの適用
@@ -194,8 +194,9 @@ class TweetController extends Controller
 
 {% hint style="info" %}
 **Tailwind CSSのビルドについて**
-- HTMLテンプレートを変更した際は、使用されているCSSクラスを検出するためビルドが必要
-- 本番環境では未使用のCSSクラスは自動的に除去されます
+
+* HTMLテンプレートを変更した際は、使用されているCSSクラスを検出するためビルドが必要
+* 本番環境では未使用のCSSクラスは自動的に除去されます
 {% endhint %}
 
 ### 動作確認
