@@ -43,15 +43,15 @@ cd laratter
 
 {% hint style="info" %}
 **重要な概念**
-- `Tweet::with('user')の 'user'`は、前回Tweetモデルに追加した`user()`リレーションメソッドのことです
-- `user()`メソッドを定義していないと、`with('user')`は使用できません
-- `latest()`は`created_at`の降順（新しい順）でデータを取得します
-- `with('user')`により、N+1問題を回避してユーザー情報を効率的に取得できます
+
+* `Tweet::with('user')の 'user'`は、前回Tweetモデルに追加した`user()`リレーションメソッドのことです
+* `user()`メソッドを定義していないと、`with('user')`は使用できません
+* `latest()`は`created_at`の降順（新しい順）でデータを取得します
+* `with('user')`により、N+1問題を回避してユーザー情報を効率的に取得できます
 {% endhint %}
 
 {% hint style="warning" %}
-**N+1問題とは？**
-ユーザー情報なしでTweetを取得し、その後各Tweetに対してユーザー情報を個別に取得すると、データベースへのクエリが大量に発生します。`with('user')`を使うことで、1回のクエリでまとめて取得できます。
+**N+1問題とは？** ユーザー情報なしでTweetを取得し、その後各Tweetに対してユーザー情報を個別に取得すると、データベースへのクエリが大量に発生します。`with('user')`を使うことで、1回のクエリでまとめて取得できます。
 {% endhint %}
 
 ```php
@@ -128,8 +128,7 @@ class TweetController extends Controller
 ```
 
 {% hint style="info" %}
-**Bladeレイアウトについて**
-`<x-app-layout></x-app-layout>`で囲って記載すると、`resources/views/layouts/app.blade.php`内の`{{ $slot }}`という箇所に、この囲ったコードがすべて埋め込まれます。
+**Bladeレイアウトについて** `<x-app-layout></x-app-layout>`で囲って記載すると、`resources/views/layouts/app.blade.php`内の`{{ $slot }}`という箇所に、この囲ったコードがすべて埋め込まれます。
 
 これにより、ヘッダーやナビゲーションなどの共通部分を自動で含めることができます。
 {% endhint %}
@@ -143,17 +142,17 @@ class TweetController extends Controller
 `@csrf` ディレクティブを使用して`CSRF（Cross-Site Request Forgery）トークン`を生成する。
 
 {% hint style="warning" %}
-**CSRFトークンとは？**
-CSRF攻撃を防ぐためのセキュリティ機能です。悪意のあるサイトが、ユーザーの知らない間に別のサイトに不正な要求を送信することを防ぎます。
+**CSRFトークンとは？** CSRF攻撃を防ぐためのセキュリティ機能です。悪意のあるサイトが、ユーザーの知らない間に別のサイトに不正な要求を送信することを防ぎます。
 
 **重要**: フォームを用いてデータを送信する場合には**必ず**`@csrf`を設定してください。忘れると419エラーが発生します。
 {% endhint %}
 
 {% hint style="info" %}
 **CSRFの詳細**
-- CSRFについて詳しく: https://www.ipa.go.jp/security/vuln/websecurity/csrf.html
-- Laravelでpostのformに`@csrf`を書き忘れると、フォーム送信時に`419 Page Expired`エラーが発生します
-- `@csrf`は送信フォーム内に隠しフィールドとしてトークンを生成します
+
+* CSRFについて詳しく: https://www.ipa.go.jp/security/vuln/websecurity/csrf.html
+* Laravelでpostのformに`@csrf`を書き忘れると、フォーム送信時に`419 Page Expired`エラーが発生します
+* `@csrf`は送信フォーム内に隠しフィールドとしてトークンを生成します
 {% endhint %}
 
 ```php
@@ -198,8 +197,7 @@ CSRF攻撃を防ぐためのセキュリティ機能です。悪意のあるサ�
 {% endhint %}
 
 {% hint style="info" %}
-**なぜ再ビルドが必要？**
-Tailwind CSSは使用されているクラスのみを含む最適化されたCSSファイルを生成します。新しいクラスを追加した場合、それらを含めるために再ビルドが必要です。
+**なぜ再ビルドが必要？** Tailwind CSSは使用されているクラスのみを含む最適化されたCSSファイルを生成します。新しいクラスを追加した場合、それらを含めるために再ビルドが必要です。
 {% endhint %}
 
 ```bash
@@ -211,24 +209,8 @@ Tailwind CSSは使用されているクラスのみを含む最適化されたCS
 一覧画面に移動しエラーが発生しないことを確認しましょう。\
 作成画面に移動し入力フォームが表示されていることを確認する。※まだ登録できないよ。
 
-
 {% hint style="info" %}
-**一覧画面で、データを確認したい場合**
-phpmyadminにて、以下insertをしてみましょう。
-`INSERT INTO tweets(user_id, tweet, created_at) VALUES (1,'つぶやきテスト', now());`
-
-※ user_idの値は、usersテーブルに実在するidを記入してください。
-{% endhint %}
-
-## 【補足】エラーメッセージの表示
-
-この画面では入力したデータに不備があった場合（未入力や文字列が長すぎるなど）にエラーメッセージを表示します。\
-エラーメッセージは`@error` ディレクティブを使用して表示できます。\
-`@error`ディレクティブは指定した項目にエラーがある場合にのみ表示されます。
-
-{% hint style="info" %}
-**テストデータの登録**
-この時点ではまだフォームからのTweet登録機能は実装していませんが、SQLを使って直接データベースに登録することができます。
+**テストデータの登録** この時点ではまだフォームからのTweet登録機能は実装していませんが、SQLを使って直接データベースに登録することができます。
 
 以下のSQLでテストデータを登録してみましょう！
 
@@ -237,6 +219,12 @@ phpmyadminにて、以下insertをしてみましょう。
 
 ```sql
 insert into
-  tweets (id, user_id, tweet, created_at, updated_at)
-  values (null, 1, 'test', now(), now());
+  tweets (user_id, tweet, created_at)
+  values (1, 'test tweet', now());
 ```
+
+## 【補足】エラーメッセージの表示
+
+この画面では入力したデータに不備があった場合（未入力や文字列が長すぎるなど）にエラーメッセージを表示します。\
+エラーメッセージは`@error` ディレクティブを使用して表示できます。\
+`@error`ディレクティブは指定した項目にエラーがある場合にのみ表示されます。

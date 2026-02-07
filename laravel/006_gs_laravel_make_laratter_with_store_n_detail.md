@@ -22,8 +22,7 @@ cd laratter
 ### テストデータの準備
 
 {% hint style="info" %}
-**事前にツイートデータを数件作成しておいてください**
-前回の章でSQLを使用してテストデータを作成したか、フォーム機能が実装済みの場合は画面から作成してください。
+**事前にツイートデータを数件作成しておいてください** 前回の章でSQLを使用してテストデータを作成したか、フォーム機能が実装済みの場合は画面から作成してください。
 {% endhint %}
 
 ## 実装の流れ確認
@@ -31,22 +30,24 @@ cd laratter
 ### (1) Tweet作成処理について
 
 * 作成画面の場所: `http://localhost/tweets/create`
-* `/tweets/create`で表示されている画面について確認
-  * routeから`tweets/create`は`TweetController@create`が利用されています
-  * `TweetController@create`のreturnから`view('tweets.create')`のviewを表示しています
-* `view('tweets.create')`は`resources/views/tweets/create.blade.php`を指しています
-  * 中の`form`を見ると、`action`は`tweets.store`になっています
-  * routeから`tweets.store`へのpostは`TweetController@store`メソッドを利用します
+*   `/tweets/create`で表示されている画面について確認
+
+    * `./vendor/bin/sail artisan route:list --path=tweets` でroute確認すると、`http://localhost/tweets/create`は`TweetController@create`が利用されています
+
+
+* `TweetController@create`のreturnから`view('tweets.create')`のviewを表示しています
+* `view('tweets.create')`はview配下の、`tweets` 配下の `create`を、つまり `resources/views/tweets/create.blade.php`を指しています
+  * 中の`form`を見ると、methodは`post` , `action`は`route('tweets.store')`になっています
+  * `route('tweets.store')`はrouteの`tweets.store`を表しています。postが利用されており、`TweetController@store`メソッドを利用します
 
 ### (2) Tweet詳細画面について
 
-* Tweet一覧ページ `http://localhost/tweets` に各ツイートの詳細へのリンクがあります
+* Tweet一覧ページ `http://localhost/tweets` に各ツイートの詳細へのリンクがあります。
 * Tweet一覧ページ`view('tweets.index')`の中のコードに`<a href="{{ route('tweets.show', $tweet) }}"`の記載があります
 * `route('tweets.show')`を確認すると`TweetController@show`なので、`TweetController`の`show`メソッドを実装していきます
 
 {% hint style="info" %}
-**ルートパラメータについて**
-`route('tweets.show', $tweet)`は自動で`$tweet`の主キー（ID）を渡します。`$tweet->id`と書く必要はありません。
+**ルートパラメータについて** `route('tweets.show', $tweet)`は自動で`$tweet`の主キー（ID）を渡します。`$tweet->id`と書く必要はありません。
 {% endhint %}
 
 ## Tweet作成処理の実装
@@ -69,8 +70,7 @@ Tweet の作成処理は`TweetController` の `store` メソッドに記載し�
 * 長さが255文字以内であること（max:255）
 
 {% hint style="warning" %}
-**バリデーション失敗時の動作**
-バリデーションをクリアしない場合（tweetが空だったり255文字以上だったり）は処理をせずに自動的に作成ページ（とエラーメッセージ）に戻されます。
+**バリデーション失敗時の動作** バリデーションをクリアしない場合（tweetが空だったり255文字以上だったり）は処理をせずに自動的に作成ページ（とエラーメッセージ）に戻されます。
 {% endhint %}
 
 ### $requestについて
@@ -78,9 +78,7 @@ Tweet の作成処理は`TweetController` の `store` メソッドに記載し�
 `フォーム`から送信されてきたデータは `$request`に格納されています。この`$request`に対して`validate`を用いてデータのバリデーションを行います。
 
 {% hint style="info" %}
-**$requestの中身を確認する方法**
-`$request`には、formから送られてきた中身が入っています。
-`dd($request->all());`と書けば簡単に中身を確認できます。
+**$requestの中身を確認する方法** `$request`には、formから送られてきた中身が入っています。 `dd($request->all());`と書けば簡単に中身を確認できます。
 {% endhint %}
 
 {% hint style="info" %}
@@ -119,10 +117,11 @@ class TweetController extends Controller
 
 {% hint style="info" %}
 **コードの詳細説明**
-- `$request->user()`: 現在ログインしているユーザーを取得
-- `->tweets()`: そのユーザーのツイートリレーションを取得
-- `->create($request->all())`: フォームのデータを使ってツイートを作成
-- `$request->only('tweet')`でも同様の処理が可能です
+
+* `$request->user()`: 現在ログインしているユーザーを取得
+* `->tweets()`: そのユーザーのツイートリレーションを取得
+* `->create($request->all())`: フォームのデータを使ってツイートを作成
+* `$request->only('tweet')`でも同様の処理が可能です
 {% endhint %}
 
 ## 動作確認
@@ -138,13 +137,13 @@ TweetController の `show` メソッドを編集します。\
 
 ### ルートモデルバインディング
 
-一覧画面のリンク（`<a href="{{ route('tweets.show', $tweet) }}">`部分）で Tweet 1件のデータが渡されているため、`$tweet`に該当するTweetのデータが自動で渡されます。\
-`show`メソッドが受け取ったデータをそのままビューファイルに渡せばOKです。
-
-{% hint style="info" %}
 **ルートモデルバインディングとは？**
-Laravelの機能で、ルートパラメータ（この場合はツイートのID）を自動でモデルインスタンスに変換してくれます。手動でデータベースから取得する必要がありません。
-{% endhint %}
+
+&#x20;Laravelの機能で、ルートパラメータ（この場合はツイートのID）を自動でモデルインスタンスに変換してくれます。手動でデータベースから取得する必要がありません。
+
+* 一覧画面のリンク（`<a href="{{ route('tweets.show', $tweet) }}">`部分）で、tweetのidが`TweetController@show`に渡されます。例えば、id = 1。
+* 受け取った`public function show(Tweet $tweet)`では、idが1番のtweetを探します。見つけたらその中身を`$tweet` にセットします。
+* idが1のデータが`$tweet` に入っているので必要に応じて処理し、bladeに渡します。
 
 ```php
 // app/Http/Controllers/TweetController.php
@@ -169,8 +168,7 @@ class TweetController extends Controller
 ここでは，ツイートの投稿者のみが編集・削除できるようにするため、ツイートの投稿者とログインユーザーが一致するかを確認した上で編集ボタンと削除ボタンを表示します。
 
 {% hint style="info" %}
-**認証チェックについて**
-`auth()->id() === $tweet->user_id`で、現在ログインしているユーザーとツイートの投稿者が同じかどうかを確認しています。
+**認証チェックについて** `auth()->id() === $tweet->user_id`で、現在ログインしているユーザーとツイートの投稿者が同じかどうかを確認しています。
 {% endhint %}
 
 ```php
@@ -215,8 +213,7 @@ class TweetController extends Controller
 ```
 
 {% hint style="info" %}
-**リレーションの活用について**
-`{{ $tweet->user->name }}`の`$tweet->user`は、`Tweet.php`に定義した`user()`メソッドによるリレーションです。これにより、ツイートから投稿者のユーザー情報を簡単に取得できます。
+**リレーションの活用について** `{{ $tweet->user->name }}`の`$tweet->user`は、`Tweet.php`に定義した`user()`メソッドによるリレーションです。これにより、ツイートから投稿者のユーザー情報を簡単に取得できます。
 
 ```php
 // Tweet.phpで定義したリレーション
@@ -232,8 +229,7 @@ public function user()
 一覧画面から詳細画面に移動してツイートの詳細が表示されることを確認してください。
 
 {% hint style="warning" %}
-**注意**
-編集と削除ボタンはまだ動作しません。画面の表示が確認できればOKです。次の章で実装します。
+**注意** 編集と削除ボタンはまだ動作しません。画面の表示が確認できればOKです。次の章で実装します。
 {% endhint %}
 
 ## 【補足】認証ユーザー情報の取得
@@ -250,8 +246,9 @@ $id = auth()->id();
 
 {% hint style="info" %}
 **auth()ヘルパーの活用**
-- `auth()->check()`: ユーザーがログインしているかを確認
-- `auth()->guest()`: ゲスト（未ログイン）かを確認
-- `auth()->id()`: ログインユーザーのIDを取得
-- `auth()->user()`: ログインユーザーのモデルインスタンスを取得
+
+* `auth()->check()`: ユーザーがログインしているかを確認
+* `auth()->guest()`: ゲスト（未ログイン）かを確認
+* `auth()->id()`: ログインユーザーのIDを取得
+* `auth()->user()`: ログインユーザーのモデルインスタンスを取得
 {% endhint %}
