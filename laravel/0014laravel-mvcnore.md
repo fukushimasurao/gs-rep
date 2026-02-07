@@ -24,13 +24,17 @@
 | Route      | <p>アクセスされた URL に応じて処理を振り分ける．URL と Controller の関数の対応を決める．<br>実際の処理は Controller を通じて Model や View が実行する．</p> |
 |            |                                                                                                            |
 
-<figure><img src="../../../.gitbook/assets/image.png" alt=""><figcaption><p>Laravel学習帳より<a href="https://laraweb.net/surrounding/922/">https://laraweb.net/surrounding/922/</a></p></figcaption></figure>
+<figure><img src="../.gitbook/assets/image.png" alt=""><figcaption><p>Laravel学習帳より<a href="https://laraweb.net/surrounding/922/">https://laraweb.net/surrounding/922/</a></p></figcaption></figure>
 
 ### 【PHPの場合】
 
-localhost/select.phpにアクセス select.phpが上から実行される。 基本的にファイルは1個で完結する。 (もちろん他のファイルを参照したり分割したりもできるが、基本は1ファイル)
+例えば、user一覧を出す`localhost/user.php`にアクセス
 
-<コード上部: PHPの部分> SELECT \* FROM gs\_an\_table; $row に取得した情報を格納
+以下のような `user.php`が上から実行される。&#x20;
+
+基本的にファイルは1個で完結する。 (もちろん他のファイルを参照したり分割したりもできるが、基本は1ファイル)
+
+<コード上部: PHPの部分> `SELECT * FROM users;` して`$row` に取得した情報を格納
 
 <コード下部: HTMLの部分> PHPで取得した情報をHTMLの部分で描写
 
@@ -40,7 +44,7 @@ localhost/select.phpにアクセス select.phpが上から実行される。 基
 $pdo = new PDO('mysql:dbname=test;host=localhost', 'root', '');
 
 // データ取得
-$stmt = $pdo->query("SELECT * FROM gs_an_table");
+$stmt = $pdo->query("SELECT * FROM users");
 $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
@@ -56,11 +60,13 @@ $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 ### 【Laravelの場合】
 
-&#x20;例えば、localhost/userにアクセス
+&#x20;例えばuser一覧を出す`localhost/user`にアクセス
 
 #### \<route ... web.php>
 
-&#x20;URLに沿って「ここに処理が書いてあるからそっち参照して」と指示。 例えば今回の場合は、 「userにアクセス(GET)されたら、UserControllerのindexメソッドを確認してー」 と記載されているとする。
+&#x20;URLに沿って「ここに処理が書いてあるからそっち参照して」と指示。
+
+&#x20;例えば今回の場合は「userにアクセス(GET)されたら、UserControllerのindexメソッドを確認してー」 と記載されているとする。
 
 ```php
 // === routes/web.php ===
@@ -68,7 +74,7 @@ Route::get('/user', [UserController::class, 'index']);
 // 「/userにGETでアクセスされたら、UserControllerのindexメソッドを実行して」
 ```
 
-なお、「/userにGETでアクセス」というのは、 ブラウザで「http://localhost/user」にアクセスしたときのこと。 (リンクをクリックしたり、アドレスバーに直接入力したりする通常のアクセス = GET)
+なお、「/userにGETでアクセス」というのは、 ブラウザで「`http://localhost/user`」にアクセスしたときのこと。 (リンクをクリックしたり、アドレスバーに直接入力したりする通常のアクセス = GET)
 
 #### \<Controller ... UserController>
 
@@ -88,7 +94,11 @@ public function index()
 
 #### \<Model ... UserModel>
 
-&#x20;Laravelでは基本的に、DB操作する際はModelファイルを通して処理がされる。 基本1テーブルにつき1 Modelファイル存在する。 例えば
+&#x20;Laravelでは基本的に、DB操作する際はModelファイルを通して処理がされる。
+
+&#x20;基本1テーブルにつき1 Modelファイル存在する。&#x20;
+
+例えばUsersテーブルをいじりたい場合、User modelを作成して、User modelをいじる。
 
 * Userテーブルの情報を取得したい場合: User Modelから情報を取得する処理をする
 * Userテーブルへinsertしたい場合: User Modelに対してinsertする処理をする イメージ。
@@ -104,7 +114,17 @@ class User extends Model
 
 #### \<View ... 画面に表示するファイル>&#x20;
 
-授業ではbladeファイル = XXXX.blade.phpを利用。 画面に描写したい内容をこのbladeファイルに記載する。 当然、controllerから渡された内容 + アルファをこの該当Viewに記載し、描写する。
+授業では`blade`ファイル = `XXXX.blade.php`を利用。&#x20;
+
+画面に描写したい内容をこのbladeファイルに記載する。 当然、controllerから渡された内容 + アルファをこの該当Viewに記載し、描写する。
+
+{% hint style="info" %}
+大抵画面に描写するファイルのことを以下のように呼称する。
+
+* blade
+* viewファイル
+* フロント
+{% endhint %}
 
 ```php
 // === resources/views/user/index.blade.php ===
