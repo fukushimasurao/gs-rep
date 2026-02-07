@@ -126,12 +126,12 @@ class TweetController extends Controller
   public function update(Request $request, Tweet $tweet)
   {
     // バリデーション実行
-    $request->validate([
+    $validated = $request->validate([
       'tweet' => 'required|max:255',
     ]);
 
     // ツイート内容を更新
-    $tweet->update($request->only('tweet'));
+    $tweet->update($validated);
 
     // 詳細画面にリダイレクト
     return redirect()->route('tweets.show', $tweet);
