@@ -126,12 +126,12 @@ class TweetController extends Controller
   public function update(Request $request, Tweet $tweet)
   {
     // バリデーション実行
-    $validated = $request->validate([
+    $request->validate([
       'tweet' => 'required|max:255',
     ]);
 
     // ツイート内容を更新
-    $tweet->update($validated);
+    $tweet->update($request->only('tweet'));
 
     // 詳細画面にリダイレクト
     return redirect()->route('tweets.show', $tweet);
@@ -142,9 +142,10 @@ class TweetController extends Controller
 {% hint style="info" %}
 **updateメソッドについて**
 
-* `$request->only('tweet')`: リクエストから`tweet`フィールドのみ取得
 * `$tweet->update()`: 指定されたデータでモデルを更新
-* セキュリティのため、更新可能なフィールドを限定しています
+* `$request->only('tweet')`: リクエストから`tweet`フィールドのみ取得
+  * `store`の時のように`$validate`を入れてもいいですが、`only`の使い方を知るためあえてこの書き方。
+* セキュリティのため、`only`で更新可能なフィールドを限定しています
 {% endhint %}
 
 ### 動作確認
