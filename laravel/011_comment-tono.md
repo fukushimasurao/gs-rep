@@ -346,16 +346,19 @@ tweets/{tweet}/comments/{comment}
           </div>
           <div class="mt-4">
 
-            <!-- 🔽 @foreachの中身を変更 -->
+          <!-- 🔽 foreachの中身を変更 ここから -->
+
             @foreach ($tweet->comments as $comment)
-            <a href="{{ route('tweets.comments.show', [$tweet, $comment]) }}">
-              <div class="border-b border-gray-200 dark:border-gray-700 pb-2 mb-2 hover:bg-gray-50 dark:hover:bg-gray-700 p-2 rounded">
-                <p class="text-gray-800 dark:text-gray-300">{{ $comment->comment }}</p>
-                <p class="text-gray-600 dark:text-gray-400 text-sm">{{ $comment->user->name }} • {{ $comment->created_at->format('Y-m-d H:i') }}</p>
-              </div>
-            </a>
+              <a href="{{ route('tweets.comments.show', [$tweet, $comment]) }}">
+                <div class="border-b border-gray-200 dark:border-gray-700 pb-2 mb-2 hover:bg-gray-50 dark:hover:bg-gray-700 p-2 rounded">
+                  <p class="text-gray-800 dark:text-gray-300">{{ $comment->comment }}</p>
+                  <p class="text-gray-600 dark:text-gray-400 text-sm">{{ $comment->user->name }} • {{ $comment->created_at->format('Y-m-d H:i') }}</p>
+                </div>
+              </a>
             @endforeach
-            <!-- ⬆️ ここまで @foreachの中身を変更 -->
+          </div>
+
+        <!-- 🔽 foreachの中身を変更 ここまで -->
 
           </div>
         </div>

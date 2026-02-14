@@ -176,7 +176,7 @@ class TweetLikeController extends Controller
 画面から操作できるように`like` ボタンを設置しましょう。一覧画面と詳細画面の両方に設置
 
 * `$tweet->likedByUsers` で、該当する Tweet に対して like しているユーザのコレクションを取得できます
-* `contains` メソッドを用いて、認証中のユーザが like しているかどうかを判定します。like 済の場合には dislike ボタンを表示、like していない場合には like ボタンを表示します。
+* `$tweet->likedByUsers`で取得した中間テーブル情報の中に自分がいるかいます。`contains` メソッドを用いて、自分 = 認証中のユーザが `like` しているかどうかを判定します。like 済の場合には dislike ボタンを表示、like していない場合には like ボタンを表示します。
 * like ボタン（と dislike ボタン）の横にはlike しているユーザの数を表示します。`$tweet->likedByUsers->count()` で 該当する Tweet に対して like しているユーザの数を取得します。
 
 ### 一覧画面
