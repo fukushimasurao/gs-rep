@@ -259,7 +259,7 @@ date()の引数はたくさん種類あります。
 <html>
 <head>
     <meta charset="utf-8">
-    // 外部にCSSファイルを用意してもいいですが、ここでは簡素化して<head>内に記述します。
+    <!-- 外部にCSSファイルを用意してもいいですが、ここでは簡素化して<head>内に記述します -->
     <style>
         .menu {
             background-color: #2FA6E9;
@@ -474,8 +474,9 @@ _get と post は method を変えるだけです。_
 _post\_confirm.php(受け取り側)_
 
 {% hint style="info" %}
-フォームから値が送信されていない場合、$\_POST\['name']のように直接アクセスすると「Notice: Undefined index」が表示されることがあります。\
-そのため、isset($\_POST\['name'])や$\_POST\['name'] ?? ''のように、isset を用いて値が存在するか確認してから使いましょう
+フォームから値が送信されていない場合、$\_POST\['name']のように直接アクセスすると「Notice: Undefined index」が表示されることがあります。
+
+今回のコードはシンプルさを優先していますが、実際の開発では isset($\_POST\['name']) や $\_POST\['name'] ?? '' のように、値の存在確認をしてから使うのが安全です。
 {% endhint %}
 
 ```php
