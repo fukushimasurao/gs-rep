@@ -1,5 +1,15 @@
 # 012\_gs\_php\_day2
 
+## PHP授業 全5日間の概要
+
+| Day | テーマ | 学ぶこと |
+|---|---|---|
+| Day1 | PHP基礎 | 変数・配列・関数・ループ、フォーム操作、ファイル保存 |
+| **Day2** | **DB入門** | **DB・テーブルの概念、SQL（INSERT/SELECT）、PHPからDB操作（PDO）** |
+| Day3 | CRUD | 詳細表示・更新（UPDATE）・削除（DELETE）、コードの関数化 |
+| Day4 | ログイン機能 | セッション管理、権限による処理の分岐、パスワードのハッシュ化 |
+| Day5 | DBリレーション | テーブルの設計・正規化、JOINで複数テーブルを扱う |
+
 ### 授業資料 <a href="#shou-ye-zi-liao" id="shou-ye-zi-liao"></a>
 
 {% embed url="https://gitlab.com/gs_hayato/gs-php-01/-/blob/master/php02.zip" %}
@@ -36,6 +46,21 @@
 * コマ3：攻撃側の視点でAIを使う
 {% endhint %}
 
+### AIに渡すコンテキスト定型文
+
+AI に質問する前に、毎回以下をチャットに貼り付けてください。これを渡すことで、授業の内容に合ったコードを生成してくれます。
+
+```
+【このAIセッションのコンテキスト】
+- PHPの授業でXAMPPを使っています
+- フレームワークは使わず、素のPHPで書きます
+- DBはMySQLで、接続にはPDOを使います
+- DB名: gs_db_class、テーブル: gs_an_table
+- カラム: id(PK,AI), name(varchar64), email(varchar128), content(text), date(datetime)
+- コードはシンプルに。初学者向けで、変数名もわかりやすく
+- mysql_*関数やmysqliは使わず、必ずPDO＋プレースホルダで書いてください
+```
+
 ---
 
 ## コマ1：DBを知る・触る
@@ -65,7 +90,15 @@
 {% hint style="success" %}
 **【AI活用】DBとテーブルについてAIに聞いてみよう**
 
-「DBとテーブルの違いを教えて。スプレッドシートに例えて説明して」とAIに質問してみてください。出てきた回答を全体で共有します。
+出てきた回答を全体で共有します。
+
+【サンプルプロンプト】
+```
+PHPの授業でデータベースを学び始めました。初学者向けにわかりやすく教えてください。
+
+【質問】
+DBとテーブルの違いを教えてください。スプレッドシート（Excelなど）に例えて説明してください。
+```
 {% endhint %}
 
 スプレッドシートだと、画面見ながら操作できる DB は **通常 CLI（コマンドラインインターフェース） = 黒い画面に文字で操作します**
@@ -198,7 +231,19 @@ text: 大容量テキスト用。varcharより大きなデータを格納可能
 {% hint style="success" %}
 **【AI活用】INSERT文をAIで生成してみよう**
 
-「`gs_an_table`に1件データを登録するINSERT文を書いて。カラムは id, name, email, content, date」とAIに頼んでみてください。生成されたSQL文を読んで、書き方を理解しましょう。
+生成されたSQL文を読んで、書き方を理解しましょう。
+
+【サンプルプロンプト】
+```
+【コンテキスト】
+- MySQLを使っています
+- DB名: gs_db_class、テーブル: gs_an_table
+- カラム: id(PK, AutoIncrement), name(varchar64), email(varchar128), content(text), date(datetime)
+
+【依頼】
+gs_an_tableに1件データを登録するINSERT文を書いてください。
+idはNULL、dateはnow()を使ってください。
+```
 {% endhint %}
 
 例文
@@ -311,7 +356,22 @@ action：insert.php
 {% hint style="success" %}
 **【AI活用】insert.phpの雛形をAIで生成してみよう**
 
-「PHPのPDOを使って、MySQLにデータをINSERTするコードを書いて。DB名は`gs_db_class`、テーブルは`gs_an_table`、カラムはname・email・content」とAIに依頼してください。生成されたコードを読んで、各部分が何をしているか確認します。
+生成されたコードを読んで、各部分が何をしているか確認します。
+
+【サンプルプロンプト】
+```
+【コンテキスト】
+- PHPの授業でXAMPPを使っています
+- フレームワークは使わず、素のPHPで書きます
+- DBはMySQLで、接続にはPDOを使います（mysql_*やmysqliは使わないでください）
+- DB名: gs_db_class、テーブル: gs_an_table
+- カラム: id(PK, AutoIncrement), name(varchar64), email(varchar128), content(text), date(datetime)
+- コードはシンプルに。初学者向けで、変数名もわかりやすく
+
+【依頼】
+POSTで受け取ったname・email・contentをgs_an_tableにINSERTするPHPファイル（insert.php）を書いてください。
+プレースホルダ（bindValue）を使ってください。
+```
 {% endhint %}
 
 `insert.php`を以下のように記述（AIの生成コードと見比べてみよう）
@@ -389,7 +449,19 @@ try-catch
 {% hint style="success" %}
 **【AI活用】select.phpの雛形もAIで生成してみよう**
 
-「PHPのPDOを使って、`gs_an_table`の全件データを取得して表示するコードを書いて」とAIに依頼してください。
+【サンプルプロンプト】
+```
+【コンテキスト】
+- PHPの授業でXAMPPを使っています
+- フレームワークは使わず、素のPHPで書きます
+- DBはMySQLで、接続にはPDOを使います（mysql_*やmysqliは使わないでください）
+- DB名: gs_db_class、テーブル: gs_an_table
+- カラム: id(PK, AutoIncrement), name(varchar64), email(varchar128), content(text), date(datetime)
+- コードはシンプルに。初学者向けで、変数名もわかりやすく
+
+【依頼】
+gs_an_tableの全件データを取得して、date・name・content・emailを<p>タグで表示するPHPファイル（select.php）を書いてください。
+```
 {% endhint %}
 
 #### `select.php` - 1

@@ -1,5 +1,15 @@
 # 013\_gs\_php\_day3
 
+## PHP授業 全5日間の概要
+
+| Day | テーマ | 学ぶこと |
+|---|---|---|
+| Day1 | PHP基礎 | 変数・配列・関数・ループ、フォーム操作、ファイル保存 |
+| Day2 | DB入門 | DB・テーブルの概念、SQL（INSERT/SELECT）、PHPからDB操作（PDO） |
+| **Day3** | **CRUD** | **詳細表示・更新（UPDATE）・削除（DELETE）、コードの関数化** |
+| Day4 | ログイン機能 | セッション管理、権限による処理の分岐、パスワードのハッシュ化 |
+| Day5 | DBリレーション | テーブルの設計・正規化、JOINで複数テーブルを扱う |
+
 ### 授業資料 <a href="#shou-ye-zi-liao" id="shou-ye-zi-liao"></a>
 
 [資料はこちら](https://gitlab.com/gs_hayato/gs-php-01/-/blob/master/php03.zip)
