@@ -351,12 +351,23 @@ method：POST
 action：insert.php
 ```
 
+### DBを操作するときの4ブロック
+
+DBに関わる処理は毎回この4ブロックで書きます。この構造はDay5まで変わりません。
+
+| ブロック | 役割 |
+|---|---|
+| 1. DB接続 | MySQLにつなぐ |
+| 2. SQL作成 | 何をするかSQLで書く |
+| 3. 実行 | SQLを実行する |
+| 4. 実行後の処理 | 成功・失敗に応じた処理 |
+
 ### 受け取り/登録処理を作成(INSERT)
 
 {% hint style="success" %}
-**【AI活用】insert.phpの雛形をAIで生成してみよう**
+**【AI活用】スケルトンをAIに渡して穴埋めしてもらおう**
 
-生成されたコードを読んで、各部分が何をしているか確認します。
+以下のスケルトン（骨組み）をAIに渡して、`/* */`の部分を埋めてもらいましょう。
 
 【サンプルプロンプト】
 ```
@@ -369,21 +380,47 @@ action：insert.php
 - コードはシンプルに。初学者向けで、変数名もわかりやすく
 
 【依頼】
-POSTで受け取ったname・email・contentをgs_an_tableにINSERTするPHPファイル（insert.php）を書いてください。
-プレースホルダ（bindValue）を使ってください。
+以下のスケルトンの /* */ 部分を埋めてください。構造とコメントは変えないでください。
+
+<?php
+// POSTデータ取得
+$name = $_POST['name'];
+/* emailとcontentも同じように書く */
+
+// 1. DB接続
+try {
+    $pdo = new PDO(/* 接続情報 */);
+} catch (PDOException $e) {
+    exit('DBConnectError:' . $e->getMessage());
+}
+
+// 2. SQL作成
+$stmt = $pdo->prepare('/* INSERT文 */');
+/* bindValueを3行 */
+
+// 3. 実行
+$status = $stmt->execute();
+
+// 4. 実行後の処理
+if ($status === false) {
+    $error = $stmt->errorInfo();
+    exit('ErrorMessage:' . print_r($error, true));
+} else {
+    header('Location: index.php');
+}
 ```
 {% endhint %}
 
-`insert.php`を以下のように記述（AIの生成コードと見比べてみよう）
+`insert.php`の完成形（AIの出力と見比べてみよう）
 
 ```php
 <?php
-//1. POSTデータ取得
+// POSTデータ取得
 $name = $_POST['name'];
 $email = $_POST['email'];
 $content = $_POST['content'];
 
-// 2. DB接続
+// 1. DB接続
 try {
     //Password注意。MAMP='root'　XAMPP=''
     $pdo = new PDO('mysql:dbname=gs_db_class; charset=utf8; host=localhost', 'root', '');
@@ -393,7 +430,7 @@ try {
     exit('DBConnectError:' . $e->getMessage());
 }
 
-// 3．データ登録SQL作成
+// 2. SQL作成
 $stmt = $pdo->prepare('INSERT INTO gs_an_table(id, name, email, content, date)
                         VALUES(NULL, :name, :email, :content, now())');
 
@@ -402,11 +439,12 @@ $stmt = $pdo->prepare('INSERT INTO gs_an_table(id, name, email, content, date)
 $stmt->bindValue(':name', $name, PDO::PARAM_STR);
 $stmt->bindValue(':email', $email, PDO::PARAM_STR);
 $stmt->bindValue(':content', $content, PDO::PARAM_STR);
+
+// 3. 実行
 $status = $stmt->execute();
 
-// 4．データ登録処理後
+// 4. 実行後の処理
 if ($status === false) {
-    //SQL実行時にエラーがある場合（エラーオブジェクト取得して表示）
     $error = $stmt->errorInfo();
     exit('ErrorMessage:' . print_r($error, true));
 } else {
@@ -437,9 +475,20 @@ try-catch
 {% endhint %}
 
 {% hint style="success" %}
-**【自分で書こう】bindValueの部分だけ自分で書いてみよう**
+**【自分で書こう】**
 
-上のコードのうち、`bindValue`の3行は自分で書いてみてください。書き方のパターンを手で覚えましょう。
+insert.phpをコピペして動作確認したら、以下の2箇所を削除して自分で書いてみよう。
+
+1. `prepare()`の中のSQL文（phpMyAdminで書いたINSERT文を思い出して）
+2. `bindValue`の3行（Day3以降も毎回出てくるパターン）
+
+```php
+// 2. SQL作成
+$stmt = $pdo->prepare('← ここを自分で書く');
+$stmt->bindValue(':name', $name, PDO::PARAM_STR);    // ← この3行も自分で書く
+$stmt->bindValue(':email', $email, PDO::PARAM_STR);
+$stmt->bindValue(':content', $content, PDO::PARAM_STR);
+```
 {% endhint %}
 
 ***
@@ -461,6 +510,7 @@ try-catch
 
 【依頼】
 gs_an_tableの全件データを取得して、date・name・content・emailを<p>タグで表示するPHPファイル（select.php）を書いてください。
+htmlspecialchars や h() 関数は使わないでください（この後別途対応します）。
 ```
 {% endhint %}
 
@@ -469,7 +519,7 @@ gs_an_tableの全件データを取得して、date・name・content・emailを<
 ```php
 <?php
 
-// 1.  DB接続
+// 1. DB接続
 try {
     //Password....最後の引数の部分。MAMP='root',XAMPP=''
     $pdo = new PDO('mysql:dbname=gs_db_class;charset=utf8;host=localhost', 'root', '');
@@ -477,18 +527,18 @@ try {
     exit('DBConnectError' . $e->getMessage());
 }
 
-// 2．データ取得SQL作成
+// 2. SQL作成
 $stmt = $pdo->prepare('SELECT * FROM gs_an_table');
+
+// 3. 実行
 $status = $stmt->execute();
 
-// 3．データ表示
+// 4. 実行後の処理
 $view = '';
 if ($status === false) {
-    //execute（SQL実行時にエラーがある場合）
     $error = $stmt->errorInfo();
     exit('ErrorQuery:' . $error[2]);
 } else {
-    // Selectデータの数だけ自動でループしてくれる
     // FETCH_ASSOC = http://php.net/manual/ja/pdostatement.fetch.php
     while ($result = $stmt->fetch(PDO::FETCH_ASSOC)) {
         $view .= '<p>';
@@ -523,6 +573,40 @@ if ($status === false) {
 </div>
 ```
 
+<details>
+
+<summary>なんでwhileを使うんだろう？</summary>
+
+SQLのSELECT結果は複数行になることがある。データが何件あるかわからないので、「データがある限り1行ずつ取り出す」whileが適している。Day1で使ったforeachと同じ発想。
+
+</details>
+
+### セキュリティ対策 XSS -1の前に：攻撃を体験してみよう
+
+今のselect.phpはエスケープ処理をしていない脆弱な状態です。実際に攻撃してみましょう。
+
+{% hint style="success" %}
+**【AI活用】このselect.phpを攻撃してみよう**
+
+【サンプルプロンプト】
+```
+PHPの授業でXSSを学んでいます。
+エスケープ処理をしていないフォームで、XSSの仕組みを理解するために、
+動作確認できる簡単なscriptタグの入力例を教えてください。
+どのページのどこにどんな内容を書けばいいですか？
+```
+{% endhint %}
+
+{% hint style="warning" %}
+AIが教えてくれた入力値をフォームに入力して、実際に動作を確認してみましょう。何が起きましたか？
+
+AIに弾かれた場合は、以下を手で入力してみよう。
+- ページ：index.phpのフォーム
+- フィールド：contentなど（どこでも可）
+- 入力値：`<script>alert('XSS')</script>`
+- 確認：select.phpを開いてダイアログが出れば成功
+{% endhint %}
+
 ### セキュリティ対策 XSS -1
 
 `select.php`に`funcs.php`を読み込んで作成した関数を使う
@@ -543,7 +627,7 @@ require_once('funcs.php');
 //XSS対応（ echoする場所で使用！それ以外はNG ）
 function h($str)
 {
-    return htmlspecialchars($str, ENT_QUOTES);
+    return htmlspecialchars($str, ENT_QUOTES, 'UTF-8');
 }
 ```
 
@@ -563,38 +647,85 @@ while ($result = $stmt->fetch(PDO::FETCH_ASSOC)) {
 
 ### SQLインジェクション体感
 
-{% hint style="success" %}
-**【AI活用】攻撃側の視点でAIを使ってみよう**
+#### Step1. insert.phpを脆弱な状態に書き換える
 
-以下のコード（プレースホルダなし版）をAIに渡して、「このコードに対してSQLインジェクション攻撃をするSQL文を書いて」と依頼してみてください。
+insert.phpの「2. SQL作成」ブロックをこう書き換えてみよう。
 
 ```php
-$name = $_POST['name'];
-$sql = "INSERT INTO gs_an_table (name) VALUES ('$name')";
+// ※学習用の脆弱コード。実際のコードでは厳禁。
+$sql = "INSERT INTO gs_an_table (id, name, email, content, date) VALUES (NULL, '$name', '$email', '$content', NOW())";
+$pdo->query($sql);
 ```
 
-生成された攻撃コードを読んで、「なぜbindValueが必要なのか」を理解しましょう。
+{% hint style="warning" %}
+`bindValue`の3行と`$stmt->execute()`、`$status`を使った処理は削除してください。
 {% endhint %}
 
-#### プレースホルダーを使わないと・・・
+#### Step2. 攻撃してみる
 
-攻撃者が `name` に以下を入力した場合：
+フォームのお名前欄に以下を入力して送信してみよう。
 
 ```
-'; DROP TABLE gs_an_table; --
+test'); DROP TABLE gs_an_table; --
 ```
 
-生成されるSQL：
+#### Step3. 何が起きた？
+
+エラー画面が出たはずです。これが**攻撃成功**の状態です。
+
+PHPが組み立てたSQLはこうなっています。
 
 ```sql
-INSERT INTO gs_an_table (name) VALUES (''; DROP TABLE gs_an_table; --')
+INSERT INTO gs_an_table (id, name, email, content, date) VALUES (NULL, 'test'); DROP TABLE gs_an_table; --', ...)
 ```
 
-`'; DROP TABLE gs_an_table; --` が SQL の一部として認識され、テーブル削除命令が実行される可能性がある！
+SQLを分解するとこうなっています。
 
-#### プレースホルダを使えば防げる
+```sql
+INSERT INTO ... VALUES (NULL, 'test')   -- 1文目：カラム数不一致でエラー
+; DROP TABLE gs_an_table                -- 2文目：PDOでは実行されない
+; --', 'email', 'content', NOW())       -- --以降はコメントアウト（これは機能している）
+```
 
-bindValueを使うと、入力値は「単なるデータ」として扱われ、SQLの構造を壊せない。
+`--` によるコメントアウトは実際に機能しており、元のSQLの末尾部分を無効化しています。最初のINSERT文がカラム数不一致でエラーになり、アプリがクラッシュしました。
+
+{% hint style="info" %}
+**テーブルは消えていないはずです。**
+
+PDOは1回の`query()`で複数のSQL文を実行できない仕様のため、`DROP TABLE`の部分は実行されません。ただし：
+
+- `--` コメントアウトは機能した（SQLの構造を書き換えられた）
+- アプリがクラッシュした（サービス停止）
+- エラーの詳細が画面に表示された（情報漏洩）
+
+「テーブルは消えなかったけど、SQLの構造は壊されており、攻撃は成功している」ということを覚えておいてください。
+{% endhint %}
+
+#### Step4. insert.phpを元に戻す
+
+体感が終わったら、insert.phpを必ず元の安全なコードに戻してください。
+
+---
+
+#### なぜbindValueで防げるのか
+
+**Before（脆弱）**
+```php
+// ※学習用の脆弱コード。実際のコードでは厳禁。
+$sql = "INSERT INTO gs_an_table (id, name, email, content, date) VALUES (NULL, '$name', '$email', '$content', NOW())";
+$pdo->query($sql);
+```
+
+**After（今日書いたコード）**
+```php
+// 2. SQL作成
+$stmt = $pdo->prepare('INSERT INTO gs_an_table (id, name, email, content, date) VALUES (NULL, :name, :email, :content, NOW())');
+$stmt->bindValue(':name',    $name,    PDO::PARAM_STR);
+$stmt->bindValue(':email',   $email,   PDO::PARAM_STR);
+$stmt->bindValue(':content', $content, PDO::PARAM_STR);
+```
+
+bindValueを使うと入力値は「単なるデータ」として扱われ、SQLの構造を壊せない。
 
 {% hint style="info" %}
 SQLインジェクションの詳細な仕組みは次回以降に扱います。
