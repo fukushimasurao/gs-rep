@@ -186,6 +186,98 @@ PHPの授業で、UPDATE/DELETE文のWHERE句を忘れると何が起きるか�
 
 ---
 
+## プラスアルファ①（WHERE忘れをコードで防ぐ工夫）模範解答
+
+生徒がAIに相談するプロンプト（資料に記載済み）
+```
+PHPでUPDATE/DELETE文のWHERE句を書き忘れて全件更新・全件削除してしまう事故が
+授業で話題になりました。初学者でもできる、事故を未然に防ぐ工夫を教えてください。
+```
+
+**講師用模範解答（優先度順）**
+
+{% hint style="warning" %}
+`$stmt->execute()`はMySQLのautocommit（既定で有効）により、実行した瞬間に変更が確定する。つまり**execute()した後にrowCount()で件数を見ても、その時点でもう全件書き換わっている／消えている**。「実行後に気づく」ことと「実行前に止める」ことは別物なので、この2つを混同させないように注意する。
+{% endhint %}
+
+1. **【予防・最強】DB側でWHEREなしのUPDATE/DELETEを拒否させる（SQL_SAFE_UPDATES）**
+   MySQL（MariaDBも同様）には、キー列を使ったWHEREが無い（＝全件が対象になる）UPDATE/DELETEをエラーで拒否するセーフモードがある。PHPコードの出来不出来やAIの生成ミスに関係なく、DB側で機械的に止められるのが最大の利点。
+   ```sql
+   SET SQL_SAFE_UPDATES = 1;
+   ```
+
+   {% hint style="warning" %}
+   **設定方法はmy.cnf編集ではなく、PDO接続時に毎回実行する方式を採用する。**
+
+   my.cnf（XAMPPの設定ファイル）を編集してサーバー全体に効かせる方法もあるが、ファイルの場所がXAMPPのバージョンや配置によって変わる・macOSの権限問題で保存が反映されない・構文ミスでMariaDBが起動しなくなるなど、教室環境では詰まりやすい。`funcs.php`の`db_conn()`にPDO接続直後の1行を足すだけで済む方法の方が、環境差の影響を受けず確実。
+   {% endhint %}
+
+   `funcs.php`の`db_conn()`に1行追加する。
+
+   ```php
+   function db_conn()
+   {
+       try {
+           $db_name = 'gs_db_class3';
+           $db_id   = 'root';
+           $db_pw   = '';
+           $db_host = 'localhost';
+           $pdo = new PDO('mysql:dbname=' . $db_name . ';charset=utf8;host=' . $db_host, $db_id, $db_pw);
+           $pdo->exec('SET SQL_SAFE_UPDATES = 1'); // ←追加。WHEREなしのUPDATE/DELETEを拒否させる
+           return $pdo;
+       } catch (PDOException $e) {
+           exit('DB Connection Error:' . $e->getMessage());
+       }
+   }
+   ```
+
+   これなら`db_conn()`を呼ぶすべてのファイル（insert.php/detail.php/update.php/delete.php）に自動で効く。関数化のパート（コマ3）で`db_conn()`を導入した後に、この1行を追加する流れが自然。
+
+   {% hint style="info" %}
+   参考: LaravelのQuery Builder（`DB::table(...)->delete()`）やEloquentの集合操作は、WHEREを付けなければ普通に全件削除できてしまう。フレームワークが自動で守ってくれるわけではないので、この「DB側で拒否する」という発想は実務でも有効。
+   {% endhint %}
+
+2. **【予防】実行前にSELECT COUNT(*)で件数を確認し、想定と違えば実行しない**
+   危険なUPDATE/DELETEを打つ前に、同じWHERE条件でSELECT COUNT(*)を実行し、対象件数が想定通りか確認してから初めてexecute()に進む。これなら本当に実行前で止められる。
+   ```php
+   // 2. SQL作成（実行前に件数チェックを挟む）
+   $checkStmt = $pdo->prepare('SELECT COUNT(*) FROM gs_an_table WHERE id = :id');
+   $checkStmt->bindValue(':id', $id, PDO::PARAM_INT);
+   $checkStmt->execute();
+   $count = $checkStmt->fetchColumn();
+
+   if ((int)$count !== 1) {
+       exit('想定外の件数が対象になっています: ' . $count . '件。処理を中止します。');
+   }
+
+   // ここまで通過したときだけ、本来のUPDATE/DELETEを実行する
+   $stmt = $pdo->prepare('DELETE FROM gs_an_table WHERE id = :id');
+   $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+   $stmt->execute();
+   ```
+
+3. **【予防】削除・更新前に確認画面を1枚挟む（ワンクッション）**
+   delete.phpに直接POSTさせず、「本当に削除しますか？」の確認画面を経由させる。Webサービスで見慣れたUXそのものなので、初学者にも直感的に理解しやすい。
+
+4. **【事後の被害を抑える】トランザクションでコミット前に踏みとどまる（発展）**
+   `$pdo->beginTransaction()`で開始し、UPDATE/DELETE実行後に`rowCount()`を確認、想定外なら`rollback()`、想定通りなら`commit()`する。「事故後に元に戻す」のではなく「確定（commit）する前に踏みとどまる」という意味では予防に近いが、トランザクションの概念を理解している必要があるため発展扱いとする。
+
+5. **【運用でカバー】開発中はDBユーザーの権限を絞る／バックアップを取る**
+   学習環境ではrootで全権限を持っているが、実務ではUPDATE/DELETEの権限を絞ったり、定期バックアップを取る運用でカバーする、という話もAIから出やすい。「コードで防ぐ」の範囲を超える運用面の話なので、出てきたら「今回はコードの話に絞ろう」と軌道修正してもよい。
+
+**確認ポイント（AIの回答が浅い/不正確な場合のフォロー）**
+- AIがSQL_SAFE_UPDATESを提示しなかった場合：コード（PHP）だけで防ぐ発想に偏りやすいので、「DB自体に拒否させる」という選択肢もあることを講師から補足する
+- AIが「execute()の後にrowCount()をチェックする」だけを予防策として提示した場合：**その時点でもう変更は確定している**ことを指摘し、「チェックは実行前でなければ予防にならない」と気づかせる（上記の警告と同じ論点）
+- トランザクション（BEGIN/COMMIT/ROLLBACK）の話が出た場合：「commitする前に止める」という意味では予防に含められるが、autocommitが既定で有効なことや、beginTransactionが必要なことまでAIが説明できているか確認する
+- 「WHERE句を必須にするフレームワークを使う」等、素のPHPの範囲を超える回答が出た場合：Laravelでも集合操作は同様に全件削除できてしまうことを共有し、「フレームワークだから安全」という誤解を持たせない
+
+**問いかけ例**
+> 「SQL_SAFE_UPDATESと、SELECT COUNT(*)で事前確認する方法。どっちがAIの生成ミスに強い？」
+> 「execute()した後にrowCountを見て『件数が違う』と分かったとき、もう手遅れなのはなぜ？」
+> 「Laravelを使えば、このWHERE忘れ事故は自動的に防げると思う？」
+
+---
+
 ## 次回以降（Day4）に持ち越すもの
 
 - セッション管理・ログイン機能

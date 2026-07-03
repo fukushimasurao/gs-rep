@@ -662,6 +662,7 @@ function db_conn()
         $db_pw   = ''; // MAMPは'root'
         $db_host = 'localhost';
         $pdo = new PDO('mysql:dbname=' . $db_name . ';charset=utf8;host=' . $db_host, $db_id, $db_pw);
+        $pdo->exec('SET SQL_SAFE_UPDATES = 1'); // WHEREなしのUPDATE/DELETEをDB側で拒否させる
         // return $pdo;を忘れないように。 
         return $pdo;
     } catch (PDOException $e) {
@@ -669,6 +670,12 @@ function db_conn()
     }
 }
 ```
+
+{% hint style="info" %}
+`SET SQL_SAFE_UPDATES = 1`は、キー列を使ったWHEREが無い（＝全件が対象になる）UPDATE/DELETEをMySQL/MariaDB側でエラーにしてくれる設定です。ここでdb_conn()に1行追加しておくだけで、insert.php・detail.php・update.php・delete.phpすべてに自動で効くようになります。
+
+先ほど体感した「WHERE忘れ」は、これを設定しておけば未然に防げていました。
+{% endhint %}
 
 1. 利用箇所で、関数を呼び出す。
 
