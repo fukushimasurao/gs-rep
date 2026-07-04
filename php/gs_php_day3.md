@@ -701,11 +701,182 @@ insert.php・detail.php・update.php・delete.phpの「1. DB接続」ブロッ�
 - どのファイルにも同じようなDB接続処理・エラー処理・リダイレクト処理が書かれています
 
 【依頼】
-以下の重複しているコードを、funcs.phpに関数としてまとめる提案をしてください。
-関数名と使い方も教えてください。
+以下の4つは、insert.php・detail.php・update.php・delete.phpそれぞれの
+「DB接続」〜「実行後の処理」部分です。重複しているコードを、
+funcs.phpに関数としてまとめる提案をしてください。関数名と使い方も教えてください。
 
-（各ファイルのDB接続〜エラー処理部分を貼る）
+【insert.phpのDB接続〜実行後の処理】
+（ここにinsert.phpの該当部分を貼る）
+
+【detail.phpのDB接続〜実行後の処理】
+（ここにdetail.phpの該当部分を貼る）
+
+【update.phpのDB接続〜実行後の処理】
+（ここにupdate.phpの該当部分を貼る）
+
+【delete.phpのDB接続〜実行後の処理】
+（ここにdelete.phpの該当部分を貼る）
 ```
+
+貼り付け用に、自分の`insert.php`・`detail.php`・`update.php`・`delete.php`から該当部分をコピーしてきてください。自分のファイルの内容が下と多少違っていても問題ありません。
+
+<details>
+
+<summary>insert.phpの該当部分（参考）</summary>
+
+```php
+//1. POSTデータ取得
+$name = $_POST['name'];
+$email = $_POST['email'];
+$age = $_POST['age'];
+$content = $_POST['content'];
+
+// 2. DB接続
+try {
+    $db_name = 'gs_db_class3';
+    $db_id   = 'root';
+    $db_pw   = '';
+    $db_host = 'localhost';
+    $pdo = new PDO('mysql:dbname=' . $db_name . ';charset=utf8;host=' . $db_host, $db_id, $db_pw);
+} catch (PDOException $e) {
+    exit('DB Connection Error:' . $e->getMessage());
+}
+
+// 3．データ登録SQL作成
+$stmt = $pdo->prepare('INSERT INTO gs_an_table(name, email, age, content, indate)
+                        VALUES(:name, :email, :age, :content, sysdate())');
+$stmt->bindValue(':name', $name, PDO::PARAM_STR);
+$stmt->bindValue(':email', $email, PDO::PARAM_STR);
+$stmt->bindValue(':age', $age, PDO::PARAM_INT);
+$stmt->bindValue(':content', $content, PDO::PARAM_STR);
+$status = $stmt->execute();
+
+// 4. 実行後の処理
+if ($status === false) {
+    $error = $stmt->errorInfo();
+    exit('SQLError:' . print_r($error, true));
+} else {
+    header('Location: select.php');
+    exit();
+}
+```
+
+</details>
+
+<details>
+
+<summary>detail.phpの該当部分（参考）</summary>
+
+```php
+$id = $_GET['id'];
+
+// DB接続
+try {
+    $db_name = 'gs_db_class3';
+    $db_id   = 'root';
+    $db_pw   = '';
+    $db_host = 'localhost';
+    $pdo = new PDO('mysql:dbname=' . $db_name . ';charset=utf8;host=' . $db_host, $db_id, $db_pw);
+} catch (PDOException $e) {
+    exit('DB Connection Error:' . $e->getMessage());
+}
+
+//3．データ登録SQL作成
+$stmt = $pdo->prepare('SELECT * FROM gs_an_table WHERE id=:id;');
+$stmt->bindValue(':id',$id,PDO::PARAM_INT);
+$status = $stmt->execute();
+
+//4．データ表示
+$result = '';
+if ($status === false) {
+    $error = $stmt->errorInfo();
+    exit('SQLError:' . print_r($error, true));
+} else {
+    $result = $stmt->fetch();
+}
+```
+
+</details>
+
+<details>
+
+<summary>update.phpの該当部分（参考）</summary>
+
+```php
+//1. POSTデータ取得
+$name   = $_POST['name'];
+$email  = $_POST['email'];
+$age    = $_POST['age'];
+$content = $_POST['content'];
+$id = $_POST['id'];
+
+//2. DB接続します
+try {
+    $db_name = 'gs_db_class3';
+    $db_id   = 'root';
+    $db_pw   = '';
+    $db_host = 'localhost';
+    $pdo = new PDO('mysql:dbname=' . $db_name . ';charset=utf8;host=' . $db_host, $db_id, $db_pw);
+} catch (PDOException $e) {
+    exit('DB Connection Error:' . $e->getMessage());
+}
+
+//３．データ登録SQL作成
+$stmt = $pdo->prepare( 'UPDATE gs_an_table SET name = :name, email = :email, age = :age, content = :content, indate = sysdate() WHERE id = :id;' );
+$stmt->bindValue(':name', $name, PDO::PARAM_STR);
+$stmt->bindValue(':email', $email, PDO::PARAM_STR);
+$stmt->bindValue(':age', $age, PDO::PARAM_INT);
+$stmt->bindValue(':content', $content, PDO::PARAM_STR);
+$stmt->bindValue(':id', $id, PDO::PARAM_INT);
+$status = $stmt->execute();
+
+//４．データ登録処理後
+if ($status === false) {
+    $error = $stmt->errorInfo();
+    exit('SQLError:' . print_r($error, true));
+} else {
+    header('Location: select.php');
+    exit();
+}
+```
+
+</details>
+
+<details>
+
+<summary>delete.phpの該当部分（参考）</summary>
+
+```php
+//1.対象のIDを取得
+$id   = $_POST['id'];
+
+//2.DB接続します
+try {
+    $db_name = 'gs_db_class3';
+    $db_id   = 'root';
+    $db_pw   = '';
+    $db_host = 'localhost';
+    $pdo = new PDO('mysql:dbname=' . $db_name . ';charset=utf8;host=' . $db_host, $db_id, $db_pw);
+} catch (PDOException $e) {
+    exit('DB Connection Error:' . $e->getMessage());
+}
+
+//3.削除SQLを作成
+$stmt = $pdo->prepare('DELETE FROM gs_an_table WHERE id = :id');
+$stmt->bindValue(':id', $id, PDO::PARAM_INT);
+$status = $stmt->execute();
+
+//４．データ登録処理後
+if ($status === false) {
+    $error = $stmt->errorInfo();
+    exit('SQLError:' . print_r($error, true));
+} else {
+    header('Location: select.php');
+    exit();
+}
+```
+
+</details>
 
 AIの提案と、下記の授業資料の関数名・設計を見比べてみましょう。「なぜこの3つの関数に分けるのか」を説明できるか確認してください。
 {% endhint %}
@@ -728,7 +899,6 @@ function db_conn()
         $db_pw   = ''; // MAMPは'root'
         $db_host = 'localhost';
         $pdo = new PDO('mysql:dbname=' . $db_name . ';charset=utf8;host=' . $db_host, $db_id, $db_pw);
-        $pdo->exec('SET SQL_SAFE_UPDATES = 1'); // WHEREなしのUPDATE/DELETEをDB側で拒否させる
         // return $pdo;を忘れないように。 
         return $pdo;
     } catch (PDOException $e) {
@@ -738,9 +908,16 @@ function db_conn()
 ```
 
 {% hint style="info" %}
-`SET SQL_SAFE_UPDATES = 1`は、キー列を使ったWHEREが無い（＝全件が対象になる）UPDATE/DELETEをMySQL/MariaDB側でエラーにしてくれる設定です。ここでdb_conn()に1行追加しておくだけで、insert.php・detail.php・update.php・delete.phpすべてに自動で効くようになります。
+`SET SQL_SAFE_UPDATES = 1`は、キー列を使ったWHEREが無い（＝全件が対象になる）UPDATE/DELETEをMySQL/MariaDB側でエラーにしてくれる設定です。
+ここでdb_conn()に1行追加しておくだけで、insert.php・detail.php・update.php・delete.phpすべてに自動で効くようになります。
 
-先ほど体感した「WHERE忘れ」は、これを設定しておけば未然に防げていました。
+必要に応じて書き加えてください。
+```php
+$pdo = new PDO(...);
+$pdo->exec('SET SQL_SAFE_UPDATES = 1');
+// return $pdo;を忘れないように。 
+return $pdo;
+```
 {% endhint %}
 
 1. 利用箇所で、関数を呼び出す。
