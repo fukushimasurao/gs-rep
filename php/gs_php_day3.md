@@ -488,58 +488,6 @@ DELETE FROM テーブル名 WHERE id = :id
 WHERE句で指定しないと、全部消えるので、超注意
 {% endhint %}
 
-{% hint style="success" %}
-**【AI活用】なぜ削除はGETよりPOSTがいいのか、AIに聞いてみよう**
-
-detail.phpへのリンクはGET、delete.phpへはPOSTで作ります。まずはこの違いをAIに質問して、出てきた回答を全体で共有しましょう。
-
-【サンプルプロンプト】
-```
-PHPの授業でDBを学んでいます。初学者向けにわかりやすく教えてください。
-
-【質問】
-detail.phpへの遷移リンクはGET（<a href="detail.php?id=...">）で作りましたが、
-delete.phpへの削除ボタンはPOST（<form method="POST">）で作るように言われました。
-なぜ削除処理はGETではなくPOSTの方がいいのですか？
-```
-
-AIの回答を確認したら、以下を開いて答え合わせをしてみましょう。
-
-<details>
-
-<summary>確認してほしいポイント</summary>
-
-* GETリンクだと、ブラウザの先読み（プリフェッチ）機能やクローラーがリンクを開いただけで削除が実行されてしまう危険がある
-* GETは「データを取得するだけで、サーバー側の状態を変えない」という前提で使うもの。DELETEのようにデータを変更する処理には向かない
-
-参考（公式）：OWASP Cheat Sheet Series「CSRF Prevention」の中でも、"Do not use GET requests for state changing operations." と明記されています。
-
-[https://cheatsheetseries.owasp.org/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html](https://cheatsheetseries.owasp.org/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html)
-
-</details>
-{% endhint %}
-
-{% hint style="success" %}
-**【AI活用】delete.phpもAIに書かせてみよう**
-
-POSTを使う理由が分かったところで、delete.phpをAIに生成してもらいましょう。update.phpとの共通点・差分に注目しながら見比べてみてください。
-
-【サンプルプロンプト】
-```
-【コンテキスト】
-- PHPの授業でXAMPPを使っています
-- DBはMySQLで、接続にはPDOを使います
-- DB名: gs_db_class3、テーブル: gs_an_table
-
-【依頼】
-select.phpのフォームからPOSTで送られてくるidを受け取り、
-そのidのレコードをDELETEするdelete.phpを書いてください。
-update.phpと同じ4ブロック構造のコメントを入れてください。
-削除後はselect.phpにリダイレクトしてください。
-```
-
-{% endhint %}
-
 ### 削除ボタン（削除フォームを作成する）
 
 1. select.phpのデータ表示のwhile文内のHTML生成に削除フォームを作成
@@ -564,7 +512,27 @@ $view .= '</p>';
 
 1. delete.phpに削除処理を作成する
 
-(`update.php`の中身をコピぺして、不要部分を修正削除すると楽です)
+{% hint style="success" %}
+**【AI活用】delete.phpをAIに書かせてみよう**
+
+update.phpとの共通点・差分に注目しながら見比べてみてください。
+
+【サンプルプロンプト】
+```
+【コンテキスト】
+- PHPの授業でXAMPPを使っています
+- DBはMySQLで、接続にはPDOを使います
+- DB名: gs_db_class3、テーブル: gs_an_table
+
+【依頼】
+select.phpのフォームからPOSTで送られてくるidを受け取り、
+そのidのレコードをDELETEするdelete.phpを書いてください。
+update.phpと同じ4ブロック構造のコメントを入れてください。
+削除後はselect.phpにリダイレクトしてください。
+```
+{% endhint %}
+
+AIが生成したコードの見本（`update.php`の中身をコピペして、不要部分を修正削除しても作れます）
 
 ```php
 //1.対象のIDを取得
@@ -601,6 +569,37 @@ if ($status === false) {
 }
 
 ```
+
+{% hint style="success" %}
+**【AI活用】なぜ削除はGETよりPOSTがいいのか、AIに聞いてみよう**
+
+出来上がったコードを見ると、detail.phpへのリンクはGET、delete.phpへの削除はPOSTになっています。この違いをAIに質問して、出てきた回答を確認しましょう。
+
+【サンプルプロンプト】
+```
+PHPの授業でDBを学んでいます。初学者向けにわかりやすく教えてください。
+
+【質問】
+detail.phpへの遷移リンクはGET（<a href="detail.php?id=...">）で作りましたが、
+delete.phpへの削除ボタンはPOST（<form method="POST">）で作るように言われました。
+なぜ削除処理はGETではなくPOSTの方がいいのですか？
+```
+
+AIの回答を確認したら、以下を開いて答え合わせをしてみましょう。
+
+<details>
+
+<summary>確認してほしいポイント</summary>
+
+* GETリンクだと、ブラウザの先読み（プリフェッチ）機能やクローラーがリンクを開いただけで削除が実行されてしまう危険がある
+* GETは「データを取得するだけで、サーバー側の状態を変えない」という前提で使うもの。DELETEのようにデータを変更する処理には向かない
+
+参考（公式）：OWASP Cheat Sheet Series「CSRF Prevention」の中でも、"Do not use GET requests for state changing operations." と明記されています。
+
+[https://cheatsheetseries.owasp.org/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html](https://cheatsheetseries.owasp.org/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html)
+
+</details>
+{% endhint %}
 
 ---
 
