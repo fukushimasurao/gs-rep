@@ -336,6 +336,21 @@ if ($status === false) {
 2. `bindValue`の1行
 {% endhint %}
 
+### HTMLを書く前に、$resultの中身を確認しよう
+
+HTMLの`value`に埋め込む前に、`$result`にどんなデータが入っているかを`var_dump`で確認しておきましょう。
+
+```php
+echo '<pre>';
+var_dump($result);
+echo '</pre>';
+exit();
+```
+
+`$stmt->fetch()`は連想配列（`PDO::FETCH_ASSOC`が既定）で返るので、`$result['name']`や`$result['email']`のようにキー名でアクセスできることを確認してください。
+
+確認できたら、上記の`var_dump`と`exit()`は削除してください（残したままだとこの後のHTML表示に進めません）。
+
 1. detail.phpに更新画面用のHTMLを記述
 
 `index.php`のコードをまるっとコピーして貼り付け！
@@ -492,7 +507,6 @@ update.phpと同じ4ブロック構造のコメントを入れてください。
 削除後はselect.phpにリダイレクトしてください。
 ```
 
-「update.phpと比べて、無くなったブロック・変わった部分はどこ？」を確認しましょう（ヒント：受け取る項目がidだけになります）。
 {% endhint %}
 
 {% hint style="success" %}
@@ -510,11 +524,20 @@ delete.phpへの削除ボタンはPOST（<form method="POST">）で作るよう�
 なぜ削除処理はGETではなくPOSTの方がいいのですか？
 ```
 
-**確認してほしいポイント**
+AIの回答を確認したら、以下を開いて答え合わせをしてみましょう。
+
+<details>
+
+<summary>確認してほしいポイント</summary>
+
 * GETリンクだと、ブラウザの先読み（プリフェッチ）機能やクローラーがリンクを開いただけで削除が実行されてしまう危険がある
 * GETは「データを取得するだけで、サーバー側の状態を変えない」という前提で使うもの。DELETEのようにデータを変更する処理には向かない
 
-AIの回答が上記のポイントと合っているか確認してみましょう。
+参考（公式）：OWASP Cheat Sheet Series「CSRF Prevention」の中でも、"Do not use GET requests for state changing operations." と明記されています。
+
+[https://cheatsheetseries.owasp.org/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html](https://cheatsheetseries.owasp.org/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html)
+
+</details>
 {% endhint %}
 
 ### 削除ボタン（削除フォームを作成する）
