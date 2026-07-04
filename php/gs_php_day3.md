@@ -498,17 +498,15 @@ $view .= '<div class="data-raw">';
 $view .= '<a href="detail.php?id=' . $result['id'] . '">';
 $view .= $result["indate"] . "：" . $result["name"];
 $view .= '</a>';
-//追記：削除は<a>ではなく<form method="POST">で送る
-$view .= '<form method="POST" action="delete.php" style="display:inline;">';
+
+// 削除formの実装。削除は<a>ではなく<form method="POST">で送る
+$view .= '<form method="POST" action="delete.php">';
 $view .= '<input type="hidden" name="id" value="' . $result['id'] . '">';
 $view .= '<button type="submit">削除</button>';
 $view .= '</form>';
+
 $view .= '</div>';
 ```
-
-{% hint style="info" %}
-`style="display:inline;"`は、`<form>`が改行を作ってしまうため、見た目をリンクのように並べるための応急処置です。デザインをこだわりたい場合はCSSクラスを作って対応しましょう。
-{% endhint %}
 
 1. delete.phpに削除処理を作成する
 
