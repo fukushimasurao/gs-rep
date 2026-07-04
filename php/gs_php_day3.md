@@ -37,7 +37,7 @@
 | コマ | テーマ | 内容 |
 |---|---|---|
 | コマ1（50分） | 復習・詳細表示 | 前回復習 → detail.php実装 |
-| コマ2（50分） | 更新・削除・危険体感 | update.php/delete.php実装 → WHERE忘れ危険体感 → Slack共有 |
+| コマ2（50分） | 更新・削除・危険体感 | update.php/delete.php実装 |
 | コマ3（50分） | 関数化・まとめ | funcs.phpへのリファクタリング → 宿題説明 |
 
 ### AIに渡すコンテキスト定型文
@@ -148,6 +148,28 @@ $stmt->bindValue(':content', $content, PDO::PARAM_STR);
 
 の流れを作ります。
 
+{% hint style="info" %}
+**今日作る画面の全体像**
+
+「form → 処理するphp → フロント（表示）」という流れが複数のファイルをまたいで続くので、迷子になりやすいポイントです。まずは全体の地図を確認しましょう。
+
+```mermaid
+flowchart LR
+    select[select.php<br>一覧表示] -- "GET: id" --> detail["detail.php<br>WHERE id=:id で<br>1件だけ取得+表示"]
+    detail -- "POST: id,name,email,age,content" --> update["update.php<br>WHERE id=:id の<br>1件だけUPDATE"]
+    update -- redirect --> select
+    select -- "POST: id" --> delete["delete.php<br>WHERE id=:id の<br>1件だけDELETE"]
+    delete -- redirect --> select
+    index[index.php<br>新規登録フォーム] -- "POST: name,email,age,content" --> insert[insert.php<br>INSERT実行]
+    insert -- redirect --> select
+```
+
+* `select.php`が一覧の入口。ここから`detail.php`（更新）と`delete.php`（削除）の2方向に分岐する
+* `detail.php`は「表示するphp」であり、送信先は`update.php`（別ファイル）になっている点に注意（detail.php自身はUPDATEを実行しない）
+* `insert.php`・`update.php`・`delete.php`はいずれも「処理をしたらselect.phpにリダイレクトする」という同じ終わり方をする
+* `detail.php`・`update.php`・`delete.php`はすべて**受け取ったidだけを`WHERE id=:id`で絞り込んで処理する**。この絞り込みを忘れると、全件が対象になってしまう（コマ2で体感します）
+{% endhint %}
+
 ## まず更新画面にidを送る為のリンクを作成する
 
 `select.php`の各項目をクリックしたら、その項目の詳細画面に遷移する様にします。 よって、`detail.php`に`id`を送るために、urlに`パラメータ(URLパラメータ)`を追加して遷移させてあげます。
@@ -206,6 +228,33 @@ echo "I am {$modifier}_man!!"  // ${modifier} でもok
 http://localhost/test/detail.php?id=XXX
 
 に遷移するか確認する。
+
+{% hint style="info" %}
+**「idを渡して処理する」流れを図で確認**
+
+更新の場合、idは「select.php → detail.php」と「detail.php → update.php」の2回、受け渡し方を変えて渡っています。ここを混同しやすいので図で整理します。
+
+```mermaid
+sequenceDiagram
+    participant User as ブラウザ
+    participant Select as select.php
+    participant Detail as detail.php
+    participant Update as update.php
+
+    User->>Select: 一覧を開く
+    Select->>User: 各行に「詳細/編集」リンク<br>href="detail.php?id=3"
+    User->>Detail: リンクをクリック<br>(GET id=3)
+    Detail->>Detail: WHERE id=:id で<br>id=3の1件だけSELECT
+    Detail->>User: id=3のデータを<br>フォームのvalueに初期表示
+    User->>Update: フォーム送信<br>(POST id=3,name,email...)
+    Update->>Update: WHERE id=:id で<br>id=3の1件だけUPDATE
+    Update->>Select: リダイレクト
+```
+
+* 1回目（select→detail）は**GET**。URLの`?id=3`として渡る
+* 2回目（detail→update）は**POST**。フォーム内の`<input type="hidden" name="id" value="3">`として渡る
+* どちらの場合も、受け取った側は必ず`WHERE id=:id`で絞り込むこと。これを忘れると「1件だけ操作するつもりが全件に影響する」というWHERE忘れ事故になります（コマ2で詳しく体感します）
+{% endhint %}
 
 ## 更新画面(detail.php)を作成する
 
