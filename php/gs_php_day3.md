@@ -167,7 +167,7 @@ flowchart LR
 * `select.php`が一覧の入口。ここから`detail.php`（更新）と`delete.php`（削除）の2方向に分岐する
 * `detail.php`は「表示するphp」であり、送信先は`update.php`（別ファイル）になっている点に注意（detail.php自身はUPDATEを実行しない）
 * `insert.php`・`update.php`・`delete.php`はいずれも「処理をしたらselect.phpにリダイレクトする」という同じ終わり方をする
-* `detail.php`・`update.php`・`delete.php`はすべて**受け取ったidだけを`WHERE id=:id`で絞り込んで処理する**。この絞り込みを忘れると、全件が対象になってしまう（コマ2で体感します）
+* 図中の`WHERE id=:id`が何を意味するかは、この後の「idを渡して処理する」流れで詳しく確認します
 {% endhint %}
 
 ## まず更新画面にidを送る為のリンクを作成する
@@ -230,26 +230,9 @@ http://localhost/test/detail.php?id=XXX
 に遷移するか確認する。
 
 {% hint style="info" %}
-**「idを渡して処理する」流れを図で確認**
+**「idを渡して処理する」ときの注意点**
 
-更新の場合、idは「select.php → detail.php」と「detail.php → update.php」の2回、受け渡し方を変えて渡っています。ここを混同しやすいので図で整理します。
-
-```mermaid
-sequenceDiagram
-    participant User as ブラウザ
-    participant Select as select.php
-    participant Detail as detail.php
-    participant Update as update.php
-
-    User->>Select: 一覧を開く
-    Select->>User: 各行に「詳細/編集」リンク<br>href="detail.php?id=3"
-    User->>Detail: リンクをクリック<br>(GET id=3)
-    Detail->>Detail: WHERE id=:id で<br>id=3の1件だけSELECT
-    Detail->>User: id=3のデータを<br>フォームのvalueに初期表示
-    User->>Update: フォーム送信<br>(POST id=3,name,email...)
-    Update->>Update: WHERE id=:id で<br>id=3の1件だけUPDATE
-    Update->>Select: リダイレクト
-```
+更新の場合、idは上の地図の中で「select.php → detail.php」と「detail.php → update.php」の2回、受け渡し方を変えて渡っています。
 
 * 1回目（select→detail）は**GET**。URLの`?id=3`として渡る
 * 2回目（detail→update）は**POST**。フォーム内の`<input type="hidden" name="id" value="3">`として渡る
