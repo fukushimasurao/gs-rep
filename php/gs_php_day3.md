@@ -489,30 +489,9 @@ WHERE句で指定しないと、全部消えるので、超注意
 {% endhint %}
 
 {% hint style="success" %}
-**【AI活用】delete.phpもAIに書かせてみよう**
-
-update.phpとの共通点・差分に注目しながら見比べてみてください。
-
-【サンプルプロンプト】
-```
-【コンテキスト】
-- PHPの授業でXAMPPを使っています
-- DBはMySQLで、接続にはPDOを使います
-- DB名: gs_db_class3、テーブル: gs_an_table
-
-【依頼】
-select.phpのフォームからPOSTで送られてくるidを受け取り、
-そのidのレコードをDELETEするdelete.phpを書いてください。
-update.phpと同じ4ブロック構造のコメントを入れてください。
-削除後はselect.phpにリダイレクトしてください。
-```
-
-{% endhint %}
-
-{% hint style="success" %}
 **【AI活用】なぜ削除はGETよりPOSTがいいのか、AIに聞いてみよう**
 
-detail.phpへのリンクはGET、delete.phpへはPOSTを使っています。この違いをAIに質問して、出てきた回答を全体で共有しましょう。
+detail.phpへのリンクはGET、delete.phpへはPOSTで作ります。まずはこの違いをAIに質問して、出てきた回答を全体で共有しましょう。
 
 【サンプルプロンプト】
 ```
@@ -538,6 +517,27 @@ AIの回答を確認したら、以下を開いて答え合わせをしてみま
 [https://cheatsheetseries.owasp.org/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html](https://cheatsheetseries.owasp.org/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html)
 
 </details>
+{% endhint %}
+
+{% hint style="success" %}
+**【AI活用】delete.phpもAIに書かせてみよう**
+
+POSTを使う理由が分かったところで、delete.phpをAIに生成してもらいましょう。update.phpとの共通点・差分に注目しながら見比べてみてください。
+
+【サンプルプロンプト】
+```
+【コンテキスト】
+- PHPの授業でXAMPPを使っています
+- DBはMySQLで、接続にはPDOを使います
+- DB名: gs_db_class3、テーブル: gs_an_table
+
+【依頼】
+select.phpのフォームからPOSTで送られてくるidを受け取り、
+そのidのレコードをDELETEするdelete.phpを書いてください。
+update.phpと同じ4ブロック構造のコメントを入れてください。
+削除後はselect.phpにリダイレクトしてください。
+```
+
 {% endhint %}
 
 ### 削除ボタン（削除フォームを作成する）
@@ -639,18 +639,33 @@ $stmt = $pdo->prepare('DELETE FROM gs_an_table');
 PHPはエラーを出しません。SQLとしては正しい文なので、「意図通りに全件処理された」だけです。
 {% endhint %}
 
-#### Step3. グループで議論してみよう
+#### Step3. AIに聞いてみよう
 
-以下について、近くの人と話してみてください。
+以下について、AIに質問してみてください。
 
 * 実務でこれをやってしまったら何が起きる？
 * Day2のSQLインジェクションと、今回のWHERE忘れ。危険の種類はどう違う？
 * どうすればこのミスを事前に防げそう？
 
-#### Step4. AIで議論を要約してSlackに投稿してみよう
+{% hint style="success" %}
+**【AI活用】WHERE忘れの危険性についてAIに聞いてみよう**
+
+【サンプルプロンプト】
+```
+PHPの授業で、UPDATE/DELETE文のWHERE句を忘れると
+全件が更新・削除されてしまう事故を体感しました。
+
+【質問】
+1. 実務でこれをやってしまったら何が起きますか？
+2. 前回学んだSQLインジェクションと、今回のWHERE忘れ。危険の種類はどう違いますか？
+3. どうすればこのミスを事前に防げますか？
+```
+{% endhint %}
+
+#### Step4. AIの回答を要約してSlackに投稿してみよう
 
 {% hint style="success" %}
-**【AI活用】グループの議論をAIに要約してもらう**
+**【AI活用】AIとのやり取りを共有メッセージに要約してもらう**
 
 【サンプルプロンプト】
 ```
@@ -658,15 +673,12 @@ PHPはエラーを出しません。SQLとしては正しい文なので、「�
 PHPの授業で、UPDATE/DELETE文のWHERE句を忘れると何が起きるかを学びました。
 
 【依頼】
-以下の議論内容を、Slackに投稿する3行以内の共有メッセージにまとめてください。
+先ほどのやり取りを、Slackに投稿する3行以内の共有メッセージにまとめてください。
 初学者にも伝わる言葉で、結論を最初に書いてください。
-
-【議論内容】
-（ここにグループで話した内容のメモを貼る）
 ```
 {% endhint %}
 
-まとめたメッセージを授業用のSlackチャンネルに投稿してください。投稿し終わったら、他のグループの投稿にも目を通してみましょう。同じテーマでも、まとめ方や言葉の選び方に違いがあるはずです。
+まとめたメッセージを授業用のSlackチャンネルに投稿してください。投稿し終わったら、他の受講生の投稿にも目を通してみましょう。同じ質問でも、AIの回答やまとめ方に違いがあるはずです。
 
 #### Step5. update.php / delete.phpを元に戻す
 
