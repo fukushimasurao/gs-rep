@@ -195,11 +195,11 @@ flowchart LR
 ```php
 //GETデータ送信リンク作成
 // <a>で囲う。
-$view .= '<p>';
+$view .= '<div class="data-raw">';
 $view .= '<a href="detail.php?id=' . $result['id'] . '">';
 $view .= "{$result['indate']} : {$result['name']}"; // 文字列は、ダブルクオーテーション利用すると変数展開可能
 $view .= '</a>';
-$view .= '</p>';
+$view .= '</div>';
 ```
 
 {% hint style="info" %}
@@ -494,7 +494,7 @@ WHERE句で指定しないと、全部消えるので、超注意
 
 ```php
 //POSTデータ送信フォーム作成
-$view .= '<p>';
+$view .= '<div class="data-raw">';
 $view .= '<a href="detail.php?id=' . $result['id'] . '">';
 $view .= $result["indate"] . "：" . $result["name"];
 $view .= '</a>';
@@ -503,7 +503,7 @@ $view .= '<form method="POST" action="delete.php" style="display:inline;">';
 $view .= '<input type="hidden" name="id" value="' . $result['id'] . '">';
 $view .= '<button type="submit">削除</button>';
 $view .= '</form>';
-$view .= '</p>';
+$view .= '</div>';
 ```
 
 {% hint style="info" %}
