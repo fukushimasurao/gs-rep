@@ -10,52 +10,25 @@
 | **Day4** | **ログイン機能** | **セッション管理、権限による処理の分岐、パスワードのハッシュ化** |
 | Day5 | DBリレーション | テーブルの設計・正規化、JOINで複数テーブルを扱う |
 
-### 授業資料 <a href="#shou-ye-zi-liao" id="shou-ye-zi-liao"></a>
+## 014\_gs\_php\_day4
+
+ユーザー側にデータを授業資料
 
 [https://gitlab.com/gs\_hayato/gs-php-01/-/blob/master/PHP04.zip](https://gitlab.com/gs_hayato/gs-php-01/-/blob/master/PHP04.zip)
 
-## 前回のおさらい
+### 前回のおさらい
 
 * `SQL`の`UPDATE`を書いた
 * `SQL`の`DELETE`を書いた
 * CRUDのC,R,U,D全部触った
 
-## 今回やること
+### 今回やること
 
-前回は、CRUD機能の`Update（編集）`、`Delete（削除）`を行いました。
+前回は、CRUD機能の`Updata（編集）`、`Delete（削除）`を行いました。
 
 今日は、`SESSION`をやっていきます。
 
 * `CRUD`とは？ [https://wa3.i-3-i.info/word123.html](https://wa3.i-3-i.info/word123.html)
-
-## 本日のタイムライン
-
-| コマ | テーマ | 内容 |
-|---|---|---|
-| コマ1（50分） | SESSIONの基本 | SESSIONの概念 → session01.php/02.phpでファイル間データ共有 |
-| コマ2（50分） | ログイン機能の実装 | session_idの共有・更新 → login_act.php実装 → ログインチェック処理 |
-| コマ3（50分） | 権限分岐・ハッシュ化・まとめ | kanri_flgによる権限分岐 → パスワードのハッシュ化 → 宿題説明 |
-
-### AIに渡すコンテキスト定型文
-
-AI に質問する前に、毎回以下をチャットに貼り付けてください。これを渡すことで、授業の内容に合ったコードを生成してくれます。
-
-```
-【このAIセッションのコンテキスト】
-- PHPの授業でXAMPPを使っています
-- フレームワークは使わず、素のPHPで書きます
-- DBはMySQLで、接続にはPDOを使います（mysql_*やmysqliは使わないでください）
-- DB名: gs_db_class4
-- テーブル1: gs_an_table（これまでのCRUD対象）
-- テーブル2: gs_user_table（ログイン用）カラム: id(PK,AI), lid(varchar), lpw(varchar), kanri_flg(int)
-- SESSIONを使ってログイン機能を実装しています
-- コードはシンプルに。初学者向けで、変数名もわかりやすく
-- DB接続などの共通処理は、funcs.phpにまとめる方針で進めています
-```
-
----
-
-## コマ1：SESSIONの基本を知る・触る
 
 ### Xamppの起動、DB準備
 
@@ -191,33 +164,9 @@ echo '<a href="session01.php">session01.phpに戻る</a>';
 `$_SESSION`はサーバー内ならどこでも（＝htdocsの中にあるファイルであればどのファイルからでも）呼び出すことができます。
 {% endhint %}
 
----
+#### `session_start();`でできること　その2
 
-## コマ2：ログイン機能の実装
-
-### `session_start();`でできること　その2
-
-IDをサーバー / クライアントで共有する。さらに、セキュリティのためにそのIDを更新する方法も確認します。
-
-{% hint style="success" %}
-**【AI活用】session_idの確認・更新コードをAIに生成してもらおう**
-
-【サンプルプロンプト】
-```
-【コンテキスト】
-- PHPの授業でXAMPPを使っています
-- SESSIONの基本(session_start, $_SESSION)は学習済みです
-
-【依頼】
-1. session01.phpに、現在のセッションIDを取得して画面に表示するコードを
-   追加してください。session_id()を使ってください。
-2. さらに、セッションIDをセキュリティ上の理由で更新する
-   session_regenerate_id.phpというファイルも作ってください。
-   session_start()の直後に現在のセッションIDを取得し、
-   session_regenerate_id(true)で新しいIDを発行し、
-   新旧のセッションIDを両方表示するコードにしてください。
-```
-{% endhint %}
+IDをサーバー / クライアントで共有する。
 
 `session01.php`をブラウザで開く★
 
@@ -229,8 +178,6 @@ session_start();
 $sid = session_id();
 echo $sid;
 ```
-
-（AIの出力と見比べてみよう）
 
 {% hint style="info" %}
 `session_start()` で新しいセッションを開始(最初のセッションIDを作成する)、あるいは既存のセッションを再開します。
@@ -308,55 +255,13 @@ echo '新しいセッション:' . $new_session_id . '<br />';
 * `SESSION ID`を発行してサーバーとブラウザにブラウザに同じ値の一意のIDを発行
 * もしブラウザがそのIDを持っていたら、サーバーは、「そのユーザー」と認識する。
 
-`login.php`のコードを確認。どのような`form`になって確認してみてください。`method`, `action`, `input`をしっかり確認しましょう。
 
-{% hint style="success" %}
-**【AI活用】login_act.phpのスケルトンをAIに渡して穴埋めしてもらおう**
 
-以下のスケルトンをAIに渡して、`/* */`の部分を埋めてもらいましょう。埋め終わったら、授業資料の完成形と見比べて「違う部分を探して」みてください。
+では、実際にコードを書いていきましょう。
 
-【サンプルプロンプト】
-```
-【コンテキスト】
-- PHPの授業でXAMPPを使っています
-- フレームワークは使わず、素のPHPで書きます
-- DBはMySQLで、接続にはPDOを使います
-- DB名: gs_db_class4、テーブル: gs_user_table
-- カラム: id(PK,AI), lid(varchar), lpw(varchar), kanri_flg(int)
-- DB接続はfuncs.phpのdb_conn()、エラー処理はsql_error($stmt)を使ってください
-
-【依頼】
-以下のスケルトンの /* */ 部分を埋めてください。構造とコメントは変えないでください。
-$_POSTで送られてくるlidとlpwが、gs_user_tableの中の
-1件のレコードと完全一致するかを確認するコードです。
-
-<?php
-
-/* SESSIONを利用するので必須の1行 */
-
-//POST値
-$lid = $_POST['lid'];
-$lpw = /* POSTでlpwを受け取る */;
-
-//1.  DB接続します
-require_once('funcs.php');
-$pdo = db_conn();
-
-$stmt = $pdo->prepare(/* lidとlpwが一致するレコードを取得するSELECT文 */);
-/* bindValueを2行 */
-$status = $stmt->execute();
-
-//3. SQL実行時にエラーがある場合STOP
-if($status === false){
-    sql_error($stmt);
-}
-
-//4. 抽出データ数を取得
-$val = $stmt->fetch();
-```
-{% endhint %}
-
-`login_act.php`の完成形（AIの出力と見比べてみよう）
+1. `login.php`のコードを確認。どのような`form`になって確認してみてください。
+   1. `method`, `action`, `input`をしっかり確認しましょう。
+2. `login_act.php`に以下の記述を追加
 
 ```php
 <?php
@@ -387,24 +292,12 @@ $val = $stmt->fetch();
 // こっから下は次のコード↓
 ```
 
-{% hint style="success" %}
-**【自分で書こう】**
-
-コピペして動作確認したら、以下の2箇所を削除して自分で書いてみよう。
-
-```php
-$stmt = $pdo->prepare('← ここを自分で書く');
-$stmt->bindValue(':lid', $lid, PDO::PARAM_STR);  // ← この2行も自分で書く
-$stmt->bindValue(':lpw', $lpw, PDO::PARAM_STR);
-```
-{% endhint %}
-
-処理後のリダイレクト先を設定
+1. 処理後のリダイレクト先を設定
 
 ```php
 //5. 該当レコードがあればSESSIONに値を代入
 // if(password_verify($lpw, $val['lpw'])){ // ハッシュを利用する場合はこっち
-if( $val ){
+if( $val['id'] != '' ){
   // セッションIDを新しいものに更新する
   session_regenerate_id(true);
   // サーバーとクライアントで共有している"最新の"SessionIDをchk_ssidに記録しておく。
@@ -417,37 +310,17 @@ if( $val ){
   //Login失敗時(Logout経由)
   redirect('login.php');
 }
+
+
 ```
+
+3. ログイン処理の作成
 
 これで、ログインのような動きはできましたが、実際には機能していません。 ログインしようとしまいと、`select.php`にアクセスできてしまうからです。
 
 よって、`select.php`などは、\_ログインしていないとみられないページ\_に修正する必要があります。
 
-### ログインチェック処理の実装
-
-{% hint style="success" %}
-**【AI活用】ログインチェック処理をAIに生成してもらおう**
-
-【サンプルプロンプト】
-```
-【コンテキスト】
-- PHPの授業でSESSIONを使ったログイン機能を作っています
-- login_act.phpでログイン成功時に $_SESSION['chk_ssid'] = session_id(); を保存しています
-
-【依頼】
-select.phpの先頭に追加する「ログインチェック」のコードを書いてください。
-条件は以下の2つです。
-1. $_SESSION['chk_ssid']が存在しない場合はエラー（未ログイン）
-2. $_SESSION['chk_ssid']が現在のsession_id()と一致しない場合もエラー
-どちらかに当てはまったら 'LOGIN ERROR' を表示して処理を止めてください。
-問題なければ、session_regenerate_id(true)でIDを更新し、
-$_SESSION['chk_ssid']を新しいIDで上書きしてください。
-```
-{% endhint %}
-
 1. select.phpにログインチェック処理を追加
-
-`select.php`の完成形（AIの出力と見比べてみよう）
 
 ```php
 //SESSIONスタート
@@ -495,35 +368,7 @@ if (!isset($_SESSION['chk_ssid']) || $_SESSION['chk_ssid'] !== session_id()) {
 
 {% endhint %}
 
-**問いかけ：** 「なぜチェックは2つ必要？1つだけではダメ？」をAIの説明も踏まえて自分の言葉で答えてみましょう。
-
-{% hint style="success" %}
-**【AI活用】ログインチェック処理をAIにリファクタリングさせよう**
-
-select.php・detail.php・delete.phpなど、ログインが必要なページすべてに同じチェック処理を書くことになります。この重複をAIに関数化してもらいましょう。
-
-【サンプルプロンプト】
-```
-【コンテキスト】
-- PHPの授業でselect.phpに以下のログインチェック処理を書きました
-- これをdetail.php、delete.phpなど複数のファイルにも同じように書く必要があります
-
-session_start();
-if (!isset($_SESSION['chk_ssid']) || $_SESSION['chk_ssid'] !== session_id()) {
-    exit('LOGIN ERROR');
-}
-session_regenerate_id(true);
-$_SESSION['chk_ssid'] = session_id();
-
-【依頼】
-このログインチェック処理をfuncs.phpの関数としてまとめたいです。
-関数名の案と実装を教えてください。
-```
-{% endhint %}
-
 1. ログイン処理を関数化。`funcs.php`にログインチェック関数を作成
-
-（AIの提案と、下記の完成形を見比べてみましょう）
 
 ```php
 //ログインチェック
@@ -576,39 +421,15 @@ loginCheck();
 // 以下省略
 ```
 
----
-
-## コマ3：権限分岐・ハッシュ化・まとめ
-
 ### 権限による処理の分岐
 
 kanri\_flgにより処理を分けたい場合、以下のコードを追加
-
-{% hint style="success" %}
-**【AI活用】権限分岐のコードをAIに生成してもらおう**
-
-【サンプルプロンプト】
-```
-【コンテキスト】
-- PHPの授業でSESSIONを使ったログイン機能を作っています
-- gs_user_tableにはkanri_flgという管理者フラグのカラムがあります
-- login_act.phpのログイン成功時には $_SESSION['chk_ssid'] = session_id(); を保存しています
-
-【依頼】
-1. login_act.phpのログイン成功時に、そのユーザーのkanri_flgもSESSIONに
-   保存するコードを追加してください。
-2. kanri_flgが1（管理者）の場合だけ特別な処理をする、if文の書き方の例を
-   教えてください。
-```
-{% endhint %}
-
-（AIの提案と、下記の完成形を見比べてみましょう）
 
 (1)
 `login_act.php`にてlogin 処理にてSESSIONに`kanri_flg`を持たせる。
 これで、loginした時に`$_SESSION['kanri_flg']`にこの人のkanri_flgが保持される。
 ```php
-if( $val ){
+if( $val['id'] != '' ){
   session_regenerate_id(true);
   $_SESSION['chk_ssid']  = session_id();
 
@@ -622,16 +443,12 @@ if( $val ){
 kanri_flg使いたいところで利用する。
 ```php
 // もし管理者の場合
-if($_SESSION['kanri_flg'] == 1) {
+if($_SESSION['kanri_flg'] === 1) {
     // 何か行いたい処理。
     // 特別な処理をしてあげる。
     // 関数化してあげてもいいかも。
 }
 ```
-
-{% hint style="info" %}
-`===`（型まで厳密に比較）ではなく`==`を使っています。DBから取得した`kanri_flg`は環境によって文字列`"1"`として返る場合があり、`=== 1`だと一致しないことがあるためです。
-{% endhint %}
 
 ### パスワードのハッシュ化
 
@@ -659,35 +476,7 @@ if($_SESSION['kanri_flg'] == 1) {
 
 → 元のパスワードが分からない（不可逆的）
 
-* `ハッシュ化` ... 不可逆的
-* `暗号化` ... 可逆的 = 復元可能
-
-{% hint style="success" %}
-**【AI活用】ハッシュ値の構造をAIに説明してもらおう**
-
-以下のプロンプトをAIに投げて、`password_hash()`が生成するハッシュ値の構造を説明してもらいましょう。
-
-【サンプルプロンプト】
-```
-password_hash()で生成されるハッシュ値の構造を教えてください。
-$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi
-という例を使って、どの部分が何を意味しているか、
-初学者にも分かるように説明してください。
-```
-
-**AIの回答を読んだら、以下2点を必ず確認しましょう（講師に説明できるように）**
-
-1. ソルトの位置が固定である理由（`password_verify()`がソルト部分だけ抜き出して再ハッシュ化するため）
-2. 同じパスワードでも毎回ハッシュ値が変わる理由（ソルトが毎回ランダムに生成されるため）
-
-**問いかけ**
-> 「もしソルトがなかったら、同じパスワードを使っている2人のハッシュ値はどうなる？」
-> 「パスワードを『暗号化』ではなく『ハッシュ化』するのはなぜ？」
-{% endhint %}
-
-<details>
-
-<summary>詳しく知りたい人向け：60文字の構造を正確に見る</summary>
+#### ハッシュ値の構造について
 
 生成されたハッシュ値を詳しく見てみましょう：
 
@@ -739,6 +528,8 @@ echo $salt; // → 92IXUNpkjO0rOQ5byMi.Ye
 
 * パスワード + ソルトをハッシュ化した結果
 
+#### なぜソルトの位置が固定なのか？
+
 **パスワード検証時の処理**
 
 ```php
@@ -754,7 +545,7 @@ function password_verify($password, $hash) {
 }
 ```
 
-**コストの設定について**
+#### コストの設定について
 
 ```php
 // コストを指定する場合
@@ -765,7 +556,7 @@ $hashed_pw = password_hash($password, PASSWORD_DEFAULT, $options);
 $hashed_pw = password_hash($password, PASSWORD_DEFAULT);
 ```
 
-**なぜ毎回違うハッシュ値になるのか？**
+#### なぜ毎回違うハッシュ値になるのか？
 
 ```php
 <?php
@@ -793,15 +584,16 @@ echo "ソルト3: " . substr($hash3, 7, 22) . "<br>";
 
 同じパスワード「test」でも、**7-28文字目のソルト部分**が毎回ランダムに生成されるため、ハッシュ値全体も毎回変わります。これにより、同じパスワードを使用している複数のユーザーでも、データベースに保存されるハッシュ値は異なります。
 
-**ソルトの重要性**
+#### ソルトの重要性
 
 1. **レインボーテーブル攻撃の防止** - 事前計算されたハッシュ表が無効になる
 2. **同一パスワードの識別防止** - 同じパスワードでも異なるハッシュ値になる
 3. **辞書攻撃の困難化** - パスワード + ランダムソルトの組み合わせを計算する必要がある
 
-</details>
-
 _**万が一パスワードが盗まれた場合に備えて、パスワードをハッシュ化**_
+
+* `ハッシュ化` ... 不可逆的
+* `暗号化` ... 可逆的 = 復元可能
 
 1. `hash.php`を作成
 2. `hash.php`内にパスワードのハッシュ化の処理を記述
@@ -830,26 +622,9 @@ echo $hashed_pw;
 | h\_test2 | test2                 |
 | h\_test3 | test3                 |
 
-{% hint style="success" %}
-**【AI活用】login_act.phpをハッシュ化対応にAIで修正してもらおう**
+1. `login_act.php`の中の処理を一部変更
 
-【サンプルプロンプト】
-```
-【コンテキスト】
-- PHPの授業でlogin_act.phpを作りました。今はSQLのWHERE句でlidとlpwを
-  直接比較しています
-- gs_user_tableのlpwカラムは、これからpassword_hash()でハッシュ化した
-  値を保存する形に変えます
-
-【依頼】
-1. SQL文をlidのみで検索するように変更してください（パスワードは
-   WHERE句で比較できないため）
-2. 取得した1件のデータに対して、password_verify()を使って
-   入力されたパスワードが一致するか確認するコードに書き換えてください
-```
-{% endhint %}
-
-パスワードはハッシュ化されているため`WHERE`句で直接比較できません。まず`lid`のみでユーザーを検索し、`password_verify()`でパスワードが一致するか確認します。（AIの出力と見比べてみよう）
+まず、SQL文を `lid` のみでユーザーを検索するように変更し、SQL実行後に `fetch()` で結果を1件取得します。 \*\*なぜなら、パスワードはハッシュ化されているため、SQLの `WHERE` 句で直接比較することはできないからです。\*\*まずユーザーIDでユーザー情報を取得し、その後PHP側で `password_verify()` 関数を使ってパスワードが一致するかを検証する必要があります。
 
 ```php
 // ↓lidでの検索結果を取得
@@ -859,7 +634,11 @@ $status = $stmt->execute();
 
 // データを1件取得
 $val = $stmt->fetch();
+```
 
+次に、取得したデータと入力されたパスワードを照合します。 `$val` にユーザー情報が取得できていて、かつ `password_verify()` が `true` を返した場合にログイン成功とします。
+
+```php
 //5. 該当レコードがあればSESSIONに値を代入
 if( $val && password_verify($lpw, $val['lpw']) ){
   //Login成功時
@@ -873,12 +652,16 @@ if( $val && password_verify($lpw, $val['lpw']) ){
 ```
 
 {% hint style="info" %}
-`password_verify('ハッシュ化前の値', 'ハッシュ化された値')`で一致するか確認できる（一致すればtrue、ダメならfalse）。
+`password_verify('ハッシュ化前の値', 'ハッシュ化された値')`
+
+で、`ハッシュ化前の値`と `ハッシュ化された値`が一致するか確認できる。
+
+一致したら、ture, ダメならfalseが戻る。
 {% endhint %}
 
----
+今後ユーザー登録する際にパスワードはハッシュ化してあげる。
 
-## 【課題】 ブックマークアプリ その4
+### 【課題】 ブックマークアプリ その4
 
 1. まず、以下の通りDBとテーブルを作成
 
@@ -893,12 +676,3 @@ if( $val && password_verify($lpw, $val['lpw']) ){
 * ログインが必要なページ 例；詳細画面、編集画面
 
 1. 課題を提出するときは必ずsqlファイルも提出。ファイルの用意の仕方は[ここを参照](https://gitlab.com/gs_hayato/gs-php-01/-/blob/master/%E3%81%9D%E3%81%AE%E4%BB%96/howToExportSql.md)
-
-## プラスアルファ（早く終わった人向け）
-
-### ① session_idを目で見て確認する
-
-ブラウザのdeveloper toolsでCookieの`PHPSESSID`と、サーバー側の`sess_XXXXX`ファイルを両方確認してみましょう。「同じIDが両側にある」ことを目で見て確認できます。
-
-* ブラウザ側：`developer tools`の`検証 ＞ Application ＞ Cookies ＞ localhost`に`PHPSESSID`
-* サーバー側：XAMPP/Macは`XAMPP/xamppfiles/temp`、Windowsは`C/xampp/tmp/`（ファイルの拡張子を`.txt`に変えると中身が見られます）
