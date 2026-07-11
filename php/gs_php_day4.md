@@ -409,7 +409,8 @@ $val = $stmt->fetch();
 if( $val ){
   // セッションIDを新しいものに更新する
   session_regenerate_id(true);
-  // サーバーとクライアントで共有している"最新の"SessionIDをchk_ssidに記録しておく。
+  // 1) 更新後のSessionIDをサーバー側で$_SESSION['chk_ssid']に格納しておく
+  // 2) 同じIDはレスポンスを通じてブラウザにも返され、サーバーとクライアントで共有される
   $_SESSION['chk_ssid']  = session_id();
 
   //権限判断したい場合は、kanri_flgをsessionに入れておく。
