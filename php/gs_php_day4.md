@@ -904,3 +904,90 @@ if( $val && password_verify($lpw, $val['lpw']) ){
 
 * ブラウザ側：`developer tools`の`検証 ＞ Application ＞ Cookies ＞ localhost`に`PHPSESSID`
 * サーバー側：XAMPP/Macは`XAMPP/xamppfiles/temp`、Windowsは`C/xampp/tmp/`（ファイルの拡張子を`.txt`に変えると中身が見られます）
+
+### ② ユーザー登録画面を作ってみる（ハッシュ化対応）
+
+今日は`gs_user_table`にすでに用意されたユーザーでログインしましたが、実際のサービスでは「新規登録」の画面から自分でユーザーを作れる必要があります。ここまでの`insert.php`の作り方と、今日学んだ`password_hash()`を組み合わせて、ユーザー登録機能を作ってみましょう。
+
+**作るもの**
+
+* `register.php` … `lid`（ログインID）と`lpw`（パスワード）を入力するフォーム
+* `register_act.php` … 入力された`lpw`を`password_hash()`でハッシュ化してから`gs_user_table`にINSERTする処理
+
+**ヒント**
+
+* フォームの構造は、Day1〜2で作った`index.php`（新規登録フォーム）と同じ考え方で作れます
+* INSERTの4ブロック構造（DB接続→SQL作成→実行→実行後の処理）は`insert.php`と同じです。`db_conn()`・`sql_error()`・`redirect()`は`funcs.php`のものをそのまま使ってください
+* **重要：** `$_POST['lpw']`を**そのままSQLに渡してはいけません**。必ず`password_hash($lpw, PASSWORD_DEFAULT)`でハッシュ化した後の値をbindValueに渡してください
+* `kanri_flg`は、登録画面から選ばせず、`0`（一般ユーザー）で固定登録にするのがシンプルでおすすめです
+
+{% hint style="success" %}
+**【AI活用】register_act.phpのスケルトンをAIに渡して穴埋めしてもらおう**
+
+【サンプルプロンプト】
+```
+【コンテキスト】
+- PHPの授業でXAMPPを使っています
+- フレームワークは使わず、素のPHPで書きます
+- DBはMySQLで、接続にはPDOを使います
+- DB名: gs_db_class4、テーブル: gs_user_table
+- カラム: id(PK,AI), lid(varchar), lpw(varchar), kanri_flg(int)
+- DB接続はfuncs.phpのdb_conn()、エラー処理はsql_error($stmt)、
+  リダイレクトはredirect($file_name)を使ってください
+
+【依頼】
+以下のスケルトンの /* */ 部分を埋めてください。構造とコメントは変えないでください。
+$_POSTで送られてくるlidとlpwを使って、gs_user_tableに新規ユーザーを
+登録するコードです。lpwは平文のまま保存せず、必ずハッシュ化してください。
+
+<?php
+//POST値
+$lid = $_POST['lid'];
+$lpw = $_POST['lpw'];
+
+// パスワードをハッシュ化
+$hashed_lpw = /* password_hash()を使ってハッシュ化 */;
+
+//1. DB接続します
+require_once('funcs.php');
+$pdo = db_conn();
+
+//2. SQL作成（kanri_flgは0で固定登録）
+$stmt = $pdo->prepare(/* INSERT文 */);
+/* bindValueを2行（lid, ハッシュ化したlpw） */
+
+//3. 実行
+$status = $stmt->execute();
+
+//4. 実行後の処理
+if($status === false){
+    sql_error($stmt);
+}else{
+    redirect(/* 登録後に飛ばすファイル名 */);
+}
+```
+{% endhint %}
+
+**動作確認のポイント**
+
+1. `register.php`から登録したら、phpMyAdminで`gs_user_table`の`lpw`カラムを確認する。`$2y$10$...`のような60文字の文字列になっていればOK（平文のパスワードがそのまま見えていたら失敗）
+2. 登録した`lid`・`lpw`で、実際に`login.php`からログインできるか確認する
+
+{% hint style="success" %}
+**【AI活用】自分の実装をAIにレビューさせてみよう**
+
+register_act.phpが書けたら、AIに渡して安全性をチェックしてもらいましょう。
+
+【サンプルプロンプト】
+```
+【コンテキスト】
+- PHPの授業でユーザー登録処理（register_act.php）を作りました
+- パスワードはpassword_hash()でハッシュ化してから保存しています
+
+【依頼】
+以下のコードを見て、セキュリティや実装の観点で改善できる点があれば
+教えてください。（コードを貼り付ける）
+```
+
+AIからは「lidの重複チェックがない」「バリデーションがない」といった指摘が出ることがあります。授業で扱っていない範囲ですが、気になる人は`funcs.php`のバリデーション関数（Day3のプラスアルファ⑤）と組み合わせて挑戦してみましょう。
+{% endhint %}
