@@ -295,6 +295,43 @@ echo '古いセッション:' . $old_session_id . '<br />';
 echo '新しいセッション:' . $new_session_id . '<br />';
 ```
 
+{% hint style="info" %}
+**なぜ`$old_session_id`と`$new_session_id`で違う値が返ってくるのか？**
+
+`session_id()`は、ブラウザに「今のIDは何？」と毎回聞きに行っているわけではありません。サーバー側に「今のセッションIDはこれです」と書いてある**メモ用紙**のようなものがあり、`session_id()`はそのメモ用紙に書かれている値をそのまま返すだけの関数です。
+
+1. ブラウザがCookieでID（例：`OLD111`）を送ってくる
+2. `session_start()`が、そのIDを**メモ用紙に書く**（「今のIDは`OLD111`」）
+3. `$old_session_id = session_id();` → メモ用紙を見て`OLD111`を返す
+4. `session_regenerate_id(true);` → 新しいID（例：`NEW222`）を作り、**メモ用紙の内容を`NEW222`に書き換える**（同時に「次のレスポンスでブラウザにも`NEW222`を伝える」予約もする）
+5. `$new_session_id = session_id();` → この時点でメモ用紙はもう`NEW222`に変わっているので、`NEW222`を返す
+
+つまり、`session_id()`が返す値は「その時点でメモ用紙に書かれている値」であり、`session_regenerate_id(true)`はそのメモ用紙の内容を直接書き換える処理です。ブラウザのCookieが実際に新しい値（`NEW222`）に変わるのは、このレスポンスが返ってきた後になります。
+
+<details>
+
+<summary>図で見る：ブラウザ・サーバー・メモ用紙のタイミング</summary>
+
+```mermaid
+sequenceDiagram
+    participant B as ブラウザ（Cookie）
+    participant S as サーバー（メモ用紙＝内部の現在ID）
+
+    B->>S: Cookie: PHPSESSID=OLD111 を送信
+    S->>S: session_start()<br>メモ用紙に「OLD111」と書く
+    S->>S: $old_session_id = session_id();<br>→ メモ用紙を見て OLD111 を返す
+    S->>S: session_regenerate_id(true);<br>メモ用紙を「NEW222」に書き換える
+    S->>S: $new_session_id = session_id();<br>→ メモ用紙を見て NEW222 を返す
+    S->>B: レスポンス + Set-Cookie: PHPSESSID=NEW222
+    Note over B: ここでようやくブラウザのCookieがNEW222になる
+```
+
+* `session_id()`は常に「その時点のメモ用紙」を見て値を返している（矢印がすべてサーバー内で閉じている点に注目）
+* ブラウザのCookieが更新されるのは、一番最後のレスポンスが届いた後
+
+</details>
+{% endhint %}
+
 ***
 
 ### ログイン処理の実装
@@ -386,18 +423,6 @@ $val = $stmt->fetch();
 
 // こっから下は次のコード↓
 ```
-
-{% hint style="success" %}
-**【自分で書こう】**
-
-コピペして動作確認したら、以下の2箇所を削除して自分で書いてみよう。
-
-```php
-$stmt = $pdo->prepare('← ここを自分で書く');
-$stmt->bindValue(':lid', $lid, PDO::PARAM_STR);  // ← この2行も自分で書く
-$stmt->bindValue(':lpw', $lpw, PDO::PARAM_STR);
-```
-{% endhint %}
 
 処理後のリダイレクト先を設定
 
