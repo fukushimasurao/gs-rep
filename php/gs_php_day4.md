@@ -307,29 +307,6 @@ echo '新しいセッション:' . $new_session_id . '<br />';
 5. `$new_session_id = session_id();` → この時点でメモ用紙はもう`NEW222`に変わっているので、`NEW222`を返す
 
 つまり、`session_id()`が返す値は「その時点でメモ用紙に書かれている値」であり、`session_regenerate_id(true)`はそのメモ用紙の内容を直接書き換える処理です。ブラウザのCookieが実際に新しい値（`NEW222`）に変わるのは、このレスポンスが返ってきた後になります。
-
-<details>
-
-<summary>図で見る：ブラウザ・サーバー・メモ用紙のタイミング</summary>
-
-```mermaid
-sequenceDiagram
-    participant B as ブラウザ（Cookie）
-    participant S as サーバー（メモ用紙＝内部の現在ID）
-
-    B->>S: Cookie: PHPSESSID=OLD111 を送信
-    S->>S: session_start()<br>メモ用紙に「OLD111」と書く
-    S->>S: $old_session_id = session_id();<br>→ メモ用紙を見て OLD111 を返す
-    S->>S: session_regenerate_id(true);<br>メモ用紙を「NEW222」に書き換える
-    S->>S: $new_session_id = session_id();<br>→ メモ用紙を見て NEW222 を返す
-    S->>B: レスポンス + Set-Cookie: PHPSESSID=NEW222
-    Note over B: ここでようやくブラウザのCookieがNEW222になる
-```
-
-* `session_id()`は常に「その時点のメモ用紙」を見て値を返している（矢印がすべてサーバー内で閉じている点に注目）
-* ブラウザのCookieが更新されるのは、一番最後のレスポンスが届いた後
-
-</details>
 {% endhint %}
 
 ***
