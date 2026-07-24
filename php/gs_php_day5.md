@@ -42,7 +42,7 @@ AI に質問する前に、毎回以下をチャットに貼り付けてくだ�
 - フレームワークは使わず、素のPHPで書きます
 - DBはMySQLで、接続にはPDOを使います（mysql_*やmysqliは使わないでください）
 - DB名: gs_db_class5
-- テーブル1: users（ログインユーザー）カラム: id(PK,AI), name(varchar)
+- テーブル1: users（ログインユーザー）カラム: id(PK,AI), lid(varchar), lpw(varchar), name(varchar), kanri_flg(int)
 - テーブル2: contents（投稿）カラム: id(PK,AI), user_id(int, usersへの外部キー), content(text), image(varchar), created_at(datetime)
 - contents.user_id が users.id を参照する1対多の関係です
 - コードはシンプルに。初学者向けで、変数名もわかりやすく
@@ -213,13 +213,15 @@ JOIN
 `login_act.php`
 
 ```php
-if($val['id'] !== '') {
+if( $val ) {
+    session_regenerate_id(true);
     $_SESSION['chk_ssid'] = session_id();
     $_SESSION['kanri_flg'] = $val['kanri_flg'];
-    $_SESSION['user_name'] = $val['name'];
     $_SESSION['user_id'] = $val['id']; // ← 追記
-    header('Location: select.php');
+    redirect('select.php');
 } else {
+    redirect('login.php');
+}
 ```
 
 {% hint style="success" %}
@@ -354,7 +356,7 @@ $status = $stmt->execute();
         $view .= '</a>';
         $view .= "　";
 
-        if ($_SESSION['kanri_flg'] === 1) {
+        if ($_SESSION['kanri_flg'] == 1) {
             $view .= '<a class="btn btn-danger" href="delete.php?id=' . $r['id'] . '">';
             $view .= '削除';
             $view .= '</a>';
@@ -560,8 +562,8 @@ if($status === false) {
 
 ```html
 <?php
-if (!empty($row['image'])) {
-    echo '<img src="' . h($row['image']) . '" class="image-class">';
+if (!empty($result['image'])) {
+    echo '<img src="' . h($result['image']) . '" class="image-class">';
 }
 ?>
 ```
