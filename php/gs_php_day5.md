@@ -513,6 +513,8 @@ array(1) {
 ```
 【コンテキスト】
 - PHPの授業でXAMPPを使っています
+- これはinsert.phpに追加するコードです。すでに$content = $_POST['content'];と
+  $user_id = $_SESSION['user_id'];を取得済みで、このあとDB接続・INSERT処理が続きます
 - フォームに<input type="file" name="image">を追加し、
   enctype="multipart/form-data"を設定済みです
 - $_FILES['image']でアップロードされたファイル情報を受け取れます
