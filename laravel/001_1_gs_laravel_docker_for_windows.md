@@ -109,7 +109,7 @@ docker run --rm --pull=always \
   -v "$(pwd)":/opt \
   -w /opt \
   laravelsail/php84-composer:latest \
-  bash -lc "composer global require laravel/installer --quiet && export PATH=\"\$HOME/.composer/vendor/bin:\$PATH\" && laravel new todo-app --livewire --database=mysql --pest --no-node --no-interaction && cd todo-app && php artisan sail:install --with=mysql,mailpit"
+  bash -lc "composer global require laravel/installer --quiet && export PATH=\"\$HOME/.composer/vendor/bin:\$PATH\" && laravel new laratter --livewire --database=mysql --pest --no-node --no-interaction && cd laratter && php artisan sail:install --with=mysql,mailpit"
 ```
 
 {% hint style="info" %}
@@ -117,7 +117,7 @@ docker run --rm --pull=always \
 
 * `laravelsail/php84-composer` イメージを使い、PCにPHPやComposerをインストールせずにLaravelプロジェクトを作成
 * `composer global require laravel/installer`：イメージに入っているLaravelインストーラーが古いことがあるため、最新版に更新（`--livewire`オプションを使うために必要）
-* `laravel new todo-app --livewire --database=mysql --pest --no-node --no-interaction`：`todo-app` という名前で、**Livewire Starter Kit（認証にFortifyを使用）・MySQL・Pest**構成のプロジェクトを作成。`--no-node`はこの段階ではnpmビルドを行わない設定（あとでSailコンテナ内から実行します）
+* `laravel new laratter --livewire --database=mysql --pest --no-node --no-interaction`：`laratter` という名前で、**Livewire Starter Kit（認証にFortifyを使用）・MySQL・Pest**構成のプロジェクトを作成。`--no-node`はこの段階ではnpmビルドを行わない設定（あとでSailコンテナ内から実行します）
 * `php artisan sail:install --with=mysql,mailpit`：Sailの `compose.yaml`（Docker設定ファイル）を、MySQLとメール確認用のMailpitを含む構成で生成
 {% endhint %}
 
@@ -126,7 +126,7 @@ docker run --rm --pull=always \
 Dockerコンテナ内（root権限）でファイルが作成されるため、所有者を自分に戻します：
 
 ```bash
-sudo chown -R $USER: todo-app
+sudo chown -R $USER: laratter
 ```
 
 {% hint style="warning" %}
@@ -142,13 +142,13 @@ sudo chown -R $USER: todo-app
 Ubuntuターミナルで以下のコマンドを実行：
 
 ```bash
-cd todo-app
+cd laratter
 ```
 
 {% hint style="warning" %}
 **注意**:
 
-* プロジェクト名を `todo-app` としたので、`cd todo-app` で移動します
+* プロジェクト名を `laratter` としたので、`cd laratter` で移動します
 * 引き続きUbuntuターミナルで作業を行います
 {% endhint %}
 
@@ -230,12 +230,12 @@ Ubuntuターミナルで以下のコマンドを順番に実行：
 ### compose.yamlファイルの編集
 
 {% hint style="info" %}
-**compose.yamlファイルの場所** `compose.yaml` ファイルは、先ほど作成した `todo-app` フォルダの中にあります。
+**compose.yamlファイルの場所** `compose.yaml` ファイルは、先ほど作成した `laratter` フォルダの中にあります。
 
 **具体的な場所:**
 
-* WSL Ubuntuターミナルで `cd todo-app` を実行した場所
-* VS Codeなどのエディタで `todo-app` フォルダを開いた時に、フォルダの直下に表示されるファイル
+* WSL Ubuntuターミナルで `cd laratter` を実行した場所
+* VS Codeなどのエディタで `laratter` フォルダを開いた時に、フォルダの直下に表示されるファイル
 * ファイル名は `compose.yaml`（拡張子は `.yml`）
 {% endhint %}
 
@@ -247,7 +247,7 @@ Ubuntuターミナルで以下のコマンドを順番に実行：
 * 気になる人は、生成AIと相談しながら記述することを推奨します
 {% endhint %}
 
-`todo-app` フォルダ内の `compose.yaml` ファイルを開き、以下を追加：
+`laratter` フォルダ内の `compose.yaml` ファイルを開き、以下を追加：
 
 {% hint style="warning" %}
 **追加する場所に注意！** 以下のコードは、`compose.yaml` ファイルの **`networks:` より上の位置** に追加してください。 具体的には、既存のサービス（`laravel.test`, `mysql`, `redis` など）と同じレベルで追加します。
@@ -285,7 +285,7 @@ phpmyadmin:
    * **ユーザー名**: `sail`
    * **パスワード**: `password`
 4. **phpMyAdmin動作確認**：
-   * ログイン後、左側に `todo_app` データベースが表示されることを確認
+   * ログイン後、左側に `laratter` データベースが表示されることを確認
    * データベースをクリックして、テーブル一覧が表示されることを確認
    * もしテーブルが表示されない場合は、先ほどの `./vendor/bin/sail artisan migrate` が実行されているか確認
 
@@ -314,7 +314,7 @@ phpmyadmin:
 
 **「Port already in use」エラー** → XAMPP/MAMPが起動していないか確認
 
-**コマンドが認識されない** → プロジェクトディレクトリ（`todo-app`フォルダ）内で実行しているか確認 → WSL Ubuntuターミナルを使用しているか確認
+**コマンドが認識されない** → プロジェクトディレクトリ（`laratter`フォルダ）内で実行しているか確認 → WSL Ubuntuターミナルを使用しているか確認
 
 **WSL関連のエラー** → PowerShellで `wsl --list --verbose` を実行してUbuntuが利用可能か確認
 

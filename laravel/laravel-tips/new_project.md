@@ -26,12 +26,12 @@ docker run --rm --pull=always \
   bash -lc "composer global require laravel/installer --quiet && export PATH=\"\$HOME/.composer/vendor/bin:\$PATH\" && laravel new blog --livewire --database=mysql --pest --no-node --no-interaction && cd blog && php artisan sail:install --with=mysql,mailpit"
 sudo chown -R $USER: blog
 
-# 新しいプロジェクト「todo-app」を作成
+# 新しいプロジェクト「laratter」を作成
 docker run --rm --pull=always \
   -v "$(pwd)":/opt -w /opt \
   laravelsail/php84-composer:latest \
-  bash -lc "composer global require laravel/installer --quiet && export PATH=\"\$HOME/.composer/vendor/bin:\$PATH\" && laravel new todo-app --livewire --database=mysql --pest --no-node --no-interaction && cd todo-app && php artisan sail:install --with=mysql,mailpit"
-sudo chown -R $USER: todo-app
+  bash -lc "composer global require laravel/installer --quiet && export PATH=\"\$HOME/.composer/vendor/bin:\$PATH\" && laravel new laratter --livewire --database=mysql --pest --no-node --no-interaction && cd laratter && php artisan sail:install --with=mysql,mailpit"
+sudo chown -R $USER: laratter
 ```
 
 {% hint style="info" %}
@@ -91,7 +91,8 @@ DB_PASSWORD=password
 
 **注意：** `DB_DATABASE`は作成したプロジェクト名と合わせることが推奨されます。
 - プロジェクト名が「blog」なら → `DB_DATABASE=blog`
-- プロジェクト名が「todo-app」なら → `DB_DATABASE=todo_app`（ハイフンをアンダースコアに変更）
+- プロジェクト名が「laratter」なら → `DB_DATABASE=laratter`
+- プロジェクト名にハイフンが含まれる場合（例：「todo-app」）は `DB_DATABASE=todo_app` のようにアンダースコアに変更してください
 
 #### アプリケーションURL
 

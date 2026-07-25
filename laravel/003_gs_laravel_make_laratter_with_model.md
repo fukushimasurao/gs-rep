@@ -9,7 +9,7 @@
 
 ### アプリケーションの要件
 
-今回作成するtodo-appアプリケーションでは、以下の機能が必要です：
+今回作成するlaratterアプリケーションでは、以下の機能が必要です：
 
 - **ユーザー**がログインできる
 - **ユーザー**がつぶやき（Tweet）を投稿できる
@@ -53,12 +53,12 @@ Laravelでは、**データベースのテーブルを直接操作するので�
 ### プロジェクトディレクトリにいることを確認
 
 ```bash
-cd todo-app
+cd laratter
 ```
 
 {% hint style="info" %}
 **現在のディレクトリの確認方法**
-`pwd` コマンドで現在のディレクトリを確認できます。表示されるパスの最後が `/todo-app` になっていればOKです。
+`pwd` コマンドで現在のディレクトリを確認できます。表示されるパスの最後が `/laratter` になっていればOKです。
 {% endhint %}
 
 ## Laravelにおけるモデルとテーブルの基本概念
@@ -101,7 +101,7 @@ Laravelではファイル名のルール等規則が多いです。**コマン�
 
 ### コマンドの実行
 
-以下のコマンドを`todo-app`ディレクトリで実行してください：
+以下のコマンドを`laratter`ディレクトリで実行してください：
 
 ```bash
 ./vendor/bin/sail artisan make:model Tweet -rm
@@ -117,9 +117,9 @@ Laravelではファイル名のルール等規則が多いです。**コマン�
 以下のような出力が表示されて、`Model`、`migrationsファイル`、`Controller`が作成されればOKです：
 
 ```bash
-// todo-app階層にいることを確認
+// laratter階層にいることを確認
 pwd
-/Users/fukushimahayato/todo-app
+/Users/fukushimahayato/laratter
 
 ./vendor/bin/sail artisan make:model Tweet -rm
 
@@ -479,7 +479,7 @@ Showing [7] routes
 
 **phpMyAdminでテーブル構造を確認**
 - http://localhost:8080 にアクセス
-- データベース：`todo_app`を選択
+- データベース：`laratter`を選択
 - `tweets`テーブルが存在することを確認
 - カラム構成が正しいことを確認：
   - `id` (bigint, PRIMARY KEY, AUTO_INCREMENT)
