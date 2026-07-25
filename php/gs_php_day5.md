@@ -597,14 +597,32 @@ if($status === false) {
 
 基本的には、DBの`image`カラムに画像の格納先があるので、これを`<img>`タグの`src`に記述するだけです。
 
-`detail.php`
+`detail.php`のform内、`textarea`の`div`と送信ボタンの`div`の間に追加します。
 
 ```html
-<?php
-if (!empty($result['image'])) {
-    echo '<img src="' . h($result['image']) . '" class="image-class">';
-}
-?>
+<form method="POST" action="update.php" enctype="multipart/form-data">
+    <div class="jumbotron">
+        <fieldset>
+            <legend>[編集]</legend>
+            <div>
+                <label for="content">内容：</label>
+                <textarea id="content" name="content" rows="4" cols="40"><?= h($row['content']) ?></textarea>
+            </div>
+
+            <!-- 以下のPHPブロックを追加 -->
+            <?php
+            if (!empty($row['image'])) {
+                echo '<img src="' . h($row['image']) . '" class="image-class">';
+            }
+            ?>
+
+            <div>
+                <input type="submit" value="更新">
+                <input type="hidden" name="id" value="<?= $id ?>">
+            </div>
+        </fieldset>
+    </div>
+</form>
 ```
 
 `select.php`
