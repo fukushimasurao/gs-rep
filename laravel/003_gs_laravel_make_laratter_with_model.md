@@ -293,7 +293,32 @@ Laravelアプリケーションと対話的にやり取りできるコマンド�
 
 今回は**User**モデルと**Tweet**モデルを**1対多**で連携します。
 
-<figure><img src="../.gitbook/assets/user_v_tweet.jpg" alt=""><figcaption></figcaption></figure>
+```mermaid
+flowchart LR
+    subgraph users["users（1）"]
+        uA["ユーザーA<br>id: 1"]
+        uB["ユーザーB<br>id: 2"]
+        uC["ユーザーC<br>id: 3"]
+    end
+    subgraph tweets["tweets（多）"]
+        t1["Tweet 1<br>user_id: 1"]
+        t2["Tweet 2<br>user_id: 1"]
+        t3["Tweet 3<br>user_id: 1"]
+        t4["Tweet 4<br>user_id: 2"]
+        t5["Tweet 5<br>user_id: 2"]
+        t6["Tweet 6<br>user_id: 3"]
+        t7["Tweet 7<br>user_id: 3"]
+    end
+    uA --> t1
+    uA --> t2
+    uA --> t3
+    uB --> t4
+    uB --> t5
+    uC --> t6
+    uC --> t7
+```
+
+1人の`user`（例：ユーザーA）は複数の`tweet`を持てる一方、1件の`tweet`は必ず1人の`user`（`user_id`）にしか属しません。この非対称な関係が「1対多」です。
 
 ### Userモデルの設定
 
@@ -310,20 +335,25 @@ namespace App\Models;
 
 // ... other imports
 
-class User extends Authenticatable
+class User extends Authenticatable implements PasskeyUser
 {
-    // 省略
+    /** @use HasFactory<UserFactory> */
+    use HasFactory, Notifiable, PasskeyAuthenticatable, TwoFactorAuthenticatable;
 
-    protected function casts(): array
+   // ⭐️省略⭐️
+
+    /**
+     * Get the user's initials
+     */
+    public function initials(): string
     {
-        return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-        ];
+        $initials = Str::initials($this->name, true);
+
+        return Str::length($initials) > 1
+            ? Str::substr($initials, 0, 1).Str::substr($initials, -1)
+            : $initials;
     }
-    
-    // ⭐️ここから↓追加⭐️
-    // 一番下に以下のメソッドを追加する
+
     public function tweets()
     {
         // $thisは、Userモデルそのものと思ってください
