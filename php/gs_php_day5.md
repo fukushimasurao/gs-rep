@@ -673,7 +673,31 @@ AIをフル活用してOKです。ただし、生成されたコードの各部�
 
 1対多とは別に、**多対多**という関係もあります。例えば「1人の学生が複数の部活に入り、1つの部活に複数の学生が所属する」ような関係です。多対多は、2つのテーブルを直接紐づけることができないため、間に**中間テーブル**を挟んで実現します。
 
-<figure><img src="../.gitbook/assets/多対多.jpg" alt=""><figcaption><p>多対多</p></figcaption></figure>
+```mermaid
+flowchart LR
+    subgraph students["students（多）"]
+        A["A"]
+        B["B"]
+        C["C"]
+        D["D"]
+        E["E"]
+        F["F"]
+    end
+    subgraph clubs["clubs（多）"]
+        tennis["テニス"]
+        soccer["サッカー"]
+        baseball["野球"]
+    end
+    A --> tennis
+    A --> baseball
+    B --> soccer
+    B --> baseball
+    C --> tennis
+    D --> soccer
+    E --> tennis
+    E --> soccer
+    F --> baseball
+```
 
 {% hint style="success" %}
 **【AI活用】多対多と中間テーブルの必要性をAIに聞いてみよう**
