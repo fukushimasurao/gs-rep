@@ -29,7 +29,7 @@
 | コマ | テーマ | 内容 |
 |---|---|---|
 | コマ1（50分） | DBリレーションとJOIN | テーブルを分ける理由・正規化 → JOINの書き方 |
-| コマ2（50分） | アプリでのリレーション実装 | ログインユーザーidの記録 → 一覧にJOINで投稿者名を表示 |
+| コマ2（50分） | アプリでのリレーション実装 | 現状のアプリを確認 → ログインユーザーidの記録 → 一覧にJOINで投稿者名を表示 |
 | コマ3（50分） | 画像アップロード機能・まとめ | フォーム→保存→表示までの一連の実装 → 宿題説明 |
 
 ### AIに渡すコンテキスト定型文
@@ -184,6 +184,8 @@ JOIN
 
 {% hint style="info" %}
 ただの`join`と書いた場合、`inner join`となる。 `join`の違いはざっくりと、 左側のテーブルに必ずデータを含めたい場合 → `LEFT JOIN` 両方のテーブルに一致するデータだけが必要 →`INNER JOIN` 右側のテーブルを基準にデータを取得したい場合 → `RIGHT JOIN` 両方のテーブルのすべてのデータを取得したい場合 → `FULL OUTER JOIN`
+
+※ この授業で使っているMySQL/MariaDBは`FULL OUTER JOIN`をネイティブサポートしていません。同じ結果が欲しい場合は`LEFT JOIN`の結果と`RIGHT JOIN`の結果を`UNION`で組み合わせて代用します。
 {% endhint %}
 
 特定のテーブルのカラムを指定する場合は、`テーブル.カラム`のように指定する。
@@ -224,6 +226,32 @@ JOIN
 
 ## コマ2：アプリでのリレーション実装
 
+### まずはアプリの中身をブラウザで見てみよう
+
+実装に入る前に、配布された今のアプリがどんな状態になっているかを確認しておきましょう。
+
+1. `localhost/gs_code/php05/login.php`をブラウザで開く
+2. 以下のテストアカウントでログインする
+
+```
+ID: test1
+PW: test1
+```
+
+3. `index.php`（投稿画面）を確認する。今はテキストを送信するだけのシンプルなフォームで、画像を送る欄はまだない
+4. `select.php`（一覧画面）を確認する。今は`content`だけが並んでいて、**誰が投稿したか（投稿者名）も、画像も表示されていない**
+
+{% hint style="info" %}
+`users`テーブルには他に`test2/test2`（一般ユーザー）、`test3/test3`もいます。ログインし直して、`kanri_flg`（管理者フラグ）によって`select.php`の削除ボタンの見え方が変わることも確認しておきましょう。
+{% endhint %}
+
+このあとコマ2・コマ3で、
+
+* `select.php`に投稿者名を表示する（JOIN）
+* `index.php`/`insert.php`に画像アップロードを追加する
+
+の2つを実装していきます。今見た「まだできていない状態」がゴールに向かう出発点です。
+
 ### データ登録時のログインユーザーidを保存する処理を追加
 
 まずは、`contents`テーブルに書き込みされる際に、どのuserが記載したかを記録するようにしましょう。
@@ -236,7 +264,7 @@ JOIN
 `login_act.php`
 
 ```php
-if( $val ) {
+if ($val !== false) {
     session_regenerate_id(true);
     $_SESSION['chk_ssid'] = session_id();
     $_SESSION['kanri_flg'] = $val['kanri_flg'];
@@ -248,55 +276,19 @@ if( $val ) {
 ```
 
 {% hint style="success" %}
-**【AI活用】insert.phpのスケルトンをAIに渡して穴埋めしてもらおう**
+**【自分で書こう】insert.phpに2行追加してみよう**
 
-以下のスケルトンをAIに渡して、`/* */`の部分を埋めてもらいましょう。埋め終わったら、授業資料の完成形と見比べてみてください。
+既存の`insert.php`に、以下の2箇所を追加してください。
 
-【サンプルプロンプト】
-```
-【コンテキスト】
-- PHPの授業でXAMPPを使っています
-- フレームワークは使わず、素のPHPで書きます
-- DBはMySQLで、接続にはPDOを使います
-- DB名: gs_db_class5、テーブル: contents
-- カラム: id(PK,AI), user_id(int), content(text), created_at(datetime)
-- DB接続はfuncs.phpのdb_conn()、エラー処理はsql_error($stmt)、
-  リダイレクトはredirect($file_name)を使ってください
-- ログインユーザーのidは$_SESSION['user_id']に入っています
+1. ログインユーザーのidをセッションから取得する（`login_act.php`で保存した`$_SESSION['user_id']`を使う）
+2. `contents`へのINSERT文に`user_id`を含め、`bindValue`を1行追加する
 
-【依頼】
-以下のスケルトンの /* */ 部分を埋めてください。構造とコメントは変えないでください。
-
-<?php
-session_start();
-require_once 'funcs.php';
-loginCheck();
-
-//1. POSTデータ取得
-$content = $_POST['content'];
-//ログインユーザーidを取得
-$user_id = /* セッションから取得 */;
-
-//2. DB接続します
-$pdo = db_conn();
-
-//３．データ登録SQL作成
-$stmt = $pdo->prepare(/* user_idも含めたINSERT文 */);
-$stmt->bindValue(':content', $content, PDO::PARAM_STR);
-/* user_idのbindValueを1行追加 */
-$status = $stmt->execute(); //実行
-
-// 処理後のリダイレクト
-if($status === false) {
-    sql_error($stmt);
-} else {
-    redirect('select.php');
-}
-?>
-```
+書けたら、下の完成形と見比べてみましょう。
 {% endhint %}
 
-`insert.php`の完成形（AIの出力と見比べてみよう）
+<details>
+
+<summary>答え（insert.phpの完成形）</summary>
 
 ```php
 <?php
@@ -326,6 +318,8 @@ if($status === false) {
 }
 ?>
 ```
+
+</details>
 
 上記処理を追加後、一旦ログアウト→ログインし、`phpMyAdmin`にて`contents`テーブルの`user_id`カラムに意図したuser\_idが記録されているか確認してください。
 
