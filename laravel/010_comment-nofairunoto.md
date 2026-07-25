@@ -369,34 +369,31 @@ DELETE /tweets/{tweet}/comments/{comment} → destroy
 
 <?php
 
-use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TweetController;
 use App\Http\Controllers\TweetLikeController;
 // 🔽 追加
 use App\Http\Controllers\CommentController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-  return view('welcome');
+Route::view('/', 'welcome')->name('home');
+
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::view('dashboard', 'dashboard')->name('dashboard');
+
+    Route::resource('tweets', TweetController::class);
+    Route::post('/tweets/{tweet}/like', [TweetLikeController::class, 'store'])->name('tweets.like');
+    Route::delete('/tweets/{tweet}/like', [TweetLikeController::class, 'destroy'])->name('tweets.dislike');
+    // 🔽 追加
+    Route::resource('tweets.comments', CommentController::class);
 });
 
-Route::get('/dashboard', function () {
-  return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
-
-Route::middleware('auth')->group(function () {
-  Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-  Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-  Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-  Route::resource('tweets', TweetController::class);
-  Route::post('/tweets/{tweet}/like', [TweetLikeController::class, 'store'])->name('tweets.like');
-  Route::delete('/tweets/{tweet}/like', [TweetLikeController::class, 'destroy'])->name('tweets.dislike');
-  // 🔽 追加
-  Route::resource('tweets.comments', CommentController::class);
-});
-
-require __DIR__ . '/auth.php';
+require __DIR__.'/settings.php';
 ```
+
+{% hint style="info" %}
+**Livewire Starter Kitでのルート構成**
+ログイン・会員登録・プロフィール編集などのルートはFortify/`routes/settings.php`側で管理されているため、`routes/web.php`にはアプリ独自のルート（Tweet/Comment関連）のみを記述します。詳しくは002・003を参照してください。
+{% endhint %}
 
 ### ルーティングの確認
 

@@ -1,14 +1,12 @@
-# 002\_Breeze導入
+# 002\_認証の仕組み(Livewire Starter Kit + Fortify)
 
-Laravel Breeze は、手軽に利用できる認証パッケージです。
+`todo-app` は、プロジェクト作成時点（001の手順）で、すでに認証機能（ログイン・会員登録・パスワードリセットなど）が組み込まれています。
 
-パッケージを利用すると非常に簡単にログイン機能等が実装できます！ Laravel Breeze をプロジェクトにインストールしましょう。
+以前のBreezeでは「パッケージを後からインストールして認証機能を追加する」という流れでしたが、今回使用する **Livewire Starter Kit** は `laravel new todo-app --livewire` を実行した時点で認証まわりのファイルが一式生成済みです。このページでは「何を追加でインストールするか」ではなく、**すでに用意されているものが何なのか**を確認していきます。
 
 ## 事前準備
 
 ### Dockerコンテナが起動していることを確認
-
-まずは前回作成したDockerコンテナが起動していることを確認してください：
 
 ```bash
 ./vendor/bin/sail up -d
@@ -16,149 +14,115 @@ Laravel Breeze は、手軽に利用できる認証パッケージです。
 
 ### プロジェクトディレクトリにいることを確認
 
-ターミナルで `laratter` プロジェクトフォルダにいることを確認してください：
-
 ```bash
-cd laratter
+cd todo-app
 ```
 
 {% hint style="info" %}
 **現在のディレクトリの確認方法**
 - Mac/Linux: `pwd` コマンドで現在のディレクトリを確認できます
-- 表示されるパスの最後が `/laratter` になっていればOKです
+- 表示されるパスの最後が `/todo-app` になっていればOKです
 {% endhint %}
 
-## Breezeパッケージの導入
+## Livewire Starter Kit と Fortify の役割分担
 
-### 手順1: Breezeパッケージのインストール
+{% hint style="info" %}
+**Laravel Fortify とは？**
+ログイン・会員登録・パスワードリセット・メール確認・2要素認証などの**バックエンド処理（ルート・コントローラー相当の処理）**を提供するパッケージです。画面（View）は持っていません。
+{% endhint %}
 
-```bash
-./vendor/bin/sail composer require laravel/breeze --dev
+{% hint style="info" %}
+**Livewire Starter Kit とは？**
+Fortifyの処理につなぎこむ**画面（View）側**を提供するスターターキットです。ログイン画面・会員登録画面・ダッシュボード・ナビゲーションなどが、Livewire/Flux UIコンポーネントを使ったBladeファイルとしてあらかじめ用意されています。
+{% endhint %}
+
+つまり「Fortifyが裏側の処理を担当し、Livewire Starter Kitがその画面を提供する」という役割分担になっています。
+
+## 生成されたファイルを確認しよう
+
+### 1. ルート定義
+
+`routes/web.php` を開いてください：
+
+```php
+<?php
+
+use Illuminate\Support\Facades\Route;
+
+Route::view('/', 'welcome')->name('home');
+
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::view('dashboard', 'dashboard')->name('dashboard');
+});
+
+require __DIR__.'/settings.php';
 ```
 
 {% hint style="info" %}
-**このコマンドの意味:**
-- Breezeパッケージをプロジェクトに追加します
-- `--dev` オプションにより開発環境専用として追加されます
-- この段階ではまだ利用できません（次の手順で設定を適用する必要があります）
+**Breeze版との違い**
+Breezeでは `require __DIR__.'/auth.php'` のように、ログイン・会員登録用のルートを別ファイルで読み込んでいました。Fortifyではログイン・会員登録などのルート（`/login`, `/register` など）は**Fortify自身が内部で自動登録**するため、`routes/web.php` には出てきません。
 {% endhint %}
 
-### 手順2: Breezeの設定適用
+`routes/settings.php` には、ログイン後のプロフィール設定・パスワード変更などのルートが定義されています。
 
-```bash
-./vendor/bin/sail artisan breeze:install
+### 2. Fortifyの設定ファイル
+
+`app/Providers/FortifyServiceProvider.php` を開いてください。ここで「Fortifyのどの処理に、どの画面（View）を表示するか」が紐付けられています：
+
+```php
+private function configureViews(): void
+{
+    Fortify::loginView(fn () => view('pages::auth.login'));
+    Fortify::registerView(fn () => view('pages::auth.register'));
+    Fortify::verifyEmailView(fn () => view('pages::auth.verify-email'));
+    // ...
+}
 ```
 
 {% hint style="info" %}
-**このコマンドの意味:**
-- ログイン・登録・パスワードリセットなどのテンプレートファイルを自動生成
-- 認証に必要なルートやコントローラーを自動追加
-- CSS/JSファイルの設定も自動で行われます
+**このコマンドの意味**
+例えば `/login` にGETアクセスがあった場合、Fortifyは `resources/views/pages/auth/login.blade.php` を表示します。ログインフォームが送信された（POST）場合の処理はFortify内部で行われます。
 {% endhint %}
 
-コマンドを実行すると、以下のような選択肢が表示されます。
-基本Enter押してれば問題ないですが、
-**Which testing framework do you prefer? に関しては、PHPUnitを選択してください。**
-**Pestを選択すると、次に進めません**
-※もし進めなくなったら、ファイルをすべて削除 → 最初から`curl -s "https://laravel.build/laratter" | bash`からやり直しです。
+### 3. 認証画面のView
 
+`resources/views/pages/auth/` フォルダの中に、ログイン・会員登録などの画面がBladeファイルとして用意されています：
 
-```bash
- ┌ Which Breeze stack would you like to install? ─┐
- │ Blade with Alpine                              │  ← Enterで選択
- └────────────────────────────────────────────────┘
-
- ┌ Would you like dark mode support? ─────────────┐
- │ No                                             │  ← Enterで選択
- └────────────────────────────────────────────────┘
-
- ┌ Which testing framework do you prefer? ────────┐
- │ PHPUnit                                        │  ← キーボードの矢印でPHPUnitを選択してEnter
- └────────────────────────────────────────────────┘
+```
+resources/views/pages/auth/
+├── login.blade.php
+├── register.blade.php
+├── forgot-password.blade.php
+├── reset-password.blade.php
+├── confirm-password.blade.php
+├── two-factor-challenge.blade.php
+└── verify-email.blade.php
 ```
 
-{% hint style="warning" %}
-**選択について**
-各選択肢の詳細は、Laravel上級者になってから学習することをお勧めします。
-{% endhint %}
+`login.blade.php` の中身を見ると、通常のBladeフォームで `route('login.store')` にPOSTしているだけのシンプルな構造です（`flux:input` など、Flux UIというコンポーネント集を使って見た目を整えています）：
 
-### 手順3: フロントエンドファイルのビルド
-
-```bash
-./vendor/bin/sail npm run build
+```blade
+<form method="POST" action="{{ route('login.store') }}" class="flex flex-col gap-6">
+    @csrf
+    <flux:input name="email" :label="__('Email address')" type="email" required autofocus />
+    <flux:input name="password" :label="__('Password')" type="password" required />
+    <flux:button variant="primary" type="submit" class="w-full">
+        {{ __('Log in') }}
+    </flux:button>
+</form>
 ```
 
-{% hint style="info" %}
-**このコマンドの意味:**
-- CSS、JavaScriptファイルをコンパイル・最適化
-- Breezeで追加されたスタイルを反映
-- 今後フロントエンドファイル（CSS/JS）を変更した際にも実行が必要
-{% endhint %}
+### 4. ナビゲーション
 
-{% hint style="warning" %}
-**重要**: このコマンドを実行しないと、ログイン画面のスタイルが正しく表示されません。必ず実行してください。
-{% endhint %}
+`resources/views/layouts/app/header.blade.php` に、ログイン後のヘッダー・ナビゲーションが `flux:header` / `flux:navbar` / `flux:sidebar` コンポーネントで組まれています。詳しくは次のレッスン（004）で扱います。
 
 ## 動作確認
-
-### ブラウザでの確認
-
-ビルドが完了したら、ブラウザで http://localhost にアクセスしてください。
-
-Laravelのトップページの右上に **「Login」「Register」** のリンクが追加されていることを確認できます。
-
-<figure><img src="../.gitbook/assets/laravel/002/laravel_002_010.png" alt=""><figcaption></figcaption></figure>
-
-{% hint style="warning" %}
-**まだユーザー登録はできません**
-ログイン画面は表示されますが、まだユーザー情報を保存するためのデータベーステーブルが作成されていないため、実際の登録は行えません。次の手順でテーブルを作成します。
-{% endhint %}
-
-## データベーステーブルの作成
-
-### 手順4: マイグレーションの実行
-
-{% hint style="info" %}
-**マイグレーションとは？**
-データベースにテーブルを作成・変更するためのLaravelの仕組みです。ユーザー情報を保存するための `users` テーブルなどを作成します。
-{% endhint %}
-
-```bash
-./vendor/bin/sail artisan migrate
-```
-
-{% hint style="warning" %}
-**すでに実行済みの場合**
-前回のDocker環境構築時に既にマイグレーションを実行している場合は、「Nothing to migrate.」と表示されます。その場合は次の手順に進んでください。
-{% endhint %}
-
-マイグレーションが成功すると、以下のような出力が表示されます：
-
-```bash
-   INFO  Preparing database.  
-
-  Creating migration table ................................. 78ms DONE
-
-   INFO  Running migrations.  
-
-  2014_10_12_000000_create_users_table ..................... 25ms DONE
-  2014_10_12_100000_create_password_reset_tokens_table ..... 10ms DONE
-  2019_08_19_000000_create_failed_jobs_table ............... 24ms DONE
-  2019_12_14_000001_create_personal_access_tokens_table .... 32ms DONE
-```
-
-{% hint style="success" %}
-**成功！**
-すべてのテーブルで「DONE」が表示されれば、データベースの準備が完了です。
-{% endhint %}
-
-## 動作テスト
 
 ### ユーザー登録のテスト
 
 1. ブラウザで http://localhost にアクセス
-2. 右上の **「Register」** をクリック
-3. 以下の情報で2-3人のテストユーザーを作成してください：
+2. 「Register」をクリック
+3. 以下の情報で2〜3人のテストユーザーを作成してください：
    - **Name**: 任意の名前
    - **Email**: テスト用のメールアドレス（例：test1@example.com）
    - **Password**: 8文字以上のパスワード
@@ -169,10 +133,15 @@ Laravelのトップページの右上に **「Login」「Register」** のリン
 ユーザー登録が成功すると、自動的にログインされ、ダッシュボード画面に遷移します。
 {% endhint %}
 
-## 便利機能：ローカルメールサーバー
+{% hint style="warning" %}
+**「SQLSTATE...」エラーが出た場合**
+テーブルがまだ作成されていない可能性があります。001のレッスンで案内した通り、`./vendor/bin/sail artisan migrate` を実行してください。
+{% endhint %}
+
+## 便利機能：ローカルメールサーバー（Mailpit）
 
 {% hint style="info" %}
-**MailHog（メールサーバー）**
+**Mailpit（メールサーバー）**
 http://localhost:8025 にアクセスすると、開発用のメールサーバーにアクセスできます。
 
 **用途:**
@@ -180,47 +149,15 @@ http://localhost:8025 にアクセスすると、開発用のメールサーバ�
 - ユーザー登録確認メールの確認
 - 外部ネットワークに接続せずにメール機能をテスト可能
 
-このメールサーバーは開発環境専用で、実際のメールは送信されません。
+このメールサーバーは開発環境専用で、実際のメールは送信されません。001の `sail:install --with=mysql,mailpit` で自動的にセットアップ済みです。
 {% endhint %}
 
 ---
 
-## ⚠️ 重要：Laravel Breezeの将来性について（2025年現在）
+## なぜBreezeではなくLivewire Starter Kit + Fortifyにしたのか
 
 {% hint style="warning" %}
-**Laravel 12以降でのBreeze事情**
+**Laravel BreezeはLaravel 12以降、公式推奨から外れています**
 
-Laravel 12が最新となった現在、**Laravel Breezeは公式推奨から外れています**。
-
-**現在の状況（2025年）:**
-- **Laravel 11まで**: Breezeは公式推奨の認証スターターキット
-- **Laravel 12以降**: 非推奨（ただし技術的には利用可能）
-
-**新しいアプリケーションスターターキットの導入**に伴い、Laravel BreezeとLaravel Jetstreamは**追加アップデートを受けられなくなりました**。
-{% endhint %}
-
-{% hint style="info" %}
-**現在のBreeze利用について**
-
-✅ **技術的に問題なし**: Laravel 12でもBreezeは正常に動作します  
-✅ **既存機能は利用可能**: 認証機能はすべて動作します  
-⚠️ **セキュリティリスク**: 将来的なセキュリティアップデートが期待できません  
-⚠️ **機能追加なし**: 新機能追加や改善は期待できません  
-
-**学習目的**: 現時点では問題なく利用できます  
-**本格運用**: 他のスターターキットの検討を推奨
-{% endhint %}
-
-{% hint style="success" %}
-**将来的な選択肢（中長期的対応）**
-
-**1年以降の本格的な開発**では、以下のような代替手段を検討することをお勧めします：
-
-**推奨代替案:**
-- **Laravel Livewire**: モダンなフルスタック開発
-- **Laravel Jetstream**: より高機能な認証システム（ただしこちらも同様の状況）
-- **カスタム認証実装**: 自分で認証システムを構築
-- **外部認証サービス**: Auth0、Firebase Authなど
-
-**学習段階**: Breezeで基本を学んだ後、Livewireなどの学習を推奨
+Laravel 12で新しいアプリケーションスターターキット（React / Vue / Livewire）が導入されたことに伴い、Laravel BreezeとLaravel Jetstreamは追加アップデートを受けられなくなりました。今後の学習・開発では、公式が現在も更新を続けているLivewire Starter Kit（内部でFortifyを使用）を採用しています。
 {% endhint %}

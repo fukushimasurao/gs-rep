@@ -17,7 +17,7 @@
 
 ### 前提条件
 
-*   `laratter` プロジェクトのセットアップが完了していること。
+*   `todo-app` プロジェクトのセットアップが完了していること。
 *   Dockerコンテナが起動していること (`./vendor/bin/sail up -d`)。
 
 ---
@@ -33,7 +33,6 @@
 
 <?php
 
-use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TweetController;
 // 🔽 1. HelloControllerを読み込む use文を追加
 use App\Http\Controllers\HelloController;

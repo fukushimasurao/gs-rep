@@ -15,14 +15,14 @@
 
 **動画で解説している内容:**
 
-1. Laravel プロジェクトの作成（`curl -s "https://laravel.build/laratter" | bash`）
-2. プロジェクトディレクトリへの移動（`cd laratter`）
+1. Laravel プロジェクトの作成
+2. プロジェクトディレクトリへの移動
 3. compose.yaml への phpMyAdmin 設定追加
 4. `./vendor/bin/sail up -d` でのコンテナ起動
 
 ※ 動画内の一部コマンドと下記テキストで差異がある場合は、**下記テキストを正**として進めてください。
 
-※ 動画で使用しているLaravelは少し古いバージョンのため、**現在のLaravelとUIが異なって見える場合があります**が、基本的な操作は同じです。
+※ 動画で使用しているLaravelは少し古いバージョンのため、**現在のLaravelとUIが異なって見える場合があります**が、基本的な操作は同じです。プロジェクト作成コマンドはLivewire Starter Kit + Fortify構成に対応するため、下記テキストの新しいコマンドに変更されています。
 {% endhint %}
 
 ***
@@ -97,30 +97,43 @@ Laravelも同じように大きな器を用意してその中で環境構築を�
 
 ### 手順1: Laravelプロジェクトの作成
 
+{% hint style="warning" %}
+**動画との違いについて** 動画では `curl -s "https://laravel.build/..." | bash` でプロジェクトを作成していますが、現在はLivewire Starter Kit + Fortify構成に対応するため、下記の新しいコマンドを使用してください。
+{% endhint %}
+
 ターミナルで以下のコマンドを実行します：
 
 ```bash
-curl -s "https://laravel.build/laratter" | bash
+docker run --rm --pull=always \
+  -v "$(pwd)":/opt \
+  -w /opt \
+  laravelsail/php84-composer:latest \
+  bash -lc "composer global require laravel/installer --quiet && export PATH=\"\$HOME/.composer/vendor/bin:\$PATH\" && laravel new todo-app --livewire --database=mysql --pest --no-node --no-interaction && cd todo-app && php artisan sail:install --with=mysql,mailpit"
 ```
-
-{% hint style="warning" %}
-**動画との違いについて** 動画では `curl -s "https://laravel.build/test-project" | bash` としていますが、 `curl -s "https://laravel.build/laratter" | bash` で実行してください。
-{% endhint %}
-
-{% hint style="warning" %}
-**パスワード入力について** コマンド実行の最後に `Password for XXX:` と表示され、**パソコンのログインパスワード**の入力を求められます。
-
-* **注意**: パスワードを入力しても画面には文字が表示されません（セキュリティのため）
-* 見た目は何も入力されていないように見えますが、正しく入力されています
-* パスワードを入力後、Enterキーを押してください
-{% endhint %}
 
 {% hint style="info" %}
 **このコマンドの意味:**
 
-* `laratter` という名前でLaravelプロジェクトを作成
-* 必要なDockerファイルも自動生成
-* データベース（MySQL）、Redis、メールサーバーなども含まれる
+* `laravelsail/php84-composer` イメージを使い、Macに直接PHPやComposerをインストールせずにLaravelプロジェクトを作成
+* `composer global require laravel/installer`：イメージに入っているLaravelインストーラーが古いことがあるため、最新版に更新（`--livewire`オプションを使うために必要）
+* `laravel new todo-app --livewire --database=mysql --pest --no-node --no-interaction`：`todo-app` という名前で、**Livewire Starter Kit（認証にFortifyを使用）・MySQL・Pest**構成のプロジェクトを作成。`--no-node`はこの段階ではnpmビルドを行わない設定（あとでSailコンテナ内から実行します）
+* `php artisan sail:install --with=mysql,mailpit`：Sailの `compose.yaml`（Docker設定ファイル）を、MySQLとメール確認用のMailpitを含む構成で生成
+{% endhint %}
+
+**ファイルの所有者を修正**
+
+Dockerコンテナ内（root権限）でファイルが作成されるため、所有者を自分に戻します：
+
+```bash
+sudo chown -R $USER: todo-app
+```
+
+{% hint style="warning" %}
+**パスワード入力について** `Password for XXX:` と表示され、**パソコンのログインパスワード**の入力を求められます。
+
+* **注意**: パスワードを入力しても画面には文字が表示されません（セキュリティのため）
+* 見た目は何も入力されていないように見えますが、正しく入力されています
+* パスワードを入力後、Enterキーを押してください
 {% endhint %}
 
 ### 手順2: プロジェクトディレクトリに移動
@@ -128,11 +141,11 @@ curl -s "https://laravel.build/laratter" | bash
 ターミナルで以下のコマンドを実行します：
 
 ```bash
-cd laratter
+cd todo-app
 ```
 
 {% hint style="warning" %}
-**注意**: プロジェクト名を `laratter` に変更したので、`cd laratter` で移動します。
+**注意**: プロジェクト名を `todo-app` としたので、`cd todo-app` で移動します。
 {% endhint %}
 
 ***
@@ -158,23 +171,25 @@ cd laratter
 * `-d`: バックグラウンドで実行（ターミナルが占有されない）
 {% endhint %}
 
-### 手順4: データベースのセットアップ
+### 手順4: データベースのセットアップとフロントエンドのビルド
 
-初回 `./vendor/bin/sail up -d` 実行後、ブラウザで `http://localhost` にアクセスしてみてください。
-
-{% hint style="warning" %}
-**SQLSTATEエラーが表示された場合** 🚨もし「SQLSTATE...」というエラー画面が表示された場合は、データベースの初期設定が必要です。 以下のコマンドをターミナルで実行してください。
-{% endhint %}
+ターミナルで以下のコマンドを順番に実行します：
 
 ```bash
 ./vendor/bin/sail artisan migrate
+./vendor/bin/sail npm install
+./vendor/bin/sail npm run dev
 ```
 
 {% hint style="info" %}
 **このコマンドの意味:**
 
-* Laravelのデータベーステーブルを作成
-* ユーザー認証などの基本テーブルが準備される
+* `artisan migrate`：Laravelのデータベーステーブルを作成（ユーザー認証などの基本テーブルが準備される）
+* `npm install` / `npm run dev`：Livewire Starter Kit（Flux UI）のCSS/JSをビルド。プロジェクト作成時に `--no-node` を指定したため、ここで初めてビルドします
+{% endhint %}
+
+{% hint style="warning" %}
+**`npm run dev` はターミナルを占有します** 開発中はこのまま起動したままにしておき、別のタブ/ウィンドウで他の作業を行ってください。停止する場合は `Ctrl + C` です。
 {% endhint %}
 
 ### 手順5: 動作確認
@@ -211,12 +226,12 @@ cd laratter
 ### compose.yamlファイルの編集
 
 {% hint style="info" %}
-**compose.yamlファイルの場所** `compose.yaml` ファイルは、先ほど作成した `laratter` フォルダの中にあります。
+**compose.yamlファイルの場所** `compose.yaml` ファイルは、先ほど作成した `todo-app` フォルダの中にあります。
 
 **具体的な場所:**
 
-* ターミナルで `cd laratter` を実行した場所
-* VS Codeなどのエディタで `laratter` フォルダを開いた時に、フォルダの直下に表示されるファイル
+* ターミナルで `cd todo-app` を実行した場所
+* VS Codeなどのエディタで `todo-app` フォルダを開いた時に、フォルダの直下に表示されるファイル
 * ファイル名は `compose.yaml`（拡張子は `.yml`）
 {% endhint %}
 
@@ -228,7 +243,7 @@ cd laratter
 * 気になる人は、生成AIと相談しながら記述することを推奨します
 {% endhint %}
 
-`laratter` フォルダ内の `compose.yaml` ファイルを開き、以下を追加：
+`todo-app` フォルダ内の `compose.yaml` ファイルを開き、以下を追加：
 
 {% hint style="warning" %}
 **追加する場所に注意！** 以下のコードは、`compose.yaml` ファイルの **`networks:` より上の位置** に追加してください。 具体的には、既存のサービス（`laravel.test`, `mysql`, `redis` など）と同じレベルで追加します。
@@ -274,7 +289,7 @@ platform: linux/amd64
    * **ユーザー名**: `sail`
    * **パスワード**: `password`
 4. **phpMyAdmin動作確認**：
-   * ログイン後、左側に `laratter` データベースが表示されることを確認
+   * ログイン後、左側に `todo_app` データベースが表示されることを確認
    * データベースをクリックして、テーブル一覧が表示されることを確認
    * もしテーブルが表示されない場合は、先ほどの `./vendor/bin/sail artisan migrate` が実行されているか確認
 
@@ -301,7 +316,7 @@ platform: linux/amd64
 
 **「Port already in use」エラー** → XAMPP/MAMPが起動していないか確認
 
-**コマンドが認識されない** → プロジェクトディレクトリ（`laratter`フォルダ）内で実行しているか確認
+**コマンドが認識されない** → プロジェクトディレクトリ（`todo-app`フォルダ）内で実行しているか確認
 
 **M1/M2 Mac での動作不具合** → compose.yaml に `platform: linux/amd64` を追加
 

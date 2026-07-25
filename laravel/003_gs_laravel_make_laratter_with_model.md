@@ -9,7 +9,7 @@
 
 ### アプリケーションの要件
 
-今回作成するlaratterアプリケーションでは、以下の機能が必要です：
+今回作成するtodo-appアプリケーションでは、以下の機能が必要です：
 
 - **ユーザー**がログインできる
 - **ユーザー**がつぶやき（Tweet）を投稿できる
@@ -53,12 +53,12 @@ Laravelでは、**データベースのテーブルを直接操作するので�
 ### プロジェクトディレクトリにいることを確認
 
 ```bash
-cd laratter
+cd todo-app
 ```
 
 {% hint style="info" %}
 **現在のディレクトリの確認方法**
-`pwd` コマンドで現在のディレクトリを確認できます。表示されるパスの最後が `/laratter` になっていればOKです。
+`pwd` コマンドで現在のディレクトリを確認できます。表示されるパスの最後が `/todo-app` になっていればOKです。
 {% endhint %}
 
 ## Laravelにおけるモデルとテーブルの基本概念
@@ -101,7 +101,7 @@ Laravelではファイル名のルール等規則が多いです。**コマン�
 
 ### コマンドの実行
 
-以下のコマンドを`laratter`ディレクトリで実行してください：
+以下のコマンドを`todo-app`ディレクトリで実行してください：
 
 ```bash
 ./vendor/bin/sail artisan make:model Tweet -rm
@@ -117,9 +117,9 @@ Laravelではファイル名のルール等規則が多いです。**コマン�
 以下のような出力が表示されて、`Model`、`migrationsファイル`、`Controller`が作成されればOKです：
 
 ```bash
-// laratter階層にいることを確認
+// todo-app階層にいることを確認
 pwd
-/Users/fukushimahayato/laratter
+/Users/fukushimahayato/todo-app
 
 ./vendor/bin/sail artisan make:model Tweet -rm
 
@@ -388,43 +388,56 @@ class Tweet extends Model
 
 ### ルートファイルの編集
 
-`routes/web.php`ファイルに，`Tweet`に関するルートを設定します。以下の2行を追加してください：
+`routes/web.php`ファイルに，`Tweet`に関するルートを設定します。デフォルトの状態は以下のようになっています：
+
+```php
+// routes/web.php（デフォルトの状態）
+
+<?php
+
+use Illuminate\Support\Facades\Route;
+
+Route::view('/', 'welcome')->name('home');
+
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::view('dashboard', 'dashboard')->name('dashboard');
+});
+
+require __DIR__.'/settings.php';
+```
+
+{% hint style="info" %}
+**Livewire Starter Kitでのルート構成**
+ログイン・会員登録などのルートはFortifyが内部で自動登録するため、ここには出てきません。プロフィール設定などのルートは`routes/settings.php`にまとまっています（002で確認済み）。
+{% endhint %}
+
+ここに`TweetController`のインポートと、`Tweet`に関するCRUDルートを追加します：
 
 ```php
 // routes/web.php
 
 <?php
 
-use App\Http\Controllers\ProfileController;
-
 // ⭐️1行追加⭐️
 use App\Http\Controllers\TweetController;
 
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-  return view('welcome');
+Route::view('/', 'welcome')->name('home');
+
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::view('dashboard', 'dashboard')->name('dashboard');
+
+    // ⭐️ 追加 ⭐️
+    Route::resource('tweets', TweetController::class);
 });
 
-Route::get('/dashboard', function () {
-  return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
-
-Route::middleware('auth')->group(function () {
-  Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-  Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-  Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-
-  // ⭐️ 追加 ⭐️
-  Route::resource('tweets', TweetController::class);
-});
-
-require __DIR__ . '/auth.php';
+require __DIR__.'/settings.php';
 ```
 
 {% hint style="info" %}
 **認証ミドルウェアについて**
-`Route::middleware('auth')->group(function () { ... });`に囲まれているルートは、ユーザーが認証されている（ログインしている）状態でないとアクセスできないことを表しています。
+`Route::middleware(['auth', 'verified'])->group(function () { ... });`に囲まれているルートは、ユーザーが認証済み（ログイン済み・メール確認済み）でないとアクセスできないことを表しています。
 
 今回はモデル作成時に`-r`オプション（`--resource`）を指定しており`Tweet`に関する**CRUD処理のルートが自動的に追加**されています。
 {% endhint %}
@@ -466,7 +479,7 @@ Showing [7] routes
 
 **phpMyAdminでテーブル構造を確認**
 - http://localhost:8080 にアクセス
-- データベース：`laratter`を選択
+- データベース：`todo_app`を選択
 - `tweets`テーブルが存在することを確認
 - カラム構成が正しいことを確認：
   - `id` (bigint, PRIMARY KEY, AUTO_INCREMENT)

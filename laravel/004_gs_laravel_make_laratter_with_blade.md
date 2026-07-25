@@ -20,7 +20,7 @@
 ### プロジェクトディレクトリにいることを確認
 
 ```bash
-cd laratter
+cd todo-app
 ```
 
 ## Bladeテンプレートとは？
@@ -39,14 +39,14 @@ Laravelでは画面を作成する際に**Bladeテンプレート**を使用し�
 
 {% hint style="info" %}
 **Tailwind CSSとは？**
-CSSフレームワークの一つです。HTMLのclassに直接デザインを指定して書くことができるユーティリティファーストのCSSライブラリです。Laravel Breezeにあらかじめ含まれています。
+CSSフレームワークの一つです。HTMLのclassに直接デザインを指定して書くことができるユーティリティファーストのCSSライブラリです。Livewire Starter Kit（Flux UI）にあらかじめ含まれています。
 {% endhint %}
 
 ## ビューファイルの作成
 
 ### Bladeテンプレートファイルの生成
 
-以下のコマンドを`laratter`ディレクトリで実行してください：
+以下のコマンドを`todo-app`ディレクトリで実行してください：
 4行を一気にコピペでもokです。
 
 ```bash
@@ -79,8 +79,9 @@ CSSフレームワークの一つです。HTMLのclassに直接デザインを�
 ├── dashboard.blade.php
 ├── layouts
 │   ├── app.blade.php
-│   ├── guest.blade.php
-│   └── navigation.blade.php
+│   └── app
+│       ├── header.blade.php
+│       └── sidebar.blade.php   ← ナビゲーションはここ
 ├── tweets
 │   ├── create.blade.php [← ⭐️NEW⭐️]
 │   ├── edit.blade.php   [← ⭐️NEW⭐️]
@@ -88,6 +89,11 @@ CSSフレームワークの一つです。HTMLのclassに直接デザインを�
 │   └── show.blade.php   [← ⭐️NEW⭐️]
 └── welcome.blade.php
 ```
+
+{% hint style="info" %}
+**なぜファイルが2つあるの？**
+Livewire Starter Kitは「サイドバー型」（`sidebar.blade.php`）と「ヘッダー型」（`header.blade.php`）の2種類のナビゲーションデザインを用意しています。`resources/views/layouts/app.blade.php` を見ると、実際に使われているのは `x-layouts::app.sidebar`、つまり**サイドバー型**であることが分かります。このレッスンでは `sidebar.blade.php` を編集します。
+{% endhint %}
 
 {% hint style="success" %}
 **ファイル作成完了！**
@@ -98,157 +104,53 @@ CSSフレームワークの一つです。HTMLのclassに直接デザインを�
 
 ### 各画面へのリンク追加
 
-各画面へ簡単に移動できるようにナビゲーションバーにリンクを追加します。ナビゲーションバーは`resources/views/layouts/navigation.blade.php`に記述されています。
+各画面へ簡単に移動できるようにナビゲーションバーにリンクを追加します。ナビゲーションバーは`resources/views/layouts/app/sidebar.blade.php`に記述されています。
 
 初期状態では`Dashboard`のリンクが追加されているため、同様の形式で一覧画面と作成画面へのリンクを作成します。
 
-{% hint style="warning" %}
-**重要な注意点**
-このファイルでは**PC画面**と**モバイル画面**で表示する内容を変えているため、それぞれ**2箇所**にリンクのコードを追加する必要があります。
+{% hint style="success" %}
+**Breeze版との違い：編集箇所は1箇所だけ**
+Breezeのナビゲーションバーは、PC画面用・モバイル画面用でそれぞれ別のHTMLを書く必要がありました。Livewire Starter Kitの`flux:sidebar`はレスポンシブ対応（`collapsible="mobile"`）が組み込まれているため、**リンクの追加は1箇所だけでOK**です。
 {% endhint %}
 
-### navigation.blade.phpファイルの編集
+### sidebar.blade.phpファイルの編集
 
-`resources/views/layouts/navigation.blade.php`ファイルを開き、以下のように編集してください：
+`resources/views/layouts/app/sidebar.blade.php`ファイルを開き、`<flux:sidebar.group>`の中に`Dashboard`と同じ形式でリンクを追加してください：
 
 {% hint style="info" %}
 **編集方法について**
-以下のコードは**ファイル全体**を置き換えるものです。既存の内容をすべて削除して、以下のコードをコピペしてください。
+以下は既存の`flux:sidebar.nav`ブロックの一部を抜粋しています。`<!-- ⭐️ 追加 ⭐️ -->`の箇所だけを追記してください。
 
 記載されている`route('tweets.index')`などは、routeで設定されたルート名です。
 `./vendor/bin/sail artisan route:list --path=tweets`の出力を思い出してください！
 {% endhint %}
 
 ```php
-<!-- resources/views/layouts/navigation.blade.php -->
+<!-- resources/views/layouts/app/sidebar.blade.php（抜粋） -->
 
-<nav x-data="{ open: false }" class="bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700">
-  <!-- Primary Navigation Menu -->
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="flex justify-between h-16">
-      <div class="flex">
-        <!-- Logo -->
-        <div class="shrink-0 flex items-center">
-          <a href="{{ route('dashboard') }}">
-            <x-application-logo class="block h-9 w-auto fill-current text-gray-800 dark:text-gray-200" />
-          </a>
-        </div>
-
-        <!-- Navigation Links -->
-        <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-          <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
+<flux:sidebar.nav>
+    <flux:sidebar.group :heading="__('Platform')" class="grid">
+        <flux:sidebar.item icon="home" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>
             {{ __('Dashboard') }}
-          </x-nav-link>
+        </flux:sidebar.item>
 
-          <!-- ⭐️ 2項目追加↓↓↓ ⭐️ -->
-          <x-nav-link :href="route('tweets.index')" :active="request()->routeIs('tweets.index')">
+        <!-- ⭐️ 2項目追加↓↓↓ ⭐️ -->
+        <flux:sidebar.item icon="list-bullet" :href="route('tweets.index')" :current="request()->routeIs('tweets.index')" wire:navigate>
             {{ __('Tweet一覧') }}
-          </x-nav-link>
-          <x-nav-link :href="route('tweets.create')" :active="request()->routeIs('tweets.create')">
+        </flux:sidebar.item>
+        <flux:sidebar.item icon="pencil-square" :href="route('tweets.create')" :current="request()->routeIs('tweets.create')" wire:navigate>
             {{ __('Tweet作成') }}
-          </x-nav-link>
-          <!-- ⭐️ 2項目追加↑↑↑↑ ⭐️ -->
-
-        </div>
-      </div>
-
-      <!-- Settings Dropdown -->
-      <div class="hidden sm:flex sm:items-center sm:ms-6">
-        <x-dropdown align="right" width="48">
-          <x-slot name="trigger">
-            <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none transition ease-in-out duration-150">
-              <div>{{ Auth::user()->name }}</div>
-
-              <div class="ms-1">
-                <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                  <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
-                </svg>
-              </div>
-            </button>
-          </x-slot>
-
-          <x-slot name="content">
-            <x-dropdown-link :href="route('profile.edit')">
-              {{ __('Profile') }}
-            </x-dropdown-link>
-
-            <!-- Authentication -->
-            <form method="POST" action="{{ route('logout') }}">
-              @csrf
-
-              <x-dropdown-link :href="route('logout')" onclick="event.preventDefault();
-                                                this.closest('form').submit();">
-                {{ __('Log Out') }}
-              </x-dropdown-link>
-            </form>
-          </x-slot>
-        </x-dropdown>
-      </div>
-
-      <!-- Hamburger -->
-      <div class="-me-2 flex items-center sm:hidden">
-        <button @click="open = ! open" class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 dark:text-gray-500 hover:text-gray-500 dark:hover:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-900 focus:outline-none focus:bg-gray-100 dark:focus:bg-gray-900 focus:text-gray-500 dark:focus:text-gray-400 transition duration-150 ease-in-out">
-          <svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
-            <path :class="{'hidden': open, 'inline-flex': ! open }" class="inline-flex" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-            <path :class="{'hidden': ! open, 'inline-flex': open }" class="hidden" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-          </svg>
-        </button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Responsive Navigation Menu -->
-  <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
-    <div class="pt-2 pb-3 space-y-1">
-      <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-        {{ __('Dashboard') }}
-      </x-responsive-nav-link>
-
-      <!-- ⭐️ 2項目追加↓↓↓ ⭐️ -->
-      <x-responsive-nav-link :href="route('tweets.index')" :active="request()->routeIs('tweets.index')">
-        {{ __('Tweet一覧') }}
-      </x-responsive-nav-link>
-      <x-responsive-nav-link :href="route('tweets.create')" :active="request()->routeIs('tweets.create')">
-        {{ __('Tweet作成') }}
-      </x-responsive-nav-link>
-      <!-- ⭐️ 2項目追加↑↑↑↑ ⭐️ -->
-
-    </div>
-
-    <!-- Responsive Settings Options -->
-    <div class="pt-4 pb-1 border-t border-gray-200 dark:border-gray-600">
-      <div class="px-4">
-        <div class="font-medium text-base text-gray-800 dark:text-gray-200">{{ Auth::user()->name }}</div>
-        <div class="font-medium text-sm text-gray-500">{{ Auth::user()->email }}</div>
-      </div>
-
-      <div class="mt-3 space-y-1">
-        <x-responsive-nav-link :href="route('profile.edit')">
-          {{ __('Profile') }}
-        </x-responsive-nav-link>
-
-        <!-- Authentication -->
-        <form method="POST" action="{{ route('logout') }}">
-          @csrf
-
-          <x-responsive-nav-link :href="route('logout')" onclick="event.preventDefault();
-                                        this.closest('form').submit();">
-            {{ __('Log Out') }}
-          </x-responsive-nav-link>
-        </form>
-      </div>
-    </div>
-  </div>
-</nav>
+        </flux:sidebar.item>
+        <!-- ⭐️ 2項目追加↑↑↑↑ ⭐️ -->
+    </flux:sidebar.group>
+</flux:sidebar.nav>
 ```
 
 {% hint style="info" %}
-**Bladeコンポーネントについて**
-Bladeの中に記述されている`<x-...>`というタグは、**コンポーネント**という部品のようなものです。
+**Fluxコンポーネントについて**
+`<flux:...>`というタグは、Livewire Starter Kitに含まれる**Flux UI**というコンポーネント集です。BreezeのBladeコンポーネント（`<x-nav-link>`など）と役割は同じですが、見た目がすでに整ったUIキットとして提供されています。
 
-実体は`resources/views/components`の中にあります。例えば`<x-nav-link>`は、`resources/views/components/nav-link.blade.php`に実装があります。
-
-同じような部品はコンポーネントに用意して複数のページで使いまわすことで、コードの重複を避けることができます。
+`icon`属性にはアイコン名（[Heroicons](https://heroicons.com/)ベース）を指定します。`wire:navigate`は、ページ全体を再読み込みせずに高速に画面遷移させるLivewireの機能です。
 {% endhint %}
 
 ## 動作確認
