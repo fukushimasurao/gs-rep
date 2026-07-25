@@ -234,6 +234,8 @@ JOIN
 2. 以下のテストアカウントでログインする
 
 ```
+// アカウント情報は、usersテーブルにあります。便宜上PWはハッシュ化していません。
+
 ID: test1
 PW: test1
 ```
@@ -299,15 +301,15 @@ loginCheck();
 //1. POSTデータ取得
 $content = $_POST['content'];
 //ログインユーザーidを取得
-$user_id = $_SESSION['user_id']; // ← 追記
+$user_id = $_SESSION['user_id']; // ← ⭐️追記
 
 //2. DB接続します
 $pdo = db_conn();
 
 //３．データ登録SQL作成
-$stmt = $pdo->prepare('INSERT INTO contents(user_id, content, created_at)VALUES(:user_id, :content, NOW());'); // user_idへの記録を追加
+$stmt = $pdo->prepare('INSERT INTO contents(user_id, content, created_at)VALUES(:user_id, :content, NOW());'); // ⭐️user_idへの記録を追加
 $stmt->bindValue(':content', $content, PDO::PARAM_STR);
-$stmt->bindValue(':user_id', $user_id, PDO::PARAM_INT);  // bindValue追加
+$stmt->bindValue(':user_id', $user_id, PDO::PARAM_INT);  // ⭐️bindValue追加
 $status = $stmt->execute(); //実行
 
 // 処理後のリダイレクト
@@ -321,7 +323,9 @@ if($status === false) {
 
 </details>
 
-上記処理を追加後、一旦ログアウト→ログインし、`phpMyAdmin`にて`contents`テーブルの`user_id`カラムに意図したuser\_idが記録されているか確認してください。
+上記処理を追加後、
+一旦**ログアウト→ログイン**して、
+`phpMyAdmin`にて`contents`テーブルの`user_id`カラムに意図したuser\_idが記録されているか確認してください。
 
 ### アンケート一覧で投稿者名を横に表示する（リレーション先のデータ取得）
 
@@ -388,7 +392,23 @@ $status = $stmt->execute();
 
 上記のように、ユーザ1に対して投稿が複数ある関係性を**1対多**という。
 
-<figure><img src="../.gitbook/assets/1対多.jpg" alt=""><figcaption><p>1対多</p></figcaption></figure>
+```mermaid
+flowchart LR
+    subgraph users["users（1）"]
+        u1["田中<br>id: 1"]
+        u2["佐藤<br>id: 2"]
+    end
+    subgraph contents["contents（多）"]
+        c1["おはよう<br>user_id: 1"]
+        c2["こんにちは<br>user_id: 1"]
+        c3["やあ<br>user_id: 2"]
+    end
+    u1 --> c1
+    u1 --> c2
+    u2 --> c3
+```
+
+1人の`user`（田中）が複数の`content`（`user_id`が同じ投稿）を持てる一方、1件の`content`は必ず1人の`user`にしか属さない。この非対称な関係が「1対多」です。
 
 もう一段レベルの高い関係として**多対多**もありますが、これはプラスアルファで扱います。
 
