@@ -632,7 +632,7 @@ $pdo = db_conn();
 $stmt = $pdo->prepare('SELECT
     contents.id as id,
     contents.content as content,
-    contents.image as image, // ←追加
+    contents.image as image, -- ← ⭐️追加
     users.name as name
 FROM contents JOIN users ON contents.user_id = users.id ');
 $status = $stmt->execute();
