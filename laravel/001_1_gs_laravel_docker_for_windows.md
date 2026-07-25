@@ -36,46 +36,16 @@
 
 ## 目次
 
-1. [事前準備](001_1_gs_laravel_docker_for_windows.md#事前準備)
-2. [Dockerとは？](001_1_gs_laravel_docker_for_windows.md#dockerとは)
-3. [Laravel Sailの導入](001_1_gs_laravel_docker_for_windows.md#laravel-sailの導入)
-4. [プロジェクトの起動と確認](001_1_gs_laravel_docker_for_windows.md#プロジェクトの起動と確認)
-5. [phpMyAdminの設定](001_1_gs_laravel_docker_for_windows.md#phpmyadminの設定)
+1. [Dockerとは？](001_1_gs_laravel_docker_for_windows.md#dockerとは)
+2. [Laravel Sailの導入](001_1_gs_laravel_docker_for_windows.md#laravel-sailの導入)
+3. [プロジェクトの起動と確認](001_1_gs_laravel_docker_for_windows.md#プロジェクトの起動と確認)
+4. [phpMyAdminの設定](001_1_gs_laravel_docker_for_windows.md#phpmyadminの設定)
 
 ***
 
-## 事前準備
-
 {% hint style="success" %}
-**🎥 動画で詳しく解説** Docker Desktop のインストール手順が詳しく解説されています。
-{% endhint %}
-
-### 必要なソフトウェア
-
-1. **Docker Desktop for Windows** のインストール
-   * [公式サイト](https://docs.docker.com/desktop/)からダウンロード
-   * ダウンロードした `.exe` ファイルを右クリック
-   * **「管理者として実行」** を選択してインストール
-   * インストール後、必ず起動させておく
-   * Docker Desktop の **Settings** から設定を確認
-   * **Disk image location** が `... Docker\wsl` に設定されていることを確認
-2.  **WSL（Windows Subsystem for Linux）の確認**
-
-    * PowerShellを **管理者として実行**
-    * 以下のコマンドを実行してUbuntuが利用可能か確認：
-
-    ```powershell
-    wsl --list --verbose
-    ```
-
-    * Ubuntuが表示されることを確認
-3. **既存サーバーの停止** もしXAMPPやMAMPを起動している場合は、それらを終了させてから以下を行ってください。
-
-{% hint style="warning" %}
-**重要**:
-
-* Docker DesktopがPCにインストールされ、起動していることを確認してください
-* WSLのUbuntuが利用可能であることを確認してください
+**事前準備は完了している前提です**
+Docker Desktopのインストール・WSL（Ubuntu）のセットアップ・`docker -v`での動作確認は、別紙の環境構築資料で完了している前提でここから進めます。まだの場合は先にそちらを済ませてください。
 {% endhint %}
 
 ***

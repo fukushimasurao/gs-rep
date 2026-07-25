@@ -29,31 +29,16 @@
 
 ## 目次
 
-1. [事前準備](001_2_gs_laravel_docker_for_mac.md#事前準備)
-2. [Dockerとは？](001_2_gs_laravel_docker_for_mac.md#dockerとは)
-3. [Laravel Sailの導入](001_2_gs_laravel_docker_for_mac.md#laravel-sailの導入)
-4. [プロジェクトの起動と確認](001_2_gs_laravel_docker_for_mac.md#プロジェクトの起動と確認)
-5. [phpMyAdminの設定](001_2_gs_laravel_docker_for_mac.md#phpmyadminの設定)
+1. [Dockerとは？](001_2_gs_laravel_docker_for_mac.md#dockerとは)
+2. [Laravel Sailの導入](001_2_gs_laravel_docker_for_mac.md#laravel-sailの導入)
+3. [プロジェクトの起動と確認](001_2_gs_laravel_docker_for_mac.md#プロジェクトの起動と確認)
+4. [phpMyAdminの設定](001_2_gs_laravel_docker_for_mac.md#phpmyadminの設定)
 
 ***
 
-## 事前準備
-
-{% hint style="info" %}
-**Docker Desktop のインストール** Mac版の動画では Docker Desktop のインストール手順は省略されています。 事前に Docker Desktop for Mac をインストールしておいてください。
-
-**参考**: Docker Desktop のインストール方法については、以下の記事の **8.インストール初回** まで完了すればOKです（9は不要）： https://minegishirei.hatenablog.com/entry/2023/05/04/124946
-{% endhint %}
-
-### 必要なソフトウェア
-
-1. **Docker Desktop for Mac** のインストール
-   * [公式サイト](https://docs.docker.com/desktop/)からダウンロード
-   * インストール後、必ず起動させておく
-2. **既存サーバーの停止** もしXAMPPやMAMPを起動している場合は、それらを終了させてから以下を行ってください。
-
-{% hint style="warning" %}
-**重要**: Docker DesktopがMacにインストールされ、起動していることを確認してください。
+{% hint style="success" %}
+**事前準備は完了している前提です**
+Docker Desktopのインストール・`docker -v`での動作確認は、別紙の環境構築資料で完了している前提でここから進めます。まだの場合は先にそちらを済ませてください。
 {% endhint %}
 
 ***
