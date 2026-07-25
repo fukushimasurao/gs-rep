@@ -343,9 +343,11 @@ if($status === false) {
 - contents.user_id が users.id を参照しています
 
 【依頼】
-contentsの全件を、投稿者名（usersのname）と一緒にJOINで取得するSELECT文を
-書いてください。取得するカラムはcontents.id, contents.content, users.nameで、
+contentsの全件を、投稿者名（usersのname）と一緒にJOINで取得したいです。
+取得するカラムはcontents.id, contents.content, users.nameで、
 それぞれ id, content, name という名前でエイリアスしてください。
+$pdo->prepare()を使って、$stmtに代入するPHPのコードとして書いてください
+（SQL文だけでなく、$stmt = $pdo->prepare('...'); の形でお願いします）。
 ```
 {% endhint %}
 
