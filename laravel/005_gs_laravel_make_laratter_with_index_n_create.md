@@ -98,12 +98,10 @@ class TweetController extends Controller
 ```php
 <!-- resources/views/tweets/index.blade.php -->
 
-<x-app-layout>
-  <x-slot name="header">
-    <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-      {{ __('Tweet一覧') }}
-    </h2>
-  </x-slot>
+<x-layouts::app :title="__('Tweet一覧')">
+  <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight mb-6">
+    {{ __('Tweet一覧') }}
+  </h2>
 
   <div class="py-12">
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
@@ -121,16 +119,21 @@ class TweetController extends Controller
     </div>
   </div>
 
-</x-app-layout>
+</x-layouts::app>
 
 
 
 ```
 
-{% hint style="info" %}
-**Bladeレイアウトについて** `<x-app-layout></x-app-layout>`で囲って記載すると、`resources/views/layouts/app.blade.php`内の`{{ $slot }}`という箇所に、この囲ったコードがすべて埋め込まれます。
+{% hint style="warning" %}
+**`<x-app-layout>`は使いません**
+BreezeのBlade with Alpineスタックには`<x-app-layout>`コンポーネントがありましたが、Livewire Starter Kitのこのプロジェクトには存在しません。代わりに`<x-layouts::app>`（`resources/views/layouts/app.blade.php`）を使います。
+{% endhint %}
 
-これにより、ヘッダーやナビゲーションなどの共通部分を自動で含めることができます。
+{% hint style="info" %}
+**Bladeレイアウトについて** `<x-layouts::app></x-layouts::app>`で囲って記載すると、`resources/views/layouts/app.blade.php`（さらにその先の`layouts/app/sidebar.blade.php`）内の`{{ $slot }}`という箇所に、この囲ったコードがすべて埋め込まれます。`:title`で渡した文字列はページタイトル（ブラウザのタブなど）に使われます。
+
+これにより、ナビゲーション（サイドバー）などの共通部分を自動で含めることができます。
 {% endhint %}
 
 ## 作成画面の作成
@@ -158,12 +161,10 @@ class TweetController extends Controller
 ```php
 <!-- resources/views/tweets/create.blade.php -->
 
-<x-app-layout>
-  <x-slot name="header">
-    <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-      {{ __('Tweet作成') }}
-    </h2>
-  </x-slot>
+<x-layouts::app :title="__('Tweet作成')">
+  <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight mb-6">
+    {{ __('Tweet作成') }}
+  </h2>
 
   <div class="py-12">
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
@@ -184,7 +185,7 @@ class TweetController extends Controller
       </div>
     </div>
   </div>
-</x-app-layout>
+</x-layouts::app>
 
 ```
 

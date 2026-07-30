@@ -176,12 +176,10 @@ class TweetController extends Controller
 ```php
 <!-- resources/views/tweets/show.blade.php -->
 
-<x-app-layout>
-  <x-slot name="header">
-    <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-      {{ __('Tweet詳細') }}
-    </h2>
-  </x-slot>
+<x-layouts::app :title="__('Tweet詳細')">
+  <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight mb-6">
+    {{ __('Tweet詳細') }}
+  </h2>
 
   <div class="py-12">
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
@@ -210,9 +208,14 @@ class TweetController extends Controller
       </div>
     </div>
   </div>
-</x-app-layout>
+</x-layouts::app>
 
 ```
+
+{% hint style="warning" %}
+**`<x-app-layout>`は使いません**
+BreezeのBlade with Alpineスタックには`<x-app-layout>`コンポーネントがありましたが、Livewire Starter Kitのこのプロジェクトには存在しません。代わりに`<x-layouts::app>`（`resources/views/layouts/app.blade.php`）を使います。
+{% endhint %}
 
 {% hint style="info" %}
 **リレーションの活用について** `{{ $tweet->user->name }}`の`$tweet->user`は、`Tweet.php`に定義した`user()`メソッドによるリレーションです。これにより、ツイートから投稿者のユーザー情報を簡単に取得できます。

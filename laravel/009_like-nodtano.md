@@ -219,12 +219,10 @@ like ボタンはユーザが like しているかどうかによって like（l
 ```php
 <!-- resources/views/tweets/index.blade.php -->
 
-<x-app-layout>
-  <x-slot name="header">
-    <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-      {{ __('Tweet一覧') }}
-    </h2>
-  </x-slot>
+<x-layouts::app :title="__('Tweet一覧')">
+  <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight mb-6">
+    {{ __('Tweet一覧') }}
+  </h2>
 
   <div class="py-12">
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
@@ -258,9 +256,14 @@ like ボタンはユーザが like しているかどうかによって like（l
     </div>
   </div>
 
-</x-app-layout>
+</x-layouts::app>
 
 ```
+
+{% hint style="warning" %}
+**`<x-app-layout>`は使いません**
+BreezeのBlade with Alpineスタックには`<x-app-layout>`コンポーネントがありましたが、Livewire Starter Kitのこのプロジェクトには存在しません。代わりに`<x-layouts::app>`（`resources/views/layouts/app.blade.php`）を使います。
+{% endhint %}
 
 ### 詳細画面
 
@@ -269,12 +272,10 @@ like ボタンはユーザが like しているかどうかによって like（l
 ```php
 <!-- resources/views/tweets/show.blade.php -->
 
-<x-app-layout>
-  <x-slot name="header">
-    <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-      {{ __('Tweet詳細') }}
-    </h2>
-  </x-slot>
+<x-layouts::app :title="__('Tweet詳細')">
+  <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight mb-6">
+    {{ __('Tweet詳細') }}
+  </h2>
 
   <div class="py-12">
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
@@ -317,9 +318,14 @@ like ボタンはユーザが like しているかどうかによって like（l
       </div>
     </div>
   </div>
-</x-app-layout>
+</x-layouts::app>
 
 ```
+
+{% hint style="warning" %}
+**`<x-app-layout>`は使いません**
+BreezeのBlade with Alpineスタックには`<x-app-layout>`コンポーネントがありましたが、Livewire Starter Kitのこのプロジェクトには存在しません。代わりに`<x-layouts::app>`（`resources/views/layouts/app.blade.php`）を使います。
+{% endhint %}
 
 {% hint style="info" %}
 **`$tweet->likedByUsers->contains(auth()->id())` の処理詳細**

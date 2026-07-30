@@ -109,12 +109,10 @@ Tweet 詳細画面を下記のように編集しましょう。(まだコメン�
 ```blade
 <!-- resources/views/tweets/show.blade.php -->
 
-<x-app-layout>
-  <x-slot name="header">
-    <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-      {{ __('Tweet詳細') }}
-    </h2>
-  </x-slot>
+<x-layouts::app :title="__('Tweet詳細')">
+  <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight mb-6">
+    {{ __('Tweet詳細') }}
+  </h2>
 
   <div class="py-12">
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
@@ -169,9 +167,14 @@ Tweet 詳細画面を下記のように編集しましょう。(まだコメン�
       </div>
     </div>
   </div>
-</x-app-layout>
+</x-layouts::app>
 
 ```
+
+{% hint style="warning" %}
+**`<x-app-layout>`は使いません**
+BreezeのBlade with Alpineスタックには`<x-app-layout>`コンポーネントがありましたが、Livewire Starter Kitのこのプロジェクトには存在しません。代わりに`<x-layouts::app>`（`resources/views/layouts/app.blade.php`）を使います。
+{% endhint %}
 
 ### コメント作成画面の作成 <a href="#komentono" id="komentono"></a>
 
@@ -202,12 +205,10 @@ public function create(Tweet $tweet)
 ```blade
 <!-- resources/views/tweets/comments/create.blade.php -->
 
-<x-app-layout>
-  <x-slot name="header">
-    <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-      {{ __('コメント作成') }}
-    </h2>
-  </x-slot>
+<x-layouts::app :title="__('コメント作成')">
+  <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight mb-6">
+    {{ __('コメント作成') }}
+  </h2>
 
   <div class="py-12">
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
@@ -229,7 +230,7 @@ public function create(Tweet $tweet)
       </div>
     </div>
   </div>
-</x-app-layout>
+</x-layouts::app>
 
 ```
 
@@ -298,12 +299,10 @@ tweets/{tweet}/comments/{comment}
 ```blade
 <!-- resources/views/tweets/show.blade.php -->
 
-<x-app-layout>
-  <x-slot name="header">
-    <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-      {{ __('Tweet詳細') }}
-    </h2>
-  </x-slot>
+<x-layouts::app :title="__('Tweet詳細')">
+  <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight mb-6">
+    {{ __('Tweet詳細') }}
+  </h2>
 
   <div class="py-12">
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
@@ -365,8 +364,13 @@ tweets/{tweet}/comments/{comment}
       </div>
     </div>
   </div>
-</x-app-layout>
+</x-layouts::app>
 ```
+
+{% hint style="warning" %}
+**`<x-app-layout>`は使いません**
+BreezeのBlade with Alpineスタックには`<x-app-layout>`コンポーネントがありましたが、Livewire Starter Kitのこのプロジェクトには存在しません。代わりに`<x-layouts::app>`（`resources/views/layouts/app.blade.php`）を使います。
+{% endhint %}
 
 {% hint style="info" %}
 ルーティングで 2 つのパラメータを設定する場合は配列で設定する．
@@ -434,12 +438,10 @@ public function show(Tweet $tweet, Comment $comment)
 ```blade
 <!-- resources/views/tweets/comments/show.blade.php -->
 
-<x-app-layout>
-  <x-slot name="header">
-    <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-      {{ __('コメント詳細') }}
-    </h2>
-  </x-slot>
+<x-layouts::app :title="__('コメント詳細')">
+  <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight mb-6">
+    {{ __('コメント詳細') }}
+  </h2>
 
   <div class="py-12">
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
@@ -467,9 +469,14 @@ public function show(Tweet $tweet, Comment $comment)
       </div>
     </div>
   </div>
-</x-app-layout>
+</x-layouts::app>
 
 ```
+
+{% hint style="warning" %}
+**`<x-app-layout>`は使いません**
+BreezeのBlade with Alpineスタックには`<x-app-layout>`コンポーネントがありましたが、Livewire Starter Kitのこのプロジェクトには存在しません。代わりに`<x-layouts::app>`（`resources/views/layouts/app.blade.php`）を使います。
+{% endhint %}
 
 ### 動作確認
 

@@ -48,12 +48,10 @@ public function edit(Tweet $tweet, Comment $comment)
 ```blade
 <!-- resources/views/tweets/comments/edit.blade.php -->
 
-<x-app-layout>
-  <x-slot name="header">
-    <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-      {{ __('コメント編集') }}
-    </h2>
-  </x-slot>
+<x-layouts::app :title="__('コメント編集')">
+  <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight mb-6">
+    {{ __('コメント編集') }}
+  </h2>
 
   <div class="py-12">
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
@@ -76,9 +74,14 @@ public function edit(Tweet $tweet, Comment $comment)
       </div>
     </div>
   </div>
-</x-app-layout>
+</x-layouts::app>
 
 ```
+
+{% hint style="warning" %}
+**`<x-app-layout>`は使いません**
+BreezeのBlade with Alpineスタックには`<x-app-layout>`コンポーネントがありましたが、Livewire Starter Kitのこのプロジェクトには存在しません。代わりに`<x-layouts::app>`（`resources/views/layouts/app.blade.php`）を使います。
+{% endhint %}
 
 ### 更新処理 <a href="#geng-xin-chu-li" id="geng-xin-chu-li"></a>
 
