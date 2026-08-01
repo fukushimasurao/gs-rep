@@ -1,4 +1,8 @@
-# 001\_1\_Docker導入\_WINDOWS
+# {OLD}001\_1\_Docker導入\_WINDOWS
+
+{% hint style="warning" %}
+**このページは旧バージョンです** 最新の手順は [001\_0\_Laravelプロジェクトの作成とSail起動](001_0_gs_laravel_project_setup.md) を参照してください。
+{% endhint %}
 
 **WINDOWS向けの記事です！** **Macは次のページへ！**
 

@@ -187,6 +187,23 @@ code .env
 ### よくあるエラーと解決方法
 
 1. **ポートが使用されている場合**
+
+   よくある原因は2つあります。
+
+   **原因A: 別のSailプロジェクトが起動中**
+   複数のプロジェクト（例：`laratter`と`laratter2`）を作った場合、デフォルトでは同じホスト側ポート（80, 3306, 1025, 8025, 5173など）を使おうとして衝突します。片方を止めてから起動してください。
+   ```bash
+   cd ~/laratter
+   ./vendor/bin/sail down
+
+   cd ~/laratter2
+   ./vendor/bin/sail up -d
+   ```
+   同時に両方起動しておきたい場合は、`.env`の`APP_PORT`や`FORWARD_DB_PORT`などを別番号にずらしてください。
+
+   **原因B: XAMPP/MAMPやHomebrew等のローカルMySQLが起動中**
+   ポート3306はローカルにインストール済みのMySQLとも衝突します。停止方法・確認方法は[001\_0のページ](../001_0_gs_laravel_project_setup.md)を参照してください。
+
    ```bash
    # .envのAPP_PORTを変更してから
    ./vendor/bin/sail up -d
