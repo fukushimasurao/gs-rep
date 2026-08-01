@@ -41,6 +41,7 @@
     * [ルートモデル結合](laravel/laravel-tips/rtomoderu.md)
     * [命名規則に従わない場合の多対多連携](laravel/laravel-tips/niwanaino.md)
     * [練習のための新しいプロジェクトを作成したい場合](laravel/laravel-tips/new_project.md)
+    * [日本語化(i18n)の現状と対処法](laravel/laravel-tips/localization.md)
 * [VS code関連](vs-code.md)
 * [便利情報](good-tools.md)
 * [sqlインジェクション確認](sql_injection.md)
