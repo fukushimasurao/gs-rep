@@ -19,6 +19,103 @@ AIに「機能を実装して」と直接指示すると、指示文が曖昧な
 
 自然言語の曖昧な指示を、実行可能な仕様（テスト）に変換してから実装に入るのがポイント。TDD（テスト駆動開発）をAI活用の文脈に応用したイメージ。
 
+## 具体例：ツイート本文のバリデーション
+
+`laratter`の「Tweet投稿」機能を例に、3ステップの流れを見てみます。
+
+### 1. テストケースの洗い出し（人間 × AI：相談しながら出す）
+
+「ツイート投稿にバリデーションを追加したい」とだけ伝えるのではなく、**AIと相談しながら**ケースを洗い出します。ここは人間が主導し、AIに壁打ち相手になってもらうイメージです：
+
+* 正常系：1〜255文字のツイートは登録できる
+* 境界値：ちょうど255文字は登録できる／256文字は登録できない
+* 異常系：空文字は登録できない
+* 異常系：未ログインユーザーは投稿できない（認可）
+
+### 2. テストコードの作成（AIに依頼）
+
+洗い出したケースをそのままAIに渡し、**テストコードの作成をAIに依頼**します：
+
+【サンプルプロンプト】
+```
+Laravel(Pest)のテストコードを書いてください。
+
+対象：Tweet投稿機能（POST /tweets）
+
+以下のテストケースをすべて満たすテストコードにしてください。
+- 正常系：1〜255文字のツイートは登録できる
+- 境界値：ちょうど255文字は登録できる／256文字は登録できない
+- 異常系：空文字は登録できない
+- 異常系：未ログインユーザーは投稿できない（認可）
+```
+
+```php
+it('255文字以内のツイートは登録できる', function () {
+    $user = User::factory()->create();
+
+    $this->actingAs($user)
+        ->post('/tweets', ['tweet' => str_repeat('あ', 255)])
+        ->assertRedirect();
+
+    $this->assertDatabaseCount('tweets', 1);
+});
+
+it('256文字を超えるツイートは登録できない', function () {
+    $user = User::factory()->create();
+
+    $this->actingAs($user)
+        ->post('/tweets', ['tweet' => str_repeat('あ', 256)])
+        ->assertSessionHasErrors('tweet');
+
+    $this->assertDatabaseCount('tweets', 0);
+});
+
+it('空のツイートは登録できない', function () {
+    $user = User::factory()->create();
+
+    $this->actingAs($user)
+        ->post('/tweets', ['tweet' => ''])
+        ->assertSessionHasErrors('tweet');
+});
+
+it('未ログインユーザーは投稿できない', function () {
+    $this->post('/tweets', ['tweet' => 'test'])
+        ->assertRedirect('/login');
+});
+```
+
+### 3. 実装（AIに依頼）
+
+作成したテストコードを満たすように、**実装をAIに依頼**します：
+
+【サンプルプロンプト】
+```
+以下のPestテストコードをすべて満たすように、
+TweetControllerのstoreメソッドを実装してください。
+
+（ここに2で作成したテストコードを貼り付ける）
+```
+
+実装結果の例：
+
+```php
+public function store(Request $request)
+{
+    $request->validate([
+        'tweet' => 'required|string|max:255',
+    ]);
+
+    Tweet::create([
+        'tweet' => $request->tweet,
+        'user_id' => auth()->id(),
+    ]);
+
+    return redirect()->route('tweets.index');
+}
+```
+
+「バリデーションを追加して」という曖昧な依頼だけだと、AIが`max`の文字数や空文字の扱いを勝手に判断してしまいがちですが、先にテストコードとして仕様を固めておくことで、意図通りの実装になりやすくなります。
+
 ## 注意点（人間の責務）
 
 この手法の効果は、**テストケースの網羅性**にほぼ依存する。テストケースに漏れがあると、AIはそのテストにだけ最適化した実装を作ってしまい、「テストは通るが要件は満たしていない」状態になり得る。そのため以下は人間が意識的にチェックする。
