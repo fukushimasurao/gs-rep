@@ -45,4 +45,5 @@
     * [日本語化(i18n)の現状と対処法](laravel/laravel-tips/localization.md)
 * [VS code関連](vs-code.md)
 * [便利情報](good-tools.md)
+* [AI駆動開発Tips（テストケース駆動）](ai-tdd-tips.md)
 * [sqlインジェクション確認](sql_injection.md)
