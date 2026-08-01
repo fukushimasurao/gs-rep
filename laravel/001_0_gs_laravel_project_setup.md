@@ -186,11 +186,18 @@ cd laratter
 **`npm run dev` はターミナルを占有します** 開発中はこのまま起動したままにしておき、別のタブ/ウィンドウで他の作業を行ってください。停止する場合は `Ctrl + C` です。
 {% endhint %}
 
+{% hint style="danger" %}
+**`npm run dev` の出力に出てくる `APP_URL: http://localhost:8000` に惑わされないでください**
+`npm run dev`を実行すると `➜ APP_URL: http://localhost:8000` という行が表示されますが、これは`.env`の`APP_URL`の値を表示しているだけで、実際にアクセスできるURLではありません。**Sailは80番ポートでアプリを公開している**ため、`http://localhost:8000`にアクセスすると「ERR_CONNECTION_REFUSED（接続が拒否されました）」になります。次の手順の通り、ポート番号なしの`http://localhost`にアクセスしてください。
+
+気になる場合は、`.env`の`APP_URL=http://localhost:8000`を`APP_URL=http://localhost`に書き換えておくと、この紛らわしい表示自体がなくなります。
+{% endhint %}
+
 ### 手順5: 動作確認
 
 ブラウザで以下のURLにアクセス：
 
-* **Laravel アプリケーション**: http://localhost
+* **Laravel アプリケーション**: http://localhost（`:8000`は付けません）
 * **成功**: Laravelのウェルカムページが表示される
 
 <figure><img src="../.gitbook/assets/laravel_start.png" alt=""><figcaption></figcaption></figure>
