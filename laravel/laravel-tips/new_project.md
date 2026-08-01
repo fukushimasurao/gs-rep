@@ -213,16 +213,25 @@ code .env
    - `.env`のDB設定を確認
    - コンテナが正常に起動しているか確認：`./vendor/bin/sail ps`
 
-3. **アプリケーションキーエラー**
+3. **`migrate`時に「Access denied for user 'sail'@'%' to database ...」エラー**
+   - 以前に同じプロジェクト名で作成・削除したことがある場合、MySQLデータ用のDockerボリュームが古い状態のまま残っているのが原因です（新しい`.env`の内容で初期化されていない）
+   - 以下でボリュームごと作り直してください（`-v`で関連ボリュームも削除されるので、同名の古いデータがあれば消えます）
+   ```bash
+   ./vendor/bin/sail down -v
+   ./vendor/bin/sail up -d
+   ./vendor/bin/sail artisan migrate
+   ```
+
+4. **アプリケーションキーエラー**
    ```bash
    ./vendor/bin/sail artisan key:generate
    ```
 
-4. **権限エラー**
+5. **権限エラー**
    ```bash
    sudo chown -R $USER:$USER プロジェクト名/
    ```
 
-5. **`--livewire`オプションが見つからないエラー**
+6. **`--livewire`オプションが見つからないエラー**
    - `laravelsail/php84-composer`イメージに入っているLaravelインストーラーが古いことが原因です
    - コマンド内の `composer global require laravel/installer` が実行されているか確認してください

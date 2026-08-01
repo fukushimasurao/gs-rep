@@ -108,6 +108,22 @@ docker run --rm --pull=always \
 * `php artisan sail:install --with=mysql,mailpit`：Sailの `compose.yaml`（Docker設定ファイル）を、MySQLとメール確認用のMailpitを含む構成で生成
 {% endhint %}
 
+成功すると、最後に以下のような出力が表示されます：
+
+```bash
+   INFO  Sail scaffolding installed successfully. You may run your Docker containers using Sail's "up" command.  
+
+➜ ./vendor/bin/sail up
+
+   WARN  A database service was installed. Run "artisan migrate" to prepare your database:  
+
+➜ ./vendor/bin/sail artisan migrate
+```
+
+{% hint style="info" %}
+**`➜ ./vendor/bin/sail up` などの表示について** これはコマンドが実行されたわけではなく、「次はこのコマンドを実行してね」という案内メッセージです。実際にはこの後の手順で1つずつ実行していきます。
+{% endhint %}
+
 **ファイルの所有者を修正**
 
 Dockerコンテナ内（root権限）でファイルが作成されるため、所有者を自分に戻します：
@@ -117,7 +133,7 @@ sudo chown -R $USER: laratter
 ```
 
 {% hint style="warning" %}
-**パスワード入力について** `Password for XXX:` と表示され、**パソコンのログインパスワード**の入力を求められます。
+**パスワード入力について** 上記コマンドを実行すると `Password:`（環境によっては`Password for XXX:`）と表示され、**パソコンのログインパスワード**の入力を求められます。
 
 * **注意**: パスワードを入力しても画面には文字が表示されません（セキュリティのため）
 * 見た目は何も入力されていないように見えますが、正しく入力されています
@@ -285,3 +301,15 @@ platform: linux/amd64
 **コマンドが認識されない** → プロジェクトディレクトリ（`laratter`フォルダ）内で実行しているか確認。Windowsの場合はWSL（Ubuntu）ターミナルを使用しているか確認
 
 **M1/M2 Macでの動作不具合** → compose.yaml に `platform: linux/amd64` を追加
+
+**`migrate`時に「Access denied for user 'sail'@'%' to database 'laratter'」エラー** → 以前に同じプロジェクト名で作成・削除したことがある場合、MySQLのデータを保存しているDockerボリュームが古い状態のまま残っていることが原因です。MySQLは空のボリュームに対してのみ初期設定（`sail`ユーザーの作成など）を行うため、古いボリュームが残っていると今の`.env`の内容で初期化されません。以下でボリュームごと作り直してください：
+
+```bash
+./vendor/bin/sail down -v
+./vendor/bin/sail up -d
+./vendor/bin/sail artisan migrate
+```
+
+{% hint style="warning" %}
+`-v`は関連するDockerボリューム（DBデータ）も削除するオプションです。同じプロジェクト名で既に保存していたデータが残っている場合は消えるので注意してください。
+{% endhint %}
