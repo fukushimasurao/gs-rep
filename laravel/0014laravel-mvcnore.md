@@ -149,3 +149,21 @@ select.php                  ├ routes/web.php (交通整理)
 【流れを覚えよう】
 
 route > controller > (modelは無いこともあり) > view
+
+**【AI活用】MVCとRouteの流れをAIに説明してもらおう**
+
+以下の点線の中身をまるごとコピーし、このページの4つのコードブロック（routes/web.php、UserController.php、User.php、index.blade.php）を貼り付けてAIに送ってみましょう。
+
+```
+--------
+Laravelの授業でMVCとルーティングを学んでいます。初学者向けにわかりやすく、
+簡素に説明してください。
+
+下記は今回のサンプルコードです（routes/web.php → Controller → Model → View の順）。
+
+【質問】
+- ブラウザで /user にアクセスしてから画面が表示されるまで、
+  この4つのファイルはどういう順番で・何をしていますか？
+- Route・Controller・Model・Viewは、それぞれ何をする役割ですか？
+--------
+```
