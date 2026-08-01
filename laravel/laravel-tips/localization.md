@@ -12,12 +12,12 @@ Livewire Starter Kitで作った`laratter`は、初期状態だとログイン�
 Laravel本体・Fortify・Jetstream・Breezeなどの定型文言を128言語分カバーしているパッケージです。Laravel 13・Fortify 1系にも対応しています。
 
 ```bash
-composer require --dev laravel-lang/lang
-php artisan lang:update
+./vendor/bin/sail composer require --dev laravel-lang/lang
+./vendor/bin/sail artisan lang:update
 ```
 
 {% hint style="info" %}
-より手軽に使いたい場合は`laravel-lang/common`という軽量版もあります。こちらは`php artisan lang:add ja`の1コマンドで日本語リソースを追加できます。
+より手軽に使いたい場合は`laravel-lang/common`という軽量版もあります。こちらは`./vendor/bin/sail artisan lang:add ja`の1コマンドで日本語リソースを追加できます。
 {% endhint %}
 
 `.env`を編集して日本語をデフォルトにします：
