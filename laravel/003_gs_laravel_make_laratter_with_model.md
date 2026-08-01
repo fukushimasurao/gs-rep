@@ -441,7 +441,7 @@ require __DIR__.'/settings.php';
 ログイン・会員登録などのルートはFortifyが内部で自動登録するため、ここには出てきません。プロフィール設定などのルートは`routes/settings.php`にまとまっています（002で確認済み）。
 {% endhint %}
 
-ここに`TweetController`のインポートと、`Tweet`に関するCRUDルートを追加します：
+ここに`TweetController`のインポートと、`Tweet`に関するCRUDルートを追加します。まずは**1つ1つのルートを省略せずに**書いてみましょう：
 
 ```php
 // routes/web.php
@@ -458,7 +458,65 @@ Route::view('/', 'welcome')->name('home');
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::view('dashboard', 'dashboard')->name('dashboard');
 
-    // ⭐️ 追加 ⭐️
+    // ⭐️ 7行追加 ⭐️
+    Route::get('/tweets', [TweetController::class, 'index'])->name('tweets.index');
+    Route::get('/tweets/create', [TweetController::class, 'create'])->name('tweets.create');
+    Route::post('/tweets', [TweetController::class, 'store'])->name('tweets.store');
+    Route::get('/tweets/{tweet}', [TweetController::class, 'show'])->name('tweets.show');
+    Route::get('/tweets/{tweet}/edit', [TweetController::class, 'edit'])->name('tweets.edit');
+    Route::put('/tweets/{tweet}', [TweetController::class, 'update'])->name('tweets.update');
+    Route::delete('/tweets/{tweet}', [TweetController::class, 'destroy'])->name('tweets.destroy');
+});
+
+require __DIR__.'/settings.php';
+```
+
+{% hint style="info" %}
+**各ルートの役割**
+
+| メソッド | URL | 対応するControllerのメソッド | 用途 |
+| --- | --- | --- | --- |
+| GET | `/tweets` | `index` | 一覧表示 |
+| GET | `/tweets/create` | `create` | 作成画面表示 |
+| POST | `/tweets` | `store` | 作成処理 |
+| GET | `/tweets/{tweet}` | `show` | 詳細表示 |
+| GET | `/tweets/{tweet}/edit` | `edit` | 編集画面表示 |
+| PUT | `/tweets/{tweet}` | `update` | 更新処理 |
+| DELETE | `/tweets/{tweet}` | `destroy` | 削除処理 |
+
+このような「一覧・作成・詳細・編集・更新・削除」の7つの処理をひとまとめにしたものを**CRUD（Create・Read・Update・Delete）**と呼びます。
+{% endhint %}
+
+### Route::resourceで圧縮する
+
+{% hint style="success" %}
+**備考：`Route::resource()`という書き方もあります**
+上に書いた7行は、実は以下の1行にまとめて書くことができます。**実務でもこちらの書き方が主流**です。今後の資料でも`Route::resource()`を使っていきます。
+
+```php
+Route::resource('tweets', TweetController::class);
+```
+
+この1行だけで、上記7つのルート（URL・HTTPメソッド・ルート名すべて）が自動的に登録されます。まずは省略しない書き方で仕組みを理解してから、この短縮形に置き換える、という流れで覚えていきましょう。
+{% endhint %}
+
+7行のルートを、`Route::resource()`を使った1行に書き換えてください：
+
+```php
+// routes/web.php
+
+<?php
+
+use App\Http\Controllers\TweetController;
+
+use Illuminate\Support\Facades\Route;
+
+Route::view('/', 'welcome')->name('home');
+
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::view('dashboard', 'dashboard')->name('dashboard');
+
+    // ⭐️ 7行 → 1行に置き換え ⭐️
     Route::resource('tweets', TweetController::class);
 });
 
@@ -474,7 +532,7 @@ require __DIR__.'/settings.php';
 
 ### ルーティングの確認
 
-ルーティングは以下のコマンドで確認可能です。`resource`を用いることで`Tweet`に関する**CRUD処理のルートが自動的に追加**されていることが確認できます：
+`Route::resource()`に置き換えても、さきほど手書きした7行とルートが変わっていないことを確認しましょう。以下のコマンドで確認できます：
 
 ```bash
 ./vendor/bin/sail artisan route:list --path=tweets
