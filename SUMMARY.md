@@ -14,6 +14,7 @@
   * [PhpMyAdmin関連](php/phpmyadmin.md)
   * [その他情報情報](php/something.md)
 * [Laravel](laravel/README.md)
+  * [000\_laratterの完成形（仕様書）（仮）](laravel/000_laratter_spec.md)
   * [001\_0\_Laravelプロジェクトの作成とSail起動](laravel/001_0_gs_laravel_project_setup.md)
   * [{OLD}001\_1\_Docker導入\_WINDOWS](laravel/001_1_gs_laravel_docker_for_windows.md)
   * [{OLD}001\_2\_Docker導入\_Mac](laravel/001_2_gs_laravel_docker_for_mac.md)
