@@ -220,8 +220,8 @@ BreezeのBlade with Alpineスタックには`<x-app-layout>`コンポーネン�
 
 ```sql
 insert into
-  tweets (user_id, tweet, created_at)
-  values (1, 'test tweet', now());
+  tweets (user_id, tweet, created_at, updated_at)
+  values (1, 'test tweet', now(),now());
 ```
 
 ## 【補足】エラーメッセージの表示
