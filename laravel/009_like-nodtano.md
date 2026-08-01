@@ -114,6 +114,7 @@ use Illuminate\Support\Facades\Route;
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::view('dashboard', 'dashboard')->name('dashboard');
 
+    // 🌟 7行あったコードを、resource で1つにまとめています。
     Route::resource('tweets', TweetController::class);
 
     // 🔽 2行追加 🔽
