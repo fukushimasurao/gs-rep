@@ -60,7 +60,7 @@ sequenceDiagram
 ### コントローラの作成
 
 ```
-./vendor/bin/sail artisan make:controller TweetLikeController --resource
+./vendor/bin/sail artisan make:controller TweetLikeController
 ```
 
 {% hint style="info" %}
@@ -173,23 +173,19 @@ use App\Models\Tweet;
 
 class TweetLikeController extends Controller
 {
-  /**
-   * Store a newly created resource in storage.
-   */
+  // ⭐️↓↓↓ここから追加⭐️
   public function store(Tweet $tweet)
   {
     $tweet->likedByUsers()->attach(auth()->id());
     return back();
   }
 
-  /**
-   * Remove the specified resource from storage.
-   */
   public function destroy(Tweet $tweet)
   {
     $tweet->likedByUsers()->detach(auth()->id());
     return back();
   }
+  // ⭐️↑↑↑↑↑ここまで追加⭐️
 }
 ```
 
