@@ -151,9 +151,14 @@ class TweetController extends Controller
 **コードの詳細説明**
 
 * `$request->user()`: 現在ログインしているユーザーを取得
-* `->tweets()`: そのユーザーのツイートリレーションを取得
+* `->tweets()`: Userモデルの`tweets()`メソッド（リレーション）を呼び出し、そのユーザーのツイートリレーションを取得
 * `->create($request->all())`: フォームのデータを使ってツイートを作成
 * `$request->only('tweet')`でも同様の処理が可能です
+{% endhint %}
+
+{% hint style="info" %}
+**なぜuser経由でtweetを作成する？**
+`Tweet`モデルの`$fillable = ['tweet']`には`user_id`が含まれていないため、`Tweet::create()`に直接`user_id`を渡してもセットされません。`$request->user()->tweets()->create($validate)`のようにリレーション経由で`create()`すると、`user_id`は`$fillable`のチェックを介さずリレーションの仕組みで自動セットされます。フォームから任意の`user_id`を送られてなりすまし投稿されるのを防ぐための設計です。
 {% endhint %}
 
 ## 動作確認
