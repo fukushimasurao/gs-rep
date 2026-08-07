@@ -11,7 +11,7 @@
 
 ↓ここでは 2 と 3 を実施します↓
 
-1. 中間テーブルの作成と各モデルの連携
+1. 中間テーブルの作成と各モデルの連携 ... 008で対応済み
 2. コントローラに Like 機能の実装
 3. ビューファイルに like ボタンを設置
 
@@ -23,6 +23,30 @@
 * →route にそって、特定のcontroller メソッドで処理される
 * →modelでデータが保存される。
 という感じです。
+
+```mermaid
+sequenceDiagram
+    participant B as ブラウザ
+    participant R as web.php
+    participant C as TweetLikeController
+    participant M as Tweet(model) / tweet_user
+
+    Note over B: ♡ likeボタンを押す
+    B->>R: POST /tweets/{tweet}/like
+    R->>C: tweets.like → store($tweet)
+    C->>M: $tweet->likedByUsers()->attach(auth()->id())
+    M-->>C: tweet_userにレコード追加
+    C-->>B: return back()
+
+    Note over B: ♥ dislikeボタンを押す
+    B->>R: DELETE /tweets/{tweet}/like
+    R->>C: tweets.dislike → destroy($tweet)
+    C->>M: $tweet->likedByUsers()->detach(auth()->id())
+    M-->>C: tweet_userからレコード削除
+    C-->>B: return back()
+```
+
+`attach()`は中間テーブルにレコードを1件追加、`detach()`は中間テーブルから該当レコードを1件削除するメソッドです。どちらも「対象のTweet」と「認証中のユーザーID」の組み合わせを`tweet_user`テーブルに対して操作します。
 
 以下では、
 
