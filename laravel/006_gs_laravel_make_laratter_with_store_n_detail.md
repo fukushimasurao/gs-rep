@@ -45,6 +45,13 @@ sequenceDiagram
     C-->>B: redirect()->route('tweets.index')
 ```
 
+{% hint style="info" %}
+画面の表示（`create`）とデータの受け取り（`store`）は別メソッドが担当しています。
+
+* フォームの`action="{{ route('tweets.store') }}"`が、POST時の行き先ルートを決めている
+* ルート名（`tweets.create` / `tweets.store`）が、実際に呼ばれるコントローラのメソッドを紐づけている
+{% endhint %}
+
 ### 図解：詳細フロー（index → show）
 
 ```mermaid
@@ -61,6 +68,19 @@ sequenceDiagram
     C->>V: view('tweets.show', compact('tweet'))
     V-->>B: 詳細画面のHTMLを返す
 ```
+
+{% hint style="info" %}
+`route('tweets.show', $tweet)`は`$tweet->id`を自動で渡してくれるため、リンク側で明示的にIDを書く必要はありません。
+{% endhint %}
+
+### ルート名 ⇄ メソッド対応表
+
+| HTTPメソッド | ルート名 | コントローラメソッド | 役割 |
+| --- | --- | --- | --- |
+| GET | `tweets.create` | `create()` | 作成フォームを表示 |
+| POST | `tweets.store` | `store()` | フォームの内容を保存 |
+| GET | `tweets.index` | `index()` | 一覧を表示 |
+| GET | `tweets.show` | `show($tweet)` | 1件の詳細を表示 |
 
 ## Tweet作成処理の実装
 
