@@ -28,10 +28,40 @@ cd laratter
 * 詳細画面`tweets.show`内に`href="{{ route('tweets.edit', $tweet) }}"`が記載されています
 * routeを確認すると`TweetController@edit`メソッドが呼び出されます。つまり、更新ボタンを押した後の処理は`edit` メソッドを編集するということです。
 
+```mermaid
+sequenceDiagram
+    participant B as ブラウザ
+    participant R as web.php
+    participant C as TweetController
+    participant V as View / DB
+
+    B->>R: GET /tweets/{tweet}/edit
+    R->>C: tweets.edit → edit($tweet)
+    C-->>B: return view('tweets.edit')
+    B->>R: POST /tweets/{tweet}（@method('PUT')）
+    R->>C: tweets.update → update($request, $tweet)
+    C->>V: $tweet->update($request->only('tweet'))
+    C-->>B: redirect()->route('tweets.show', $tweet)
+```
+
 ### (2) Tweet削除について
 
 * 詳細画面内に`<form action="{{ route('tweets.destroy', $tweet) }}"`が記載されています
 * routeを確認すると`TweetController@destroy`メソッドが呼び出されます。つまり削除ボタンを押した後の処理は、`destroy` メソッドを編集するということです。
+
+```mermaid
+sequenceDiagram
+    participant B as ブラウザ
+    participant R as web.php
+    participant C as TweetController
+    participant V as View / DB
+
+    Note over B: 詳細画面で削除ボタンを押す
+    B->>R: POST /tweets/{tweet}（@method('DELETE')）
+    R->>C: tweets.destroy → destroy($tweet)
+    C->>V: $tweet->delete()
+    C-->>B: redirect()->route('tweets.index')
+```
 
 {% hint style="info" %}
 **権限チェック** 前章で実装した通り、編集・削除ボタンは投稿者本人にのみ表示されます。
