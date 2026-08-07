@@ -27,29 +27,6 @@ cd laratter
 
 ## 実装の流れ確認
 
-### (1) Tweet作成処理について
-
-* 作成画面の場所: `http://localhost/tweets/create`
-*   `/tweets/create`で表示されている画面について確認
-
-    * `./vendor/bin/sail artisan route:list --path=tweets` でroute確認すると、`http://localhost/tweets/create`は`TweetController@create`が利用されています
-
-
-* `TweetController@create`のreturnから`view('tweets.create')`のviewを表示しています
-* `view('tweets.create')`はview配下の、`tweets` 配下の `create`を、つまり `resources/views/tweets/create.blade.php`を指しています
-  * 中の`form`を見ると、methodは`post` , `action`は`route('tweets.store')`になっています
-  * `route('tweets.store')`はrouteの`tweets.store`を表しています。postが利用されており、`TweetController@store`メソッドを利用します
-
-### (2) Tweet詳細画面について
-
-* Tweet一覧ページ `http://localhost/tweets` に各ツイートの詳細へのリンクがあります。
-* Tweet一覧ページ`view('tweets.index')`の中のコードに`<a href="{{ route('tweets.show', $tweet) }}"`の記載があります
-* `route('tweets.show')`を確認すると`TweetController@show`なので、`TweetController`の`show`メソッドを実装していきます
-
-{% hint style="info" %}
-**ルートパラメータについて** `route('tweets.show', $tweet)`は自動で`$tweet`の主キー（ID）を渡します。`$tweet->id`と書く必要はありません。
-{% endhint %}
-
 ### 図解：作成フロー（create → store）
 
 ```mermaid
