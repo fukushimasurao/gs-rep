@@ -50,6 +50,41 @@ cd laratter
 **ルートパラメータについて** `route('tweets.show', $tweet)`は自動で`$tweet`の主キー（ID）を渡します。`$tweet->id`と書く必要はありません。
 {% endhint %}
 
+### 図解：作成フロー（create → store）
+
+```mermaid
+sequenceDiagram
+    participant B as ブラウザ
+    participant R as web.php
+    participant C as TweetController
+    participant V as View / DB
+
+    B->>R: GET /tweets/create
+    R->>C: tweets.create → create()
+    C-->>B: return view('tweets.create')
+    B->>R: POST /tweets/store（form action）
+    R->>C: tweets.store → store()
+    C->>V: $request->user()->tweets()->create()
+    C-->>B: redirect()->route('tweets.index')
+```
+
+### 図解：詳細フロー（index → show）
+
+```mermaid
+sequenceDiagram
+    participant B as ブラウザ
+    participant R as web.php
+    participant C as TweetController
+    participant V as View / DB
+
+    Note over B: 一覧画面のリンクをクリック
+    B->>R: GET /tweets/{tweet}
+    R->>C: tweets.show → show($tweet)
+    Note right of C: ルートモデルバインディングで<br/>IDからTweetを自動解決
+    C->>V: view('tweets.show', compact('tweet'))
+    V-->>B: 詳細画面のHTMLを返す
+```
+
 ## Tweet作成処理の実装
 
 Tweet の作成処理は`TweetController` の `store` メソッドに記載していきます。

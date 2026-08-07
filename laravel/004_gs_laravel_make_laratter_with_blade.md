@@ -147,6 +147,14 @@ Breezeのナビゲーションバーは、PC画面用・モバイル画面用で
 ```
 
 {% hint style="info" %}
+**`:href`と`:current`について**
+属性名の先頭に`:`が付くと、値がPHPの式として評価されます。
+
+- `:href="route('tweets.index')"`：`route()`ヘルパーでルート名からURLを生成してリンク先に設定します。URLを直書きせずルート名で参照するため、後でパスを変更してもBlade側の修正が不要になります。
+- `:current="request()->routeIs('tweets.index')"`：現在表示中のページのルート名が`tweets.index`かどうかを判定し、一致していればそのサイドバー項目をアクティブ表示（ハイライト）します。
+{% endhint %}
+
+{% hint style="info" %}
 **Fluxコンポーネントについて**
 `<flux:...>`というタグは、Livewire Starter Kitに含まれる**Flux UI**というコンポーネント集です。BreezeのBladeコンポーネント（`<x-nav-link>`など）と役割は同じですが、見た目がすでに整ったUIキットとして提供されています。
 
