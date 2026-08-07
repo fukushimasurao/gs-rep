@@ -33,7 +33,33 @@ Like機能では以下の関係が成り立ちます：
 
 この場合、ツイート1はユーザーAとBからいいねされ、ツイート3はユーザーAとCからいいねされています。
 
-<figure><img src="../.gitbook/assets/like_many-many.jpg" alt=""><figcaption></figcaption></figure>
+```mermaid
+graph LR
+    subgraph Users["ユーザー"]
+        A((ユーザーA))
+        B((ユーザーB))
+        C((ユーザーC))
+    end
+
+    subgraph Tweets["ツイート"]
+        T1((ツイート1))
+        T2((ツイート2))
+        T3((ツイート3))
+        T4((ツイート4))
+        T5((ツイート5))
+    end
+
+    A -->|いいね| T1
+    A -->|いいね| T3
+    A -->|いいね| T5
+    B -->|いいね| T1
+    B -->|いいね| T2
+    C -->|いいね| T3
+    C -->|いいね| T4
+    C -->|いいね| T5
+```
+
+ツイート1はユーザーAとBから、ツイート3はユーザーAとCから、というように「1人のユーザーが複数のツイートへ」「1つのツイートが複数のユーザーから」矢印が伸びているのが多対多です。
 
 多対多の場合は以下の流れが基本です：
 
@@ -59,6 +85,28 @@ Like機能では以下の関係が成り立ちます：
 **中間テーブルの必要性**
 
 多対多の場合は、中間テーブルを作成する必要があります。これは「どのユーザーが」「どのツイートに」いいねしたかを記録するためです。
+
+```mermaid
+erDiagram
+    USER ||--o{ TWEET_USER : "いいねする"
+    TWEET ||--o{ TWEET_USER : "いいねされる"
+
+    USER {
+        bigint id
+    }
+    TWEET {
+        bigint id
+    }
+    TWEET_USER {
+        bigint id
+        bigint tweet_id FK
+        bigint user_id FK
+        datetime created_at
+        datetime updated_at
+    }
+```
+
+`tweet_user`が中間テーブルです。`USER`・`TWEET`はどちらも中間テーブルに対して「1対多」でつながっており、この2つの1対多を組み合わせることで多対多を表現しています。
 
 中間テーブルに必要な情報：
 
