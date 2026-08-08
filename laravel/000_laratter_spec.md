@@ -120,21 +120,21 @@ erDiagram
 
 ## 主要ルート一覧
 
-| メソッド | URI | 名前 | 用途 | Controller@Method | モデル |
-| --- | --- | --- | --- | --- | --- |
-| GET | `/tweets` | `tweets.index` | 一覧表示 | `TweetController@index` | `Tweet` |
-| GET | `/tweets/create` | `tweets.create` | 作成画面表示 | `TweetController@create` | `Tweet` |
-| POST | `/tweets` | `tweets.store` | 作成処理 | `TweetController@store` | `Tweet` |
-| GET | `/tweets/{tweet}` | `tweets.show` | 詳細表示 | `TweetController@show` | `Tweet` |
-| GET | `/tweets/{tweet}/edit` | `tweets.edit` | 編集画面表示 | `TweetController@edit` | `Tweet` |
-| PUT | `/tweets/{tweet}` | `tweets.update` | 更新処理 | `TweetController@update` | `Tweet` |
-| DELETE | `/tweets/{tweet}` | `tweets.destroy` | 削除処理 | `TweetController@destroy` | `Tweet` |
-| POST | `/tweets/{tweet}/like` | `tweets.like` | いいね | `TweetLikeController@store` | `Tweet`（`tweet_user`） |
-| DELETE | `/tweets/{tweet}/like` | `tweets.dislike` | いいね解除 | `TweetLikeController@destroy` | `Tweet`（`tweet_user`） |
-| GET | `/tweets/{tweet}/comments` | `tweets.comments.index` | コメント一覧 | `CommentController@index` | `Comment` |
-| GET | `/tweets/{tweet}/comments/create` | `tweets.comments.create` | コメント作成画面表示 | `CommentController@create` | `Comment` |
-| POST | `/tweets/{tweet}/comments` | `tweets.comments.store` | コメント作成処理 | `CommentController@store` | `Comment` |
-| GET | `/tweets/{tweet}/comments/{comment}` | `tweets.comments.show` | コメント詳細表示 | `CommentController@show` | `Comment` |
-| GET | `/tweets/{tweet}/comments/{comment}/edit` | `tweets.comments.edit` | コメント編集画面表示 | `CommentController@edit` | `Comment` |
-| PUT | `/tweets/{tweet}/comments/{comment}` | `tweets.comments.update` | コメント更新処理 | `CommentController@update` | `Comment` |
-| DELETE | `/tweets/{tweet}/comments/{comment}` | `tweets.comments.destroy` | コメント削除処理 | `CommentController@destroy` | `Comment` |
+| メソッド | URI | 名前 | 用途 | Controller@Method | モデル | View |
+| --- | --- | --- | --- | --- | --- | --- |
+| GET | `/tweets` | `tweets.index` | 一覧表示 | `TweetController@index` | `Tweet` | `tweets.index` |
+| GET | `/tweets/create` | `tweets.create` | 作成画面表示 | `TweetController@create` | `Tweet` | `tweets.create` |
+| POST | `/tweets` | `tweets.store` | 作成処理 | `TweetController@store` | `Tweet` | `tweets.index`へredirect |
+| GET | `/tweets/{tweet}` | `tweets.show` | 詳細表示 | `TweetController@show` | `Tweet` | `tweets.show` |
+| GET | `/tweets/{tweet}/edit` | `tweets.edit` | 編集画面表示 | `TweetController@edit` | `Tweet` | `tweets.edit` |
+| PUT | `/tweets/{tweet}` | `tweets.update` | 更新処理 | `TweetController@update` | `Tweet` | `tweets.show`へredirect |
+| DELETE | `/tweets/{tweet}` | `tweets.destroy` | 削除処理 | `TweetController@destroy` | `Tweet` | `tweets.index`へredirect |
+| POST | `/tweets/{tweet}/like` | `tweets.like` | いいね | `TweetLikeController@store` | `Tweet`（`tweet_user`） | 元画面へback() |
+| DELETE | `/tweets/{tweet}/like` | `tweets.dislike` | いいね解除 | `TweetLikeController@destroy` | `Tweet`（`tweet_user`） | 元画面へback() |
+| GET | `/tweets/{tweet}/comments` | `tweets.comments.index` | コメント一覧 | `CommentController@index` | `Comment` | `tweets.show`内で表示 |
+| GET | `/tweets/{tweet}/comments/create` | `tweets.comments.create` | コメント作成画面表示 | `CommentController@create` | `Comment` | `tweets.comments.create` |
+| POST | `/tweets/{tweet}/comments` | `tweets.comments.store` | コメント作成処理 | `CommentController@store` | `Comment` | `tweets.show`へredirect |
+| GET | `/tweets/{tweet}/comments/{comment}` | `tweets.comments.show` | コメント詳細表示 | `CommentController@show` | `Comment` | `tweets.comments.show` |
+| GET | `/tweets/{tweet}/comments/{comment}/edit` | `tweets.comments.edit` | コメント編集画面表示 | `CommentController@edit` | `Comment` | `tweets.comments.edit` |
+| PUT | `/tweets/{tweet}/comments/{comment}` | `tweets.comments.update` | コメント更新処理 | `CommentController@update` | `Comment` | `tweets.comments.show`へredirect |
+| DELETE | `/tweets/{tweet}/comments/{comment}` | `tweets.comments.destroy` | コメント削除処理 | `CommentController@destroy` | `Comment` | `tweets.show`へredirect |
