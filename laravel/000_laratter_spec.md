@@ -129,7 +129,8 @@ erDiagram
 | GET | `/tweets/{tweet}/edit` | `tweets.edit` | 編集画面表示 | `TweetController@edit` | `Tweet` | `tweets.edit` |
 | PUT | `/tweets/{tweet}` | `tweets.update` | 更新処理 | `TweetController@update` | `Tweet` | `tweets.show`へredirect |
 | DELETE | `/tweets/{tweet}` | `tweets.destroy` | 削除処理 | `TweetController@destroy` | `Tweet` | `tweets.index`へredirect |
-| POST | `/tweets/{tweet}/like` | `tweets.like` | いいね | `TweetLikeController@store` | `Tweet`（`tweet_user`） | 元画面へback() |
+| POST | `/tweets/{tweet}/like` | `tweets.like` | いいね | `TweetLi
+keController@store` | `Tweet`（`tweet_user`） | 元画面へback() |
 | DELETE | `/tweets/{tweet}/like` | `tweets.dislike` | いいね解除 | `TweetLikeController@destroy` | `Tweet`（`tweet_user`） | 元画面へback() |
 | GET | `/tweets/{tweet}/comments` | `tweets.comments.index` | コメント一覧 | `CommentController@index` | `Comment` | `tweets.show`内で表示 |
 | GET | `/tweets/{tweet}/comments/create` | `tweets.comments.create` | コメント作成画面表示 | `CommentController@create` | `Comment` | `tweets.comments.create` |
@@ -138,3 +139,25 @@ erDiagram
 | GET | `/tweets/{tweet}/comments/{comment}/edit` | `tweets.comments.edit` | コメント編集画面表示 | `CommentController@edit` | `Comment` | `tweets.comments.edit` |
 | PUT | `/tweets/{tweet}/comments/{comment}` | `tweets.comments.update` | コメント更新処理 | `CommentController@update` | `Comment` | `tweets.comments.show`へredirect |
 | DELETE | `/tweets/{tweet}/comments/{comment}` | `tweets.comments.destroy` | コメント削除処理 | `CommentController@destroy` | `Comment` | `tweets.show`へredirect |
+
+## 制作順（章立て）
+
+| 番号 | 内容 | やること |
+| --- | --- | --- |
+| 001_0 | Laravelプロジェクトの作成とSail起動 | 環境構築（Docker/Sail） |
+| 001_3 | Route-Controller-Viewの基本 | Laravelの基礎（MVC・データの受け渡し） |
+| 002 | 認証の仕組み（Livewire Starter Kit + Fortify） | ログイン・会員登録機能一式（自分で実装はしない） |
+| 003 | Modelとテーブルの用意 | `Tweet`モデル・マイグレーション・`users`とのリレーション定義 |
+| 004 | 画面の用意 | `resources/views/tweets`配下の雛形ファイル作成、ナビゲーション追加 |
+| 005 | 一覧画面と作成画面の実装 | `TweetController@index`・`create` |
+| 006 | 作成処理と詳細画面の実装 | `TweetController@store`・`show` |
+| 007 | 更新処理と削除処理の実装 | `TweetController@update`・`destroy`（投稿者本人のみ） |
+| 008 | Like機能（多対多のリレーション） | `tweet_user`中間テーブル・モデルのリレーション定義 |
+| 009 | Like機能（多対多データの操作） | `TweetLikeController`の`store`/`destroy`、いいねボタン設置 |
+| 010 | Comment機能（ファイルの準備と設定） | `Comment`モデル・マイグレーション・`CommentController`・ネストルート |
+| 011 | Comment作成処理と詳細画面の実装 | `CommentController@create`・`store`・`show` |
+| 012 | Comment更新処理と削除処理の実装 | `CommentController@edit`・`update`・`destroy`（投稿者本人のみ） |
+
+{% hint style="info" %}
+`001_1`・`001_2`（Windows/Mac版のDocker導入）は`{OLD}`表記の旧版ページです。
+{% endhint %}
